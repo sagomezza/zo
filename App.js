@@ -5,10 +5,11 @@ import HomeIndex from './src/screens/Home/HomeIndex';
 import FooterIndex from './src/screens/Footer/FooterIndex';
 import UserInputIndex from './src/screens/UserInput/UserInputIndex';
 import LogoutIndex from './src/screens/Logout/LogoutIndex';
+import UserExitIndex from './src/screens/UserExit/UserExitIndex'
 
 
 const navigator = createStackNavigator({
-  Screen: LogoutIndex
+  Screen: UserExitIndex
 });
 
 export default createAppContainer(navigator);
