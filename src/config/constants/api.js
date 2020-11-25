@@ -1,4 +1,4 @@
-export const API="https://us-central1-bluspot-worker.cloudfunctions.net/"
+export const API="https://us-central1-bluspot-worker.cloudfunctions.net"
 
 //LOGIN
-export const READOFFICIAL="readOfiicial"
+export const READOFFICIAL="/readOfficial"
