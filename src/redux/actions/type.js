@@ -1,0 +1,1 @@
+export const SET_OFFICIAL = "[SET_OFFICIAL]"
