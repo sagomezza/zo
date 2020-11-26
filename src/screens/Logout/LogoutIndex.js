@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, FlatList} from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
+import FooterIndex from '../Footer/FooterIndex'
 
 const LogoutIndex = () => {
 
@@ -74,6 +75,7 @@ const LogoutIndex = () => {
         <Text style={{fontSize: 20, margin: '3%'}}>  Cerrar turno</Text>
       </TouchableOpacity>
     </View>
+    <FooterIndex/>
   </View>
   );
 }

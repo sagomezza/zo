@@ -1,4 +1,4 @@
-import React from 'react';
+ import React from 'react';
 import { View, Text, FlatList  } from 'react-native';
 import Footer from '../../components/Footer'
 import HomeStyles from '../Home/HomeStyles'
