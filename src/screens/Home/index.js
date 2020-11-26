@@ -1,6 +1,6 @@
  import React from 'react';
 import { View, Text, FlatList  } from 'react-native';
-import FooterIndex from '../Footer/FooterIndex'
+import Footer from '../../components/Footer'
 import HomeStyles from '../Home/HomeStyles'
 
 const HomeIndex = () => {
@@ -68,7 +68,7 @@ const HomeIndex = () => {
 
         
       </View>
-      <FooterIndex/>
+      <Footer/>
     </View>
   );
 };

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {View, TouchableOpacity, Text} from 'react-native';
-import FooterStyles from '../Footer/FooterStyles';
+import FooterStyles from './styles';
 
 const FooterIndex = () => {
     return (
