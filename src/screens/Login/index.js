@@ -8,7 +8,8 @@ import {
   TextInput,
   TouchableOpacity,
   AsyncStorage,
-  Platform
+  Platform,
+  Image
 } from 'react-native';
 //-------- Library dependecies ------------
 import axios from 'axios';
@@ -69,6 +70,9 @@ const LoginIndex = (props) => {
 
   return (
     <View style={styles.container}>
+      <View>
+      {/* <Image style={{width:50, height: 50}} source={require('./assets/images/icon@2x.png')}/> */}
+      </View>
       <Text style={styles.loginText} >Inicio de sesión</Text>
       <Text style={{ marginRight: '36%', ...styles.titleInputText }}>Correo</Text>
       <View style={styles.textInputContainer}>
@@ -90,9 +94,9 @@ const LoginIndex = (props) => {
           placeholderTextColor="#C9C1C1"
           autoCapitalize={"none"}
           autoCorrect={false}
-          textContentType={'password'}
           value={password}
           onChangeText={(text) => setPassword(text)}
+          secureTextEntry={true}
         />
       </View>
 
@@ -102,7 +106,9 @@ const LoginIndex = (props) => {
         style={styles.button}>
         <Text style={styles.enterText}>Ingresar</Text>
       </TouchableOpacity>
-      <Text style={styles.restoreText}>Olvidé mi contraseña</Text>
+      <TouchableOpacity>
+        <Text style={styles.restoreText}>Olvidé mi contraseña</Text>
+      </TouchableOpacity>
     </View>
   );
 };

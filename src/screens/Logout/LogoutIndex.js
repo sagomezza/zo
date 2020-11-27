@@ -1,11 +1,17 @@
-import React from 'react';
-import { StyleSheet, View, Text, FlatList} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, FlatList, Modal, TouchableHighlight, Dimensions } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
-import FooterIndex from '../Footer/FooterIndex'
+import FooterIndex from '../../../src/components/Footer/index';
+import { firebase } from '@firebase/app';
+import '@firebase/auth';
+import '@firebase/database';
+import "@firebase/firestore";
+import Screen from '../Menu/MenuStyles';
 
-const LogoutIndex = () => {
 
+const LogoutIndex = (props) => {
+  const {navigation} = props;
   const HomeStyles = StyleSheet.create({
     plateInput: {
       borderColor: 'gray', 
@@ -17,7 +23,52 @@ const LogoutIndex = () => {
       textAlign: 'center',
       marginTop: '8%'
     },
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22,
+      backgroundColor: 'rgba(52, 52, 52, 0.8)',
+      
+    },
+    modalView: {
+      height: 200,
+      padding: 35,
+      borderRadius:20,
+      borderColor: '#707070',
+      borderWidth: 1,
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      backgroundColor: '#FFF',
+      shadowColor: '#FFF',
+      shadowOffset: {
+        width: 50,
+        height: 50,
+      },
+      shadowOpacity: 0,
+      shadowRadius: 50,
+      elevation: 5,
+    },
+    openButton: {
+      backgroundColor: "#F194FF",
+      borderRadius: 20,
+      padding: 10,
+      elevation: 2,
+      borderColor: '#D9D9D9',
+      borderWidth:1
+    },
+    textStyle: {
+      color: "gray",
+      fontWeight: "bold",
+      textAlign: "center"
+    },
+    modalText: {
+      marginBottom: 15,
+      textAlign: "center"
+    }
   });
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const name = 'Santiago Gómez Barrero';
   const place = 'Hospital Manuel Uribe Ángel';
@@ -33,7 +84,7 @@ const LogoutIndex = () => {
   
   return (
   <View style={{flex: 1}}>
-   
+    
     <View style={{alignItems: 'center', marginTop: '30%'}}>
         {<Text style={{fontSize: 20}}>{name}</Text>}
         {<Text>{place}</Text>}
@@ -72,10 +123,41 @@ const LogoutIndex = () => {
     </View>
     <View style={{alignItems: 'center'}}>
       <TouchableOpacity style={HomeStyles.plateInput}>
-        <Text style={{fontSize: 20, margin: '3%'}}>  Cerrar turno</Text>
+        <Text style={{fontSize: 20, margin: '3%'}}  onPress={() => {setModalVisible(true)}}>  Cerrar turno</Text>
       </TouchableOpacity>
     </View>
-    <FooterIndex/>
+    <FooterIndex navigation={navigation}/>
+            <Modal
+              animationType="fade"
+              transparent={true}
+              backdropOpacity={0.3}
+              visible={modalVisible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+              }}
+            >
+              <View style={HomeStyles.centeredView}>
+                <View style={HomeStyles.modalView}>
+                  <View style={{marginBottom: '7%', alignItems: 'center'}}>
+                    <Text>Has cerrado tu sesión</Text>
+                  </View>
+                  <TouchableHighlight
+                    style={{ ...HomeStyles.openButton, backgroundColor: "#ffffff" }}
+                    onPress={() => {
+                      setModalVisible(!modalVisible);
+                      firebase.auth().signOut().then(function() {
+                        // Sign-out successful.
+                      }).catch(function(error) {
+                        // An error happened.
+                      });
+                      navigation.navigate('Login')
+                    }}
+                  >
+                    <Text style={HomeStyles.textStyle}>Entendido</Text>
+                  </TouchableHighlight>
+                </View>
+              </View>
+            </Modal>
   </View>
   );
 }

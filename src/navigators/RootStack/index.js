@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Login from "../../screens/Login";
 
 import HomeStack from "../HomeStack";
+import MainDrawer from "../MainDrawer/MainDrawer";
 // import HeaderTitle from "components/StackHeader";
 
 const Stack = createStackNavigator();
@@ -57,6 +58,14 @@ const RootStack = ({ initialRouteName }) => {
           // title: "Home",
         }}
       />
+      {/* <Stack.Screen
+        name="MainDrawer"
+        component={MainDrawer}
+        options={{
+          headerShown: false,
+          // title: "Home",
+        }}
+      /> */}
     </Stack.Navigator>
   );
 };

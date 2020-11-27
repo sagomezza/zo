@@ -1,30 +1,44 @@
 import React, {useState} from 'react';
-import { StyleSheet, Button, View } from 'react-native';
+import { StyleSheet, Button, View, Modal,TouchableHighlight } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { Text, TouchableOpacity } from 'react-native';
 import moment from 'moment';
-import { Footer } from 'native-base';
-import FooterIndex from '../Footer/FooterIndex';
+import FooterIndex from '../../components/Footer/index';
+import Logout from '../Menu/MenuStyles';
 
-const UserOut = () => {
+const UserOut = (props) => {
+  const { navigation } = props;
 
   const dateMonthIn = new Date('05/05/20');
   const dateMonthOut = new Date('07/05/20');
   const phoneNumber = 3134578950;
-  const totalAmount = 3900;
   const hour = 1;
-  const plateOne = 'EVZ';
-  const plateTwo = '124';
+  const [totalAmount, setTotalAmount] = useState(39000);
   const [totalPay, setTotalPay] = useState(0);
-  
-  
+  const [totalPayModal, setTotalPayModal] = useState(0);
+  const [plateOne, setPlateOne] = useState('');
+  const [plateTwo, setPlateTwo] = useState('');
+  const [isEditable, setIsEditable] = useState(true);
+
+  // function validate(){
+  //   console.log('asdsadsd');
+  //   console.log(plateOne);
+  //   if((plateOne.length + plateTwo.length) == 6){
+  //     // conexion con back
+  //     setIsEditable(false);
+  //     alert('asjdgasdgh');
+  //   }
+  // }
+
+
   const styles = StyleSheet.create({
     container: { 
       flex: 1,
       paddingLeft: '15%',
       paddingRight: '15%',
-      paddingTop: '15%',
-      backgroundColor: '#ffffff' 
+      paddingTop: '2%',
+      backgroundColor: '#ffffff',
+      alignContent: 'center' 
     },
     plateInput: {
       width: 140, 
@@ -33,7 +47,8 @@ const UserOut = () => {
       marginRight: '5%', 
       borderWidth: 1,
       borderRadius: 20,
-      fontSize: 50
+      fontSize: 50,
+      fontFamily: 'Montserrat-Regular'
     },
     numberInput: {
       width: '100%', 
@@ -46,7 +61,8 @@ const UserOut = () => {
       borderBottomRightRadius: 20,
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
-      fontSize: 25
+      fontSize: 25,
+      
     },
     inputMoney: {
       width: 300, 
@@ -55,7 +71,8 @@ const UserOut = () => {
       marginRight: '5%', 
       marginBottom: '10%',
       borderWidth: 1,
-      paddingLeft: 10
+      paddingLeft: 10,
+      fontFamily: 'Montserrat-Regular'
     },
     miniButtonMoney:{
       width: 65,
@@ -66,44 +83,121 @@ const UserOut = () => {
     },
     miniButtonMoneyText: {
       fontSize: 12,
-      textAlign: 'center'
-    }
+      textAlign: 'center',
+      fontFamily: 'Montserrat-Regular'
+    },
+    infoUSerText: {
+      fontFamily: 'Montserrat-Regular',
+    },
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22,
+      backgroundColor: 'rgba(52, 52, 52, 0.8)',
+      
+    },
+    modalView: {
+      height: 200,
+      padding: 35,
+      borderRadius:20,
+      borderColor: '#707070',
+      borderWidth: 1,
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      backgroundColor: '#FFF',
+      shadowColor: '#FFF',
+      shadowOffset: {
+        width: 50,
+        height: 50,
+      },
+      shadowOpacity: 0,
+      shadowRadius: 50,
+      elevation: 5,
+    },
+    openButton: {
+      backgroundColor: "#F194FF",
+      borderRadius: 20,
+      padding: 10,
+      elevation: 2,
+      borderColor: '#D9D9D9',
+      borderWidth:1
+    },
+    textStyle: {
+      color: "gray",
+      fontWeight: "bold",
+      textAlign: "center",
+      fontFamily: 'Montserrat-Regular'
+    },
+    modalText: {
+      marginBottom: 15,
+      textAlign: "center",
+      fontFamily: 'Montserrat-Regular'
+    },
   });
-
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modal2Visible, setModal2Visible] = useState(false);
+  const [modal3Visible, setModal3Visible] = useState(false);
+  const [modal4Visible, setModal4Visible] = useState(false);
   return (
     <View style={{flex: 1}}>
+      <Logout navigation={navigation}/> 
       <View style={styles.container}>
-
+        <TouchableOpacity 
+                style={
+                  {borderRadius: 20,
+                  alignItems: 'center',
+                  height: 50,
+                  width:50,
+                  borderWidth: 1,
+                  borderRadius: 15,
+                  borderColor: 'gray'}}   
+                onPress={() => {navigation.navigate('QRscanner')}}>
+                {/* <Image source={require('./assets/Imagenes/Grupo34.png')}/> */}
+        </TouchableOpacity>
         <View style={{paddingLeft: '20%', flexDirection: "row", marginBottom: '5%'}}>
-
+            
           <TextInput
             style={styles.plateInput}
             textAlign='center'
             value={plateOne}
-            editable={false}
+            maxLength={3}
+            autoCapitalize={'characters'}
+            editable={isEditable}
+            onChange={text => {
+              setPlateOne(text)
+              // validate()
+            }}
             />
           
           <TextInput
             style={styles.plateInput}
             textAlign='center'
             value={plateTwo}
-            editable={false}
+            maxLength={3}
+            autoCapitalize={'characters'}
+            editable={isEditable}
+            onChange={text => {
+              setPlateTwo(text)
+              //validate()
+            }}
           />
         </View>
 
         <View style={{alignItems: 'center', marginBottom: '5%'}}>
-          {<Text>{phoneNumber}</Text>}
-          <Text>{"Tiempo de inicio: " + moment(dateMonthIn).format('hh:MM A DD/MM/YY')}</Text>
-          <Text>{"Tiempo de salida " + moment(dateMonthOut).format('hh:MM A DD/MM/YY')}</Text>
-          <Text style={{fontSize: 20}}>{"Total horas:" + hour + (hour > 1 ? " Horas" : " Hora")}</Text>
-          <Text>{"A pagar"}</Text>
-          <Text style={{fontSize: 50}}>{"$" + totalAmount }</Text>
+          {<Text style={styles.infoUSerText}>{phoneNumber}</Text>}
+          <Text style={styles.infoUSerText}>{"Tiempo de inicio: " + moment(dateMonthIn).format('hh:MM A DD/MM/YY')}</Text>
+          <Text style={styles.infoUSerText}>{"Tiempo de salida " + moment(dateMonthOut).format('hh:MM A DD/MM/YY')}</Text>
+          <Text style={styles.infoUSerText}>CODIGO: </Text>
+          <Text style={{fontSize: 20, fontFamily: 'Montserrat-Regular'}}>{"Total horas: " + hour + (hour > 1 ? " Horas" : " Hora")}</Text>
+          <Text style={styles.infoUSerText}>{"A pagar"}</Text>
+          <Text style={{fontSize: 50, fontFamily: 'Montserrat-Regular'}}>{"$" + totalAmount }</Text>
         </View>
 
         <View style={{alignItems: 'center'}}>
           <View style={{flexDirection: 'row'}}>
             <View style={{marginRight: 10, marginTop: 15}}>
-              <Text>{"Valor ingresado"}</Text>
+              <Text style={{ fontFamily: 'Montserrat-Regular'}} >{"Valor ingresado"}</Text>
             </View>
             <View>
               <TextInput
@@ -118,7 +212,7 @@ const UserOut = () => {
             
           </View>
 
-          <View style={{marginLeft: 95, marginBottom: 10}}>
+          <View style={{marginLeft: '25%', marginBottom: 10}}>
             <View style={{flexDirection: 'row', paddingBottom: '5%'}}>
                 <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(5000)}>
                     <Text style={styles.miniButtonMoneyText}>$5000</Text>
@@ -137,7 +231,7 @@ const UserOut = () => {
 
           <View style={{flexDirection: 'row', paddingBottom: '10%', marginLeft: '5%'}}>
             <View style={{marginLeft: 30, marginRight: 10, marginTop: 15}}>
-              <Text>{"A devolver"}</Text>
+              <Text style={{ fontFamily: 'Montserrat-Regular'}}>{"A devolver"}</Text>
             </View>
             <View style={{marginRight: 20}}>
               <TextInput
@@ -154,17 +248,162 @@ const UserOut = () => {
           <Button
             title="Cobrar"
             color='gray'
-          />
+            onPress={() => {setModalVisible(true)}} />
         </View>
 
         <View style={{marginBottom: 10}}>
           <Button
             title="Pago pendiente"
             color='gray'
+            onPress={() => {setModal2Visible(true)}} 
           />
         </View>
       </View>
-      <FooterIndex/>
+      <FooterIndex navigation={navigation}/>
+      <Modal
+      animationType="fade"
+      transparent={true}
+      backdropOpacity={0.3}
+      visible={modalVisible}
+      onRequestClose={() => {
+        Alert.alert("Modal has been closed.");
+      }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{marginBottom: '7%', alignItems: 'center'}}>
+              <Text style={styles.modalText}>EZV 123</Text>
+              <Text>+3004678602</Text>
+              <Text>Ha iniciado tiempo de parqueo</Text>
+              <Text>11/11/2020 4:20 PM</Text>
+            </View>
+            <TouchableHighlight
+              style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <Text style={styles.textStyle}>Entendido</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+      animationType="fade"
+      transparent={true}
+      backdropOpacity={0.3}
+      visible={modal2Visible}
+      onRequestClose={() => {
+        Alert.alert("Modal has been closed.");
+      }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{marginBottom: '7%', alignItems: 'center'}}>
+              <Text style={styles.modalText}>¿Estás seguro de que hay un pago pendiente?</Text>
+              
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
+                onPress={() => {
+                  setModal2Visible(!modal2Visible);
+                  setModal3Visible(!modal3Visible);
+                  
+                }}
+              >
+                <Text style={styles.textStyle}>SI</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
+                onPress={() => {
+                  setModal2Visible(!modal2Visible);
+                }}
+              >
+                <Text style={styles.textStyle}>NO</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+      animationType="fade"
+      transparent={true}
+      backdropOpacity={0.3}
+      visible={modal3Visible}
+      onRequestClose={() => {
+        Alert.alert("Modal has been closed.");
+      }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{marginBottom: '7%', alignItems: 'center'}}>
+              <Text style={styles.modalText}>Elija tipo de pago:</Text>
+              
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
+                  onPress={() => {
+                    setModal3Visible(!modal3Visible);}}
+                
+              >
+                <Text style={styles.textStyle}>Total</Text>
+              </TouchableHighlight>
+              
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
+                onPress={() => {
+                  setModal3Visible(!modal3Visible);
+                  setModal4Visible(!modal4Visible);
+                }}
+              >
+                <Text style={styles.textStyle}>Parcial</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+      animationType="fade"
+      transparent={true}
+      backdropOpacity={0.3}
+      visible={modal4Visible}
+      onRequestClose={() => {
+        Alert.alert("Modal has been closed.");
+      }}
+      >
+        <View style={styles.centeredView}>
+          <View style={{...styles.modalView}}>
+            <View style={{marginBottom: '7%', alignItems: 'center'}}>
+              <Text style={styles.modalText}>Ingresa el valor exacto de pago: </Text>
+              <Text>{totalAmount}</Text>
+              <TextInput
+                keyboardType='numeric'
+                placeholder='$'
+                value={totalPayModal == 0 ? '' : totalPayModal + ''}
+                onChangeText={text => setTotalPayModal(text)}
+              />
+              <TextInput
+                editable={false}
+                value={(totalAmount - totalPayModal) < 0 ? '0' : totalPay + (totalAmount - totalPayModal) +''}
+              />
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
+                  onPress={() => {
+                    setModal4Visible(!modal4Visible);
+                    setTotalAmount(totalAmount - totalPayModal);
+                    setTotalPayModal(0);
+                  }}
+              >
+                <Text style={styles.textStyle}>Guardar</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

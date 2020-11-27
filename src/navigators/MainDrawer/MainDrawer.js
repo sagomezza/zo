@@ -10,14 +10,13 @@ import UserOut from "../../screens/UserExit/UserExitIndex";
 import Qr from "../../screens/Qr/QRIndex";
 import ScreenMenu from "../../screens/Menu/MenuStyles";
 import { createDrawerNavigator, DrawerContent, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer"; 
-import MainDrawer from "../MainDrawer/MainDrawer";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const HomeStack = ({ navigation }) => {
+const MainDrawer = ({ navigation }) => {
   return (
-    <Stack.Navigator
+    <Drawer.Navigator
       initialRouteName={"Home"}
       screenOptions={{
         //headerTitle: (props) => <HeaderTitle {...props} />,
@@ -64,7 +63,7 @@ const HomeStack = ({ navigation }) => {
       //   );
       // }}
     >
-      <Stack.Screen
+      <Drawer.Screen
         name="Home"
         component={HomeIndex}
         options={{
@@ -83,7 +82,7 @@ const HomeStack = ({ navigation }) => {
           // ),
         }}
       />
-      <Stack.Screen
+      <Drawer.Screen
         name="Logout"
         component={LogoutIndex}
         options={{
@@ -91,7 +90,7 @@ const HomeStack = ({ navigation }) => {
           headerLeft: null,
         }}
       />
-      <Stack.Screen
+      <Drawer.Screen
         name="UserInput"
         component={UserInput}
         options={{
@@ -99,7 +98,7 @@ const HomeStack = ({ navigation }) => {
           headerLeft: null,
         }}
       />
-      <Stack.Screen
+      <Drawer.Screen
         name="UserOut"
         component={UserOut}
         options={{
@@ -107,7 +106,7 @@ const HomeStack = ({ navigation }) => {
           headerLeft: null,
         }}
       />
-      <Stack.Screen
+      <Drawer.Screen
         name="QRscanner"
         component={Qr}
         options={{
@@ -116,8 +115,8 @@ const HomeStack = ({ navigation }) => {
         }}
       />
       
-    </Stack.Navigator>
+    </Drawer.Navigator>
   );
 };
 
-export default HomeStack;
+export default MainDrawer;

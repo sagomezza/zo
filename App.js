@@ -6,12 +6,26 @@ import { NavigationContainer } from "@react-navigation/native";
 import { AuthProvider } from "./src/components/AuthContext";
 import { auth } from "./src/config/firebase";
 import RootStack from "./src/navigators/RootStack"
+import Screen from './src/screens/Menu/MenuStyles';
+import * as Font from 'expo-font';
+import {AppLoading} from "expo";
+
+const fetchFont = () => {
+  return Font.loadAsync({
+    'Montserrat-Regular': require('./assets/fonts/Montserrat-Regular.ttf'),
+    'Montserrat-Bold': require('./assets/fonts/Montserrat-Bold.ttf'),
+    'Montserrat-Light': require('./assets/fonts/Montserrat-Light.ttf'),
+  })
+}
 
 const App = () => {
+  const [fontLoaded, setfontLoaded] = useState(false);
   const [currentUser, setUser] = useState("");
   const [initialRouteName, setInitialRouteName] = useState("Login");
   const [loginState, setLoginState] = useState(false);
 
+  
+  
   const updateUserState = useCallback((user) => {
     // console.log("[App/updateUserState] ", user);
     if (user) {
@@ -43,6 +57,16 @@ const App = () => {
     );
   }
 
+  if (!fontLoaded) {
+    return <AppLoading
+    startAsync={fetchFont}
+    onError={() => console.log('ERROR')}
+    onFinish={() => {
+      setfontLoaded(true)
+    }}
+    />;
+  }
+
   return (
     <Provider store={store}>
       <AuthProvider value={{ currentUser }}>
@@ -53,6 +77,7 @@ const App = () => {
     </Provider>
   );
 
+  
 }
 
 export default App;

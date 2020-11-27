@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
-import { TouchableOpacity, View, Text, Modal, TouchableHighlight, Alert} from 'react-native';
+import { TouchableOpacity, View, Text, Modal, TouchableHighlight, Alert, Image} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { Table, Row, Rows } from 'react-native-table-component';
 import styles from '../UserInput/UserInputStyles';
-import FooterIndex from '../Footer/FooterIndex';
+import FooterIndex from '../../components/Footer/index';
+import Logout from '../Menu/MenuStyles';
 
-const UserInput = ({ navigation }) => {
+const UserInput = (props) => {
+  const { navigation } = props;
 
     const isBlackList = true;
     const dateMonth = new Date('05/05/20');
@@ -21,6 +23,7 @@ const UserInput = ({ navigation }) => {
 
     return (
       <View style={{flex: 1}}>  
+      <Logout navigation={navigation}/>  
       <View style={styles.container}>
         <View style={{alignItems:'center'}}> 
             <View style={{flexDirection: 'row', alignItems: 'center', paddingBottom: '10%'}}>
@@ -29,6 +32,7 @@ const UserInput = ({ navigation }) => {
                 textAlign='center'
                 maxLength={3}
                 autoCapitalize={"characters"}
+                
                 //onChangeText={text => onChangeText(text)}
                 //value={value}
                 />
@@ -37,6 +41,7 @@ const UserInput = ({ navigation }) => {
                 textAlign='center'
                 maxLength={3}
                 autoCapitalize={"characters"}
+                keyboardType='default'
                 // onChangeText={text => onChangeText(text)}
                 // value={value}
                 />
@@ -57,31 +62,31 @@ const UserInput = ({ navigation }) => {
             <TouchableOpacity 
               style={styles.buttonI} 
               >
-              <Text style={styles.buttonText} onPress={() => {setModalVisible(true)}}>Iniciar</Text>
+              <Text style={styles.buttonText} onPress={() => {setModalVisible(true)}}>Inicio</Text>
             </TouchableOpacity>
           </View>
           <View style={{marginRight: 10}}>
-            <TouchableOpacity style={styles.buttonT}>
-              <Text style={styles.buttonText}>Tarjeta</Text>
+            <TouchableOpacity style={styles.buttonT}   onPress={() => {navigation.navigate('QRscanner')}}>
+              {/* <Image source={require('./assets/Imagenes/Grupo34.png')}/> */}
             </TouchableOpacity>
           </View>
         </View>
        
        <View style={{alignItems: 'center'}}>
-          {isBlackList ? <Text>{"Lista Negra"}</Text> : ''}
+          {isBlackList ? <Text style={{fontFamily: 'Montserrat-Regular'}}>{"Lista Negra"}</Text> : ''}
   
-          <Text style={{fontSize: 20}}>Gerardo Bedoya</Text>
-          <Text>{"Mensualidad hasta " + dateMonth}</Text>
+          <Text style={{fontSize: 20, fontFamily: 'Montserrat-Regular'}}>Gerardo Bedoya</Text>
+          <Text  style={{fontFamily: 'Montserrat-Regular', fontSize: 12}}>{"Mensualidad hasta " + dateMonth}</Text>
         </View>
         <View>
             <Table >
-            <Row data={state.HeadTable} style={styles.HeadStyleTable} textStyle={styles.TableText}/>
-            <Rows data={state.DataTable} textStyle={styles.TableText}/>
+            <Row data={state.HeadTable} style={styles.HeadStyleTable} textStyle={styles.tableText}/>
+            <Rows data={state.DataTable} textStyle={styles.tableText}/>
             </Table>
         </View>
     
       </View>
-      <FooterIndex/>
+      <FooterIndex navigation={navigation}/>
       <Modal
         animationType="fade"
         transparent={true}

@@ -1,9 +1,11 @@
  import React from 'react';
 import { View, Text, FlatList  } from 'react-native';
-import Footer from '../../components/Footer'
-import HomeStyles from '../Home/HomeStyles'
+import Footer from '../../components/Footer';
+import HomeStyles from '../Home/HomeStyles';
+import Logout from '../Menu/MenuStyles';
 
-const HomeIndex = () => {
+const HomeIndex = (props) => {
+  const { navigation } = props;
   const placas = [
     { placa: 'EVW 590', pago: 'Pago por x horas', total: '$16.500' },
     { placa: 'EVW 590', pago: 'Pago por x horas', total: '$16.500'},
@@ -15,38 +17,40 @@ const HomeIndex = () => {
   ];
   return (
     <View style={{flex: 1}}>
+      <Logout navigation={navigation}/> 
       <View style={{paddingLeft: '26%', paddingTop: '10%', flexDirection: "row", marginBottom: 50}}>
         <View style={HomeStyles.plateInput}>
           <Text style={HomeStyles.plateInputText}>
-            10/30
+            55/112
           </Text>
+          
         </View>
         <View style= {HomeStyles.plateInput}>
-          <Text style={HomeStyles.plateInputText}>hkgffs</Text>
+          <Text style={HomeStyles.plateInputText}>85/200</Text>
         </View>
       </View>
       <View style={{paddingBottom: 10}}>
         <View style={{paddingLeft:60}}>
-          <Text >Historial de pagos</Text>
+          <Text style={HomeStyles.textPago} >Historial de pagos</Text>
         </View>
         <FlatList
           data={placas}
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
           return (
-          <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: 60, marginRight:70, marginTop: 20 }} >
+          <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#008999", marginBottom: 10, marginLeft: 60, marginRight:70, marginTop: 20 }} >
             <View style={{marginBottom: 10}} >
-              <Text>{item.placa}</Text>
-              <Text>{item.pago}</Text>
+              <Text style={HomeStyles.textPlaca}>{item.placa}</Text>
+              <Text style={HomeStyles.textPago}>{item.pago}</Text>
             </View>
             <View style={{ flex: 1, alignItems:'flex-end'}} >
-              <Text>{item.total}</Text>
+              <Text style={HomeStyles.textMoney}>{item.total}</Text>
             </View>
           </View>
           )}}
         />   
         <View style={{paddingLeft:60, marginTop: 50}}>
-          <Text >Carros parqueados</Text>
+          <Text style={HomeStyles.textPago}>Carros parqueados</Text>
         </View>
         <FlatList
           data={carros}
@@ -55,12 +59,12 @@ const HomeIndex = () => {
           return (
           <View style={{ flexDirection: "row", position: 'relative', marginBottom: 10,  marginLeft: 60, marginRight:70, marginTop: 20 }} >
             <View style={{marginBottom: 10, marginleft:10}} >
-              <Text>{item.placa}</Text>
-              <Text>{item.codigo}</Text>
+              <Text style={HomeStyles.textPlaca} >{item.placa}</Text>
+              <Text style={HomeStyles.textPago}>{item.codigo}</Text>
             </View>
             <View style={{ flex: 1, alignItems:'flex-end'}} >
-              <Text>{item.hora}</Text>
-              <Text>{item.medio}</Text>
+              <Text style={HomeStyles.textMoney}>{item.hora}</Text>
+              <Text style={HomeStyles.textPago}>{item.medio}</Text>
             </View>
           </View>
           )}}    
@@ -68,7 +72,7 @@ const HomeIndex = () => {
 
         
       </View>
-      <Footer/>
+      <Footer navigation={navigation}/>
     </View>
   );
 };

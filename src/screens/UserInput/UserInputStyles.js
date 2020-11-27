@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     HeadStyleTable: { 
       height: 40,
       alignContent: "center",
+      
     },
     plateInput: {
       width: '30%', 
@@ -21,6 +22,7 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       borderRadius: 20,
       fontSize: 35,
+      fontFamily: 'Montserrat-Regular'
     },
     numberInput: {
       width: '70%', 
@@ -29,13 +31,14 @@ const styles = StyleSheet.create({
       marginBottom: '10%',
       borderWidth: 1,
       borderRadius: 20,
-      fontSize: 25
+      fontSize: 25,
+      fontFamily: 'Montserrat-Regular'
     },
     buttonI: {
       borderRadius:20,
       alignItems: 'center',
       height: 50,
-      width:70,
+      width: 80,
       borderWidth: 1,
       borderRadius: 15,
       borderColor: 'gray'
@@ -44,7 +47,7 @@ const styles = StyleSheet.create({
       borderRadius:20,
       alignItems: 'center',
       height: 50,
-      width:80,
+      width:50,
       borderWidth: 1,
       borderRadius: 15,
       borderColor: 'gray'
@@ -52,8 +55,8 @@ const styles = StyleSheet.create({
     buttonText: {
       color:'#707070',
       fontSize: 20,
-      fontWeight: 'bold',
-      marginTop: '12%'
+      marginTop: '12%',
+      fontFamily: 'Montserrat-Bold'
     },
     centeredView: {
       flex: 1,
@@ -92,12 +95,18 @@ const styles = StyleSheet.create({
     textStyle: {
       color: "gray",
       fontWeight: "bold",
-      textAlign: "center"
+      textAlign: "center",
+      fontFamily: 'Montserrat-Regular'
     },
     modalText: {
       marginBottom: 15,
-      textAlign: "center"
-    }
-  });
+      textAlign: "center",
+      fontFamily: 'Montserrat-Regular'
+    },
+    tableText: {
+        fontFamily: 'Montserrat-Regular',
+    },
+    
+});
 
 export default styles;
