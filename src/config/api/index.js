@@ -9,3 +9,5 @@ export const GET_PARANOICS_FROM_HQ = "/getParanoicsFromHq";
 export const READ_OFFICIAL = "/readOfficial";
 //RECIPS
 export const GET_RECIPS = "/getRecips";
+//HQ's
+export const READ_HQ = "/readHq";

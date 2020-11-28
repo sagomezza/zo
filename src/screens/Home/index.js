@@ -4,7 +4,7 @@ import Footer from '../../components/Footer';
 import HomeStyles from '../Home/HomeStyles';
 import Logout from '../Menu/MenuStyles';
 import instance from "../../config/axios";
-import { GET_RECIPS } from "../../config/api";
+import { GET_RECIPS, READ_HQ } from "../../config/api";
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 
@@ -13,6 +13,13 @@ const HomeIndex = (props) => {
   //console.log("officialProps: ", officialProps);
   const officialHq = officialProps.official.hq !== undefined ? officialProps.official.hq[0] : "";
   const [ recips, setRecips ] = useState([]);
+  const [ vehiclesData, setVehiclesData ] = useState({
+    availableCars: 0,
+    availableBikes: 0,
+    totalCars: 0,
+    totalBikes: 0,
+  });
+  const [ reservations, setReservations ] = useState([]);
 
   useEffect(() => {
     const getRecips = async () => {
@@ -29,7 +36,28 @@ const HomeIndex = (props) => {
       }
     };
 
+    const readHq = async () => {
+      try {
+        const response = await instance.post(READ_HQ, {
+          id: officialHq
+        });
+        if(response.data.response){
+          //console.log("res; ", response.data.data);
+          setVehiclesData({
+            availableCars: response.data.data.availableCars,
+            availableBikes: response.data.data.availableBikes,
+            totalCars: response.data.data.totalCars,
+            totalBikes: response.data.data.totalBikes
+          });
+          setReservations(response.data.data.reservations);
+        }
+      } catch (error) {
+        console.log("err: ", error);
+      }
+    };
+
     getRecips();
+    readHq();
   }, []);
 
   const placas = [
@@ -47,12 +75,14 @@ const HomeIndex = (props) => {
       <View style={{paddingLeft: '26%', paddingTop: '10%', flexDirection: "row", marginBottom: 50}}>
         <View style={HomeStyles.plateInput}>
           <Text style={HomeStyles.plateInputText}>
-            55/112
+            {`${vehiclesData.availableBikes}/${vehiclesData.totalBikes}`}
           </Text>
           
         </View>
         <View style= {HomeStyles.plateInput}>
-          <Text style={HomeStyles.plateInputText}>85/200</Text>
+          <Text style={HomeStyles.plateInputText}>
+          {`${vehiclesData.availableCars}/${vehiclesData.totalCars}`}
+          </Text>
         </View>
       </View>
       <View style={{paddingBottom: 10}}>
@@ -60,14 +90,14 @@ const HomeIndex = (props) => {
           <Text style={HomeStyles.textPago} >Historial de pagos</Text>
         </View>
         <FlatList
-          data={placas}
+          data={recips}
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
           return (
           <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#008999", marginBottom: 10, marginLeft: 60, marginRight:70, marginTop: 20 }} >
             <View style={{marginBottom: 10}} >
-              <Text style={HomeStyles.textPlaca}>{item.placa}</Text>
-              <Text style={HomeStyles.textPago}>{item.pago}</Text>
+              <Text style={HomeStyles.textPlaca}>{item.plate}</Text>
+              <Text style={HomeStyles.textPago}>{`Pago por ${item.hours} horas`}</Text>
             </View>
             <View style={{ flex: 1, alignItems:'flex-end'}} >
               <Text style={HomeStyles.textMoney}>{item.total}</Text>
@@ -79,18 +109,18 @@ const HomeIndex = (props) => {
           <Text style={HomeStyles.textPago}>Carros parqueados</Text>
         </View>
         <FlatList
-          data={carros}
+          data={reservations}
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
           return (
           <View style={{ flexDirection: "row", position: 'relative', marginBottom: 10,  marginLeft: 60, marginRight:70, marginTop: 20 }} >
             <View style={{marginBottom: 10, marginleft:10}} >
-              <Text style={HomeStyles.textPlaca} >{item.placa}</Text>
-              <Text style={HomeStyles.textPago}>{item.codigo}</Text>
+              <Text style={HomeStyles.textPlaca} >{item.plate}</Text>
+              <Text style={HomeStyles.textPago}>{item.verificationCode}</Text>
             </View>
             <View style={{ flex: 1, alignItems:'flex-end'}} >
-              <Text style={HomeStyles.textMoney}>{item.hora}</Text>
-              <Text style={HomeStyles.textPago}>{item.medio}</Text>
+              <Text style={HomeStyles.textMoney}>{new Date(item.dateStart).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</Text>
+              <Text style={HomeStyles.textPago}>Pago por hora</Text>
             </View>
           </View>
           )}}    
