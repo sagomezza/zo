@@ -10,7 +10,8 @@ import * as actions from "../../redux/actions";
 
 const HomeIndex = (props) => {
   const { navigation, officialProps } = props;
-  const officialHq = officialProps.official.hq[0] !== undefined ? officialProps.official.hq[0] : "";
+  //console.log("officialProps: ", officialProps);
+  const officialHq = officialProps.official.hq !== undefined ? officialProps.official.hq[0] : "";
   const [ recips, setRecips ] = useState([]);
 
   useEffect(() => {

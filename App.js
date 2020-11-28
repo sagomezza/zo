@@ -25,10 +25,25 @@ const App = () => {
   const [fontLoaded, setfontLoaded] = useState(false);
   const [currentUser, setUser] = useState("");
   const [initialRouteName, setInitialRouteName] = useState("Login");
-  const [loginState, setLoginState] = useState(false);
+  const [loginState, setLoginState] = useState(true);
+  
+  const readUser = async (userEmail) => {
+    //console.log("USER. ", userEmail);
+    if(userEmail){
+      try {
+        const response = await instance.post(READ_OFFICIAL, {
+          email: userEmail
+        });
+        if(response.data.response){
+          store.dispatch(setOfficial(response.data.data));
+        }
+      } catch (error) {
+        //console.log("err: ", error);
+      }
+    }
+    setLoginState(false);
+  }
 
-  
-  
   const updateUserState = useCallback((user) => {
     // console.log("[App/updateUserState] ", user);
     if (user) {
@@ -36,35 +51,19 @@ const App = () => {
       // console.log(user)
       setUser(user);
       setInitialRouteName("Home");
+      readUser(user.email);
     } else {
       setUser(null);
       setInitialRouteName("Login");
     }
-    setLoginState(false);
   }, []);
 
   useEffect(() => {
     setLoginState(true);
     // listen for auth state changes
     const unsubscribe = auth.onAuthStateChanged(updateUserState);
+
     // unsubscribe to the listener when unmounting
-
-    const readUser = async () => {
-      if(currentUser.email){
-        try {
-          const response = await instance.post(READ_OFFICIAL, {
-            email: currentUser.email
-          });
-          if(response.data.response){
-            store.dispatch(setOfficial(response.data.data));
-          }
-        } catch (error) {
-          //console.log("err: ", error);
-        }
-      }
-    }
-    readUser();
-
     return () => unsubscribe();
   }, []);
 
