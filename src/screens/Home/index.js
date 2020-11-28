@@ -1,11 +1,36 @@
- import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList  } from 'react-native';
 import Footer from '../../components/Footer';
 import HomeStyles from '../Home/HomeStyles';
 import Logout from '../Menu/MenuStyles';
+import instance from "../../config/axios";
+import { GET_RECIPS } from "../../config/api";
+import { connect } from "react-redux";
+import * as actions from "../../redux/actions";
 
 const HomeIndex = (props) => {
-  const { navigation } = props;
+  const { navigation, officialProps } = props;
+  const officialHq = officialProps.official.hq[0] !== undefined ? officialProps.official.hq[0] : "";
+  const [ recips, setRecips ] = useState([]);
+
+  useEffect(() => {
+    const getRecips = async () => {
+      try {
+        const response = await instance.post(GET_RECIPS, {
+          hqId: officialHq
+        });
+        if(response.data.response === 1){
+          //console.log("res: ", response.data.data.finished);
+          setRecips(response.data.data.finished);
+        }
+      } catch (error) {
+        //console.log("err: ", error);
+      }
+    };
+
+    getRecips();
+  }, []);
+
   const placas = [
     { placa: 'EVW 590', pago: 'Pago por x horas', total: '$16.500' },
     { placa: 'EVW 590', pago: 'Pago por x horas', total: '$16.500'},
@@ -78,4 +103,8 @@ const HomeIndex = (props) => {
 };
 
 
-export default HomeIndex;
+const mapStateToProps = (state) => ({
+  officialProps: state.official
+});
+
+export default connect(mapStateToProps, actions)(HomeIndex);
