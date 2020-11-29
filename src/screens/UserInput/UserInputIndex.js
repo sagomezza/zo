@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { TouchableOpacity, View, Text, Modal, TouchableHighlight, Alert, Image} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { Table, Row, Rows } from 'react-native-table-component';
 import styles from '../UserInput/UserInputStyles';
 import FooterIndex from '../../components/Footer/index';
 import Logout from '../Menu/MenuStyles';
+import Axios from 'axios';
+import { API } from '../../config/constants/api';
+import { TIMEOUT } from '../../config/constants/constants';
 
 const UserInput = (props) => {
   const { navigation } = props;
@@ -20,6 +23,46 @@ const UserInput = (props) => {
       ]
     };
     const [modalVisible, setModalVisible] = useState(false);
+    const [ plateOne, setPlateOne ] = useState('');
+    const [ plateTwo, setPlateTwo ] = useState('');
+    const [ findUserByPlate, setFindUserByPlate] = useState([]);
+    const [ startParking, setStartParking] = useState({});
+    const [ iniciar, setIniciar] = useState(0);
+
+    useEffect(() => {
+      async function test(){
+        try{
+          if((plateOne+plateTwo).length === 6){
+            let readOff = await Axios.post(
+            `${API}${'/findUserByPlate'}`,
+            { plate: plateOne+plateTwo },
+            { timeout: TIMEOUT }
+            )
+            setFindUserByPlate(readOff.data.data);
+            }
+        } catch(err){
+          console.log(err?.response)
+        }
+      }
+      test()
+    }, [plateOne, plateTwo]);
+
+    useEffect(() => {
+      async function test2() {
+        try{
+            let readOff = await Axios.post(
+            `${API}${'/startParking'}`,
+            {  },
+            { timeout: TIMEOUT }
+            )
+            console.log(readOff.data.data)
+            setStartParking(readOff.data.data);    
+        } catch (err){
+          console.log(err?.response)
+        }
+      }
+      test2()
+    }, [iniciar]);
 
     return (
       <View style={{flex: 1}}>  
@@ -33,8 +76,8 @@ const UserInput = (props) => {
                 maxLength={3}
                 autoCapitalize={"characters"}
                 
-                //onChangeText={text => onChangeText(text)}
-                //value={value}
+                onChangeText={text => setPlateOne(text)}
+                value={plateOne}
                 />
                 <TextInput
                 style={styles.plateInput}
@@ -42,8 +85,11 @@ const UserInput = (props) => {
                 maxLength={3}
                 autoCapitalize={"characters"}
                 keyboardType='default'
-                // onChangeText={text => onChangeText(text)}
-                // value={value}
+                onChangeText={(text) =>{
+                  setPlateTwo(text)
+                }
+                }
+                value={plateTwo}
                 />
             </View>
             
@@ -62,7 +108,10 @@ const UserInput = (props) => {
             <TouchableOpacity 
               style={styles.buttonI} 
               >
-              <Text style={styles.buttonText} onPress={() => {setModalVisible(true)}}>Inicio</Text>
+              <Text style={styles.buttonText} onPress={() => {
+                setModalVisible(true);
+                setIniciar(1);
+                }}>Inicio</Text>
             </TouchableOpacity>
           </View>
           <View style={{marginRight: 10}}>
@@ -99,10 +148,10 @@ const UserInput = (props) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={{marginBottom: '7%', alignItems: 'center'}}>
-              <Text style={styles.modalText}>EZV 123</Text>
-              <Text>+3004678602</Text>
+              <Text style={styles.modalText}> {plateOne+ ' ' +plateTwo} </Text>
+              <Text> {findUserByPlate.phone} </Text>
               <Text>Ha iniciado tiempo de parqueo</Text>
-              <Text>11/11/2020 4:20 PM</Text>
+              <Text>hora</Text>
             </View>
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
