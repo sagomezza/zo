@@ -8,29 +8,37 @@ import Logout from '../Menu/MenuStyles';
 import Axios from 'axios';
 import { API } from '../../config/constants/api';
 import { TIMEOUT } from '../../config/constants/constants';
+import { connect } from "react-redux";
+import * as actions from "../../redux/actions";
 
 const UserInput = (props) => {
-  const { navigation } = props;
+  const { navigation, officialProps } = props;
+  //console.log("officialProps: ", officialProps);
+  const officialHq = officialProps.official.hq !== undefined ? officialProps.official.hq[0] : "";
 
     const isBlackList = true;
-    const dateMonth = new Date('05/05/20');
+    const dateMonth = '--';
     const state = {
       HeadTable: ['Vehículos', 'Últimos pagos'],
       DataTable: [
         ['EVT 123', '09/11/2020 $9600'],
-        ['EVT 124', '09/11/2020 $9600'],
-        ['EVT 125', '09/11/2020 $9600']
+
       ]
     };
+    
     const [modalVisible, setModalVisible] = useState(false);
     const [ plateOne, setPlateOne ] = useState('');
     const [ plateTwo, setPlateTwo ] = useState('');
     const [ findUserByPlate, setFindUserByPlate] = useState([]);
     const [ startParking, setStartParking] = useState({});
     const [ iniciar, setIniciar] = useState(0);
+    
+    function isCharacterALetter(char) {
+      return (/[a-zA-Z]/).test(char)
+    }
 
     useEffect(() => {
-      async function test(){
+      async function findUserByPlate(){
         try{
           if((plateOne+plateTwo).length === 6){
             let readOff = await Axios.post(
@@ -44,25 +52,34 @@ const UserInput = (props) => {
           console.log(err?.response)
         }
       }
-      test()
-    }, [plateOne, plateTwo]);
+      findUserByPlate()
+    },[plateOne, plateTwo]);
 
-    useEffect(() => {
-      async function test2() {
+    async function startPark(){
         try{
+          if((plateOne+plateTwo).length === 6){
+            let type
+            if(isCharacterALetter(plateTwo[2])) type = "bike"
+            else type = "car"
             let readOff = await Axios.post(
             `${API}${'/startParking'}`,
-            {  },
+            { plate: plateOne+plateTwo, 
+              hqId: officialHq, 
+              dateStart: new Date(),
+              phone: "+571456789674",
+              type  },
             { timeout: TIMEOUT }
             )
-            console.log(readOff.data.data)
-            setStartParking(readOff.data.data);    
-        } catch (err){
+            setModalVisible(true);
+            setIniciar(1);
+            setStartParking(readOff.data.data);
+            }
+        } catch(err){
+          console.log(err)
           console.log(err?.response)
-        }
-      }
-      test2()
-    }, [iniciar]);
+        } 
+      };
+    
 
     return (
       <View style={{flex: 1}}>  
@@ -107,29 +124,29 @@ const UserInput = (props) => {
           <View style={{marginRight: 20}}>
             <TouchableOpacity 
               style={styles.buttonI} 
+              onPress={() => {
+                startPark()
+                }}
               >
-              <Text style={styles.buttonText} onPress={() => {
-                setModalVisible(true);
-                setIniciar(1);
-                }}>Inicio</Text>
+              <Text style={styles.buttonText} >Inicio</Text>
             </TouchableOpacity>
           </View>
           <View style={{marginRight: 10}}>
             <TouchableOpacity style={styles.buttonT}   onPress={() => {navigation.navigate('QRscanner')}}>
-              {/* <Image source={require('./assets/Imagenes/Grupo34.png')}/> */}
+                {/* <Image source={require('./assets/Imagenes/Grupo34.png')}/> */}
             </TouchableOpacity>
           </View>
         </View>
        
        <View style={{alignItems: 'center'}}>
-          {isBlackList ? <Text style={{fontFamily: 'Montserrat-Regular'}}>{"Lista Negra"}</Text> : ''}
+          {isBlackList ? <Text style={{fontFamily: 'Montserrat-Regular'}}>Blacklist: </Text> : ''}
   
-          <Text style={{fontSize: 20, fontFamily: 'Montserrat-Regular'}}>Gerardo Bedoya</Text>
+          
           <Text  style={{fontFamily: 'Montserrat-Regular', fontSize: 12}}>{"Mensualidad hasta " + dateMonth}</Text>
         </View>
         <View>
             <Table >
-            <Row data={state.HeadTable} style={styles.HeadStyleTable} textStyle={styles.tableText}/>
+            <Row data={state.Table} style={styles.HeadStyleTable} textStyle={styles.tableText}/>
             <Rows data={state.DataTable} textStyle={styles.tableText}/>
             </Table>
         </View>
@@ -149,9 +166,9 @@ const UserInput = (props) => {
           <View style={styles.modalView}>
             <View style={{marginBottom: '7%', alignItems: 'center'}}>
               <Text style={styles.modalText}> {plateOne+ ' ' +plateTwo} </Text>
-              <Text> {findUserByPlate.phone} </Text>
+              <Text> {startPark.phone} </Text>
               <Text>Ha iniciado tiempo de parqueo</Text>
-              <Text>hora</Text>
+              <Text>{new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</Text>
             </View>
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
@@ -168,5 +185,9 @@ const UserInput = (props) => {
     );
 
 }
+const mapStateToProps = (state) => ({
+  officialProps: state.official
+});
 
-  export default UserInput;
+export default connect(mapStateToProps, actions)(UserInput);
+

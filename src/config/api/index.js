@@ -11,3 +11,7 @@ export const READ_OFFICIAL = "/readOfficial";
 export const GET_RECIPS = "/getRecips";
 //HQ's
 export const READ_HQ = "/readHq";
+//PARKING PROCESS
+export const START_PARKING = "/startParking";
+export const MARKEXIT = "/markExit"
+export const FINISHPARKING = "/finishParking"

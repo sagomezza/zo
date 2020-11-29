@@ -2,34 +2,25 @@ import React, {useState} from 'react';
 import { StyleSheet, Button, View, Modal,TouchableHighlight } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { Text, TouchableOpacity } from 'react-native';
-import moment from 'moment';
+// import moment from 'moment';
 import FooterIndex from '../../components/Footer/index';
 import Logout from '../Menu/MenuStyles';
+import { connect } from "react-redux";
+import instance from "../../config/axios";
+import * as actions from "../../redux/actions";
+import { MARKEXIT, FINISHPARKING } from '../../config/api'
 
 const UserOut = (props) => {
-  const { navigation } = props;
+ const { navigation } = props;
+  // const dateMonthIn = new Date('05/05/20');
+  // const dateMonthOut = new Date('07/05/20');
 
-  const dateMonthIn = new Date('05/05/20');
-  const dateMonthOut = new Date('07/05/20');
-  const phoneNumber = 3134578950;
-  const hour = 1;
   const [totalAmount, setTotalAmount] = useState(39000);
   const [totalPay, setTotalPay] = useState(0);
   const [totalPayModal, setTotalPayModal] = useState(0);
   const [plateOne, setPlateOne] = useState('');
   const [plateTwo, setPlateTwo] = useState('');
   const [isEditable, setIsEditable] = useState(true);
-
-  // function validate(){
-  //   console.log('asdsadsd');
-  //   console.log(plateOne);
-  //   if((plateOne.length + plateTwo.length) == 6){
-  //     // conexion con back
-  //     setIsEditable(false);
-  //     alert('asjdgasdgh');
-  //   }
-  // }
-
 
   const styles = StyleSheet.create({
     container: { 
@@ -185,13 +176,13 @@ const UserOut = (props) => {
         </View>
 
         <View style={{alignItems: 'center', marginBottom: '5%'}}>
-          {<Text style={styles.infoUSerText}>{phoneNumber}</Text>}
-          <Text style={styles.infoUSerText}>{"Tiempo de inicio: " + moment(dateMonthIn).format('hh:MM A DD/MM/YY')}</Text>
-          <Text style={styles.infoUSerText}>{"Tiempo de salida " + moment(dateMonthOut).format('hh:MM A DD/MM/YY')}</Text>
+          {<Text style={styles.infoUSerText}>Celular: </Text>}
+          <Text style={styles.infoUSerText}>{"Tiempo de inicio: " }</Text>
+          <Text style={styles.infoUSerText}>{"Tiempo de salida "  }</Text>
           <Text style={styles.infoUSerText}>CODIGO: </Text>
-          <Text style={{fontSize: 20, fontFamily: 'Montserrat-Regular'}}>{"Total horas: " + hour + (hour > 1 ? " Horas" : " Hora")}</Text>
+          <Text style={{fontSize: 20, fontFamily: 'Montserrat-Regular'}}>{"Total horas: "  }</Text>
           <Text style={styles.infoUSerText}>{"A pagar"}</Text>
-          <Text style={{fontSize: 50, fontFamily: 'Montserrat-Regular'}}>{"$" + totalAmount }</Text>
+          <Text style={{fontSize: 50, fontFamily: 'Montserrat-Regular'}}>{"$" }</Text>
         </View>
 
         <View style={{alignItems: 'center'}}>
@@ -407,5 +398,8 @@ const UserOut = (props) => {
     </View>
   );
 }
+const mapStateToProps = (state) => ({
+  officialProps: state.official
+});
 
-export default UserOut;
+export default connect(mapStateToProps, actions)(UserOut);
