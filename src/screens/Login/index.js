@@ -67,11 +67,11 @@ const LoginIndex = (props) => {
       console.log(err)
     }
   }
-
+///assets/images/icon@2x.png'
   return (
-    <View style={styles.container}>
+    <View style={styles.container}> 
       <View>
-      {/* <Image style={{width:50, height: 50}} source={require('./assets/images/icon@2x.png')}/> */}
+      <Image style={{width:100, height: 70}} resizeMode={"contain"} source={require( '../../../assets/images/icon.png' )}/>
       </View>
       <Text style={styles.loginText} >Inicio de sesión</Text>
       <Text style={{ marginRight: '36%', ...styles.titleInputText }}>Correo</Text>
