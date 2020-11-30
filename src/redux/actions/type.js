@@ -1,1 +1,2 @@
 export const SET_OFFICIAL = "[SET_OFFICIAL]"
+export const SET_RESERVATIONS = "[SET_RESERVATION]"

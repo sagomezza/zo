@@ -1,5 +1,4 @@
 import {
-    GET_RESERVATIONS,
     SET_RESERVATIONS
 } from '../actions/type'
 
@@ -9,10 +8,6 @@ const initialState = {
 
 const reservationsReducer = (state=initialState, action ) => {
     switch (action.type) {
-        case GET_RESERVATIONS:
-            return {
-                ...state,
-            };
         case SET_RESERVATIONS:
             return {
                 ...state,
