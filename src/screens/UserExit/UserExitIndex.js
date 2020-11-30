@@ -140,8 +140,8 @@ const UserOut = (props) => {
         if ((plateOne + plateTwo).length === 6) {
           let reserve = props.reservations.filter(reserve => reserve.plate === plateOne + plateTwo)
 
-          let readOff = await Axios.post(
-            `${API}${MARKEXIT}`,
+          let readOff = await instance.post(
+            MARKEXIT,
             {
               plate: plateOne + plateTwo,
               hqId: reserve.hqId,
@@ -167,8 +167,8 @@ const UserOut = (props) => {
     setLoading(true)
     setErr("")
     try {
-      let readOff = await Axios.post(
-        `${API}${MARKEXIT}`,
+      let readOff = await instance.post(
+        FINISHPARKING,
         {
           plate: recip.plate,
           hqId: recip.hqId,
