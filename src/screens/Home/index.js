@@ -50,6 +50,7 @@ const HomeIndex = (props) => {
             totalBikes: response.data.data.totalBikes
           });
           setReservations(response.data.data.reservations);
+          props.setReservations(response.data.data.reservations)
         }
       } catch (error) {
         console.log("err: ", error);
@@ -135,7 +136,8 @@ const HomeIndex = (props) => {
 
 
 const mapStateToProps = (state) => ({
-  officialProps: state.official
+  officialProps: state.official,
+  reservations: state.reservations
 });
 
 export default connect(mapStateToProps, actions)(HomeIndex);
