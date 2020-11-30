@@ -67,13 +67,13 @@ const App = () => {
     return () => unsubscribe();
   }, []);
 
-  if (loginState || initialRouteName === "") {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator size={50} color={"#2DD47F"} />
-      </View>
-    );
-  }
+  // if (loginState || initialRouteName === "") {
+  //   return (
+  //     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+  //       <ActivityIndicator size={50} color={"#2DD47F"} />
+  //     </View>
+  //   );
+  // }
 
   if (!fontLoaded) {
     return <AppLoading

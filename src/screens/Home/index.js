@@ -61,15 +61,7 @@ const HomeIndex = (props) => {
     readHq();
   }, []);
 
-  const placas = [
-    { placa: 'EVW 590', pago: 'Pago por x horas', total: '$16.500' },
-    { placa: 'EVW 590', pago: 'Pago por x horas', total: '$16.500'},
-    { placa: 'EVW 590', pago: 'Pago por x horas', total: '$16.500'},  
-  ];
-  const carros = [
-    { placa: 'EVL 590', codigo: 'Código:986009', hora:'11:28 PM', medio:'Pago x horas ' },
-    { placa: 'EVL 590', codigo: 'Tarjeta:', hora:'11:28 PM', medio:'Mensualidad' },
-  ];
+
   return (
     <View style={{flex: 1}}>
       <Logout navigation={navigation}/> 
@@ -106,9 +98,11 @@ const HomeIndex = (props) => {
           </View>
           )}}
         />   
-        <View style={{paddingLeft:60, marginTop: 50}}>
+        
+        <View style={{paddingLeft:60, marginTop: 30}}>
           <Text style={HomeStyles.textPago}>Carros parqueados</Text>
         </View>
+        
         <FlatList
           data={reservations}
           keyExtractor={({ id }) => id}

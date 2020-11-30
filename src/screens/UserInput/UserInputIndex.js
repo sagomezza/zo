@@ -140,19 +140,20 @@ const UserInput = (props) => {
                 </TouchableOpacity>
             }
           </View>
+          
           <View style={{ marginRight: 10 }}>
             <TouchableOpacity style={styles.buttonT} onPress={() => { navigation.navigate('QRscanner') }}>
-              {/* <Image source={require('./assets/Imagenes/Grupo34.png')}/> */}
+              <Image style={{width: 30, height: 30, marginTop: 8}} source={require('../../../assets/images/GrupoQR.png')}/>
             </TouchableOpacity>
           </View>
         </View>
 
-        <View style={{ alignItems: 'center' }}>
+        {/* <View style={{ alignItems: 'center' }}>
           {isBlackList ? <Text style={{ fontFamily: 'Montserrat-Regular' }}>Blacklist: </Text> : ''}
 
 
           <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 12 }}>{"Mensualidad hasta " + dateMonth}</Text>
-        </View>
+        </View> */}
         {/* <View>
           <Table >
             <Row data={state.Table} style={styles.HeadStyleTable} textStyle={styles.tableText} />
@@ -181,8 +182,9 @@ const UserInput = (props) => {
             </View>
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
-              onPress={() => {
+              onPress={({navigation}) => {
                 setModalVisible(!modalVisible);
+                
               }}
             >
               <Text style={styles.textStyle}>Entendido</Text>
