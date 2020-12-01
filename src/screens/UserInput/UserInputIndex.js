@@ -16,7 +16,7 @@ import { START_PARKING, FIND_USER_BY_PLATE } from "../../config/api";
 const UserInput = (props) => {
   const { navigation, officialProps } = props;
   //console.log("officialProps: ", officialProps);
-  const officialHq = officialProps.official.hq !== undefined ? officialProps.official.hq[0] : "";
+  const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
 
   const isBlackList = true;
   const dateMonth = '--';
@@ -187,6 +187,7 @@ const UserInput = (props) => {
                 setModalVisible(!modalVisible);
                 setPlateOne("");
                 setPlateTwo("");
+                setPhone("");
               }}
             >
               <Text style={styles.textStyle}>Entendido</Text>

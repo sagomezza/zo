@@ -140,18 +140,14 @@ const UserOut = (props) => {
     async function markExit() {
       try {
         if ((plateOne + plateTwo).length === 6) {
-          console.log("1")
           let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
-          console.log('1');
-          console.log(reserve)
           let data = {
             plate: plateOne + plateTwo,
-            hqId: reserve.hqId,
-            phone: reserve.phone,
+            hqId: reserve[0].hqId,
+            phone: reserve[0].phone,
             officialEmail: officialProps.email,
             dateFinished: new Date()
           }
-          console.log(data)
           const response = await instance.post(
             MARKEXIT,
             {
@@ -163,12 +159,11 @@ const UserOut = (props) => {
             },
             { timeout: TIMEOUT }
           )
-          console.log(response.data.data);
           setRecip(response.data.data);
           setTotalAmount(response.data.data.total)
         }
       } catch (err) {
-        console.log(err)
+        console.log(err.response)
   
       }
     }

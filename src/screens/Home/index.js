@@ -11,7 +11,7 @@ import * as actions from "../../redux/actions";
 const HomeIndex = (props) => {
   const { navigation, officialProps } = props;
   //console.log("officialProps: ", officialProps);
-  const officialHq = officialProps.official.hq !== undefined ? officialProps.official.hq[0] : "";
+  const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const [ recips, setRecips ] = useState([]);
   const [ vehiclesData, setVehiclesData ] = useState({
     availableCars: 0,
