@@ -81,6 +81,7 @@ const UserInput = (props) => {
         setModalVisible(true);
         setIniciar(1);
         setStartParking(readOff.data.data);
+        setLoading(false);
       }
     } catch (err) {
       console.log(err)
@@ -136,7 +137,7 @@ const UserInput = (props) => {
                 : <TouchableOpacity
                   style={styles.buttonI}
                   onPress={() => {
-                    startPark()
+                    startPark();
                   }}
                 >
                   <Text style={styles.buttonText} >Inicio</Text>
