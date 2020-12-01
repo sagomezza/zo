@@ -83,6 +83,7 @@ const HomeIndex = (props) => {
           <Text style={HomeStyles.textPago} >Historial de pagos</Text>
         </View>
         <FlatList
+          style= {{height: "40%"}}
           data={recips}
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
@@ -104,11 +105,12 @@ const HomeIndex = (props) => {
         </View>
         
         <FlatList
+          
           data={reservations}
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
           return (
-          <View style={{ flexDirection: "row", position: 'relative', marginBottom: 10,  marginLeft: 60, marginRight:70, marginTop: 20 }} >
+            <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#008999", marginBottom: 10, marginLeft: 60, marginRight:70, marginTop: 20 }} >            
             <View style={{marginBottom: 10, marginleft:10}} >
               <Text style={HomeStyles.textPlaca} >{item.plate}</Text>
               <Text style={HomeStyles.textPago}>{item.verificationCode}</Text>

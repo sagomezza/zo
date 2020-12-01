@@ -23,7 +23,7 @@ const UserOut = (props) => {
   const [plateTwo, setPlateTwo] = useState("");
   const [isEditable, setIsEditable] = useState(true);
   const [recip, setRecip] = useState({})
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("")
 
 
@@ -136,18 +136,27 @@ const UserOut = (props) => {
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
 
+  function restart(){
+    setTotalAmount(0);
+    setTotalPay(0);
+    setTotalPayModal(0);
+    setPlateOne("");
+    setPlateTwo("");
+    setIsEditable(true);
+    setRecip({})
+    setLoading(false);
+    setErr("")
+    setModalVisible(false);
+    setModal2Visible(false);
+    setModal3Visible(false);
+    setModal4Visible(false);
+  }
+
   useEffect(() => {
     async function markExit() {
       try {
         if ((plateOne + plateTwo).length === 6) {
           let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
-          let data = {
-            plate: plateOne + plateTwo,
-            hqId: reserve[0].hqId,
-            phone: reserve[0].phone,
-            officialEmail: officialProps.email,
-            dateFinished: new Date()
-          }
           const response = await instance.post(
             MARKEXIT,
             {
@@ -160,6 +169,7 @@ const UserOut = (props) => {
             { timeout: TIMEOUT }
           )
           setRecip(response.data.data);
+          // console.log(totalAmount - totalPay)
           setTotalAmount(response.data.data.total)
         }
       } catch (err) {
@@ -171,7 +181,7 @@ const UserOut = (props) => {
   }, [plateOne, plateTwo]);
 
   const finishParking = async (paymentStatus) => {
-    setLoading(true)
+    // setLoading(true)
     setErr("")
     try {
       const response = await instance.post(
@@ -189,8 +199,11 @@ const UserOut = (props) => {
         { timeout: TIMEOUT }
       )
       //props.navigation.navigate("home")
+      setLoading(true)
+      restart()
     } catch (err) {
-      console.log(err)
+      console.log(err?.response)
+      setLoading(false)
       setErr("Algo malo pasó, vuelve a intentarlo más tarde")
     }
   }
@@ -244,8 +257,8 @@ const UserOut = (props) => {
 
         <View style={{ alignItems: 'center', marginBottom: '5%' }}>
           {<Text style={styles.infoUSerText}>Celular: {recip.phone} </Text>}
-          <Text style={styles.infoUSerText}>Tiempo de inicio: {recip.dateStart && new Date(recip.dateStart)}</Text>
-          <Text style={styles.infoUSerText}>Tiempo de salida: {recip.dateFinished && new Date(recip.dateFinished)}</Text>
+          {/* <Text style={styles.infoUSerText}>Tiempo de inicio: {recip.dateStart && new Date(recip.dateStart)}</Text> */}
+          {/* <Text style={styles.infoUSerText}>Tiempo de salida: {recip.dateFinished && new Date(recip.dateFinished)}</Text> */}
           <Text style={styles.infoUSerText}>CODIGO: {recip.verificationCode} </Text>
           <Text style={{ fontSize: 20, fontFamily: 'Montserrat-Regular' }}>Total horas: {recip?.hours}</Text>
           <Text style={styles.infoUSerText}>{"A pagar"}</Text>
@@ -303,20 +316,28 @@ const UserOut = (props) => {
           </View>
         </View>
         {err !== "" && <Text style={{color: "red"}}>{err}</Text>}
-        {!loading && <View style={{ marginBottom: 10 }}>
+        {/* {!loading &&  */}
+        <View style={{ marginBottom: 10 }}>
           <Button
             title="Cobrar"
             color='gray'
+            disabled={loading}
             onPress={() => { setModalVisible(true); finishParking("payed") }} />
-        </View>}
-        {loading && <ActivityIndicator />}
-        {!loading && <View style={{ marginBottom: 10 }}>
+        </View>
+        {/* } */}
+        {/* {loading && <ActivityIndicator />} */}
+        {/* {!loading &&  */}
+        <View style={{ marginBottom: 10 }}>
           <Button
             title="Pago pendiente"
             color='gray'
-            onPress={() => { setModal2Visible(true); finishParking("pending") }}
+            disabled={loading}
+            onPress={() => { setModal2Visible(true); 
+              // finishParking("pending") 
+            }}
           />
-        </View>}
+        </View>
+        {/* } */}
       </View>
       <FooterIndex navigation={navigation} />
       <Modal
@@ -324,17 +345,13 @@ const UserOut = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={{ marginBottom: '7%', alignItems: 'center' }}>
-              <Text style={styles.modalText}>EZV 123</Text>
-              <Text>+3004678602</Text>
-              <Text>Ha iniciado tiempo de parqueo</Text>
-              <Text>11/11/2020 4:20 PM</Text>
+              <Text style={styles.modalText}>{recip.plate}</Text>
+              <Text>{recip.phone}</Text>
+              <Text>¡Cobro exitoso!</Text>
             </View>
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
@@ -352,9 +369,6 @@ const UserOut = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modal2Visible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -390,9 +404,6 @@ const UserOut = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modal3Visible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -405,6 +416,7 @@ const UserOut = (props) => {
                 style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
                 onPress={() => {
                   setModal3Visible(!modal3Visible);
+                  finishParking("pending") 
                 }}
 
               >
@@ -429,9 +441,6 @@ const UserOut = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modal4Visible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
       >
         <View style={styles.centeredView}>
           <View style={{ ...styles.modalView }}>
@@ -446,7 +455,7 @@ const UserOut = (props) => {
               />
               <TextInput
                 editable={false}
-                value={(totalAmount - totalPayModal) < 0 ? '0' : totalPay + (totalAmount - totalPayModal) + ''}
+                value={(totalPayModal - totalAmount) < 0 ? '0' : (totalPayModal - totalAmount) + ''}
               />
             </View>
             <View style={{ flexDirection: 'row' }}>
@@ -454,7 +463,8 @@ const UserOut = (props) => {
                 style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
                 onPress={() => {
                   setModal4Visible(!modal4Visible);
-                  setTotalAmount(totalAmount - totalPayModal);
+                  setTotalPay(totalPayModal)
+                  finishParking("parcial-pending") 
                   setTotalPayModal(0);
                 }}
               >
