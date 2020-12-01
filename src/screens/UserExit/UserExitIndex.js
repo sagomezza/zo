@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import instance from "../../config/axios";
 import * as actions from "../../redux/actions";
 import { MARKEXIT, FINISHPARKING } from '../../config/api'
+import { TIMEOUT } from '../../config/constants/constants';
 
 const UserOut = (props) => {
   const { navigation, officialProps } = props;
@@ -18,12 +19,14 @@ const UserOut = (props) => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
   const [totalPayModal, setTotalPayModal] = useState(0);
-  const [plateOne, setPlateOne] = useState(String);
-  const [plateTwo, setPlateTwo] = useState(String);
+  const [plateOne, setPlateOne] = useState("");
+  const [plateTwo, setPlateTwo] = useState("");
   const [isEditable, setIsEditable] = useState(true);
   const [recip, setRecip] = useState({})
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("")
+
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -136,29 +139,37 @@ const UserOut = (props) => {
   useEffect(() => {
     async function markExit() {
       try {
-        console.log((plateOne+plateTwo).length === 6)
         if ((plateOne + plateTwo).length === 6) {
-          console.log("entro")
-          let reserve = props.reservations.filter(reserve => reserve.plate === plateOne + plateTwo)
+          console.log("1")
+          let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
+          console.log('1');
           console.log(reserve)
-          let readOff = await instance.post(
+          let data = {
+            plate: plateOne + plateTwo,
+            hqId: reserve.hqId,
+            phone: reserve.phone,
+            officialEmail: officialProps.email,
+            dateFinished: new Date()
+          }
+          console.log(data)
+          const response = await instance.post(
             MARKEXIT,
             {
               plate: plateOne + plateTwo,
-              hqId: reserve.hqId,
-              phone: reserve.phone,
+              hqId: reserve[0].hqId,
+              phone: reserve[0].phone,
               officialEmail: officialProps.email,
               dateFinished: new Date()
             },
             { timeout: TIMEOUT }
           )
-          console(recip.data.data)
-          setRecip(readOff.data.data);
-          setTotalAmount(readOff.data.data.total)
+          console.log(response.data.data);
+          setRecip(response.data.data);
+          setTotalAmount(response.data.data.total)
         }
       } catch (err) {
         console.log(err)
-        console.log(err?.response)
+  
       }
     }
     markExit()
@@ -168,7 +179,7 @@ const UserOut = (props) => {
     setLoading(true)
     setErr("")
     try {
-      let readOff = await instance.post(
+      const response = await instance.post(
         FINISHPARKING,
         {
           plate: recip.plate,
@@ -214,8 +225,7 @@ const UserOut = (props) => {
             textAlign='center'
             maxLength={3}
             autoCapitalize={'characters'}
-            editable={isEditable}
-            onChange={text => {
+            onChangeText={text => {
               setPlateOne(text)
               // validate()
             }}
@@ -228,8 +238,7 @@ const UserOut = (props) => {
             textAlign='center'
             maxLength={3}
             autoCapitalize={'characters'}
-            editable={isEditable}
-            onChange={text => {
+            onChangeText={(text) => {
               setPlateTwo(text)
               //validate()
             }}

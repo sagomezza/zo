@@ -45,12 +45,12 @@ const UserInput = (props) => {
     async function findUserByPlate() {
       try {
         if ((plateOne + plateTwo).length === 6) {
-          let readOff = await Axios.post(
-            `${API}${'/findUserByPlate'}`,
+          const response = await instance.post(
+            FIND_USER_BY_PLATE,
             { plate: plateOne + plateTwo },
             { timeout: TIMEOUT }
           )
-          setFindUserByPlate(readOff.data.data);
+          setFindUserByPlate(response.data.data);
         }
       } catch (err) {
         console.log(err?.response)
@@ -62,12 +62,11 @@ const UserInput = (props) => {
   async function startPark() {
     setLoading(true)
     try {
-      console.log((plateOne+plateTwo).length === 6)
       if ((plateOne + plateTwo).length === 6) {
         let type
         if (isCharacterALetter(plateTwo[2])) type = "bike"
         else type = "car"
-        let readOff = await instance.post(
+        const response = await instance.post(
           START_PARKING,
           {
             plate: plateOne + plateTwo,
@@ -80,16 +79,15 @@ const UserInput = (props) => {
         )
         setModalVisible(true);
         setIniciar(1);
-        setStartParking(readOff.data.data);
+        setStartParking(response.data.data);
         setLoading(false);
       }
     } catch (err) {
-      console.log(err)
       console.log(err?.response)
     }
   };
 
-
+  
   return (
     <View style={{ flex: 1 }}>
       <Logout navigation={navigation} />
@@ -101,7 +99,6 @@ const UserInput = (props) => {
               textAlign='center'
               maxLength={3}
               autoCapitalize={"characters"}
-
               onChangeText={text => setPlateOne(text)}
               value={plateOne}
             />
@@ -111,7 +108,7 @@ const UserInput = (props) => {
               maxLength={3}
               autoCapitalize={"characters"}
               keyboardType='default'
-              onChangeText={(text) => 
+              onChangeText={text => 
                 setPlateTwo(text)
               
               }
