@@ -18,8 +18,8 @@ const UserOut = (props) => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
   const [totalPayModal, setTotalPayModal] = useState(0);
-  const [plateOne, setPlateOne] = useState('');
-  const [plateTwo, setPlateTwo] = useState('');
+  const [plateOne, setPlateOne] = useState(String);
+  const [plateTwo, setPlateTwo] = useState(String);
   const [isEditable, setIsEditable] = useState(true);
   const [recip, setRecip] = useState({})
   const [loading, setLoading] = useState(true);
@@ -134,14 +134,15 @@ const UserOut = (props) => {
   const [modal4Visible, setModal4Visible] = useState(false);
 
   useEffect(() => {
-     const markExit = async () => {
+    async function markExit() {
       try {
-        console.log((plateOne + plateTwo).length === 6)
+        console.log((plateOne+plateTwo).length === 6)
         if ((plateOne + plateTwo).length === 6) {
+          console.log("entro")
           let reserve = props.reservations.filter(reserve => reserve.plate === plateOne + plateTwo)
-
-          let readOff = await Axios.post(
-            `${API}${MARKEXIT}`,
+          console.log(reserve)
+          let readOff = await instance.post(
+            MARKEXIT,
             {
               plate: plateOne + plateTwo,
               hqId: reserve.hqId,
@@ -167,8 +168,8 @@ const UserOut = (props) => {
     setLoading(true)
     setErr("")
     try {
-      let readOff = await Axios.post(
-        `${API}${MARKEXIT}`,
+      let readOff = await instance.post(
+        FINISHPARKING,
         {
           plate: recip.plate,
           hqId: recip.hqId,
@@ -211,7 +212,6 @@ const UserOut = (props) => {
           <TextInput
             style={styles.plateInput}
             textAlign='center'
-            value={plateOne}
             maxLength={3}
             autoCapitalize={'characters'}
             editable={isEditable}
@@ -219,12 +219,13 @@ const UserOut = (props) => {
               setPlateOne(text)
               // validate()
             }}
+            value={plateOne}
+            
           />
 
           <TextInput
             style={styles.plateInput}
             textAlign='center'
-            value={plateTwo}
             maxLength={3}
             autoCapitalize={'characters'}
             editable={isEditable}
@@ -232,17 +233,19 @@ const UserOut = (props) => {
               setPlateTwo(text)
               //validate()
             }}
+            value={plateTwo}
+            
           />
         </View>
 
         <View style={{ alignItems: 'center', marginBottom: '5%' }}>
-          {<Text style={styles.infoUSerText}>Celular: {recip?.phone} </Text>}
+          {<Text style={styles.infoUSerText}>Celular: {recip.phone} </Text>}
           <Text style={styles.infoUSerText}>Tiempo de inicio: {recip.dateStart && new Date(recip.dateStart)}</Text>
           <Text style={styles.infoUSerText}>Tiempo de salida: {recip.dateFinished && new Date(recip.dateFinished)}</Text>
-          <Text style={styles.infoUSerText}>CODIGO: {recip?.verificationCode} </Text>
+          <Text style={styles.infoUSerText}>CODIGO: {recip.verificationCode} </Text>
           <Text style={{ fontSize: 20, fontFamily: 'Montserrat-Regular' }}>Total horas: {recip?.hours}</Text>
           <Text style={styles.infoUSerText}>{"A pagar"}</Text>
-          <Text style={{ fontSize: 50, fontFamily: 'Montserrat-Regular' }}>$ {recip?.total} </Text>
+          <Text style={{ fontSize: 50, fontFamily: 'Montserrat-Regular' }}>$ {recip.total} </Text>
         </View>
 
         <View style={{ alignItems: 'center' }}>

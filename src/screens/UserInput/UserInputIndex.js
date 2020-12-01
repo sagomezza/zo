@@ -10,6 +10,8 @@ import { API } from '../../config/constants/api';
 import { TIMEOUT } from '../../config/constants/constants';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
+import instance from "../../config/axios";
+import { START_PARKING, FIND_USER_BY_PLATE } from "../../config/api";
 
 const UserInput = (props) => {
   const { navigation, officialProps } = props;
@@ -60,12 +62,13 @@ const UserInput = (props) => {
   async function startPark() {
     setLoading(true)
     try {
+      console.log((plateOne+plateTwo).length === 6)
       if ((plateOne + plateTwo).length === 6) {
         let type
         if (isCharacterALetter(plateTwo[2])) type = "bike"
         else type = "car"
-        let readOff = await Axios.post(
-          `${API}${'/startParking'}`,
+        let readOff = await instance.post(
+          START_PARKING,
           {
             plate: plateOne + plateTwo,
             hqId: officialHq,
@@ -107,9 +110,9 @@ const UserInput = (props) => {
               maxLength={3}
               autoCapitalize={"characters"}
               keyboardType='default'
-              onChangeText={(text) => {
+              onChangeText={(text) => 
                 setPlateTwo(text)
-              }
+              
               }
               value={plateTwo}
             />
@@ -176,7 +179,7 @@ const UserInput = (props) => {
           <View style={styles.modalView}>
             <View style={{ marginBottom: '7%', alignItems: 'center' }}>
               <Text style={styles.modalText}> {plateOne + ' ' + plateTwo} </Text>
-              <Text> {startPark.phone} </Text>
+              <Text> {findUserByPlate} </Text>
               <Text>Ha iniciado tiempo de parqueo</Text>
               <Text>{new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</Text>
             </View>
@@ -184,7 +187,8 @@ const UserInput = (props) => {
               style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
               onPress={({navigation}) => {
                 setModalVisible(!modalVisible);
-                
+                setPlateOne("");
+                setPlateTwo("");
               }}
             >
               <Text style={styles.textStyle}>Entendido</Text>
