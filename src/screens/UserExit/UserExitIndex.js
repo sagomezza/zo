@@ -156,7 +156,9 @@ const UserOut = (props) => {
     async function markExit() {
       try {
         if ((plateOne + plateTwo).length === 6) {
+          console.log(props.reservations.reservations)
           let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
+          console.log(reserve)
           const response = await instance.post(
             MARKEXIT,
             {

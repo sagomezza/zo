@@ -79,7 +79,21 @@ const LogoutIndex = (props) => {
   const dateMonthIn = new Date('05/05/20');
   const dateMonthOut = new Date('07/05/20');
   const [ inputValue, setInputValue] = useState(0);
-
+  useEffect(() => {
+    const readHq = async () => {
+      try {
+        const response = await instance.post(READ_HQ, {
+          id: officialHq
+        });
+        if(response.data.response){
+          props.setReservations(response.data.data.reservations);
+        }
+      } catch (error) {
+        console.log("err: ", error);
+      }
+    };
+    readHq();
+  }, []);
 
   return (
   <View style={{flex: 1}}>

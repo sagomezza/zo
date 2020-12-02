@@ -84,7 +84,7 @@ const HomeIndex = (props) => {
           <Text style={HomeStyles.textPago} >Historial de pagos</Text>
         </View>
         <FlatList
-          style= {{height: "40%"}}
+          style= {{height: "35%"}}
           data={recips}
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
@@ -101,12 +101,12 @@ const HomeIndex = (props) => {
           )}}
         />   
         
-        <View style={{paddingLeft:60, marginTop: 30}}>
+        <View style={{paddingLeft:60}}>
           <Text style={HomeStyles.textPago}>Carros parqueados</Text>
         </View>
         
         <FlatList
-          
+          styles={{marginBottom: "30%"}}
           data={reservations}
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
