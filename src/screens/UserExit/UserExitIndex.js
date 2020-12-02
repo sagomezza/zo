@@ -173,7 +173,7 @@ const UserOut = (props) => {
           setTotalAmount(response.data.data.total)
         }
       } catch (err) {
-        console.log(err.response)
+        console.log(err)
   
       }
     }

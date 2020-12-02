@@ -30,6 +30,7 @@ const HomeIndex = (props) => {
         if(response.data.response === 1){
           //console.log("res: ", response.data.data.finished);
           setRecips(response.data.data.finished);
+          props.setRecips(response.data.data.finished);
         }
       } catch (error) {
         //console.log("err: ", error);
@@ -42,7 +43,6 @@ const HomeIndex = (props) => {
           id: officialHq
         });
         if(response.data.response){
-          //console.log("res; ", response.data.data);
           setVehiclesData({
             availableCars: response.data.data.availableCars,
             availableBikes: response.data.data.availableBikes,
@@ -50,7 +50,8 @@ const HomeIndex = (props) => {
             totalBikes: response.data.data.totalBikes
           });
           setReservations(response.data.data.reservations);
-          props.setReservations(response.data.data.reservations)
+          props.setReservations(response.data.data.reservations);
+          props.setHq(response.data.data);
         }
       } catch (error) {
         console.log("err: ", error);
@@ -133,7 +134,11 @@ const HomeIndex = (props) => {
 
 const mapStateToProps = (state) => ({
   officialProps: state.official,
-  reservations: state.reservations
+  reservations: state.reservations,
+  recips: state.recips,
+  name: state.recips
+
+
 });
 
 export default connect(mapStateToProps, actions)(HomeIndex);
