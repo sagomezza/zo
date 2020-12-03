@@ -8,8 +8,9 @@ import Logout from '../Menu/MenuStyles';
 import { connect } from "react-redux";
 import instance from "../../config/axios";
 import * as actions from "../../redux/actions";
-import { MARKEXIT, FINISHPARKING } from '../../config/api'
+import { MARKEXIT, FINISHPARKING, READ_HQ } from '../../config/api'
 import { TIMEOUT } from '../../config/constants/constants';
+import store from '../../config/store';
 
 const UserOut = (props) => {
   const { navigation, officialProps } = props;
@@ -135,7 +136,8 @@ const UserOut = (props) => {
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
-
+  const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
+  
   function restart(){
     setTotalAmount(0);
     setTotalPay(0);
@@ -156,7 +158,6 @@ const UserOut = (props) => {
     async function markExit() {
       try {
         if ((plateOne + plateTwo).length === 6) {
-          console.log(props.reservations.reservations)
           let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
           console.log(reserve)
           const response = await instance.post(
@@ -173,6 +174,7 @@ const UserOut = (props) => {
           setRecip(response.data.data);
           // console.log(totalAmount - totalPay)
           setTotalAmount(response.data.data.total)
+          readHq()
         }
       } catch (err) {
         console.log(err)
@@ -181,6 +183,19 @@ const UserOut = (props) => {
     }
     markExit()
   }, [plateOne, plateTwo]);
+
+  async function readHq () {
+    try {
+      const response = await instance.post(READ_HQ, {
+        id: officialHq
+      });
+      if(response.data.response){
+        store.dispatch(actions.setReservations(response.data.data.reservations));
+      }
+    } catch (error) {
+      console.log("err: ", error);
+    }
+  };
 
   const finishParking = async (paymentStatus) => {
     // setLoading(true)

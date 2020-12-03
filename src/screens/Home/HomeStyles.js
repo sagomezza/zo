@@ -2,8 +2,8 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   plateInput: {
-    width: 180, 
-    height: 83,
+    width: 200, 
+    height: 103,
     borderColor: '#008999', 
     marginRight: '7%', 
     borderWidth: 1,

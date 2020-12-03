@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, View, Text, Modal, TouchableHighlight, Alert, Image, ActivityIndicator } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import { Table, Row, Rows } from 'react-native-table-component';
 import styles from '../UserInput/UserInputStyles';
 import FooterIndex from '../../components/Footer/index';
 import Logout from '../Menu/MenuStyles';
-import Axios from 'axios';
-import { API } from '../../config/constants/api';
 import { TIMEOUT } from '../../config/constants/constants';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import instance from "../../config/axios";
-import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER } from "../../config/api";
-import AlreadyParkedModal from '../../components/Modal/ModalIndex';
+import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ } from "../../config/api";
+import store from '../../config/store';
 
 const UserInput = (props) => {
   const { navigation, officialProps } = props;
@@ -25,7 +22,6 @@ const UserInput = (props) => {
   const [findUserByPlate, setFindUserByPlate] = useState([]);
   const [startParking, setStartParking] = useState({});
   const [phone, setPhone] = useState("");
-  const [loading, setLoading] = useState(false)
   const [existingUser,setExitingUser] = useState(true)
 
   function isCharacterALetter(char) {
@@ -91,7 +87,6 @@ const UserInput = (props) => {
   }, [phone]);
 
   async function startPark() {
-    setLoading(true)
     try {
       if ((plateOne + plateTwo).length === 6) {
         let type
@@ -110,12 +105,26 @@ const UserInput = (props) => {
         )
         setModalVisible(true);
         setStartParking(response.data.data);
-        setLoading(false);
+        readHq();
       }
     } catch (err) {
       if(err?.response.data.response === -2) setModal2Visible(true)
       
       console.log(err?.response)
+    }
+  };
+
+
+  async function readHq () {
+    try {
+      const response = await instance.post(READ_HQ, {
+        id: officialHq
+      });
+      if(response.data.response){
+        store.dispatch(actions.setReservations(response.data.data.reservations));
+      }
+    } catch (error) {
+      console.log("err: ", error);
     }
   };
 
@@ -160,10 +169,7 @@ const UserInput = (props) => {
 
         <View style={{ flexDirection: 'row-reverse', paddingBottom: '10%' }}>
           <View style={{ marginRight: 20 }}>
-            {
-              loading ?
-                <ActivityIndicator />
-                : <TouchableOpacity
+                <TouchableOpacity
                   style={styles.buttonI}
                   disabled={existingUser}
                   onPress={() => {
@@ -172,7 +178,6 @@ const UserInput = (props) => {
                 >
                   <Text style={styles.buttonText} >Inicio</Text>
                 </TouchableOpacity>
-            }
           </View>
           
           <View style={{ marginRight: 10 }}>
@@ -197,7 +202,36 @@ const UserInput = (props) => {
 
       </View>
       <FooterIndex navigation={navigation} />
-      <AlreadyParkedModal modal2Visible={modal2Visible}/>
+      <View>
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    backdropOpacity={0.3}
+                    visible={modal2Visible}
+                    onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    }}
+                >
+                    <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <View style={{ marginBottom: '7%', alignItems: 'center' }}>
+                        <Text style={styles.modalText}> El vehículo con placas {plateOne + ' ' + plateTwo} ya se encuentra estacionado. </Text>
+                        </View>
+                        <TouchableHighlight
+                        style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
+                        onPress={() => {
+                            setModal2Visible(!modal2Visible);
+                            setPlateOne("");
+                            setPlateTwo("");
+                            setPhone("");
+                        }}
+                        >
+                        <Text style={styles.textStyle}>Entendido</Text>
+                        </TouchableHighlight>
+                    </View>
+                    </View>
+                </Modal>
+            </View>
       <Modal
         animationType="fade"
         transparent={true}
@@ -222,6 +256,7 @@ const UserInput = (props) => {
                 setPlateOne("");
                 setPlateTwo("");
                 setPhone("");
+                
               }}
             >
               <Text style={styles.textStyle}>Entendido</Text>
@@ -234,7 +269,8 @@ const UserInput = (props) => {
 
 }
 const mapStateToProps = (state) => ({
-  officialProps: state.official
+  officialProps: state.official,
+  reservations: state.reservations
 });
 
 export default connect(mapStateToProps, actions)(UserInput);

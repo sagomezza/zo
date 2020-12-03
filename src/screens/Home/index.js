@@ -7,9 +7,12 @@ import instance from "../../config/axios";
 import { GET_RECIPS, READ_HQ } from "../../config/api";
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
+import store from '../../config/store';
 
 const HomeIndex = (props) => {
-  const { navigation, officialProps } = props;
+  // console.log("------------1----------")
+  const { navigation, officialProps, reservations } = props;
+  // console.log(props.reservations);
   //console.log("officialProps: ", officialProps);
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const [ recips, setRecips ] = useState([]);
@@ -19,7 +22,7 @@ const HomeIndex = (props) => {
     totalCars: 0,
     totalBikes: 0,
   });
-  const [ reservations, setReservations ] = useState([]);
+  // const [ reservations, setReservations ] = useState([]);
 
   useEffect(() => {
     const getRecips = async () => {
@@ -49,9 +52,10 @@ const HomeIndex = (props) => {
             totalCars: response.data.data.totalCars,
             totalBikes: response.data.data.totalBikes
           });
-          setReservations(response.data.data.reservations);
-          props.setReservations(response.data.data.reservations);
-          props.setHq(response.data.data);
+          // setReservations(response.data.data.reservations);
+          store.dispatch(actions.setReservations(response.data.data.reservations));
+          //props.setReservations(response.data.data.reservations);
+          store.dispatch(actions.setHq(response.data.data));
         }
       } catch (error) {
         console.log("err: ", error);
@@ -62,29 +66,31 @@ const HomeIndex = (props) => {
     readHq();
   }, []);
 
-
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, alignContent: "center"}}>
       <Logout navigation={navigation}/> 
-      <View style={{paddingLeft: '26%', paddingTop: '10%', flexDirection: "row", marginBottom: 50}}>
+      <View style={{alignItems:"flex-end"}}>
+      <View style={{padding: '6%', flexDirection: "row"}}>
         <View style={HomeStyles.plateInput}>
-        <Image style={{width:40, height: 40, marginBottom: 50}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoC.png' )}/>
+        <Image style={{width:"25%", height: "25%", marginTop: "5%", marginLeft: "5%"}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoC.png' )}/>
           <Text style={HomeStyles.plateInputText}>
             {`${vehiclesData.availableBikes}/${vehiclesData.totalBikes}`}
           </Text>
           
         </View>
         <View style= {HomeStyles.plateInput}>
-        <Image style={{width:40, height: 40, marginBottom: 50}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoM.png' )}/>
+        <Image style={{width:"24%", height: "24%", marginTop: "5%", marginLeft: "5%"}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoM.png' )}/>
           <Text style={HomeStyles.plateInputText}>
           {`${vehiclesData.availableCars}/${vehiclesData.totalCars}`}
           </Text>
         </View>
       </View>
+      </View>
       <View style={{paddingBottom: "60%"}}>
         <View style={{paddingLeft:60}}>
           <Text style={HomeStyles.textPago} >Historial de pagos</Text>
         </View>
+        <View style={{height: "53%"}}>
         <FlatList
           style= {{height: "40%"}}
           data={recips}
@@ -93,34 +99,35 @@ const HomeIndex = (props) => {
           return (
           <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#008999", marginBottom: 10, marginLeft: 60, marginRight:70, marginTop: 20 }} >
             <View style={{marginBottom: 10}} >
-              <Text style={HomeStyles.textPlaca}>{item.plate}</Text>
-              <Text style={HomeStyles.textPago}>{`Pago por ${item.hours} horas`}</Text>
+              <Text  key={item.id} style={HomeStyles.textPlaca}>{item.plate}</Text>
+              <Text  key={item.id} style={HomeStyles.textPago}>{`Pago por ${item.hours} horas`}</Text>
             </View>
             <View style={{ flex: 1, alignItems:'flex-end'}} >
-              <Text style={HomeStyles.textMoney}>${item.total}</Text>
+              <Text key={item.id} style={HomeStyles.textMoney}>${item.total}</Text>
             </View>
           </View>
           )}}
         />   
-        
+        </View>
+        <View style= {{height:"45%"}}>
         <View style={{paddingLeft:60, marginTop: 30}}>
           <Text style={HomeStyles.textPago}>Carros parqueados</Text>
         </View>
-        <View>
-        {reservations.length > 0 ? 
+         
+        {reservations.reservations.length > 0 ? 
           <FlatList
           styles={{marginBottom: 20}}
-          data={reservations}
+          data={reservations.reservations}
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
           return (
             <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#008999", marginBottom: 10, marginLeft: 60, marginRight:70, marginTop: 20 }} >            
             <View style={{marginBottom: 10, marginleft:10}} >
-              <Text style={HomeStyles.textPlaca} >{item.plate}</Text>
-              <Text style={HomeStyles.textPago}>{item.verificationCode}</Text>
+              <Text key={item.id} style={HomeStyles.textPlaca} >{item.plate}</Text>
+              <Text key={item.id} style={HomeStyles.textPago}>{item.verificationCode}</Text>
             </View>
             <View style={{ flex: 1, alignItems:'flex-end'}} >
-              <Text style={HomeStyles.textMoney}>{new Date(item.dateStart).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</Text>
+              <Text key={item.id} style={HomeStyles.textMoney}>{new Date(item.dateStart).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</Text>
               <Text style={HomeStyles.textPago}>Pago por hora</Text>
             </View>
           </View>
@@ -145,8 +152,6 @@ const mapStateToProps = (state) => ({
   reservations: state.reservations,
   recips: state.recips,
   name: state.recips
-
-
 });
 
 export default connect(mapStateToProps, actions)(HomeIndex);

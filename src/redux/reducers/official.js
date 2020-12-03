@@ -14,6 +14,7 @@ const officialReducer = (state=initialState, action ) => {
     switch (action.type) {
         case SET_OFFICIAL:
             return {
+                ...state,
                 email: action.payload.email,
                 phone: action.payload.phone,
                 name: action.payload.name,
