@@ -7,8 +7,9 @@
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/images/icon@2x.png",
-      "resizeMode": "contain",
+      "resizeMode": "center",
       "backgroundColor": "#008999"
+      
     },
     "updates": {
       "fallbackToCacheTimeout": 0

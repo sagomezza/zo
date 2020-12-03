@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList, Modal, TouchableHighlight, Dimensions } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
@@ -10,6 +10,7 @@ import "@firebase/firestore";
 import Screen from '../Menu/MenuStyles';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
+import instance from '../../config/axios';
 
 
 const LogoutIndex = (props) => {
@@ -73,8 +74,7 @@ const LogoutIndex = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const recips = props.recips.recips;
   const official = props.official;
-  console.log('aqui')
-  console.log(props)
+  
   const hq = props.hq;
   const dateMonthIn = new Date('05/05/20');
   const dateMonthOut = new Date('07/05/20');

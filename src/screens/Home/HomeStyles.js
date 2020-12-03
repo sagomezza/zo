@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
     marginRight: '7%', 
     borderWidth: 1,
     borderRadius: 20,
+    flexDirection: "row"
   },
   plateInputText: {
     fontSize: 35,

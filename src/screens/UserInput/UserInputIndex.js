@@ -11,31 +11,22 @@ import { TIMEOUT } from '../../config/constants/constants';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import instance from "../../config/axios";
-import { START_PARKING, FIND_USER_BY_PLATE } from "../../config/api";
+import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER } from "../../config/api";
+import AlreadyParkedModal from '../../components/Modal/ModalIndex';
 
 const UserInput = (props) => {
   const { navigation, officialProps } = props;
   //console.log("officialProps: ", officialProps);
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-
-  const isBlackList = true;
-  const dateMonth = '--';
-  const state = {
-    HeadTable: ['Vehículos', 'Últimos pagos'],
-    DataTable: [
-      ['EVT 123', '09/11/2020 $9600'],
-
-    ]
-  };
-
+  const [modal2Visible, setModal2Visible] =useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [plateOne, setPlateOne] = useState('');
   const [plateTwo, setPlateTwo] = useState('');
   const [findUserByPlate, setFindUserByPlate] = useState([]);
   const [startParking, setStartParking] = useState({});
-  const [iniciar, setIniciar] = useState(0);
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false)
+  const [existingUser,setExitingUser] = useState(true)
 
   function isCharacterALetter(char) {
     return (/[a-zA-Z]/).test(char)
@@ -51,6 +42,7 @@ const UserInput = (props) => {
             { timeout: TIMEOUT }
           )
           setFindUserByPlate(response.data.data);
+          setExitingUser(false)
         }
       } catch (err) {
         console.log(err?.response)
@@ -58,6 +50,45 @@ const UserInput = (props) => {
     }
     findUserByPlate()
   }, [plateOne, plateTwo]);
+
+  useEffect(() => {
+    async function createUser() {
+      try {
+
+        if ((plateOne + plateTwo).length === 6 && phone.length === 10) {
+          let type
+          let body = {
+            phone: '+57' + phone
+          }
+          if(findUserByPlate.length > 0){
+            body = {
+              ...body,
+              type: "full",
+              email: officialProps.email,
+              name: officialProps.name,
+              lastName: officialProps.lastName,
+              expoToken: 'ExpoToken[fefe]'
+            }
+          } else {
+            body = {
+              ...body,
+              plate: plateOne + plateTwo,
+              type: "starter"
+            }
+          } 
+          const response = await instance.post(
+            CREATE_USER,
+            body,
+            { timeout: TIMEOUT }
+          )
+          setExitingUser(false)
+        }
+      } catch (err) {
+        console.log(err?.response)
+      }
+    }
+    createUser()
+  }, [phone]);
 
   async function startPark() {
     setLoading(true)
@@ -78,11 +109,12 @@ const UserInput = (props) => {
           { timeout: TIMEOUT }
         )
         setModalVisible(true);
-        setIniciar(1);
         setStartParking(response.data.data);
         setLoading(false);
       }
     } catch (err) {
+      if(err?.response.data.response === -2) setModal2Visible(true)
+      
       console.log(err?.response)
     }
   };
@@ -117,7 +149,7 @@ const UserInput = (props) => {
           </View>
 
           <TextInput
-            style={styles.numberInput}
+            style={styles.textInput}
             keyboardType='numeric'
             textAlign='center'
             maxLength={10}
@@ -133,6 +165,7 @@ const UserInput = (props) => {
                 <ActivityIndicator />
                 : <TouchableOpacity
                   style={styles.buttonI}
+                  disabled={existingUser}
                   onPress={() => {
                     startPark();
                   }}
@@ -164,6 +197,7 @@ const UserInput = (props) => {
 
       </View>
       <FooterIndex navigation={navigation} />
+      <AlreadyParkedModal modal2Visible={modal2Visible}/>
       <Modal
         animationType="fade"
         transparent={true}

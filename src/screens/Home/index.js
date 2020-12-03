@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList  } from 'react-native';
+import { View, Text, FlatList, Image  } from 'react-native';
 import Footer from '../../components/Footer';
 import HomeStyles from '../Home/HomeStyles';
 import Logout from '../Menu/MenuStyles';
@@ -68,23 +68,25 @@ const HomeIndex = (props) => {
       <Logout navigation={navigation}/> 
       <View style={{paddingLeft: '26%', paddingTop: '10%', flexDirection: "row", marginBottom: 50}}>
         <View style={HomeStyles.plateInput}>
+        <Image style={{width:40, height: 40, marginBottom: 50}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoC.png' )}/>
           <Text style={HomeStyles.plateInputText}>
             {`${vehiclesData.availableBikes}/${vehiclesData.totalBikes}`}
           </Text>
           
         </View>
         <View style= {HomeStyles.plateInput}>
+        <Image style={{width:40, height: 40, marginBottom: 50}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoM.png' )}/>
           <Text style={HomeStyles.plateInputText}>
           {`${vehiclesData.availableCars}/${vehiclesData.totalCars}`}
           </Text>
         </View>
       </View>
-      <View style={{paddingBottom: 10}}>
+      <View style={{paddingBottom: "60%"}}>
         <View style={{paddingLeft:60}}>
           <Text style={HomeStyles.textPago} >Historial de pagos</Text>
         </View>
         <FlatList
-          style= {{height: "35%"}}
+          style= {{height: "40%"}}
           data={recips}
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
@@ -95,18 +97,19 @@ const HomeIndex = (props) => {
               <Text style={HomeStyles.textPago}>{`Pago por ${item.hours} horas`}</Text>
             </View>
             <View style={{ flex: 1, alignItems:'flex-end'}} >
-              <Text style={HomeStyles.textMoney}>{item.total}</Text>
+              <Text style={HomeStyles.textMoney}>${item.total}</Text>
             </View>
           </View>
           )}}
         />   
         
-        <View style={{paddingLeft:60}}>
+        <View style={{paddingLeft:60, marginTop: 30}}>
           <Text style={HomeStyles.textPago}>Carros parqueados</Text>
         </View>
-        
-        <FlatList
-          styles={{marginBottom: "30%"}}
+        <View>
+        {reservations.length > 0 ? 
+          <FlatList
+          styles={{marginBottom: 20}}
           data={reservations}
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
@@ -122,8 +125,13 @@ const HomeIndex = (props) => {
             </View>
           </View>
           )}}    
-        />
-
+        /> :
+        <View style={{paddingLeft:60, marginTop: 10}}>
+          <Text style={HomeStyles.textPago}>No hay parqueos activos en este momento</Text>
+        </View>
+        }
+        </View>
+        
         
       </View>
       <Footer navigation={navigation}/>

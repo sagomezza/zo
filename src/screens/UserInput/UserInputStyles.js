@@ -24,13 +24,14 @@ const styles = StyleSheet.create({
       fontSize: 35,
       fontFamily: 'Montserrat-Regular'
     },
-    numberInput: {
+    textInput: {
       width: '70%', 
       height: 60,
       borderColor: 'gray', 
       marginBottom: '10%',
       borderWidth: 1,
       borderRadius: 20,
+      width: "70%",
       fontSize: 25,
       fontFamily: 'Montserrat-Regular'
     },
