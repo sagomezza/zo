@@ -159,7 +159,6 @@ const UserOut = (props) => {
       try {
         if ((plateOne + plateTwo).length === 6) {
           let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
-          console.log(reserve)
           const response = await instance.post(
             MARKEXIT,
             {
@@ -172,9 +171,9 @@ const UserOut = (props) => {
             { timeout: TIMEOUT }
           )
           setRecip(response.data.data);
-          // console.log(totalAmount - totalPay)
           setTotalAmount(response.data.data.total)
           readHq()
+          getRecips()
         }
       } catch (err) {
         console.log(err)
@@ -194,6 +193,19 @@ const UserOut = (props) => {
       }
     } catch (error) {
       console.log("err: ", error);
+    }
+  };
+
+  const getRecips = async () => {
+    try {
+      const response = await instance.post(GET_RECIPS, {
+        hqId: officialHq
+      });
+      if(response.data.response === 1){
+        store.dispatch(actions.setRecips(response.data.data.finished));
+      }
+    } catch (error) {
+      //console.log("err: ", error);
     }
   };
 

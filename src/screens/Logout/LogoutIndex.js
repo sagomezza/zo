@@ -137,8 +137,8 @@ const LogoutIndex = (props) => {
       />   
     </View>
     <View style={{alignItems: 'center'}}>
-      <TouchableOpacity style={HomeStyles.plateInput}>
-        <Text style={{fontSize: 20, margin: '3%'}}  onPress={() => {setModalVisible(true)}}>  Cerrar turno</Text>
+      <TouchableOpacity style={HomeStyles.plateInput} onPress={() => {setModalVisible(true)}}>
+        <Text style={{fontSize: 20, margin: '3%'}}>  Cerrar turno</Text>
       </TouchableOpacity>
     </View>
     <FooterIndex navigation={navigation}/>

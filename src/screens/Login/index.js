@@ -46,7 +46,7 @@ const LoginIndex = (props) => {
        * In case everything is correct call the sign in function and then navigate to Home
        */
       let response = await auth.signInWithEmailAndPassword(email.toString(), password.toString())
-      console.log(response.user.toJSON().stsTokenManager.accessToken)
+      // console.log(response.user.toJSON().stsTokenManager.accessToken)
       let fbToken  =response.user.toJSON().stsTokenManager.accessToken
       if (Platform.OS === 'android' && Platform.Version < 23) {
         await AsyncStorage.setItem('firebaseToken', fbToken)

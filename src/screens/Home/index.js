@@ -10,19 +10,15 @@ import * as actions from "../../redux/actions";
 import store from '../../config/store';
 
 const HomeIndex = (props) => {
-  // console.log("------------1----------")
-  const { navigation, officialProps, reservations } = props;
-  // console.log(props.reservations);
-  //console.log("officialProps: ", officialProps);
+  const { navigation, officialProps, reservations, recips } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  const [ recips, setRecips ] = useState([]);
+  // const [ recips, setRecips ] = useState([]);
   const [ vehiclesData, setVehiclesData ] = useState({
     availableCars: 0,
     availableBikes: 0,
     totalCars: 0,
     totalBikes: 0,
   });
-  // const [ reservations, setReservations ] = useState([]);
 
   useEffect(() => {
     const getRecips = async () => {
@@ -31,9 +27,7 @@ const HomeIndex = (props) => {
           hqId: officialHq
         });
         if(response.data.response === 1){
-          //console.log("res: ", response.data.data.finished);
-          setRecips(response.data.data.finished);
-          props.setRecips(response.data.data.finished);
+          store.dispatch(actions.setRecips(response.data.data.finished));
         }
       } catch (error) {
         //console.log("err: ", error);
@@ -52,9 +46,7 @@ const HomeIndex = (props) => {
             totalCars: response.data.data.totalCars,
             totalBikes: response.data.data.totalBikes
           });
-          // setReservations(response.data.data.reservations);
           store.dispatch(actions.setReservations(response.data.data.reservations));
-          //props.setReservations(response.data.data.reservations);
           store.dispatch(actions.setHq(response.data.data));
         }
       } catch (error) {
@@ -93,7 +85,7 @@ const HomeIndex = (props) => {
         <View style={{height: "53%"}}>
         <FlatList
           style= {{height: "40%"}}
-          data={recips}
+          data={recips.recips}
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
           return (

@@ -13,7 +13,6 @@ import store from '../../config/store';
 
 const UserInput = (props) => {
   const { navigation, officialProps } = props;
-  //console.log("officialProps: ", officialProps);
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const [modal2Visible, setModal2Visible] =useState(false);
   const [modalVisible, setModalVisible] = useState(false);
