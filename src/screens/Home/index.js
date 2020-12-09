@@ -8,6 +8,7 @@ import { GET_RECIPS, READ_HQ } from "../../config/api";
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import store from '../../config/store';
+import moment from 'moment';
 
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips } = props;
@@ -27,6 +28,7 @@ const HomeIndex = (props) => {
           hqId: officialHq
         });
         if(response.data.response === 1){
+          
           store.dispatch(actions.setRecips(response.data.data.finished));
         }
       } catch (error) {
@@ -59,19 +61,19 @@ const HomeIndex = (props) => {
   }, []);
 
   return (
-    <View style={{flex: 1, alignContent: "center"}}>
+    <View style={{flex: 1, alignContent: "center",backgroundColor:"#FFFF"}}>
       <Logout navigation={navigation}/> 
       <View style={{alignItems:"flex-end"}}>
       <View style={{padding: '6%', flexDirection: "row"}}>
         <View style={HomeStyles.plateInput}>
-        <Image style={{width:"25%", height: "25%", marginTop: "5%", marginLeft: "5%"}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoC.png' )}/>
+        <Image style={{width:"24%", height: "24%", marginTop: "5%", marginLeft: "5%"}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoM.png' )}/>
           <Text style={HomeStyles.plateInputText}>
             {`${vehiclesData.availableBikes}/${vehiclesData.totalBikes}`}
           </Text>
           
         </View>
         <View style= {HomeStyles.plateInput}>
-        <Image style={{width:"24%", height: "24%", marginTop: "5%", marginLeft: "5%"}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoM.png' )}/>
+        <Image style={{width:"25%", height: "25%", marginTop: "5%", marginLeft: "5%"}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoC.png' )}/>
           <Text style={HomeStyles.plateInputText}>
           {`${vehiclesData.availableCars}/${vehiclesData.totalCars}`}
           </Text>
@@ -83,6 +85,7 @@ const HomeIndex = (props) => {
           <Text style={HomeStyles.textPago} >Historial de pagos</Text>
         </View>
         <View style={{height: "53%"}}>
+        {recips.recips.length > 0 ? 
         <FlatList
           style= {{height: "40%"}}
           data={recips.recips}
@@ -99,7 +102,12 @@ const HomeIndex = (props) => {
             </View>
           </View>
           )}}
-        />   
+        />
+        :
+        <View style={{paddingLeft:60, marginTop: 10}}>
+          <Text style={HomeStyles.textPago}> No se encuentran registros en el historial </Text>
+        </View>
+        }   
         </View>
         <View style= {{height:"45%"}}>
         <View style={{paddingLeft:60, marginTop: 30}}>
@@ -113,14 +121,14 @@ const HomeIndex = (props) => {
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
           return (
-            <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#008999", marginBottom: 10, marginLeft: 60, marginRight:70, marginTop: 20 }} >            
+            <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#FFFFFF", marginBottom: 10, marginLeft: 60, marginRight:70, marginTop: 20 }} >            
             <View style={{marginBottom: 10, marginleft:10}} >
               <Text key={item.id} style={HomeStyles.textPlaca} >{item.plate}</Text>
               <Text key={item.id} style={HomeStyles.textPago}>{item.verificationCode}</Text>
             </View>
             <View style={{ flex: 1, alignItems:'flex-end'}} >
               <Text key={item.id} style={HomeStyles.textMoney}>{new Date(item.dateStart).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</Text>
-              <Text style={HomeStyles.textPago}>Pago por hora</Text>
+              <Text style={HomeStyles.textPago}>Pago por horas</Text>
             </View>
           </View>
           )}}    

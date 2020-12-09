@@ -2,7 +2,9 @@ import {
   SET_OFFICIAL,
   SET_RESERVATIONS,
   SET_RECIPS,
-  SET_HQ
+  SET_HQ,
+  SET_QR,
+  SET_QR_PHONE
 } from './type'
 
 export const setOfficial = (official) => {
@@ -30,5 +32,19 @@ export const setHq = (hq) => {
   return {
     type: SET_HQ,
     payload: hq,
+  };
+};
+
+export const setQr = (qr) => {
+  return {
+    type: SET_QR,
+    payload: qr,
+  };
+};
+
+export const setPhone = (phone) => {
+  return {
+    type: SET_QR_PHONE,
+    payload: phone,
   };
 };

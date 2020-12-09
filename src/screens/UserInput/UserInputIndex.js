@@ -10,6 +10,7 @@ import * as actions from "../../redux/actions";
 import instance from "../../config/axios";
 import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ } from "../../config/api";
 import store from '../../config/store';
+import moment from 'moment';
 
 const UserInput = (props) => {
   const { navigation, officialProps } = props;
@@ -21,7 +22,7 @@ const UserInput = (props) => {
   const [findUserByPlate, setFindUserByPlate] = useState([]);
   const [startParking, setStartParking] = useState({});
   const [phone, setPhone] = useState("");
-  const [existingUser,setExitingUser] = useState(true)
+  const [existingUser,setExistingUser] = useState(true)
 
   function isCharacterALetter(char) {
     return (/[a-zA-Z]/).test(char)
@@ -31,17 +32,22 @@ const UserInput = (props) => {
     async function findUserByPlate() {
       try {
         if ((plateOne + plateTwo).length === 6) {
+          
           const response = await instance.post(
             FIND_USER_BY_PLATE,
             { plate: plateOne + plateTwo },
             { timeout: TIMEOUT }
           )
           setFindUserByPlate(response.data.data);
-          setExitingUser(false)
+          setExistingUser(false)
+          setPhone((response.data.data[0]).substring(3,12))
+        } else {
+          setPhone("")
         }
       } catch (err) {
         console.log(err?.response)
       }
+      
     }
     findUserByPlate()
   }, [plateOne, plateTwo]);
@@ -76,7 +82,7 @@ const UserInput = (props) => {
             body,
             { timeout: TIMEOUT }
           )
-          setExitingUser(false)
+          setExistingUser(false)
         }
       } catch (err) {
         console.log(err?.response)
@@ -105,6 +111,7 @@ const UserInput = (props) => {
         setModalVisible(true);
         setStartParking(response.data.data);
         readHq();
+        
       }
     } catch (err) {
       if(err?.response.data.response === -2) setModal2Visible(true)
@@ -173,6 +180,7 @@ const UserInput = (props) => {
                   disabled={existingUser}
                   onPress={() => {
                     startPark();
+                    
                   }}
                 >
                   <Text style={styles.buttonText} >Inicio</Text>
@@ -180,7 +188,14 @@ const UserInput = (props) => {
           </View>
           
           <View style={{ marginRight: 10 }}>
-            <TouchableOpacity style={styles.buttonT} onPress={() => { navigation.navigate('QRscanner') }}>
+            <TouchableOpacity style={styles.buttonT} 
+                              onPress={() => { 
+                                setPlateOne("");
+                                setPlateTwo("");
+                                setPhone("");
+                                store.dispatch(actions.setQr(plateOne + plateTwo));
+                                navigation.navigate('QRscanner') }}
+                                disabled={(plateOne+plateTwo).length < 6}>
               <Image style={{width: 30, height: 30, marginTop: 8}} source={require('../../../assets/images/GrupoQR.png')}/>
             </TouchableOpacity>
           </View>
@@ -246,11 +261,11 @@ const UserInput = (props) => {
               <Text style={styles.modalText}> {plateOne + ' ' + plateTwo} </Text>
               <Text> {findUserByPlate} </Text>
               <Text>Ha iniciado tiempo de parqueo</Text>
-              <Text>{new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</Text>
+              <Text></Text>
             </View>
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
-              onPress={({navigation}) => {
+              onPress={() => {
                 setModalVisible(!modalVisible);
                 setPlateOne("");
                 setPlateTwo("");

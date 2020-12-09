@@ -5,7 +5,8 @@ const FooterStyles = StyleSheet.create({
       textAlign: 'center',
       color: '#FFFFFF',
       textAlign: 'center',
-      fontSize: 36
+      fontSize: 36,
+      fontFamily: 'Montserrat-Regular'
     },
     buttonH: {
       backgroundColor: '#008999',

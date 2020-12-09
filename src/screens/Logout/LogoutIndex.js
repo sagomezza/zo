@@ -77,8 +77,8 @@ const LogoutIndex = (props) => {
   const official = props.official;
   
   const hq = props.hq;
-  const dateMonthIn = new Date('05/05/20');
-  const dateMonthOut = new Date('07/05/20');
+  // const dateMonthIn = new Date('05/05/20');
+  // const dateMonthOut = new Date('07/05/20');
   const [ inputValue, setInputValue] = useState(0);
   // useEffect(() => {
   //   const readHq = async () => {
@@ -96,29 +96,49 @@ const LogoutIndex = (props) => {
   //   readHq();
   // }, []);
 
+  // function totalCalculate () {
+  //   let totalValue = 0
+  //   for (let index = 0; index < recips.length; index++) {
+  //     const recip = recips[index];
+  //     totalValue += recip.total  
+  //   }
+    
+  // }
+
   return (
   <View style={{flex: 1}}>
     
-    <View style={{alignItems: 'center', marginTop: '30%'}}>
-        {<Text style={{fontSize: 20}}>{official.name + ' '+ official.lastName}</Text>}
-        {<Text>{hq.name}</Text>}
+    <View style={{alignItems: 'center', marginTop: '20%'}}>
+        {<Text style={{fontSize: 20,fontFamily: 'Montserrat-Bold'}}>{official.name + ' '+ official.lastName}</Text>}
+        {<Text style={{fontFamily: 'Montserrat-Regular'}}>{hq.name}</Text>}
         
-        <Text>{"Hora de inicio: " + moment(dateMonthIn).format('hh:MM A ') + " Hora de salida: " + moment(dateMonthOut).format('hh:MM A')}</Text>
+        {/* <Text>{"Hora de inicio: " + moment(dateMonthIn).format('hh:MM A ') + " Hora de salida: " + moment(dateMonthOut).format('hh:MM A')}</Text> */}
         <View style={{flexDirection: 'row', paddingBottom: '5%', marginTop: '10%'}}>
-          <View style={{marginRight: 10, marginTop: 15}}>
-            <Text>{"Valor ingresado"}</Text>
+          <View >
+            <Text style={{fontFamily: 'Montserrat-Regular'}}>{" Dinero en efectivo: "}</Text>
           </View>
-          <View style={{marginRight: 20}}>
+          <View style={{justifyContent: "space-around",
+                        width: '50%',
+                        borderColor: 'gray',
+                        borderRadius: 20,
+                        borderWidth: 1,
+                    }}>
             <TextInput
-              style={{fontSize: 25, textAlign: 'center'}}
-              value={inputValue + ''}
+              style={{
+                      fontSize: 25,
+                      fontFamily: 'Montserrat-Regular',
+                      color: '#008999',
+                    }}
+              value={ inputValue + ''}
+              keyboardType= {"numeric"}
+              textAlign='center'
               onChangeText = {text => setInputValue(text)}
             />
           </View>
         </View>
       </View>
       
-    <View style={{paddingBottom: 10, height: "40%"}}>
+    <View style={{paddingBottom: 10, height: "54%"}}>
       <FlatList
         data={recips}
         keyExtractor={({ id }) => id}
@@ -126,11 +146,11 @@ const LogoutIndex = (props) => {
         return (
         <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: 60, marginRight:70, marginTop: 20 }} >
           <View style={{marginBottom: 10}} >
-            <Text>{item.plate}</Text>
-            <Text>{item.hours}</Text>
+            <Text style={{fontFamily: 'Montserrat-Regular'}}>{item.plate}</Text>
+            <Text style={{fontFamily: 'Montserrat-Regular'}}>{`Pago por ${item.hours} horas`}</Text>
           </View>
           <View style={{ flex: 1, alignItems:'flex-end'}} >
-            <Text>{item.total}</Text>
+            <Text style={{fontFamily: 'Montserrat-Regular'}}>$ {item.total}</Text>
           </View>
         </View>
         )}}
@@ -138,7 +158,7 @@ const LogoutIndex = (props) => {
     </View>
     <View style={{alignItems: 'center'}}>
       <TouchableOpacity style={HomeStyles.plateInput} onPress={() => {setModalVisible(true)}}>
-        <Text style={{fontSize: 20, margin: '3%'}}>  Cerrar turno</Text>
+        <Text style={{fontSize: 20, textAlign: 'center',fontFamily: 'Montserrat-Regular'}}>   Cerrar turno   </Text>
       </TouchableOpacity>
     </View>
     <FooterIndex navigation={navigation}/>

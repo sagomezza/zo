@@ -1,154 +1,230 @@
-import * as React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Text, View, StyleSheet, Button, TouchableOpacity, Modal, TouchableHighlight, Dimensions } from 'react-native';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { TextInput } from 'react-native-gesture-handler';
 import FooterIndex from '../../components/Footer';
+import { Camera } from "expo-camera";
+import styles from './styles';
+import { READ_HQ, START_PARKING } from '../../config/api';
+import instance from '../../config/axios';
+import { connect } from 'react-redux';
+import * as actions from "../../redux/actions";
+import moment from 'moment';
+import { TIMEOUT } from '../../config/constants/constants';
+import store from '../../config/store';
 
+// export default class BarcodeScanner extends React.Component {
+const BarcodeScanner = (props) => {
 
-const styles = StyleSheet.create({
-    container: {
-      width: Dimensions.get('screen').width ,
-      height: Dimensions.get('screen').height ,
-      
-      
-    },
-    plateInput: {
-      width: 140, 
-      height: 80,
-      borderColor: 'gray', 
-      margin: 10, 
-      borderWidth: 1,
-      borderRadius: 20,
-      fontSize: 50
-    },
-    centeredView: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 22,
-      backgroundColor: 'rgba(52, 52, 52, 0.8)',
-      
-    },
-    modalView: {
-      height: 200,
-      padding: 35,
-      borderRadius:20,
-      borderColor: '#707070',
-      borderWidth: 1,
-      justifyContent: 'space-around',
-      alignItems: 'center',
-      backgroundColor: '#FFF',
-      shadowColor: '#FFF',
-      shadowOffset: {
-        width: 50,
-        height: 50,
-      },
-      shadowOpacity: 0,
-      shadowRadius: 50,
-      elevation: 5,
-    },
-    openButton: {
-      backgroundColor: "#F194FF",
-      borderRadius: 20,
-      padding: 10,
-      elevation: 2,
-      borderColor: '#D9D9D9',
-      borderWidth:1
-    },
-    textStyle: {
-      color: "gray",
-      fontWeight: "bold",
-      textAlign: "center"
-    },
-    modalText: {
-      marginBottom: 15,
-      textAlign: "center"
-    }
-  });
+  const { navigation, officialProps, qr} = props;
+  const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
+  const errorRef = useRef();
+  const [hasPermission, setHasPermission] = useState(null);
+  const [scanned, setScanned] = useState(false);
+  const [flash, setFlash] = useState("off");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [ plate, setPlate] = useState();
+  const [startParking, setStartParking] = useState({});
 
-
-export default class BarcodeScanner extends React.Component {
-  state = {
-    hasCameraPermission: null,
-    scanned: false,
-    modalVisible: false,
-  };
-
-  async componentDidMount() {
-    this.getPermissionsAsync();
+  function isCharacterALetter(char) {
+    return (/[a-zA-Z]/).test(char)
   }
 
-  getPermissionsAsync = async() => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({
-      hasCameraPermission: status === 'granted'
-    });
+  useEffect(() => {
+    (async () => {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA);
+      setHasPermission(status === "granted");
+    })();
+  }, []);
+
+  const handleBarCodeScanned = async ({ data }) => {
+    setScanned(true);
+    try {
+        const _data = JSON.parse(data);
+        
+        if ((qr.plate).length === 0){
+          store.dispatch(actions.setPhone(_data.phone))
+          navigation.navigate("UserOut")
+        } else {
+          let type
+          if (isCharacterALetter(qr.plate[5])) type = "bike"
+          else type = "car"
+          const response = await instance.post(
+            START_PARKING,
+            {
+              plate: qr.plate,
+              hqId: officialHq,
+              dateStart: new Date(),
+              phone: _data.phone,
+              type,
+              isParanoic:true
+            },
+            { timeout: TIMEOUT }
+          )
+          // setPlate({plate});
+          
+          setStartParking(response.data.data);
+          readHq();
+          setModalVisible(true);
+          store.dispatch(actions.setQr(''))
+
+          
+       }
+      } 
+      catch (err) {
+      console.log(err?.response?.data);
+      if(err?.response?.data) {
+        // noFundsRef.current.show()
+      } else {
+        errorRef.current.show()
+      }
+    }
   };
 
-  render() {
-    const { hasCameraPermission, scanned } = this.state;
+  async function readHq () {
+    try {
+      const response = await instance.post(READ_HQ, {
+        id: officialHq
+      });
+      if(response.data.response){
+        store.dispatch(actions.setReservations(response.data.data.reservations));
+      }
+    } catch (error) {
+      console.log("err: ", error);
+    }
+  };
+  
+  // const onCloseErrors = () => {
+  //   errorRef.current.close()
+  //   navigation.navigate("Home");
+  // }
 
-    if (hasCameraPermission === null) {
-      return (<Text> Solicitando permiso de cámara </Text>);
-    }
-    if (hasCameraPermission === false) {
-      return ( <Text> No existe acceso a la cámara </Text>);
-    }
+  // const toggleFlash = () => {
+  //   try {
+  //     if (flash === "torch") setFlash("off");
+  //     else setFlash("torch");
+  //   } catch (e) {
+  //     //console.log(e);
+  //   }
+  // };
+
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>No hay acceso a la cámara</Text>;
+  }
+
     return ( 
         <View style={{flex: 1}}>
-            <View style={{flexDirection: "row", marginTop: '15%', marginBottom: '10%', justifyContent: 'center'}}>
+            {/* <View style={{flexDirection: "row", marginTop: '15%', marginBottom: '10%', justifyContent: 'center'}}>
                 <TextInput
                 style={styles.plateInput}
                 textAlign='center'
-                value={'EVZ'}
+                value={plate}
                 editable={false}
                 />
-
-                <TextInput
-                style={styles.plateInput}
-                textAlign='center'
-                value={'123'}
-                editable={false}
-                />
-            </View>
+                
+            </View> */}
             <View style = {styles.container}>
-                <BarCodeScanner 
-                onBarCodeScanned = {scanned ? undefined : this.handleBarCodeScanned}
-                style = {StyleSheet.absoluteFillObject}
-                />
-{/* 
-                {scanned && ( <TouchableOpacity title = {'Tocar para escanear de nuevo'} onPress = {() => this.setState({scanned: false})}>
-                    <Text>Tocar para escanear de</Text>
-                </TouchableOpacity>)}  */}
+              <Camera
+                style={styles.camera}
+                barCodeScannerSettings={{
+                  barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
+                }}
+                flashMode={flash}
+                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                ratio="16:9"
+              >
+                <View style={styles.overlay}>
+                  <View style={styles.darkenSection}>
+                    <Text
+                      style={{
+                        color: "white",
+                        alignSelf: "center",
+                        fontWeight: "bold",
+                        fontSize: 22,
+                        top: "90%",
+                      }}
+                    >
+                      Leer un QR
+                    </Text>
+                  </View>
+                  <View style={styles.middleSection}>
+                    <View style={styles.darkenSection}></View>
+                    <View style={styles.qrSquare}></View>
+                    <View style={styles.darkenSection}></View>
+                  </View>
+                  
+                  {/* <View style={styles.darkenSection}>
+                    <TouchableOpacity
+                      onPress={toggleFlash}
+                      style={styles.flashlightContainer}
+                    >
+                      {flash === "off" ? (
+                        <MaterialCommunityIcons
+                          name="flashlight"
+                          size={50}
+                          color="black"
+                        />
+                      ) : (
+                        <MaterialCommunityIcons
+                          name="flashlight-off"
+                          size={50}
+                          color="black"
+                        />
+                      )}
+                    </TouchableOpacity>
+                  </View> */}
+                </View>
+{/*               
+                <CustomModal
+                  ref={errorRef}
+                  custom={true}
+                  onTouchOutside={onCloseErrors}
+                >
+                  <View style={{ alignItems: "center", marginVertical: 20 }}>
+                    <Text style={{ fontSize: 30, fontWeight: "bold" }}>¡Error inesperado!</Text>
+                    <View style={{ marginVertical: 40, alignItems: "center" }}>
+                      <Text style={{ fontSize: 20 }}>Algo salió mal al intentar leer el QR</Text>
+                      
+                      <Text style={{ fontSize: 20 }}>Vuelve a intarlo más tarde</Text>
+                    </View>
+                    <Button
+                      title={"Entendido"}
+                      color={"primary"}
+                      onPress={onCloseErrors}
+                    />
+                  </View>
+                </CustomModal> */}
+              </Camera>
             </View>
             
-            <FooterIndex navigation={this.props.navigation}/>
+            <FooterIndex navigation={navigation}/>
             <Modal
               animationType="fade"
               transparent={true}
               backdropOpacity={0.3}
-              visible={this.state.modalVisible}
+              visible={modalVisible}
               onRequestClose={() => {
                 Alert.alert("Modal has been closed.");
               }}
             >
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                  <View style={{marginBottom: '7%', alignItems: 'center'}}>
-                    <Text style={styles.modalText}>EZV 123</Text>
-                    <Text>+3004678602</Text>
+                  <View style={{ marginBottom: '7%', alignItems: 'center' }}>
+                    <Text style={styles.modalText}> {plate} </Text> 
                     <Text>Ha iniciado tiempo de parqueo</Text>
-                    <Text>11/11/2020 4:20 PM</Text>
+                    <Text>{moment().calendar()}</Text>
                   </View>
                   <TouchableHighlight
                     style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
                     onPress={() => {
-                      this.setState({
-                        modalVisible: false
-                      });
-                      this.props.navigation.navigate('UserInput');
+                      setModalVisible(!modalVisible);
+                      navigation.navigate("UserInput");
+                      
                     }}
                   >
                     <Text style={styles.textStyle}>Entendido</Text>
@@ -159,11 +235,19 @@ export default class BarcodeScanner extends React.Component {
         </View>
     );
   }
+const mapStateToProps = (state) => ({
+  qr: state.qr,
+  officialProps: state.official,
 
-  handleBarCodeScanned = () => {
-    this.setState({
-      scanned: true,
-      modalVisible: true
-    });
-  };
-}
+});
+
+export default connect(mapStateToProps, actions)(BarcodeScanner);
+
+
+
+  // handleBarCodeScanned = () => {
+  //   this.setState({
+  //     scanned: true,
+  //     modalVisible: true
+  //   });
+  // };

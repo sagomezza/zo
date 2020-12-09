@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       borderRadius: 20,
       fontSize: 35,
-      fontFamily: 'Montserrat-Regular'
+      fontFamily: 'Montserrat-Regular',
+      color: '#008999'
     },
     textInput: {
       width: '70%', 
@@ -33,7 +34,8 @@ const styles = StyleSheet.create({
       borderRadius: 20,
       width: "70%",
       fontSize: 25,
-      fontFamily: 'Montserrat-Regular'
+      fontFamily: 'Montserrat-Regular',
+      color: '#008999'
     },
     buttonI: {
       borderRadius:20,

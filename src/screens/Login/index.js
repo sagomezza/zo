@@ -64,7 +64,7 @@ const LoginIndex = (props) => {
         routes: [{ name: 'Home' }]
       }));
     } catch (err) {
-      console.log(err)
+      console.log(err?.response)
     }
   }
 

@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     loginText: {
       color: 'white',
       fontSize: 22,
-      marginBottom:30,
+      marginBottom: 30,
       fontFamily: 'Montserrat-Bold'
     },
     titleInputText: {
