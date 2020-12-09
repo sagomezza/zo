@@ -13,6 +13,7 @@ import moment from 'moment';
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
+  console.log(officialHq)
   // const [ recips, setRecips ] = useState([]);
   const [ vehiclesData, setVehiclesData ] = useState({
     availableCars: 0,
