@@ -13,8 +13,8 @@ import {
 } from 'react-native';
 //-------- Library dependecies ------------
 import axios from 'axios';
-import { auth } from '../../config/firebase'
-import * as SecureStore from 'expo-secure-store'
+import { auth } from '../../config/firebase';
+import * as SecureStore from 'expo-secure-store';
 import { connect } from 'react-redux';
 import { CommonActions } from '@react-navigation/native';
 //-------- Constants dependecies ------------
@@ -23,9 +23,9 @@ import {
   READOFFICIAL
 } from '../../config/constants/api'
 import * as actions from "../../redux/actions";
-import { TIMEOUT } from '../../config/constants/constants'
+import { TIMEOUT } from '../../config/constants/constants';
 //-------- Styling dependecies ------------
-import styles from './LoginStyles'
+import styles from './LoginStyles';
 
 const LoginIndex = (props) => {
   const { navigation } = props;
@@ -46,7 +46,7 @@ const LoginIndex = (props) => {
        * In case everything is correct call the sign in function and then navigate to Home
        */
       let response = await auth.signInWithEmailAndPassword(email.toString(), password.toString())
-      console.log(response.user.toJSON().stsTokenManager.accessToken)
+      // console.log(response.user.toJSON().stsTokenManager.accessToken)
       let fbToken  =response.user.toJSON().stsTokenManager.accessToken
       if (Platform.OS === 'android' && Platform.Version < 23) {
         await AsyncStorage.setItem('firebaseToken', fbToken)
@@ -67,11 +67,11 @@ const LoginIndex = (props) => {
       console.log(err)
     }
   }
-///assets/images/icon@2x.png'
+
   return (
     <View style={styles.container}> 
       <View>
-      <Image style={{width:100, height: 70}} resizeMode={"contain"} source={require( '../../../assets/images/icon.png' )}/>
+      <Image style={{width:210, height: 125, marginBottom: 50}} resizeMode={"contain"} source={require( '../../../assets/images/icon.png' )}/>
       </View>
       <Text style={styles.loginText} >Inicio de sesión</Text>
       <Text style={{ marginRight: '36%', ...styles.titleInputText }}>Correo</Text>

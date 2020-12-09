@@ -6,7 +6,8 @@ const initialState = {
     email: null,
     phone: null,
     name: null,
-    lastName: null
+    lastName: null,
+    hq: []
 } 
 
 const officialReducer = (state=initialState, action ) => {
@@ -14,7 +15,11 @@ const officialReducer = (state=initialState, action ) => {
         case SET_OFFICIAL:
             return {
                 ...state,
-                official: action.payload
+                email: action.payload.email,
+                phone: action.payload.phone,
+                name: action.payload.name,
+                lastName: action.payload.lastName,
+                hq: action.payload.hq
             };
 
         default:

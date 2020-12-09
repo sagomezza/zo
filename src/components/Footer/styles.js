@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native';
 
 const FooterStyles = StyleSheet.create({ 
     footerText: {
-      fontSize: 35,
       textAlign: 'center',
       color: '#FFFFFF',
       textAlign: 'center',

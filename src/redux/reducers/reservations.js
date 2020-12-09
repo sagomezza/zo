@@ -10,7 +10,6 @@ const reservationsReducer = (state=initialState, action ) => {
     switch (action.type) {
         case SET_RESERVATIONS:
             return {
-                ...state,
                 reservations: action.payload
             };   
         default: 

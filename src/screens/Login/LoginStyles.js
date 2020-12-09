@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#008999',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     loginText: {
       color: 'white',

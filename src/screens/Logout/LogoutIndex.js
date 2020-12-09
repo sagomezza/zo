@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList, Modal, TouchableHighlight, Dimensions } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
@@ -8,6 +8,10 @@ import '@firebase/auth';
 import '@firebase/database';
 import "@firebase/firestore";
 import Screen from '../Menu/MenuStyles';
+import { connect } from "react-redux";
+import * as actions from "../../redux/actions";
+import instance from '../../config/axios';
+import { READ_HQ } from '../../config/api';
 
 
 const LogoutIndex = (props) => {
@@ -69,25 +73,35 @@ const LogoutIndex = (props) => {
   });
 
   const [modalVisible, setModalVisible] = useState(false);
-
-  const name = 'Santiago Gómez Barrero';
-  const place = 'Hospital Manuel Uribe Ángel';
+  const recips = props.recips.recips;
+  const official = props.official;
+  
+  const hq = props.hq;
   const dateMonthIn = new Date('05/05/20');
   const dateMonthOut = new Date('07/05/20');
-  const totalPay = 385000;
+  const [ inputValue, setInputValue] = useState(0);
+  // useEffect(() => {
+  //   const readHq = async () => {
+  //     try {
+  //       const response = await instance.post(READ_HQ, {
+  //         id: officialHq
+  //       });
+  //       if(response.data.response){
+  //         props.setReservations(response.data.data.reservations);
+  //       }
+  //     } catch (error) {
+  //       console.log("err: ", error);
+  //     }
+  //   };
+  //   readHq();
+  // }, []);
 
-  const placas = [
-  { placa: 'EVW 590', pago: 'Pago por x horas', total: '$16.500' },
-  { placa: 'EVW 590', pago: 'Pago por x horas', total: '$16.500'},
-  { placa: 'EVW 590', pago: 'Pago por x horas', total: '$16.500'},  
-  ];
-  
   return (
   <View style={{flex: 1}}>
     
     <View style={{alignItems: 'center', marginTop: '30%'}}>
-        {<Text style={{fontSize: 20}}>{name}</Text>}
-        {<Text>{place}</Text>}
+        {<Text style={{fontSize: 20}}>{official.name + ' '+ official.lastName}</Text>}
+        {<Text>{hq.name}</Text>}
         
         <Text>{"Hora de inicio: " + moment(dateMonthIn).format('hh:MM A ') + " Hora de salida: " + moment(dateMonthOut).format('hh:MM A')}</Text>
         <View style={{flexDirection: 'row', paddingBottom: '5%', marginTop: '10%'}}>
@@ -96,23 +110,24 @@ const LogoutIndex = (props) => {
           </View>
           <View style={{marginRight: 20}}>
             <TextInput
-              style={{fontSize: 25, width: '150%', ...HomeStyles.plateInput, textAlign: 'center'}}
-              value={'$ ' + totalPay}
+              style={{fontSize: 25, textAlign: 'center'}}
+              value={inputValue + ''}
+              onChangeText = {text => setInputValue(text)}
             />
           </View>
         </View>
       </View>
       
-    <View style={{paddingBottom: 10}}>
+    <View style={{paddingBottom: 10, height: "40%"}}>
       <FlatList
-        data={placas}
+        data={recips}
         keyExtractor={({ id }) => id}
         renderItem={({item}) => {
         return (
         <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: 60, marginRight:70, marginTop: 20 }} >
           <View style={{marginBottom: 10}} >
-            <Text>{item.placa}</Text>
-            <Text>{item.pago}</Text>
+            <Text>{item.plate}</Text>
+            <Text>{item.hours}</Text>
           </View>
           <View style={{ flex: 1, alignItems:'flex-end'}} >
             <Text>{item.total}</Text>
@@ -122,8 +137,8 @@ const LogoutIndex = (props) => {
       />   
     </View>
     <View style={{alignItems: 'center'}}>
-      <TouchableOpacity style={HomeStyles.plateInput}>
-        <Text style={{fontSize: 20, margin: '3%'}}  onPress={() => {setModalVisible(true)}}>  Cerrar turno</Text>
+      <TouchableOpacity style={HomeStyles.plateInput} onPress={() => {setModalVisible(true)}}>
+        <Text style={{fontSize: 20, margin: '3%'}}>  Cerrar turno</Text>
       </TouchableOpacity>
     </View>
     <FooterIndex navigation={navigation}/>
@@ -162,4 +177,11 @@ const LogoutIndex = (props) => {
   );
 }
 
-export default LogoutIndex;
+const mapStateToProps = (state) => ({
+  official: state.official,
+  reservations: state.reservations,
+  recips: state.recips,
+  hq: state.hq
+});
+
+export default connect(mapStateToProps, actions)(LogoutIndex);

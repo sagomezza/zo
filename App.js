@@ -24,8 +24,8 @@ const fetchFont = () => {
 const App = () => {
   const [fontLoaded, setfontLoaded] = useState(false);
   const [currentUser, setUser] = useState("");
-  const [initialRouteName, setInitialRouteName] = useState("Login");
-  const [loginState, setLoginState] = useState(true);
+  const [initialRouteName, setInitialRouteName] = useState("");
+  const [loginState, setLoginState] = useState(false);
   
   const readUser = async (userEmail) => {
     //console.log("USER. ", userEmail);
@@ -45,9 +45,9 @@ const App = () => {
   }
 
   const updateUserState = useCallback((user) => {
-    // console.log("[App/updateUserState] ", user);
+    console.log("[App/updateUserState] ", user);
     if (user) {
-      // console.log("[metadata] ", auth.currentUser.metadata);
+      console.log("[metadata] ", auth.currentUser.metadata);
       // console.log(user)
       setUser(user);
       setInitialRouteName("Home");
@@ -56,6 +56,7 @@ const App = () => {
       setUser(null);
       setInitialRouteName("Login");
     }
+    
   }, []);
 
   useEffect(() => {
