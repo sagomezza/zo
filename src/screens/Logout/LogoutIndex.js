@@ -129,9 +129,10 @@ const LogoutIndex = (props) => {
                       fontFamily: 'Montserrat-Regular',
                       color: '#008999',
                     }}
-              value={ inputValue + ''}
+              value={ inputValue }
               keyboardType= {"numeric"}
               textAlign='center'
+              placeholder= '$'
               onChangeText = {text => setInputValue(text)}
             />
           </View>

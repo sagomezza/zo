@@ -40,7 +40,7 @@ const UserInput = (props) => {
           )
           setFindUserByPlate(response.data.data);
           setExistingUser(false)
-          setPhone((response.data.data[0]).substring(3,12))
+          setPhone((response.data.data[0]).substring(3,13))
         } else {
           setPhone("")
         }
@@ -55,34 +55,22 @@ const UserInput = (props) => {
   useEffect(() => {
     async function createUser() {
       try {
-
-        if ((plateOne + plateTwo).length === 6 && phone.length === 10) {
-          let type
-          let body = {
-            phone: '+57' + phone
-          }
-          if(findUserByPlate.length > 0){
-            body = {
-              ...body,
-              type: "full",
-              email: officialProps.email,
-              name: officialProps.name,
-              lastName: officialProps.lastName,
-              expoToken: 'ExpoToken[fefe]'
-            }
-          } else {
-            body = {
-              ...body,
+        if ((plateOne + plateTwo).length === 6 && phone.length === 10 && findUserByPlate.length === 0) {
+            console.log({
+              phone: '+57' + phone,
               plate: plateOne + plateTwo,
               type: "starter"
-            }
-          } 
-          const response = await instance.post(
-            CREATE_USER,
-            body,
-            { timeout: TIMEOUT }
-          )
-          setExistingUser(false)
+            })
+            const response = await instance.post(
+              CREATE_USER,
+              {
+                phone: '+57' + phone,
+                plate: plateOne + plateTwo,
+                type: "starter"
+              },
+              { timeout: TIMEOUT }
+            )
+            setExistingUser(false)
         }
       } catch (err) {
         console.log(err?.response)
@@ -143,6 +131,7 @@ const UserInput = (props) => {
           <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: '10%' }}>
             <TextInput
               style={styles.plateInput}
+              autoFocus= {true}
               textAlign='center'
               maxLength={3}
               autoCapitalize={"characters"}
@@ -157,7 +146,6 @@ const UserInput = (props) => {
               keyboardType='default'
               onChangeText={text => 
                 setPlateTwo(text)
-              
               }
               value={plateTwo}
             />

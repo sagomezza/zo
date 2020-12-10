@@ -325,7 +325,7 @@ const UserOut = (props) => {
         </View>
 
         <View style={{ alignItems: 'center', marginBottom: '5%' }}>
-          {<Text style={styles.infoUSerText}>Celular: {recip.phone} </Text>}
+          {<Text style={styles.infoUSerText}>Celular/CódigoQR: {recip.phone} </Text>}
           {/* <Text style={styles.infoUSerText}>Tiempo de inicio: {recip.dateStart && new Date(recip.dateStart)}</Text> */}
           {/* <Text style={styles.infoUSerText}>Tiempo de salida: {recip.dateFinished && new Date(recip.dateFinished)}</Text> */}
           <Text style={styles.infoUSerText}>CODIGO: {recip.verificationCode} </Text>

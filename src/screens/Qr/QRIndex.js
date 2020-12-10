@@ -27,6 +27,8 @@ const BarcodeScanner = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [ plate, setPlate] = useState();
   const [startParking, setStartParking] = useState({});
+  const [modal2Visible, setModal2Visible] =useState(false);
+
 
   function isCharacterALetter(char) {
     return (/[a-zA-Z]/).test(char)
@@ -45,12 +47,24 @@ const BarcodeScanner = (props) => {
         const _data = JSON.parse(data);
         
         if ((qr.plate).length === 0){
+          
           store.dispatch(actions.setPhone(_data.phone))
           navigation.navigate("UserOut")
         } else {
+
           let type
           if (isCharacterALetter(qr.plate[5])) type = "bike"
           else type = "car"
+          console.log("Entrooooooooooooooooo")
+          console.log({
+            plate: qr.plate,
+            hqId: officialHq,
+            dateStart: new Date(),
+            phone: _data.phone,
+            type,
+            isParanoic:true
+          })
+
           const response = await instance.post(
             START_PARKING,
             {
@@ -68,20 +82,15 @@ const BarcodeScanner = (props) => {
           setStartParking(response.data.data);
           readHq();
           setModalVisible(true);
-          store.dispatch(actions.setQr(''))
-
           
        }
       } 
       catch (err) {
       console.log(err?.response?.data);
-      if(err?.response?.data) {
-        // noFundsRef.current.show()
-      } else {
-        errorRef.current.show()
+      if(err?.response.data.response === -2) setModal2Visible(true)
       }
-    }
-  };
+      store.dispatch(actions.setQr(''))
+  }
 
   async function readHq () {
     try {
@@ -179,7 +188,7 @@ const BarcodeScanner = (props) => {
                     </TouchableOpacity>
                   </View> */}
                 </View>
-{/*               
+                {/*               
                 <CustomModal
                   ref={errorRef}
                   custom={true}
@@ -232,9 +241,36 @@ const BarcodeScanner = (props) => {
                 </View>
               </View>
             </Modal>
+            <Modal
+                    animationType="fade"
+                    transparent={true}
+                    backdropOpacity={0.3}
+                    visible={modal2Visible}
+                    onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    }}
+                >
+                    <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <View style={{ marginBottom: '7%', alignItems: 'center' }}>
+                        <Text style={styles.modalText}> El vehículo ya se encuentra estacionado. </Text>
+                        </View>
+                        <TouchableHighlight
+                        style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
+                        onPress={() => {
+                            setModal2Visible(!modal2Visible);
+                            navigation.navigate("UserInput");
+                        }}
+                        >
+                        <Text style={styles.textStyle}>Entendido</Text>
+                        </TouchableHighlight>
+                    </View>
+                    </View>
+                </Modal>
         </View>
     );
-  }
+}
+                    
 const mapStateToProps = (state) => ({
   qr: state.qr,
   officialProps: state.official,

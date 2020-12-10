@@ -13,7 +13,6 @@ import moment from 'moment';
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  console.log(officialHq)
   // const [ recips, setRecips ] = useState([]);
   const [ vehiclesData, setVehiclesData ] = useState({
     availableCars: 0,
@@ -21,7 +20,7 @@ const HomeIndex = (props) => {
     totalCars: 0,
     totalBikes: 0,
   });
-
+  console.log(reservations.reservations)
   useEffect(() => {
     const getRecips = async () => {
       try {
@@ -49,6 +48,8 @@ const HomeIndex = (props) => {
             totalCars: response.data.data.totalCars,
             totalBikes: response.data.data.totalBikes
           });
+  console.log(response.data.data.reservations)
+
           store.dispatch(actions.setReservations(response.data.data.reservations));
           store.dispatch(actions.setHq(response.data.data));
         }
@@ -128,7 +129,7 @@ const HomeIndex = (props) => {
               <Text key={item.id} style={HomeStyles.textPago}>{item.verificationCode}</Text>
             </View>
             <View style={{ flex: 1, alignItems:'flex-end'}} >
-              <Text key={item.id} style={HomeStyles.textMoney}>{new Date(item.dateStart).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</Text>
+              <Text key={item.id} style={HomeStyles.textMoney}>{new Date()}</Text>
               <Text style={HomeStyles.textPago}>Pago por horas</Text>
             </View>
           </View>
