@@ -105,12 +105,13 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: "gray",
-    fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
+    fontFamily: 'Montserrat-Bold'
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "center",
+    fontFamily: 'Montserrat-Regular'
   }
 });
 

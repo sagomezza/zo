@@ -20,7 +20,6 @@ const HomeIndex = (props) => {
     totalCars: 0,
     totalBikes: 0,
   });
-  console.log(reservations.reservations)
   useEffect(() => {
     const getRecips = async () => {
       try {
@@ -48,8 +47,7 @@ const HomeIndex = (props) => {
             totalCars: response.data.data.totalCars,
             totalBikes: response.data.data.totalBikes
           });
-  console.log(response.data.data.reservations)
-
+          
           store.dispatch(actions.setReservations(response.data.data.reservations));
           store.dispatch(actions.setHq(response.data.data));
         }
@@ -61,7 +59,6 @@ const HomeIndex = (props) => {
     getRecips();
     readHq();
   }, []);
-
   return (
     <View style={{flex: 1, alignContent: "center",backgroundColor:"#FFFF"}}>
       <Logout navigation={navigation}/> 
@@ -129,7 +126,7 @@ const HomeIndex = (props) => {
               <Text key={item.id} style={HomeStyles.textPago}>{item.verificationCode}</Text>
             </View>
             <View style={{ flex: 1, alignItems:'flex-end'}} >
-              <Text key={item.id} style={HomeStyles.textMoney}>{new Date()}</Text>
+          <Text key={item.id} style={HomeStyles.textMoney}>{moment((item.dateStart._seconds)*1000).format('LT')}</Text>
               <Text style={HomeStyles.textPago}>Pago por horas</Text>
             </View>
           </View>

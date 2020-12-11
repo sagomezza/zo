@@ -55,11 +55,15 @@ const LogoutIndex = (props) => {
     },
     openButton: {
       backgroundColor: "#F194FF",
-      borderRadius: 20,
-      padding: 10,
+      borderRadius: 10,
+      // padding: 10,
       elevation: 2,
       borderColor: '#D9D9D9',
-      borderWidth:1
+      borderWidth: 1,
+      margin: '5%',
+      width: '20%',
+      height:'40%',
+      alignItems: 'center'
     },
     textStyle: {
       color: "gray",
@@ -133,7 +137,7 @@ const LogoutIndex = (props) => {
               keyboardType= {"numeric"}
               textAlign='center'
               placeholder= '$'
-              onChangeText = {text => setInputValue(text)}
+              onChangeText = {text => setInputValue(text) + ''}
             />
           </View>
         </View>
@@ -175,8 +179,9 @@ const LogoutIndex = (props) => {
               <View style={HomeStyles.centeredView}>
                 <View style={HomeStyles.modalView}>
                   <View style={{marginBottom: '7%', alignItems: 'center'}}>
-                    <Text>Has cerrado tu sesión</Text>
+                    <Text>¿Quieres continuar con el cierre de sesión?</Text>
                   </View>
+                  <View style={{flexDirection: 'row' }}>
                   <TouchableHighlight
                     style={{ ...HomeStyles.openButton, backgroundColor: "#ffffff" }}
                     onPress={() => {
@@ -189,8 +194,19 @@ const LogoutIndex = (props) => {
                       navigation.navigate('Login')
                     }}
                   >
-                    <Text style={HomeStyles.textStyle}>Entendido</Text>
+                    <Text style={HomeStyles.textStyle}>SI</Text>
                   </TouchableHighlight>
+                  <TouchableHighlight
+                    style={{ ...HomeStyles.openButton, backgroundColor: "#ffffff" }}
+                    onPress={() => {
+                      setModalVisible(!modalVisible);
+                      navigation.navigate('Logout');
+                    }}
+                  >
+                    <Text style={HomeStyles.textStyle}>NO</Text>
+                  </TouchableHighlight>
+                  
+                  </View>
                 </View>
               </View>
             </Modal>

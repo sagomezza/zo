@@ -56,11 +56,7 @@ const UserInput = (props) => {
     async function createUser() {
       try {
         if ((plateOne + plateTwo).length === 6 && phone.length === 10 && findUserByPlate.length === 0) {
-            console.log({
-              phone: '+57' + phone,
-              plate: plateOne + plateTwo,
-              type: "starter"
-            })
+            
             const response = await instance.post(
               CREATE_USER,
               {
@@ -247,9 +243,9 @@ const UserInput = (props) => {
           <View style={styles.modalView}>
             <View style={{ marginBottom: '7%', alignItems: 'center' }}>
               <Text style={styles.modalText}> {plateOne + ' ' + plateTwo} </Text>
-              <Text> {findUserByPlate} </Text>
-              <Text>Ha iniciado tiempo de parqueo</Text>
-              <Text></Text>
+              <Text style={styles.modalText}>Ha iniciado el parqueo </Text>
+              <Text style={styles.modalText}> Celular: {phone} </Text>
+              <Text style={styles.modalText}> Hora: {moment().format('LT')}</Text>
             </View>
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
@@ -272,7 +268,7 @@ const UserInput = (props) => {
 }
 const mapStateToProps = (state) => ({
   officialProps: state.official,
-  reservations: state.reservations
+  reservations: state.reservations,
 });
 
 export default connect(mapStateToProps, actions)(UserInput);

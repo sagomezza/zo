@@ -55,16 +55,6 @@ const BarcodeScanner = (props) => {
           let type
           if (isCharacterALetter(qr.plate[5])) type = "bike"
           else type = "car"
-          console.log("Entrooooooooooooooooo")
-          console.log({
-            plate: qr.plate,
-            hqId: officialHq,
-            dateStart: new Date(),
-            phone: _data.phone,
-            type,
-            isParanoic:true
-          })
-
           const response = await instance.post(
             START_PARKING,
             {
@@ -77,10 +67,9 @@ const BarcodeScanner = (props) => {
             },
             { timeout: TIMEOUT }
           )
-          // setPlate({plate});
-          
           setStartParking(response.data.data);
           readHq();
+          setPlate(qr.plate);
           setModalVisible(true);
           
        }
@@ -225,8 +214,8 @@ const BarcodeScanner = (props) => {
                 <View style={styles.modalView}>
                   <View style={{ marginBottom: '7%', alignItems: 'center' }}>
                     <Text style={styles.modalText}> {plate} </Text> 
-                    <Text>Ha iniciado tiempo de parqueo</Text>
-                    <Text>{moment().calendar()}</Text>
+                    <Text style={styles.modalText}>Ha iniciado el parqueo</Text>
+                    <Text style={styles.modalText}>Hora: {moment().format('LT')}</Text>
                   </View>
                   <TouchableHighlight
                     style={{ ...styles.openButton, backgroundColor: "#ffffff" }}

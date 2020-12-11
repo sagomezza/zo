@@ -71,7 +71,8 @@ const UserOut = (props) => {
       marginBottom: '10%',
       borderWidth: 1,
       paddingLeft: 10,
-      fontFamily: 'Montserrat-Regular'
+      fontFamily: 'Montserrat-Regular',
+      borderRadius: 10
     },
     miniButtonMoney: {
       width: 65,
@@ -92,12 +93,11 @@ const UserOut = (props) => {
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
-      marginTop: 22,
       backgroundColor: 'rgba(52, 52, 52, 0.8)',
 
     },
     modalView: {
-      height: 200,
+      height: 310,
       padding: 35,
       borderRadius: 20,
       borderColor: '#707070',
@@ -116,11 +116,15 @@ const UserOut = (props) => {
     },
     openButton: {
       backgroundColor: "#F194FF",
-      borderRadius: 20,
-      padding: 10,
+      borderRadius: 10,
+      // padding: 10,
       elevation: 2,
       borderColor: '#D9D9D9',
-      borderWidth: 1
+      borderWidth: 1,
+      margin: '5%',
+      width: '20%',
+      height:'40%',
+      alignItems: 'center'
     },
     textStyle: {
       color: "gray",
@@ -129,7 +133,7 @@ const UserOut = (props) => {
       fontFamily: 'Montserrat-Regular'
     },
     modalText: {
-      marginBottom: 15,
+      margin: '5%',
       textAlign: "center",
       fontFamily: 'Montserrat-Regular'
     },
@@ -247,7 +251,7 @@ const UserOut = (props) => {
         recipId: recip.id,
         paymentType: "cash",
         cash: totalPay,
-        change: totalPay - totalAmount,
+        change: totalAmount - totalPay ,
         status: paymentStatus,
         isParanoic: isParanoicUser 
       })
@@ -260,7 +264,7 @@ const UserOut = (props) => {
           recipId: recip.id,
           paymentType: "cash",
           cash: totalPay,
-          change: totalPay - totalAmount,
+          change: totalAmount - totalPay,
           status: paymentStatus,
           isParanoic: isParanoicUser 
         },
@@ -369,7 +373,7 @@ const UserOut = (props) => {
             </View>
           </View>
 
-          <View style={{ flexDirection: 'row', paddingBottom: '10%', marginLeft: '5%' }}>
+          <View style={{ flexDirection: 'row', paddingBottom: '5%', marginLeft: '5%' }}>
             <View style={{ marginLeft: 30, marginRight: 10, marginTop: 15 }}>
               <Text style={{ fontFamily: 'Montserrat-Regular' }}>{"A devolver"}</Text>
             </View>
@@ -379,14 +383,14 @@ const UserOut = (props) => {
                 keyboardType='numeric'
                 placeholder='$'
                 editable={false}
-                value={(totalPay - totalAmount) <= 0 ? '$ 0' : '$ ' + (totalPay - totalAmount)}
+                value={(totalAmount - totalPay) <= 0 ? '$ 0' : '$ ' + (totalAmount - totalPay)}
               />
             </View>
           </View>
         </View>
         {err !== "" && <Text style={{color: "red"}}>{err}</Text>}
         {/* {!loading &&  */}
-        <View style={{ marginBottom: 10 }}>
+        <View style={{ padding: '5%' }}>
           <Button
             title="Cobrar"
             color='gray'
@@ -397,7 +401,7 @@ const UserOut = (props) => {
         {/* } */}
         {/* {loading && <ActivityIndicator />} */}
         {/* {!loading &&  */}
-        <View style={{ marginBottom: 10 }}>
+        <View style={{ padding: '5%' }}>
           <Button
             title="Pago pendiente"
             color='gray'
@@ -516,17 +520,40 @@ const UserOut = (props) => {
           <View style={{ ...styles.modalView }}>
             <View style={{ marginBottom: '7%', alignItems: 'center' }}>
               <Text style={styles.modalText}>Ingresa el valor exacto de pago: </Text>
-              <Text>{totalAmount}</Text>
+              <Text style={{fontFamily: 'Montserrat-Regular', fontSize: 20}}>Total a pagar: $ {totalAmount}</Text>
+              <View style= {{flexDirection:"row", justifyContent: 'space-around', padding: '5%' }}>
+              <Text style={{fontFamily: 'Montserrat-Regular'}}>Pago parcial:  </Text>
               <TextInput
+                style={{borderWidth: 1, 
+                        borderColor: 'gray',
+                        fontSize: 15,
+                        fontFamily: 'Montserrat-Regular',
+                        color: '#008999',
+                        width: '40%',
+                        fontFamily: 'Montserrat-Regular',
+                        borderRadius: 10}}
                 keyboardType='numeric'
                 placeholder='$'
+                keyboardType= {"numeric"}
+                textAlign='center'
                 value={totalPayModal == 0 ? '' : totalPayModal + ''}
                 onChangeText={text => setTotalPayModal(text)}
               />
+              </View>
+              <View style= {{flexDirection:"row", justifyContent: 'space-around' }}>
+              <Text style={{fontFamily: 'Montserrat-Regular'}}> Deuda:  </Text>
               <TextInput
+                style={{borderWidth: 1, 
+                  borderColor: 'gray',
+                  fontSize: 15,
+                  fontFamily: 'Montserrat-Regular',
+                  width: '40%',
+                  borderRadius: 10}}
+                textAlign='center'
                 editable={false}
-                value={(totalPayModal - totalAmount) < 0 ? '0' : (totalPayModal - totalAmount) + ''}
+                value={(totalAmount - totalPayModal) < 0 ? '0' : "$" + (totalAmount - totalPayModal)}
               />
+              </View>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <TouchableHighlight
@@ -536,6 +563,7 @@ const UserOut = (props) => {
                   setTotalPay(totalPayModal)
                   finishParking("parcial-pending") 
                   setTotalPayModal(0);
+                  restart();
                 }}
               >
                 <Text style={styles.textStyle}>Guardar</Text>
