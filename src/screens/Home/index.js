@@ -11,21 +11,16 @@ import store from '../../config/store';
 import moment from 'moment';
 
 const HomeIndex = (props) => {
-  const { navigation, officialProps, reservations, recips } = props;
+  const { navigation, officialProps, reservations, recips, hq } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  // const [ recips, setRecips ] = useState([]);
-  const [ vehiclesData, setVehiclesData ] = useState({
-    availableCars: 0,
-    availableBikes: 0,
-    totalCars: 0,
-    totalBikes: 0,
-  });
+
   useEffect(() => {
     const getRecips = async () => {
       try {
         const response = await instance.post(GET_RECIPS, {
-          hqId: officialHq
+          hqId: officialProps.hq[0]
         });
+        console.log(response.data)
         if(response.data.response === 1){
           
           store.dispatch(actions.setRecips(response.data.data.finished));
@@ -41,13 +36,6 @@ const HomeIndex = (props) => {
           id: officialHq
         });
         if(response.data.response){
-          setVehiclesData({
-            availableCars: response.data.data.availableCars,
-            availableBikes: response.data.data.availableBikes,
-            totalCars: response.data.data.totalCars,
-            totalBikes: response.data.data.totalBikes
-          });
-          
           store.dispatch(actions.setReservations(response.data.data.reservations));
           store.dispatch(actions.setHq(response.data.data));
         }
@@ -59,6 +47,7 @@ const HomeIndex = (props) => {
     getRecips();
     readHq();
   }, []);
+
   return (
     <View style={{flex: 1, alignContent: "center",backgroundColor:"#FFFF"}}>
       <Logout navigation={navigation}/> 
@@ -67,14 +56,14 @@ const HomeIndex = (props) => {
         <View style={HomeStyles.plateInput}>
         <Image style={{width:"24%", height: "24%", marginTop: "5%", marginLeft: "5%"}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoM.png' )}/>
           <Text style={HomeStyles.plateInputText}>
-            {`${vehiclesData.availableBikes}/${vehiclesData.totalBikes}`}
+            {`${hq.availableBikes}/${hq.totalBikes}`}
           </Text>
           
         </View>
         <View style= {HomeStyles.plateInput}>
         <Image style={{width:"25%", height: "25%", marginTop: "5%", marginLeft: "5%"}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoC.png' )}/>
           <Text style={HomeStyles.plateInputText}>
-          {`${vehiclesData.availableCars}/${vehiclesData.totalCars}`}
+          {`${hq.availableCars}/${hq.totalCars}`}
           </Text>
         </View>
       </View>
@@ -93,11 +82,11 @@ const HomeIndex = (props) => {
           return (
           <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#008999", marginBottom: 10, marginLeft: 60, marginRight:70, marginTop: 20 }} >
             <View style={{marginBottom: 10}} >
-              <Text  key={item.id} style={HomeStyles.textPlaca}>{item.plate}</Text>
-              <Text  key={item.id} style={HomeStyles.textPago}>{`Pago por ${item.hours} horas`}</Text>
+              <Text   style={HomeStyles.textPlaca}>{item.plate}</Text>
+              <Text   style={HomeStyles.textPago}>{`Pago por ${item.hours} horas`}</Text>
             </View>
             <View style={{ flex: 1, alignItems:'flex-end'}} >
-              <Text key={item.id} style={HomeStyles.textMoney}>${item.total}</Text>
+              <Text  style={HomeStyles.textMoney}>${item.total}</Text>
             </View>
           </View>
           )}}
@@ -122,11 +111,11 @@ const HomeIndex = (props) => {
           return (
             <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#FFFFFF", marginBottom: 10, marginLeft: 60, marginRight:70, marginTop: 20 }} >            
             <View style={{marginBottom: 10, marginleft:10}} >
-              <Text key={item.id} style={HomeStyles.textPlaca} >{item.plate}</Text>
-              <Text key={item.id} style={HomeStyles.textPago}>{item.verificationCode}</Text>
+              <Text  style={HomeStyles.textPlaca} >{item.plate}</Text>
+              <Text style={HomeStyles.textPago}>{item.verificationCode}</Text>
             </View>
             <View style={{ flex: 1, alignItems:'flex-end'}} >
-          <Text key={item.id} style={HomeStyles.textMoney}>{moment((item.dateStart._seconds)*1000).format('LT')}</Text>
+          <Text style={HomeStyles.textMoney}>{moment(item.dateStart).format('LT')}</Text>
               <Text style={HomeStyles.textPago}>Pago por horas</Text>
             </View>
           </View>
@@ -150,7 +139,7 @@ const mapStateToProps = (state) => ({
   officialProps: state.official,
   reservations: state.reservations,
   recips: state.recips,
-  name: state.recips
+  hq: state.hq
 });
 
 export default connect(mapStateToProps, actions)(HomeIndex);

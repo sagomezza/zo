@@ -114,6 +114,36 @@ const UserOut = (props) => {
       shadowRadius: 50,
       elevation: 5,
     },
+    modalViewCobrar: {
+      height: 200,
+      padding: 35,
+      borderRadius: 20,
+      borderColor: '#707070',
+      borderWidth: 1,
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      backgroundColor: '#FFF',
+      shadowColor: '#FFF',
+      shadowOffset: {
+        width: 50,
+        height: 50,
+      },
+      shadowOpacity: 0,
+      shadowRadius: 50,
+      elevation: 5,
+    },
+    openButtonCobrar: {
+      backgroundColor: "#FFFFFF",
+      borderRadius: 10,
+      // padding: 10,
+      elevation: 2,
+      borderColor: '#D9D9D9',
+      borderWidth: 1,
+      // margin: '5%',
+      width: '23%',
+      height:'30%',
+      alignItems: 'center'
+    },
     openButton: {
       backgroundColor: "#F194FF",
       borderRadius: 10,
@@ -127,10 +157,11 @@ const UserOut = (props) => {
       alignItems: 'center'
     },
     textStyle: {
-      color: "gray",
+      color: "black",
       fontWeight: "bold",
       textAlign: "center",
-      fontFamily: 'Montserrat-Regular'
+      fontFamily: 'Montserrat-Regular',
+      marginTop: '15%'
     },
     modalText: {
       margin: '5%',
@@ -251,7 +282,7 @@ const UserOut = (props) => {
         recipId: recip.id,
         paymentType: "cash",
         cash: totalPay,
-        change: totalAmount - totalPay ,
+        change: totalPay - totalAmount,
         status: paymentStatus,
         isParanoic: isParanoicUser 
       })
@@ -264,7 +295,7 @@ const UserOut = (props) => {
           recipId: recip.id,
           paymentType: "cash",
           cash: totalPay,
-          change: totalAmount - totalPay,
+          change: totalPay - totalAmount,
           status: paymentStatus,
           isParanoic: isParanoicUser 
         },
@@ -275,11 +306,21 @@ const UserOut = (props) => {
       readHq()
       getRecips()
 
+      if (isCharacterALetter(recip.plate[5])){
+        store.dispatch(actions.addBike());
+      } else {
+        store.dispatch(actions.addCar());
+      } 
+      
     } catch (err) {
       console.log(err?.response)
       setLoading(false)
       setErr("Algo malo pasó, vuelve a intentarlo más tarde")
     }
+  }
+
+  function isCharacterALetter(char) {
+    return (/[a-zA-Z]/).test(char)
   }
 
   return (
@@ -383,7 +424,7 @@ const UserOut = (props) => {
                 keyboardType='numeric'
                 placeholder='$'
                 editable={false}
-                value={(totalAmount - totalPay) <= 0 ? '$ 0' : '$ ' + (totalAmount - totalPay)}
+                value={(totalPay - totalAmount) <= 0 ? '$ 0' : '$ ' + (totalPay - totalAmount)}
               />
             </View>
           </View>
@@ -395,8 +436,7 @@ const UserOut = (props) => {
             title="Cobrar"
             color='gray'
             disabled={loading}
-            onPress={() => { setModalVisible(true); finishParking("payed");restart()
-          }} />
+            onPress={() => { setModalVisible(true); finishParking("payed")}} />
         </View>
         {/* } */}
         {/* {loading && <ActivityIndicator />} */}
@@ -421,16 +461,17 @@ const UserOut = (props) => {
         visible={modalVisible}
       >
         <View style={styles.centeredView}>
-          <View style={styles.modalView}>
+          <View style={styles.modalViewCobrar}>
             <View style={{ marginBottom: '7%', alignItems: 'center' }}>
               <Text style={styles.modalText}>{recip.plate}</Text>
               <Text>{recip.phone}</Text>
               <Text>¡Cobro exitoso!</Text>
             </View>
             <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
+              style={{ ...styles.openButtonCobrar}}
               onPress={() => {
                 setModalVisible(!modalVisible);
+                restart();
               }}
             >
               <Text style={styles.textStyle}>Entendido</Text>
@@ -551,7 +592,7 @@ const UserOut = (props) => {
                   borderRadius: 10}}
                 textAlign='center'
                 editable={false}
-                value={(totalAmount - totalPayModal) < 0 ? '0' : "$" + (totalAmount - totalPayModal)}
+                value={(totalAmount - totalPayModal) < 0 ? '0' : '$' + (totalAmount - totalPayModal)}
               />
               </View>
             </View>

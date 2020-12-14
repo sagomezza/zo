@@ -50,6 +50,7 @@ const BarcodeScanner = (props) => {
           
           store.dispatch(actions.setPhone(_data.phone))
           navigation.navigate("UserOut")
+
         } else {
 
           let type
@@ -72,6 +73,11 @@ const BarcodeScanner = (props) => {
           setPlate(qr.plate);
           setModalVisible(true);
           
+        if (isCharacterALetter(qr.plate[5])){
+          store.dispatch(actions.subtractBike());
+        } else {
+          store.dispatch(actions.subtractCar());
+        } 
        }
       } 
       catch (err) {

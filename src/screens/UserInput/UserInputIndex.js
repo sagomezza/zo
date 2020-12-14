@@ -96,6 +96,13 @@ const UserInput = (props) => {
         setStartParking(response.data.data);
         readHq();
         
+        if (isCharacterALetter(plateTwo[2])){
+          store.dispatch(actions.subtractBike());
+        } else {
+          console.log('ASKJDHASKJDHKSAJHD')
+          store.dispatch(actions.subtractCar());
+        } 
+
       }
     } catch (err) {
       if(err?.response.data.response === -2) setModal2Visible(true)

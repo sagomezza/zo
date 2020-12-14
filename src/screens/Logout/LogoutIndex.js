@@ -63,7 +63,8 @@ const LogoutIndex = (props) => {
       margin: '5%',
       width: '20%',
       height:'40%',
-      alignItems: 'center'
+      alignItems: 'center',
+      alignContent: 'center'
     },
     textStyle: {
       color: "gray",

@@ -4,7 +4,11 @@ import {
   SET_RECIPS,
   SET_HQ,
   SET_QR,
-  SET_QR_PHONE
+  SET_QR_PHONE,
+  SUBTRACT_BIKE,
+  SUBTRACT_CAR,
+  ADD_CAR,
+  ADD_BIKE
 } from './type'
 
 export const setOfficial = (official) => {
@@ -46,5 +50,26 @@ export const setPhone = (phone) => {
   return {
     type: SET_QR_PHONE,
     payload: phone,
+  };
+};
+
+export const subtractCar = () => {
+  return {
+    type: SUBTRACT_CAR
+  };
+};
+export const subtractBike = () => {
+  return {
+    type: SUBTRACT_BIKE
+  };
+};
+export const addCar = () => {
+  return {
+    type: ADD_CAR
+  };
+};
+export const addBike = () => {
+  return {
+    type: ADD_BIKE
   };
 };
