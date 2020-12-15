@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image  } from 'react-native';
 import Footer from '../../components/Footer';
 import HomeStyles from '../Home/HomeStyles';
-import Logout from '../Menu/MenuStyles';
+import Button from '../../components/Button';
 import instance from "../../config/axios";
 import { GET_RECIPS, READ_HQ } from "../../config/api";
 import { connect } from "react-redux";
@@ -49,10 +49,10 @@ const HomeIndex = (props) => {
   }, []);
 
   return (
-    <View style={{flex: 1, alignContent: "center",backgroundColor:"#FFFF"}}>
-      <Logout navigation={navigation}/> 
+    <View style={{flex: 1, alignContent: "center",backgroundColor:"#FFFFFF"}}>
+      <Button navigation={navigation} title="Cerrar sesión" color="red"/> 
       <View style={{alignItems:"flex-end"}}>
-      <View style={{padding: '6%', flexDirection: "row"}}>
+      <View style={HomeStyles.plateContainer}>
         <View style={HomeStyles.plateInput}>
         <Image style={{width:"24%", height: "24%", marginTop: "5%", marginLeft: "5%"}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoM.png' )}/>
           <Text style={HomeStyles.plateInputText}>

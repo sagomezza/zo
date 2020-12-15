@@ -3,7 +3,6 @@ import { TouchableOpacity, View, Text, Modal, TouchableHighlight, Alert, Image, 
 import { TextInput } from 'react-native-gesture-handler';
 import styles from '../UserInput/UserInputStyles';
 import FooterIndex from '../../components/Footer/index';
-import Logout from '../Menu/MenuStyles';
 import { TIMEOUT } from '../../config/constants/constants';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
@@ -11,6 +10,8 @@ import instance from "../../config/axios";
 import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ } from "../../config/api";
 import store from '../../config/store';
 import moment from 'moment';
+import Button from '../../components/Button';
+
 
 const UserInput = (props) => {
   const { navigation, officialProps } = props;
@@ -128,8 +129,9 @@ const UserInput = (props) => {
   
   return (
     <View style={{ flex: 1 }}>
-      <Logout navigation={navigation} />
       <View style={styles.container}>
+      <Button navigation={navigation} title="Cerrar sesión" color="red"/>
+
         <View style={{ alignItems: 'center' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: '10%' }}>
             <TextInput

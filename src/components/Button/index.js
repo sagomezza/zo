@@ -25,7 +25,7 @@ const Button = (props) => {
       ? "#2DD47F"
       : color === "error"
       ? "#f44336"
-      : "#d3d3d3";
+      : color;
 
   return (
     <>

@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Button, View, Modal, TouchableHighlight, ActivityIndicator, Image } from 'react-native';
+import { StyleSheet, View, Modal, TouchableHighlight, ActivityIndicator, Image } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { Text, TouchableOpacity } from 'react-native';
 // import moment from 'moment';
 import FooterIndex from '../../components/Footer/index';
-import Logout from '../Menu/MenuStyles';
 import { connect } from "react-redux";
 import instance from "../../config/axios";
 import * as actions from "../../redux/actions";
 import { MARKEXIT, FINISHPARKING, READ_HQ, READ_PARANOIC_USER } from '../../config/api'
 import { TIMEOUT } from '../../config/constants/constants';
 import store from '../../config/store';
+import Button from '../../components/Button';
+
 
 
 const UserOut = (props) => {
@@ -275,17 +276,6 @@ const UserOut = (props) => {
 
   const finishParking = async (paymentStatus) => {
     try {
-      console.log({
-        plate: recip.plate,
-        hqId: recip.hqId,
-        phone: recip.phone,
-        recipId: recip.id,
-        paymentType: "cash",
-        cash: totalPay,
-        change: totalPay - totalAmount,
-        status: paymentStatus,
-        isParanoic: isParanoicUser 
-      })
       const response = await instance.post(
         FINISHPARKING,
         {
@@ -325,8 +315,16 @@ const UserOut = (props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Logout navigation={navigation} />
       <View style={styles.container}>
+      <Button onPress={()=> navigation.navigate("Logout")} 
+              title="Cerrar sesión" 
+              color="transparent" 
+              style={{ borderWidth:1, 
+                       borderColor: "#008999", 
+                       alignSelf: 'flex-end',
+                      }} 
+              textStyle={{color: "#008999"}} />
+
         <TouchableOpacity
           style={
             {
@@ -431,17 +429,17 @@ const UserOut = (props) => {
         </View>
         {err !== "" && <Text style={{color: "red"}}>{err}</Text>}
         {/* {!loading &&  */}
-        <View style={{ padding: '5%' }}>
+        <View style={{ padding: '5%', alignItems: 'center'}}>
           <Button
             title="Cobrar"
-            color='gray'
+            color='#008999'
             disabled={loading}
             onPress={() => { setModalVisible(true); finishParking("payed")}} />
         </View>
         {/* } */}
         {/* {loading && <ActivityIndicator />} */}
         {/* {!loading &&  */}
-        <View style={{ padding: '5%' }}>
+        <View style={{ padding: '5%', alignItems: 'center' }}>
           <Button
             title="Pago pendiente"
             color='gray'

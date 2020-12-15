@@ -6,7 +6,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { AuthProvider } from "./src/components/AuthContext";
 import { auth } from "./src/config/firebase";
 import RootStack from "./src/navigators/RootStack"
-import Screen from './src/screens/Menu/MenuStyles';
 import * as Font from 'expo-font';
 import {AppLoading} from "expo";
 import instance from "./src/config/axios";

@@ -7,7 +7,6 @@ import { firebase } from '@firebase/app';
 import '@firebase/auth';
 import '@firebase/database';
 import "@firebase/firestore";
-import Screen from '../Menu/MenuStyles';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import instance from '../../config/axios';
@@ -56,7 +55,6 @@ const LogoutIndex = (props) => {
     openButton: {
       backgroundColor: "#F194FF",
       borderRadius: 10,
-      // padding: 10,
       elevation: 2,
       borderColor: '#D9D9D9',
       borderWidth: 1,

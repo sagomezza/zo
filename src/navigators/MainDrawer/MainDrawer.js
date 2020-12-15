@@ -8,7 +8,6 @@ import LogoutIndex from "../../screens/Logout/LogoutIndex";
 import UserInput from "../../screens/UserInput/UserInputIndex";
 import UserOut from "../../screens/UserExit/UserExitIndex";
 import Qr from "../../screens/Qr/QRIndex";
-import ScreenMenu from "../../screens/Menu/MenuStyles";
 import { createDrawerNavigator, DrawerContent, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer"; 
 
 const Stack = createStackNavigator();
