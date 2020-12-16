@@ -38,7 +38,8 @@ const LoginIndex = (props) => {
       if (email === "" || password === "") {
         setError("Por favor ingresa todos los datos: correo y contraseña")
         return;
-      }
+      } 
+      
       /**
        * TO DO:
        * Implement validate.js here, check if email is an email, and password is alphanumeric
@@ -64,6 +65,7 @@ const LoginIndex = (props) => {
         routes: [{ name: 'Home' }]
       }));
     } catch (err) {
+      setError("El usuario y/o la contraseña que ingresaste son incorrectos.")
       console.log(err?.response)
     }
   }

@@ -3,7 +3,7 @@ import normalize from "../../config/services/normalizeFontSize";
 
 const styles = StyleSheet.create({
   container: {
-    height: 50,
+    height: 40,
     width: 200,
     alignItems: "center",
     justifyContent: "center",

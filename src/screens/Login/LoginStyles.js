@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     },
     alertText: {
       color: '#FFE828',
-      fontSize: 15,
+      fontSize: 14,
       fontFamily: 'Montserrat-Bold'
     },
     enterText: {

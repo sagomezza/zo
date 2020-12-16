@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image  } from 'react-native';
-import Footer from '../../components/Footer';
+import FooterIndex from '../../components/Footer';
 import HomeStyles from '../Home/HomeStyles';
 import Button from '../../components/Button';
 import instance from "../../config/axios";
@@ -49,9 +49,23 @@ const HomeIndex = (props) => {
   }, []);
 
   return (
-    <View style={{flex: 1, alignContent: "center",backgroundColor:"#FFFFFF"}}>
-      <Button navigation={navigation} title="Cerrar sesión" color="red"/> 
-      <View style={{alignItems:"flex-end"}}>
+    <View style={{flex: 1,backgroundColor:"#FFFFFF"}}>
+      <View>
+      <View style={{heigth: '14%'}} >
+      <Button onPress={()=> navigation.navigate("Logout")} 
+              title="Cerrar sesión" 
+              color="transparent" 
+              style={{ borderWidth:1, 
+                       borderColor: "#008999", 
+                       alignSelf: 'flex-end',
+                       width: '30%',
+                       heigth: '10%',
+                       marginRight:'5%',
+                       marginTop:'6%'
+                      }} 
+              textStyle={{color: "#008999"}} />
+      </View>
+      <View style={{alignItems:"flex-end", width: '100%', height: '20%'}}>
       <View style={HomeStyles.plateContainer}>
         <View style={HomeStyles.plateInput}>
         <Image style={{width:"24%", height: "24%", marginTop: "5%", marginLeft: "5%"}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoM.png' )}/>
@@ -68,20 +82,20 @@ const HomeIndex = (props) => {
         </View>
       </View>
       </View>
-      <View style={{paddingBottom: "60%"}}>
-        <View style={{paddingLeft:60}}>
+      <View style={{ height: '72%', paddingBottom: '10%'}}>
+        <View style={{marginLeft: '13%',marginBottom:'2%'}}>
           <Text style={HomeStyles.textPago} >Historial de pagos</Text>
         </View>
-        <View style={{height: "53%"}}>
+        <View style={{height: "49%"}}>
         {recips.recips.length > 0 ? 
         <FlatList
-          style= {{height: "40%"}}
+          style= {{height: "37%"}}
           data={recips.recips}
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
           return (
-          <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#008999", marginBottom: 10, marginLeft: 60, marginRight:70, marginTop: 20 }} >
-            <View style={{marginBottom: 10}} >
+          <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#008999", marginBottom: '4%', marginLeft: '13%', marginRight:'13%', marginTop: '2%' }} >
+            <View style={{marginBottom: '2%'}} >
               <Text   style={HomeStyles.textPlaca}>{item.plate}</Text>
               <Text   style={HomeStyles.textPago}>{`Pago por ${item.hours} horas`}</Text>
             </View>
@@ -97,19 +111,19 @@ const HomeIndex = (props) => {
         </View>
         }   
         </View>
-        <View style= {{height:"45%"}}>
-        <View style={{paddingLeft:60, marginTop: 30}}>
+        <View style= {{height:"36%", marginTop:'4%'}}>
+        <View style={{marginLeft: '13%', marginBottom:'2%'}}>
           <Text style={HomeStyles.textPago}>Carros parqueados</Text>
         </View>
          
         {reservations.reservations.length > 0 ? 
           <FlatList
-          styles={{marginBottom: 20}}
+          styles={{marginTop: '2%'}}
           data={reservations.reservations}
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
           return (
-            <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#FFFFFF", marginBottom: 10, marginLeft: 60, marginRight:70, marginTop: 20 }} >            
+            <View style={{ flex:1, flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#FFFFFF", marginLeft: '13%', marginRight:'13%', marginTop: '4%' }} >            
             <View style={{marginBottom: 10, marginleft:10}} >
               <Text  style={HomeStyles.textPlaca} >{item.plate}</Text>
               <Text style={HomeStyles.textPago}>{item.verificationCode}</Text>
@@ -129,7 +143,9 @@ const HomeIndex = (props) => {
         
         
       </View>
-      <Footer navigation={navigation}/>
+      </View>
+      <FooterIndex navigation={navigation} />
+      
     </View>
   );
 };

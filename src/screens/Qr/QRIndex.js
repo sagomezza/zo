@@ -150,7 +150,7 @@ const BarcodeScanner = (props) => {
                         alignSelf: "center",
                         fontWeight: "bold",
                         fontSize: 22,
-                        top: "90%",
+                        top: "85%",
                       }}
                     >
                       Leer un QR
@@ -162,26 +162,9 @@ const BarcodeScanner = (props) => {
                     <View style={styles.darkenSection}></View>
                   </View>
                   
-                  {/* <View style={styles.darkenSection}>
-                    <TouchableOpacity
-                      onPress={toggleFlash}
-                      style={styles.flashlightContainer}
-                    >
-                      {flash === "off" ? (
-                        <MaterialCommunityIcons
-                          name="flashlight"
-                          size={50}
-                          color="black"
-                        />
-                      ) : (
-                        <MaterialCommunityIcons
-                          name="flashlight-off"
-                          size={50}
-                          color="black"
-                        />
-                      )}
-                    </TouchableOpacity>
-                  </View> */}
+                  <View style={styles.darkenSection}>
+                   
+                  </View>
                 </View>
                 {/*               
                 <CustomModal

@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   qrSquare: {
-    flex: 7,
+    flex: 5,
     backgroundColor: "transparent",
     borderWidth: 2,
     borderColor: "white",

@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
       paddingLeft: '15%',
       paddingRight: '15%',
       paddingTop: '30%',
-      backgroundColor: '#ffffff' 
+      backgroundColor: '#ffffff', 
     },
     HeadStyleTable: { 
       height: 40,

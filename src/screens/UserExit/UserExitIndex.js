@@ -26,7 +26,7 @@ const UserOut = (props) => {
   const [plateTwo, setPlateTwo] = useState("");
   const [isEditable, setIsEditable] = useState(true);
   const [recip, setRecip] = useState({})
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
   const [isParanoicUser, setIsParanoicUser] = useState(false);
 
@@ -34,8 +34,8 @@ const UserOut = (props) => {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      paddingLeft: '15%',
-      paddingRight: '15%',
+      paddingLeft: '13%',
+      paddingRight: '13%',
       paddingTop: '5%',
       backgroundColor: '#ffffff',
       alignContent: 'center'
@@ -176,7 +176,6 @@ const UserOut = (props) => {
   const [modal4Visible, setModal4Visible] = useState(false);
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   
-  
   function restart(){
     setTotalAmount(0);
     setTotalPay(0);
@@ -223,6 +222,7 @@ const UserOut = (props) => {
     try {
       if ((plateOne + plateTwo).length === 6) {
         let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
+        
         const response = await instance.post(
           MARKEXIT,
           {
@@ -234,11 +234,16 @@ const UserOut = (props) => {
           },
           { timeout: TIMEOUT }
         )
+        console.log(response.data.data)
         setRecip(response.data.data);
         setTotalAmount(response.data.data.total)
+        setLoading(false)
+        console.log(recip)
+        
       }
     } catch (err) {
       console.log(err?.response)
+      setLoading(true)
 
     }
   }
@@ -273,9 +278,23 @@ const UserOut = (props) => {
       //console.log("err: ", error);
     }
   };
+  
+  console.log({
+    plate: recip.plate,
+    hqId: recip.hqId,
+    phone: recip.phone,
+    recipId: recip.id,
+    paymentType: "cash",
+    cash: parseInt(totalPay),
+    change: totalPay - totalAmount,
+    status: 'payed',
+    isParanoic: 'true' 
+  })
 
+  
   const finishParking = async (paymentStatus) => {
     try {
+      
       const response = await instance.post(
         FINISHPARKING,
         {
@@ -284,7 +303,7 @@ const UserOut = (props) => {
           phone: recip.phone,
           recipId: recip.id,
           paymentType: "cash",
-          cash: totalPay,
+          cash: parseInt(totalPay),
           change: totalPay - totalAmount,
           status: paymentStatus,
           isParanoic: isParanoicUser 
@@ -292,9 +311,12 @@ const UserOut = (props) => {
         { timeout: TIMEOUT }
       )
       //props.navigation.navigate("home")
-      setLoading(true)
+      // setLoading(false)
+      
+      console.log('hjgjhgjhg')
       readHq()
       getRecips()
+      setModalVisible(true)
 
       if (isCharacterALetter(recip.plate[5])){
         store.dispatch(actions.addBike());
@@ -304,7 +326,7 @@ const UserOut = (props) => {
       
     } catch (err) {
       console.log(err?.response)
-      setLoading(false)
+      // setLoading(true)
       setErr("Algo malo pasó, vuelve a intentarlo más tarde")
     }
   }
@@ -312,18 +334,23 @@ const UserOut = (props) => {
   function isCharacterALetter(char) {
     return (/[a-zA-Z]/).test(char)
   }
-
+  
   return (
-    <View style={{ flex: 1 }}>
-      <View style={styles.container}>
-      <Button onPress={()=> navigation.navigate("Logout")} 
+    <View style={{ flex: 1, backgroundColor: '#ffffff'  }}>
+       <Button onPress={()=> navigation.navigate("Logout")} 
               title="Cerrar sesión" 
               color="transparent" 
               style={{ borderWidth:1, 
                        borderColor: "#008999", 
                        alignSelf: 'flex-end',
+                       width: '30%',
+                       heigth: '10%',
+                       marginRight:'4%',
+                       marginTop:'6%'
                       }} 
               textStyle={{color: "#008999"}} />
+      <View style={{ flex: 1, marginTop: '4%', marginLeft: '13%', marginRight: '13%' }} >
+     
 
         <TouchableOpacity
           style={
@@ -427,18 +454,20 @@ const UserOut = (props) => {
             </View>
           </View>
         </View>
-        {err !== "" && <Text style={{color: "red"}}>{err}</Text>}
-        {/* {!loading &&  */}
+        {err !== "" && <Text style={{color: "red", fontFamily: 'Montserrat-Regular' }}>{err}</Text>}
+        {!loading && 
         <View style={{ padding: '5%', alignItems: 'center'}}>
           <Button
             title="Cobrar"
             color='#008999'
             disabled={loading}
-            onPress={() => { setModalVisible(true); finishParking("payed")}} />
+            onPress={() => {
+              finishParking("payed") 
+              }} />
         </View>
-        {/* } */}
-        {/* {loading && <ActivityIndicator />} */}
-        {/* {!loading &&  */}
+         } 
+         {loading && <ActivityIndicator />} 
+         {!loading &&  
         <View style={{ padding: '5%', alignItems: 'center' }}>
           <Button
             title="Pago pendiente"
@@ -449,7 +478,7 @@ const UserOut = (props) => {
             }}
           />
         </View>
-        {/* } */}
+         } 
       </View>
       <FooterIndex navigation={navigation} />
       <Modal

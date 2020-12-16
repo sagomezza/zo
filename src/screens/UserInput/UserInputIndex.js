@@ -100,7 +100,6 @@ const UserInput = (props) => {
         if (isCharacterALetter(plateTwo[2])){
           store.dispatch(actions.subtractBike());
         } else {
-          console.log('ASKJDHASKJDHKSAJHD')
           store.dispatch(actions.subtractCar());
         } 
 
@@ -128,9 +127,23 @@ const UserInput = (props) => {
 
   
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
+      <View style={{heigth: '14%'}} >
+      <Button onPress={()=> navigation.navigate("Logout")} 
+              title="Cerrar sesión" 
+              color="transparent" 
+              style={{ borderWidth:1, 
+                       borderColor: "#008999", 
+                       alignSelf: 'flex-end',
+                       width: '30%',
+                       heigth: '10%',
+                       marginRight:'5%',
+                       marginTop:'6%'
+                      }} 
+              textStyle={{color: "#008999"}} />
+      </View>
       <View style={styles.container}>
-      <Button navigation={navigation} title="Cerrar sesión" color="red"/>
+      
 
         <View style={{ alignItems: 'center' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: '10%' }}>
@@ -208,7 +221,9 @@ const UserInput = (props) => {
         </View> */}
 
       </View>
+      <View>
       <FooterIndex navigation={navigation} />
+      </View>
       <View>
                 <Modal
                     animationType="fade"
