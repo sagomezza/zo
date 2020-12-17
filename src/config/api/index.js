@@ -10,7 +10,7 @@ export const READ_PARANOIC_USER = "/readParanoicUser";
 export const READ_OFFICIAL = "/readOfficial";
 export const MARK_END_OF_SHIFT = "/markEndOfShifts";
 export const START_SHIFT = "/startShift";
-
+export const EDIT_OFFICIAL = "/editOfficial"
 //RECIPS
 export const GET_RECIPS = "/getRecips";
 export const GET_SHIFT_RECIPS = "/getShiftRecips";
