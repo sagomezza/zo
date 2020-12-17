@@ -31,11 +31,12 @@ import { TIMEOUT } from '../../config/constants/constants';
 import styles from './LoginStyles';
 import normalize from '../../config/services/normalizeFontSize';
 import Button from '../../components/Button';
+import instance from '../../config/axios';
 
 
 const LoginIndex = (props) => {
   const { navigation, officialProps } = props;
-
+ 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -80,17 +81,13 @@ const LoginIndex = (props) => {
   const startShift = async () => {
     try {
       const response = await instance.post (START_SHIFT, {
-        email: officialProps.email,
+        email: email,
         date: new Date(),
       });
-      console.log('------------------')
-      console.log(response.data)
-      console.log('------------------')
-
+      onLoginPress();
     } catch (err) {
-      console.log('----------1--------')
+      console.log(err)
       console.log(err?.response)
-      console.log('----------1--------')
 
     }
   }
@@ -145,7 +142,7 @@ const LoginIndex = (props) => {
             <Text style={styles.enterText}>Ingresar</Text>
             </View>
           </TouchableOpacity> */}
-          <Button onPress={() => {startShift(); onLoginPress(); } }
+          <Button onPress={() => {startShift();} }
               title="Ingresar" 
               color='#FFE828' 
               style={{ borderWidth: normalize (1), 

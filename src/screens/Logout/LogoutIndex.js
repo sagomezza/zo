@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import instance from '../../config/axios';
 import { GET_SHIFT_RECIPS, MARK_END_OF_SHIFT, READ_HQ } from '../../config/api';
+import numberWithPoints from '../../config/services/numberWithPoints';
 
 
 const LogoutIndex = (props) => {
@@ -118,16 +119,15 @@ const LogoutIndex = (props) => {
         input: inputValue 
         
       });
-      console.log('------------------')
-      console.log(response.data)
-      console.log('------------------')
-
+      
+      firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+      }).catch(function(error) {
+        // An error happened.
+      });
     } catch (err) {
-      console.log('----------1--------')
-
+      console.log(err)
       console.log(err?.response)
-      console.log('----------1--------')
-
     }
   }
 
@@ -203,7 +203,7 @@ const LogoutIndex = (props) => {
             <Text style={{fontFamily: 'Montserrat-Regular'}}>{`Pago por ${item.hours} horas`}</Text>
           </View>
           <View style={{ flex: 1, alignItems:'flex-end'}} >
-            <Text style={{fontFamily: 'Montserrat-Regular'}}>$ {item.total}</Text>
+            <Text style={{fontFamily: 'Montserrat-Regular'}}>{`$${numberWithPoints(item.total)}`}</Text>
           </View>
         </View>
         )}}
@@ -235,11 +235,7 @@ const LogoutIndex = (props) => {
                     onPress={() => {
                       setModalVisible(!modalVisible);
                       markEndOfShift();
-                      firebase.auth().signOut().then(function() {
-                        // Sign-out successful.
-                      }).catch(function(error) {
-                        // An error happened.
-                      });
+                      
                       navigation.navigate('Login')
                     }}
                   >

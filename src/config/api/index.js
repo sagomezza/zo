@@ -8,7 +8,7 @@ export const GET_PARANOICS_FROM_HQ = "/getParanoicsFromHq";
 export const READ_PARANOIC_USER = "/readParanoicUser";
 //OFFICIAL
 export const READ_OFFICIAL = "/readOfficial";
-export const MARK_END_OF_SHIFT = "/markEndOfShifts";
+export const MARK_END_OF_SHIFT = "/markEndOfShift";
 export const START_SHIFT = "/startShift";
 export const EDIT_OFFICIAL = "/editOfficial"
 //RECIPS
