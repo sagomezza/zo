@@ -7,6 +7,7 @@ const initialState = {
     phone: null,
     name: null,
     lastName: null,
+    id: null,
     hq: []
 } 
 
@@ -19,6 +20,7 @@ const officialReducer = (state=initialState, action ) => {
                 phone: action.payload.phone,
                 name: action.payload.name,
                 lastName: action.payload.lastName,
+                id: action.payload.id,
                 hq: action.payload.hq
             };
 

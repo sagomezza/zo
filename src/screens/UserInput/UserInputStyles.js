@@ -1,11 +1,12 @@
 import { StyleSheet } from 'react-native';
+import normalize from '../../config/services/normalizeFontSize';
 
 const styles = StyleSheet.create({
     container: { 
       flex: 1,
-      paddingLeft: '15%',
-      paddingRight: '15%',
-      paddingTop: '30%',
+      marginLeft: '13%',
+      marginRight: '13%',
+      paddingTop: '25%',
       backgroundColor: '#ffffff', 
     },
     HeadStyleTable: { 
@@ -14,28 +15,26 @@ const styles = StyleSheet.create({
       
     },
     plateInput: {
-      width: '30%', 
-      height: 80,
-      borderColor: 'gray', 
-      marginRight: '5%',
-      marginLeft: '5%', 
-      borderWidth: 1,
-      borderRadius: 20,
-      fontSize: 35,
+      width: '40%', 
+      height: '95%',
+      margin:'3%',
+      fontSize: normalize(25),
       fontFamily: 'Montserrat-Regular',
-      color: '#008999'
+      color: '#008999',
+      backgroundColor: 'rgba(0,0,0,0.04)'
     },
     textInput: {
-      width: '70%', 
-      height: 60,
+      width: '86%', 
+      height: '80%',
+      marginRight: '5%',
+      marginLeft: '5%', 
       borderColor: 'gray', 
       marginBottom: '10%',
-      borderWidth: 1,
-      borderRadius: 20,
-      width: "70%",
-      fontSize: 25,
+      fontSize:normalize(25),
       fontFamily: 'Montserrat-Regular',
-      color: '#008999'
+      color: '#008999',
+      backgroundColor: 'rgba(0,0,0,0.04)'
+
     },
     buttonI: {
       borderRadius:20,

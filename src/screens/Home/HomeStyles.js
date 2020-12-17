@@ -1,44 +1,53 @@
 import { StyleSheet } from 'react-native';
+import normalize from '../../config/services/normalizeFontSize';
 
 const styles = StyleSheet.create({
   plateContainer: {
     paddingTop: '4%', 
     flexDirection: "row",
     alignContent: 'center',
+    alignItems:'center',
     marginLeft: '13%',
     marginRight: '13%',
-    width: '77%',
-    height: '65%'
+    width: '79%',
+    height: '68%'
   },
   plateInput: {
     width: '45%', 
-    height: '90%',
+    height: '100%',
     borderColor: '#008999', 
     borderWidth: 1,
     borderRadius: 20,
     flexDirection: "row",
     margin: '4%',
-    alignContent: 'center',
     // alignItems: 'center'
   },
-  plateInputText: {
-    fontSize: 35,
+  plateInputTextBig: {
+    fontSize: normalize(38),
     textAlign: 'center',
-    marginTop: '18%',
+    marginTop: '35%',
     // marginLeft: '0%',
     color: '#008999',
     fontFamily: 'Montserrat-Bold'
   },
+  plateInputTextSmall: {
+    fontSize: normalize(28),
+    textAlign: 'center',
+    marginTop: '35%',
+    // marginLeft: '0%',
+    color: '#008999',
+    fontFamily: 'Montserrat-Regular'
+  },
   textPlaca: {
-    fontSize: 25,
+    fontSize: normalize(25),
     fontFamily: 'Montserrat-Regular'
   },
   textPago: {
-    fontSize: 15,
+    fontSize: normalize(15),
     fontFamily: 'Montserrat-Regular'
   },
   textMoney: {
-    fontSize: 30,
+    fontSize: normalize(30),
     fontFamily: 'Montserrat-Regular'
   },
 });

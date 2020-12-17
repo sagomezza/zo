@@ -148,12 +148,12 @@ const BarcodeScanner = (props) => {
                       style={{
                         color: "white",
                         alignSelf: "center",
-                        fontWeight: "bold",
                         fontSize: 22,
                         top: "85%",
+                        fontFamily: 'Montserrat-Regular'
                       }}
                     >
-                      Leer un QR
+                      Lector de códigos QR
                     </Text>
                   </View>
                   <View style={styles.middleSection}>

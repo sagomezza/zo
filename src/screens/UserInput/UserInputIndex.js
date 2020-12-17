@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, View, Text, Modal, TouchableHighlight, Alert, Image, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { TouchableOpacity, View, Text, Modal, TouchableHighlight, TouchableWithoutFeedback, Alert, Image, ActivityIndicator } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from '../UserInput/UserInputStyles';
 import FooterIndex from '../../components/Footer/index';
@@ -11,19 +11,41 @@ import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ } from "../../c
 import store from '../../config/store';
 import moment from 'moment';
 import Button from '../../components/Button';
+import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
+import { Keyboard } from 'react-native';
+// import Feather from "react-native-feather";
 
 
 const UserInput = (props) => {
   const { navigation, officialProps } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
+
   const [modal2Visible, setModal2Visible] =useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [plateOne, setPlateOne] = useState('');
-  const [plateTwo, setPlateTwo] = useState('');
+
   const [findUserByPlate, setFindUserByPlate] = useState([]);
   const [startParking, setStartParking] = useState({});
-  const [phone, setPhone] = useState("");
   const [existingUser,setExistingUser] = useState(true)
+  const [codeError, setErrorText] = useState(false);
+
+
+  const [plateOne, setPlateOne] = useState('');
+  const [plateTwo, setPlateTwo] = useState('');
+  const [phone, setPhone] = useState('');
+
+  const refPlateOne = useRef(null);
+  const refPlateTwo = useRef(null);
+  const refPhone = useRef(null);
+  
+  const clearPlateOne = () => {
+    setPlateOne('');
+  }
+  const clearPlateTwo = () => {
+    setPlateTwo('');
+  }
+  const clearPhone = () => {
+    setPhone('');
+  }
 
   function isCharacterALetter(char) {
     return (/[a-zA-Z]/).test(char)
@@ -98,9 +120,9 @@ const UserInput = (props) => {
         readHq();
         
         if (isCharacterALetter(plateTwo[2])){
-          store.dispatch(actions.subtractBike());
+          store.dispatch(actions.addBike());
         } else {
-          store.dispatch(actions.subtractCar());
+          store.dispatch(actions.addCar());
         } 
 
       }
@@ -138,48 +160,83 @@ const UserInput = (props) => {
                        width: '30%',
                        heigth: '10%',
                        marginRight:'5%',
-                       marginTop:'6%'
+                       marginTop:'6%',
+                       paddingHorizontal: '2%'
                       }} 
               textStyle={{color: "#008999"}} />
       </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
       
 
-        <View style={{ alignItems: 'center' }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: '10%' }}>
+        <View style={{ alignItems: 'center', height: '50%', flexDirection: 'column'}}>
+          <View style={{ alignItems: 'center', flexDirection: 'column'}} >
+            <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', paddingBottom: '10%', height: '40%', width: '100%' }}>
+              <TextInput
+                ref={refPlateOne}
+                placeholder={'EVZ'}
+                style={styles.plateInput}
+                textAlign='center'
+                maxLength={3}
+                autoCapitalize={"characters"}
+                onChangeText={(text) => {setPlateOne(text);
+                                        if(refPlateTwo && text.length === 3 ){
+                                            refPlateTwo.current.focus();
+                                        }
+                                        ;
+                }}
+                value={plateOne}
+                onFocus= {() => {clearPlateOne(); clearPlateTwo(); clearPhone();}}
+              />
+              <TextInput
+                ref={refPlateTwo}
+                placeholder={'123'}
+                style={styles.plateInput}
+                textAlign='center'
+                maxLength={3}
+                autoCapitalize={"characters"}
+                keyboardType='default'
+                onFocus={() => {clearPlateTwo(); clearPhone();}}
+                onChangeText={text => 
+                  {setPlateTwo(text);
+                    if(refPhone && text.length === 3 ){
+                      refPhone.current.focus();
+                  };
+                  }}
+                value={plateTwo}
+              />
+            </View>
+          {/* <View> */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', paddingBottom: '0%', height: '35%', width: '100%' }}>
             <TextInput
-              style={styles.plateInput}
-              autoFocus= {true}
-              textAlign='center'
-              maxLength={3}
-              autoCapitalize={"characters"}
-              onChangeText={text => setPlateOne(text)}
-              value={plateOne}
-            />
-            <TextInput
-              style={styles.plateInput}
-              textAlign='center'
-              maxLength={3}
-              autoCapitalize={"characters"}
-              keyboardType='default'
-              onChangeText={text => 
-                setPlateTwo(text)
-              }
-              value={plateTwo}
-            />
-          </View>
-
-          <TextInput
+            ref={refPhone}
+            placeholder={'Ingrese celular'}
             style={styles.textInput}
             keyboardType='numeric'
             textAlign='center'
             maxLength={10}
-            onChangeText={text => setPhone(text)}
+            onFocus={() => { clearPhone()}}
+            onChangeText={text => {setPhone(text);
+                                   if(text.length === 10){
+                                     if (plateOne.length === 3 && plateTwo.length === 3)Keyboard.dismiss()
+                                   }}}
             value={phone}
-          />
-        </View>
+            />
+          </View>
+          </View>
+            {/* <TouchableOpacity
+              style={{ height: "100%", justifyContent: "center" }}
+              onPress={() => {setText("")}}
+            >
+             <Feather style={styles.closeIconStyle} name="x" />
+            </TouchableOpacity>
 
-        <View style={{ flexDirection: 'row-reverse', paddingBottom: '10%' }}>
+          </View> */}
+          
+        
+        {codeError && <Text>{codeError}</Text>}
+
+        <View style={{ flexDirection: 'row-reverse', paddingBottom: '10%', height:'50%' }}>
           <View style={{ marginRight: 20 }}>
                 <TouchableOpacity
                   style={styles.buttonI}
@@ -206,6 +263,7 @@ const UserInput = (props) => {
             </TouchableOpacity>
           </View>
         </View>
+        </View>
 
         {/* <View style={{ alignItems: 'center' }}>
           {isBlackList ? <Text style={{ fontFamily: 'Montserrat-Regular' }}>Blacklist: </Text> : ''}
@@ -221,6 +279,7 @@ const UserInput = (props) => {
         </View> */}
 
       </View>
+      </TouchableWithoutFeedback>
       <View>
       <FooterIndex navigation={navigation} />
       </View>

@@ -4,11 +4,12 @@ import FooterIndex from '../../components/Footer';
 import HomeStyles from '../Home/HomeStyles';
 import Button from '../../components/Button';
 import instance from "../../config/axios";
-import { GET_RECIPS, READ_HQ } from "../../config/api";
+import { GET_RECIPS, GET_SHIFT_RECIPS, READ_HQ } from "../../config/api";
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import store from '../../config/store';
 import moment from 'moment';
+import numberWithPoints from '../../config/services/numberWithPoints';
 
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
@@ -20,15 +21,29 @@ const HomeIndex = (props) => {
         const response = await instance.post(GET_RECIPS, {
           hqId: officialProps.hq[0]
         });
-        console.log(response.data)
         if(response.data.response === 1){
-          
           store.dispatch(actions.setRecips(response.data.data.finished));
         }
       } catch (error) {
         //console.log("err: ", error);
       }
     };
+
+    // const getShiftRecips = async () => {
+    //   try {
+    //     const response = await instance.post (GET_SHIFT_RECIPS, {
+    //       email: officialProps.email, 
+    //       hqId: officialProps.hq[0],
+    //       date: new Date()
+    //     });
+    //     if(response.data.response === 1){
+          
+    //       store.dispatch(actions.setRecips(response.data.data));
+    //     }
+    //   } catch (error) {
+    //     //console.log("err: ", error);
+    //   }
+    // }
 
     const readHq = async () => {
       try {
@@ -45,8 +60,10 @@ const HomeIndex = (props) => {
     };
 
     getRecips();
+    // getShiftRecips();
     readHq();
   }, []);
+
 
   return (
     <View style={{flex: 1,backgroundColor:"#FFFFFF"}}>
@@ -61,7 +78,8 @@ const HomeIndex = (props) => {
                        width: '30%',
                        heigth: '10%',
                        marginRight:'5%',
-                       marginTop:'6%'
+                       marginTop:'6%',
+                       paddingHorizontal: '2%'
                       }} 
               textStyle={{color: "#008999"}} />
       </View>
@@ -69,16 +87,22 @@ const HomeIndex = (props) => {
       <View style={HomeStyles.plateContainer}>
         <View style={HomeStyles.plateInput}>
         <Image style={{width:"24%", height: "24%", marginTop: "5%", marginLeft: "5%"}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoM.png' )}/>
-          <Text style={HomeStyles.plateInputText}>
-            {`${hq.availableBikes}/${hq.totalBikes}`}
+          <View flexDirection= 'row' height='100%'>
+          <Text style={HomeStyles.plateInputTextBig}>
+            {`${hq.availableBikes}`}
           </Text>
+          <Text style={HomeStyles.plateInputTextSmall} >{`/${hq.totalBikes}`}</Text>
+          </View>
           
         </View>
         <View style= {HomeStyles.plateInput}>
         <Image style={{width:"25%", height: "25%", marginTop: "5%", marginLeft: "5%"}} resizeMode={"contain"} source={require( '../../../assets/images/TrazadoC.png' )}/>
-          <Text style={HomeStyles.plateInputText}>
-          {`${hq.availableCars}/${hq.totalCars}`}
-          </Text>
+          <View flexDirection= 'row' height='100%' >
+            <Text style={HomeStyles.plateInputTextBig}>
+              {`${hq.availableCars}`}
+            </Text>
+            <Text style={HomeStyles.plateInputTextSmall} >{`/${hq.totalCars}`}</Text>
+          </View>
         </View>
       </View>
       </View>
@@ -94,26 +118,26 @@ const HomeIndex = (props) => {
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
           return (
-          <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#008999", marginBottom: '4%', marginLeft: '13%', marginRight:'13%', marginTop: '2%' }} >
+          <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#008999", marginBottom: '4%', marginLeft: '14%', marginRight:'13%', marginTop: '2%' }} >
             <View style={{marginBottom: '2%'}} >
               <Text   style={HomeStyles.textPlaca}>{item.plate}</Text>
               <Text   style={HomeStyles.textPago}>{`Pago por ${item.hours} horas`}</Text>
             </View>
             <View style={{ flex: 1, alignItems:'flex-end'}} >
-              <Text  style={HomeStyles.textMoney}>${item.total}</Text>
+              <Text  style={HomeStyles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
             </View>
           </View>
           )}}
         />
         :
-        <View style={{paddingLeft:60, marginTop: 10}}>
+        <View style={{marginLeft: '13%', padding: '10%'}}>
           <Text style={HomeStyles.textPago}> No se encuentran registros en el historial </Text>
         </View>
         }   
         </View>
         <View style= {{height:"36%", marginTop:'4%'}}>
         <View style={{marginLeft: '13%', marginBottom:'2%'}}>
-          <Text style={HomeStyles.textPago}>Carros parqueados</Text>
+          <Text style={HomeStyles.textPago}>Vehículos parqueados</Text>
         </View>
          
         {reservations.reservations.length > 0 ? 
@@ -123,7 +147,7 @@ const HomeIndex = (props) => {
           keyExtractor={({ id }) => id}
           renderItem={({item}) => {
           return (
-            <View style={{ flex:1, flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#FFFFFF", marginLeft: '13%', marginRight:'13%', marginTop: '4%' }} >            
+            <View style={{ flex:1, flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#FFFFFF", marginLeft: '14%', marginRight:'13%', marginTop: '4%' }} >            
             <View style={{marginBottom: 10, marginleft:10}} >
               <Text  style={HomeStyles.textPlaca} >{item.plate}</Text>
               <Text style={HomeStyles.textPago}>{item.verificationCode}</Text>
@@ -135,7 +159,7 @@ const HomeIndex = (props) => {
           </View>
           )}}    
         /> :
-        <View style={{paddingLeft:60, marginTop: 10}}>
+        <View style={{marginLeft: '13%', padding: '10%'}}>
           <Text style={HomeStyles.textPago}>No hay parqueos activos en este momento</Text>
         </View>
         }

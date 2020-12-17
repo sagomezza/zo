@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Modal, TouchableHighlight, ActivityIndicator, Image } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { StyleSheet, View, Modal, TouchableHighlight, TouchableWithoutFeedback, Keyboard, ActivityIndicator, Image } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { Text, TouchableOpacity } from 'react-native';
 // import moment from 'moment';
@@ -14,6 +14,7 @@ import Button from '../../components/Button';
 
 
 
+
 const UserOut = (props) => {
   const { navigation, officialProps, qr } = props;
   // const dateMonthIn = new Date('05/05/20');
@@ -22,14 +23,24 @@ const UserOut = (props) => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
   const [totalPayModal, setTotalPayModal] = useState(0);
-  const [plateOne, setPlateOne] = useState("");
-  const [plateTwo, setPlateTwo] = useState("");
   const [isEditable, setIsEditable] = useState(true);
   const [recip, setRecip] = useState({})
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
   const [isParanoicUser, setIsParanoicUser] = useState(false);
 
+  const [plateOne, setPlateOne] = useState('');
+  const [plateTwo, setPlateTwo] = useState('');
+
+  const refPlateOne = useRef(null);
+  const refPlateTwo = useRef(null);
+
+  const clearPlateOne = () => {
+    setPlateOne('');
+  }
+  const clearPlateTwo = () => {
+    setPlateTwo('');
+  }
 
   const styles = StyleSheet.create({
     container: {
@@ -279,21 +290,20 @@ const UserOut = (props) => {
     }
   };
   
-  console.log({
-    plate: recip.plate,
-    hqId: recip.hqId,
-    phone: recip.phone,
-    recipId: recip.id,
-    paymentType: "cash",
-    cash: parseInt(totalPay),
-    change: totalPay - totalAmount,
-    status: 'payed',
-    isParanoic: 'true' 
-  })
-
   
   const finishParking = async (paymentStatus) => {
     try {
+      console.log({
+        plate: recip.plate,
+        hqId: recip.hqId,
+        phone: recip.phone,
+        recipId: recip.id,
+        paymentType: "cash",
+        cash: parseInt(totalPay),
+        change: totalPay - totalAmount,
+        status: paymentStatus,
+        isParanoic: isParanoicUser 
+      })
       
       const response = await instance.post(
         FINISHPARKING,
@@ -313,15 +323,14 @@ const UserOut = (props) => {
       //props.navigation.navigate("home")
       // setLoading(false)
       
-      console.log('hjgjhgjhg')
       readHq()
       getRecips()
       setModalVisible(true)
 
       if (isCharacterALetter(recip.plate[5])){
-        store.dispatch(actions.addBike());
+        store.dispatch(actions.subtractBike());
       } else {
-        store.dispatch(actions.addCar());
+        store.dispatch(actions.subtractCar());
       } 
       
     } catch (err) {
@@ -346,12 +355,12 @@ const UserOut = (props) => {
                        width: '30%',
                        heigth: '10%',
                        marginRight:'4%',
-                       marginTop:'6%'
+                       marginTop:'6%',
+                       paddingHorizontal: '2%'
                       }} 
               textStyle={{color: "#008999"}} />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={{ flex: 1, marginTop: '4%', marginLeft: '13%', marginRight: '13%' }} >
-     
-
         <TouchableOpacity
           style={
             {
@@ -368,28 +377,34 @@ const UserOut = (props) => {
         <View style={{ paddingLeft: '20%', flexDirection: "row", marginBottom: '5%' }}>
 
           <TextInput
+            ref={refPlateOne}
             style={styles.plateInput}
             textAlign='center'
             maxLength={3}
             autoCapitalize={'characters'}
-            onChangeText={text => {
-              setPlateOne(text)
-              // validate()
-            }}
+            onChangeText={(text) => {setPlateOne(text);
+              if(refPlateTwo && text.length === 3 ){
+                 refPlateTwo.current.focus();
+              };}}
             value={plateOne}
-            
+            onFocus= {() => {clearPlateOne(); clearPlateTwo();}}
           />
 
           <TextInput
+            ref={refPlateTwo}
+            value={plateTwo}
             style={styles.plateInput}
             textAlign='center'
             maxLength={3}
             autoCapitalize={'characters'}
-            onChangeText={(text) => {
-              setPlateTwo(text)
-              //validate()
-            }}
-            value={plateTwo}
+            onFocus={() => {clearPlateTwo();}}
+              onChangeText={text => 
+                {setPlateTwo(text);
+                  if(text.length === 3){
+                    if (plateOne.length === 3) Keyboard.dismiss()
+                  };
+                }}
+            
             
           />
         </View>
@@ -405,11 +420,13 @@ const UserOut = (props) => {
         </View>
 
         <View style={{ alignItems: 'center' }}>
+        
           <View style={{ flexDirection: 'row' }}>
             <View style={{ marginRight: 10, marginTop: 15 }}>
               <Text style={{ fontFamily: 'Montserrat-Regular' }} >{"Valor ingresado"}</Text>
             </View>
             <View>
+            
               <TextInput
                 style={styles.inputMoney}
                 keyboardType='numeric'
@@ -417,24 +434,24 @@ const UserOut = (props) => {
                 value={totalPay == 0 ? '' : totalPay + ''}
                 onChangeText={text => setTotalPay(text)}
               />
-
+            
             </View>
 
           </View>
-
+       
           <View style={{ marginLeft: '25%', marginBottom: 10 }}>
             <View style={{ flexDirection: 'row', paddingBottom: '5%' }}>
               <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(5000)}>
-                <Text style={styles.miniButtonMoneyText}>$5000</Text>
+                <Text style={styles.miniButtonMoneyText}>$5.000</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(10000)}>
-                <Text style={styles.miniButtonMoneyText}>$10000</Text>
+                <Text style={styles.miniButtonMoneyText}>$10.000</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(20000)}>
-                <Text style={styles.miniButtonMoneyText}>$20000</Text>
+                <Text style={styles.miniButtonMoneyText}>$20.000</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(50000)}>
-                <Text style={styles.miniButtonMoneyText}>$50000</Text>
+                <Text style={styles.miniButtonMoneyText}>$50.000</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -480,6 +497,7 @@ const UserOut = (props) => {
         </View>
          } 
       </View>
+      </TouchableWithoutFeedback>
       <FooterIndex navigation={navigation} />
       <Modal
         animationType="fade"
@@ -640,6 +658,7 @@ const UserOut = (props) => {
           </View>
         </View>
       </Modal>
+      
     </View>
   );
 }

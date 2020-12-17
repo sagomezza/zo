@@ -10,11 +10,11 @@ import "@firebase/firestore";
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import instance from '../../config/axios';
-import { READ_HQ } from '../../config/api';
+import { GET_SHIFT_RECIPS, MARK_END_OF_SHIFT, READ_HQ } from '../../config/api';
 
 
 const LogoutIndex = (props) => {
-  const {navigation} = props;
+  const {navigation, officialProps, recips} = props;
   const HomeStyles = StyleSheet.create({
     plateInput: {
       borderColor: 'gray', 
@@ -76,13 +76,61 @@ const LogoutIndex = (props) => {
   });
 
   const [modalVisible, setModalVisible] = useState(false);
-  const recips = props.recips.recips;
-  const official = props.official;
-  
+  const [total, setTotal] = useState(0);
+
   const hq = props.hq;
-  // const dateMonthIn = new Date('05/05/20');
-  // const dateMonthOut = new Date('07/05/20');
   const [ inputValue, setInputValue] = useState(0);
+
+  useEffect(() => {
+    const getShiftRecips = async () => {
+      try {
+        const response = await instance.post (GET_SHIFT_RECIPS, {
+          email: officialProps.email, 
+          hqId: officialProps.hq[0],
+          date: new Date()
+        });
+        if(response.data.response === 1){
+          setTotal(response.data.data.total);
+        }
+
+      } catch (error) {
+        //console.log("err: ", error);
+      }
+    }
+    getShiftRecips();
+  }, []);
+
+  const markEndOfShift = async () => {
+    try {
+      console.log({
+        email: officialProps.email,
+        id: officialProps.id,
+        date: new Date(),
+        total: total,
+        input: inputValue
+        
+      })
+      const response = await instance.post (MARK_END_OF_SHIFT, {
+        email: officialProps.email,
+        id: officialProps.id,
+        date: new Date(),
+        total: total,
+        input: inputValue 
+        
+      });
+      console.log('------------------')
+      console.log(response.data)
+      console.log('------------------')
+
+    } catch (err) {
+      console.log('----------1--------')
+
+      console.log(err?.response)
+      console.log('----------1--------')
+
+    }
+  }
+
   // useEffect(() => {
   //   const readHq = async () => {
   //     try {
@@ -112,13 +160,13 @@ const LogoutIndex = (props) => {
   <View style={{flex: 1}}>
     
     <View style={{alignItems: 'center', marginTop: '20%'}}>
-        {<Text style={{fontSize: 20,fontFamily: 'Montserrat-Bold'}}>{official.name + ' '+ official.lastName}</Text>}
+        {<Text style={{fontSize: 20,fontFamily: 'Montserrat-Bold'}}>{officialProps.name + ' '+ officialProps.lastName}</Text>}
         {<Text style={{fontFamily: 'Montserrat-Regular'}}>{hq.name}</Text>}
         
         {/* <Text>{"Hora de inicio: " + moment(dateMonthIn).format('hh:MM A ') + " Hora de salida: " + moment(dateMonthOut).format('hh:MM A')}</Text> */}
         <View style={{flexDirection: 'row', paddingBottom: '5%', marginTop: '10%'}}>
           <View >
-            <Text style={{fontFamily: 'Montserrat-Regular'}}>{" Dinero en efectivo: "}</Text>
+            <Text style={{fontFamily: 'Montserrat-Regular'}}>{" Dinero en efectivo: "} </Text>
           </View>
           <View style={{justifyContent: "space-around",
                         width: '50%',
@@ -138,13 +186,14 @@ const LogoutIndex = (props) => {
               placeholder= '$'
               onChangeText = {text => setInputValue(text) + ''}
             />
+            
           </View>
         </View>
       </View>
       
     <View style={{paddingBottom: 10, height: "54%"}}>
       <FlatList
-        data={recips}
+        data={recips.recips}
         keyExtractor={({ id }) => id}
         renderItem={({item}) => {
         return (
@@ -185,6 +234,7 @@ const LogoutIndex = (props) => {
                     style={{ ...HomeStyles.openButton, backgroundColor: "#ffffff" }}
                     onPress={() => {
                       setModalVisible(!modalVisible);
+                      markEndOfShift();
                       firebase.auth().signOut().then(function() {
                         // Sign-out successful.
                       }).catch(function(error) {
@@ -214,7 +264,7 @@ const LogoutIndex = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-  official: state.official,
+  officialProps: state.official,
   reservations: state.reservations,
   recips: state.recips,
   hq: state.hq
