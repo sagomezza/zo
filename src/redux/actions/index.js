@@ -8,7 +8,8 @@ import {
   SUBTRACT_BIKE,
   SUBTRACT_CAR,
   ADD_CAR,
-  ADD_BIKE
+  ADD_BIKE,
+  SET_PUSH_TOKEN
 } from './type'
 
 export const setOfficial = (official) => {
@@ -58,18 +59,28 @@ export const subtractCar = () => {
     type: SUBTRACT_CAR
   };
 };
+
 export const subtractBike = () => {
   return {
     type: SUBTRACT_BIKE
   };
 };
+
 export const addCar = () => {
   return {
     type: ADD_CAR
   };
 };
+
 export const addBike = () => {
   return {
     type: ADD_BIKE
+  };
+};
+
+export const setExpoToken = (token) => {
+  return {
+    type: SET_PUSH_TOKEN,
+    payload: token,
   };
 };
