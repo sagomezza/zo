@@ -8,6 +8,7 @@ export const GET_PARANOICS_FROM_HQ = "/getParanoicsFromHq";
 export const READ_PARANOIC_USER = "/readParanoicUser";
 //OFFICIAL
 export const READ_OFFICIAL = "/readOfficial";
+export const EDIT_OFFICIAL = "/editOfficial"
 //RECIPS
 export const GET_RECIPS = "/getRecips";
 //HQ's
