@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Modal, TouchableHighlight, TouchableWithoutFeedback, Keyboard, ActivityIndicator, Image } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { Text, TouchableOpacity } from 'react-native';
-// import moment from 'moment';
+import moment from 'moment';
 import FooterIndex from '../../components/Footer/index';
 import { connect } from "react-redux";
 import instance from "../../config/axios";
 import * as actions from "../../redux/actions";
-import { MARKEXIT, FINISHPARKING, READ_HQ, READ_PARANOIC_USER } from '../../config/api'
+import { MARKEXIT, FINISHPARKING, READ_HQ, READ_PARANOIC_USER, GET_RECIPS } from '../../config/api'
 import { TIMEOUT } from '../../config/constants/constants';
 import store from '../../config/store';
 import Button from '../../components/Button';
@@ -102,7 +102,7 @@ const UserOut = (props) => {
     },
     infoUserText: {
       fontFamily: 'Montserrat-Regular',
-      fontSize:normalize(15)
+      fontSize: normalize(15)
     },
     centeredView: {
       flex: 1,
@@ -129,10 +129,10 @@ const UserOut = (props) => {
       shadowRadius: 50,
       elevation: 5,
     },
-    modalViewCobrar: {
-      height: 200,
-      padding: 35,
-      borderRadius: 20,
+    modalView: {
+      height: normalize(250),
+      padding: normalize(40),
+      borderRadius: 10,
       borderColor: '#707070',
       borderWidth: 1,
       justifyContent: 'space-around',
@@ -146,6 +146,7 @@ const UserOut = (props) => {
       shadowOpacity: 0,
       shadowRadius: 50,
       elevation: 5,
+      flexDirection: 'column'
     },
     openButtonCobrar: {
       backgroundColor: "#FFFFFF",
@@ -179,7 +180,7 @@ const UserOut = (props) => {
       marginTop: '15%'
     },
     modalText: {
-      margin: '5%',
+      marginBottom: 15,
       textAlign: "center",
       fontFamily: 'Montserrat-Regular'
     },
@@ -248,14 +249,12 @@ const UserOut = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        console.log(response.data.data)
         setRecip(response.data.data);
         setTotalAmount(response.data.data.total)
         setLoading(false)
-        console.log(recip)
-
       }
     } catch (err) {
+      console.log(err)
       console.log(err?.response)
       setLoading(true)
 
@@ -282,13 +281,22 @@ const UserOut = (props) => {
 
   const getRecips = async () => {
     try {
+      console.log(officialHq)
       const response = await instance.post(GET_RECIPS, {
         hqId: officialHq
       });
+
+      console.log("--------entroooooo---------")
+      console.log(response.data.data.finished)
+
       if (response.data.response === 1) {
         store.dispatch(actions.setRecips(response.data.data.finished));
       }
-    } catch (error) {
+    } catch (err) {
+      console.log("--------1---------")
+      console.log(err)
+      console.log(err?.response)
+      console.log("--------1---------")
       //console.log("err: ", error);
     }
   };
@@ -313,7 +321,9 @@ const UserOut = (props) => {
       )
       //props.navigation.navigate("home")
       // setLoading(false)
-
+      // if (response.data.response === 1) {
+      //   store.dispatch(actions.setRecips(response.data.data.finished));
+      // }
       readHq()
       getRecips()
       setModalVisible(true)
@@ -325,6 +335,7 @@ const UserOut = (props) => {
       }
 
     } catch (err) {
+      console.log(err)
       console.log(err?.response)
       // setLoading(true)
       setErr("Algo malo pasó, vuelve a intentarlo más tarde")
@@ -354,19 +365,19 @@ const UserOut = (props) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={{ flex: 1, marginTop: '4%', marginLeft: '13%', marginRight: '13%' }} >
           <TouchableOpacity style={
-              {
-                borderRadius: 20,
-                alignItems: 'center',
-                height: 50,
-                width: 50,
-                borderRadius: 5,
-                backgroundColor: "#008999"
-              }}
-              onPress={() => { navigation.navigate('QRscanner') }}
-            disabled={(plateOne + plateTwo).length < 6}>
+            {
+              borderRadius: 20,
+              alignItems: 'center',
+              height: 50,
+              width: 50,
+              borderRadius: 5,
+              backgroundColor: "#008999"
+            }}
+            onPress={() => { navigation.navigate('QRscanner') }}>
+            {/* disabled={(plateOne + plateTwo).length === 6}> */}
             <Image style={{ width: 34, height: 34, marginTop: 8 }} source={require('../../../assets/images/GrupoQR.png')} />
           </TouchableOpacity>
-          
+
           <View style={{ paddingLeft: '20%', flexDirection: "row", marginBottom: '5%' }}>
 
             <TextInput
@@ -500,23 +511,41 @@ const UserOut = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
       >
         <View style={styles.centeredView}>
-          <View style={styles.modalViewCobrar}>
-            <View style={{ marginBottom: '7%', alignItems: 'center' }}>
-              <Text style={styles.modalText}>{recip.plate}</Text>
-              <Text>{recip.phone}</Text>
-              <Text>¡Cobro exitoso!</Text>
+          <View style={styles.modalView}>
+            <View style={{ margin: '6%', alignItems: 'center', paddingBottom: '4%' }}>
+              <Text style={{ ...styles.modalText, fontSize: normalize(25) }}> {recip.plate} </Text>
+              <Text style={styles.modalText}> ¡Cobro exitoso! </Text>
+              <Text style={styles.modalText}> Celular: {recip.phone} </Text>
+              <Text style={styles.modalText}> Hora: {moment().format('LT')}</Text>
             </View>
-            <TouchableHighlight
-              style={{ ...styles.openButtonCobrar }}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-                restart();
+            <Button onPress={() => {
+              setModalVisible(!modalVisible);
+              restart();
+            }}
+              title="Entendido"
+              color="#ffffff"
+              style={{
+                borderWidth: 1,
+                borderColor: "#D9D9D9",
+                alignSelf: 'flex-end',
+                width: '30%',
+                heigth: '10%',
+                margin: '5%',
+                paddingHorizontal: '4%',
+                elevation: 2,
               }}
-            >
-              <Text style={styles.textStyle}>Entendido</Text>
-            </TouchableHighlight>
+              textStyle={{
+                color: "#008999",
+                textStyle: {
+                  textAlign: "center",
+                  fontFamily: 'Montserrat-Regular'
+                }
+              }} />
           </View>
         </View>
       </Modal>
@@ -525,32 +554,61 @@ const UserOut = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modal2Visible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ marginBottom: '7%', alignItems: 'center' }}>
-              <Text style={styles.modalText}>¿Estás seguro de que hay un pago pendiente?</Text>
-
+            <View style={{ margin: '6%', alignItems: 'center', paddingBottom: '4%' }}>
+              <Text style={styles.modalText}> ¿Estás seguro de que hay un pago pendiente? </Text>
             </View>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
-                onPress={() => {
-                  setModal2Visible(!modal2Visible);
-                  setModal3Visible(!modal3Visible);
-
+            <View style={{ flexDirection: 'row', width: '100%' }}>
+              <Button onPress={() => {
+                setModal2Visible(!modal2Visible);
+                setModal3Visible(!modal3Visible);
+              }}
+                title="Si"
+                color="#ffffff"
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#D9D9D9",
+                  alignSelf: 'center',
+                  width: '30%',
+                  heigth: '10%',
+                  margin: '5%',
+                  paddingHorizontal: '4%',
+                  elevation: 2,
                 }}
-              >
-                <Text style={styles.textStyle}>SI</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
-                onPress={() => {
-                  setModal2Visible(!modal2Visible);
+                textStyle={{
+                  color: "#008999",
+                  textStyle: {
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Regular'
+                  }
+                }} />
+              <Button onPress={() => {
+                setModal2Visible(!modal2Visible);
+              }}
+                title="No"
+                color="#ffffff"
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#D9D9D9",
+                  alignSelf: 'center',
+                  width: '30%',
+                  heigth: '10%',
+                  margin: '5%',
+                  paddingHorizontal: '4%',
+                  elevation: 2,
                 }}
-              >
-                <Text style={styles.textStyle}>NO</Text>
-              </TouchableHighlight>
+                textStyle={{
+                  color: "#008999",
+                  textStyle: {
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Regular'
+                  }
+                }} />
             </View>
           </View>
         </View>

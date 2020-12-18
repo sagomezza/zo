@@ -91,11 +91,11 @@ const LogoutIndex = (props) => {
           hqId: officialProps.hq[0],
           date: new Date()
         });
+        console.log(response.data.data)
         if(response.data.response === 1){
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
         }
-
       } catch (error) {
         //console.log("err: ", error);
       }
@@ -110,8 +110,7 @@ const LogoutIndex = (props) => {
         id: officialProps.id,
         date: new Date(),
         total: total,
-        input: inputValue
-        
+        input: inputValue 
       })
       const response = await instance.post (MARK_END_OF_SHIFT, {
         email: officialProps.email,
@@ -119,9 +118,7 @@ const LogoutIndex = (props) => {
         date: new Date(),
         total: total,
         input: inputValue 
-        
       });
-      
       firebase.auth().signOut().then(function() {
         // Sign-out successful.
       }).catch(function(error) {
@@ -182,7 +179,7 @@ const LogoutIndex = (props) => {
                       fontFamily: 'Montserrat-Regular',
                       color: '#008999',
                     }}
-              value={ inputValue }
+              value={ inputValue + ''}
               keyboardType= {"numeric"}
               textAlign='center'
               placeholder= '$'

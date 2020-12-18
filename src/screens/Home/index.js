@@ -22,12 +22,15 @@ const HomeIndex = (props) => {
         const response = await instance.post(GET_RECIPS, {
           hqId: officialProps.hq[0]
         });
-        // console.log(response.data)
+        console.log("entroooooooogetrecips")
+        console.log(response.data.data.finished)
         if (response.data.response === 1) {
 
           store.dispatch(actions.setRecips(response.data.data.finished));
         }
       } catch (error) {
+        console.log(err)
+        console.log(err?.response)
         //console.log("err: ", error);
       }
     };
@@ -166,8 +169,9 @@ const HomeIndex = (props) => {
             </View>
           }
         </View>
-        <FooterIndex navigation={navigation} />
+        
       </View>
+      <FooterIndex navigation={navigation} />
     </View>
   );
 };

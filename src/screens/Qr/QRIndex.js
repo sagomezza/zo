@@ -48,7 +48,7 @@ const BarcodeScanner = (props) => {
         
         if ((qr.plate).length === 0){
           
-          store.dispatch(actions.setPhone(_data.phone))
+          store.dispatch(actions.setPhone(_data.id))
           navigation.navigate("UserOut")
 
         } else {
@@ -62,7 +62,7 @@ const BarcodeScanner = (props) => {
               plate: qr.plate,
               hqId: officialHq,
               dateStart: new Date(),
-              phone: _data.phone,
+              phone: _data.id,
               type,
               isParanoic:true
             },

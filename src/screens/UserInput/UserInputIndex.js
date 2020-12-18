@@ -236,7 +236,7 @@ const UserInput = (props) => {
             </TouchableOpacity>
           </View> */}
             {/* {codeError && <Text>{codeError}</Text>} */}
-            
+
             <View style={{ height: '14%' }}>
               <View style={{ height: '100%', width: '77%', justifyContent: 'flex-end', flexDirection: 'row', marginLeft: '9%' }}>
                 <Button onPress={() => startPark()}
@@ -278,20 +278,35 @@ const UserInput = (props) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <View style={{ marginBottom: '7%', alignItems: 'center' }}>
+              <View style={{ margin: '4%', alignItems: 'center' }}>
                 <Text style={styles.modalText}> El vehículo con placas {plateOne + ' ' + plateTwo} ya se encuentra estacionado. </Text>
               </View>
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
-                onPress={() => {
-                  setModal2Visible(!modal2Visible);
-                  setPlateOne("");
-                  setPlateTwo("");
-                  setPhone("");
+              <Button onPress={() => {
+                setModal2Visible(!modal2Visible);
+                setPlateOne("");
+                setPlateTwo("");
+                setPhone("");
+              }}
+                title="Entendido"
+                color="#ffffff"
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#D9D9D9",
+                  alignSelf: 'flex-end',
+                  width: '30%',
+                  heigth: '10%',
+                  marginRight: '5%',
+                  marginTop: '5%',
+                  paddingHorizontal: '4%',
+                  elevation: 2,
                 }}
-              >
-                <Text style={styles.textStyle}>Entendido</Text>
-              </TouchableHighlight>
+                textStyle={{
+                  color: "#008999",
+                  textStyle: {
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Regular'
+                  }
+                }} />
             </View>
           </View>
         </Modal>
@@ -307,24 +322,37 @@ const UserInput = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ marginBottom: '7%', alignItems: 'center' }}>
-              <Text style={styles.modalText}> {plateOne + ' ' + plateTwo} </Text>
+            <View style={{ margin: '6%', alignItems: 'center', paddingBottom:'4%' }}>
+              <Text style={{ ...styles.modalText, fontSize: normalize(25) }}> {plateOne + ' ' + plateTwo} </Text>
               <Text style={styles.modalText}>Ha iniciado el parqueo </Text>
               <Text style={styles.modalText}> Celular: {phone} </Text>
               <Text style={styles.modalText}> Hora: {moment().format('LT')}</Text>
             </View>
-            <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-                setPlateOne("");
-                setPlateTwo("");
-                setPhone("");
-
+            <Button onPress={() => {
+              setModalVisible(!modalVisible);
+              setPlateOne("");
+              setPlateTwo("");
+              setPhone("");
+            }}
+              title="Entendido"
+              color="#ffffff"
+              style={{
+                borderWidth: 1,
+                borderColor: "#D9D9D9",
+                alignSelf: 'flex-end',
+                width: '30%',
+                heigth: '10%',
+                margin: '5%',
+                paddingHorizontal: '4%',
+                elevation: 2,
               }}
-            >
-              <Text style={styles.textStyle}>Entendido</Text>
-            </TouchableHighlight>
+              textStyle={{
+                color: "#008999",
+                textStyle: {
+                  textAlign: "center",
+                  fontFamily: 'Montserrat-Regular'
+                }
+              }} />
           </View>
         </View>
       </Modal>
