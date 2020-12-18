@@ -36,7 +36,7 @@ import instance from '../../config/axios';
 
 const LoginIndex = (props) => {
   const { navigation, officialProps } = props;
- 
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -46,8 +46,8 @@ const LoginIndex = (props) => {
       if (email === "" || password === "") {
         setError("Por favor ingresa todos los datos: correo y contraseña")
         return;
-      } 
-      
+      }
+
       /**
        * TO DO:
        * Implement validate.js here, check if email is an email, and password is alphanumeric
@@ -56,7 +56,7 @@ const LoginIndex = (props) => {
        */
       let response = await auth.signInWithEmailAndPassword(email.toString(), password.toString())
       // console.log(response.user.toJSON().stsTokenManager.accessToken)
-      let fbToken  =response.user.toJSON().stsTokenManager.accessToken
+      let fbToken = response.user.toJSON().stsTokenManager.accessToken
       if (Platform.OS === 'android' && Platform.Version < 23) {
         await AsyncStorage.setItem('firebaseToken', fbToken)
       } else {
@@ -80,11 +80,11 @@ const LoginIndex = (props) => {
 
   const startShift = async () => {
     try {
-      const response = await instance.post (START_SHIFT, {
+      const response = await instance.post(START_SHIFT, {
         email: email,
         date: new Date(),
       });
-      onLoginPress();
+
     } catch (err) {
       console.log(err)
       console.log(err?.response)
@@ -93,73 +93,78 @@ const LoginIndex = (props) => {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-    <View style={styles.container}> 
-      <View style={{height: '23%'}}>
-        <Image style={{width: normalize(210), height: normalize (125), marginBottom: normalize(50)}} resizeMode={"contain"} source={require( '../../../assets/images/icon.png' )}/>
-      </View>
-      <View style={{height: '7%'}}>
-        <Text style={styles.loginText} >Inicio de sesión</Text>
-      </View>
-      <View style={{width: '100%', height: '25%', alignContent: 'center', alignItems: 'center'}}>
-        <View>
-          <Text style={styles.titleInputText}>Correo</Text>
-          <View style={styles.textInputContainer}>
-            <TextInput
-              style={styles.textInput}
-              placeholder={"Ingresa tu correo"}
-              placeholderTextColor="#C9C1C1"
-              autoCapitalize={"none"}
-              autoCorrect={false}
-              value={email}
-              onChangeText={(text) => setEmail(text)}
-            />
+    <View style={{ flex: 1, backgroundColor: '#008999' }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.container}>
+          <View style={{ height: normalize(160) }}>
+            <Image style={{ width: normalize(190), height: normalize(110)}} resizeMode={"contain"} source={require('../../../assets/images/icon.png')} />
           </View>
-        </View>
-        <View>
-          <Text style={styles.titleInputText }>Contraseña</Text>
-          <View style={styles.textInputContainer}>
-            <TextInput
-              style={styles.textInput}
-              placeholder={"Ingresa tu contraseña"}
-              placeholderTextColor="#C9C1C1"
-              autoCapitalize={"none"}
-              autoCorrect={false}
-              value={password}
-              onChangeText={(text) => setPassword(text)}
-              secureTextEntry={true}
-            />
+          <View style={{ height: normalize(60) }}>
+            <Text style={styles.loginText} >Inicio de sesión</Text>
           </View>
-        </View>
-        {error !== "" && <Text style={styles.alertText}>{error}</Text>}
-      </View>
-      <View style={{alignContent:'center', width: '100%', height: '10%', alignItems:'center',}}>
-          
-          {/* <TouchableOpacity
+          <View style={{ width: '100%', height: normalize(190), alignContent: 'center', alignItems: 'center' }}>
+            <View>
+              <Text style={styles.titleInputText}>Correo</Text>
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder={"Ingresa tu correo"}
+                  placeholderTextColor="#C9C1C1"
+                  autoCapitalize={"none"}
+                  autoCorrect={false}
+                  value={email}
+                  onChangeText={(text) => setEmail(text)}
+                />
+              </View>
+            </View>
+            <View>
+              <Text style={styles.titleInputText}>Contraseña</Text>
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder={"Ingresa tu contraseña"}
+                  placeholderTextColor="#C9C1C1"
+                  autoCapitalize={"none"}
+                  autoCorrect={false}
+                  value={password}
+                  onChangeText={(text) => setPassword(text)}
+                  secureTextEntry={true}
+                />
+              </View>
+            </View>
+            <View>
+              {error !== "" && <Text style={styles.alertText}>{error}</Text>}
+            </View>
+          </View>
+          <View style={{ alignContent: 'center', width: '100%', height: '8%', alignItems: 'center', }}>
+
+            {/* <TouchableOpacity
             onPress={onLoginPress}
             >
             <View style={styles.button}>
             <Text style={styles.enterText}>Ingresar</Text>
             </View>
           </TouchableOpacity> */}
-          <Button onPress={() => {startShift();} }
-              title="Ingresar" 
-              color='#FFE828' 
-              style={{ borderWidth: normalize (1), 
-                       borderColor: "#707070", 
-                       alignSelf: 'center',
-                       width: '60%',
-                       heigth: '10%',
-                       margin: '2%',
-                       paddingHorizontal: '11%',
-                      }} 
-              textStyle={{color: "#FFFFFF", fontFamily: 'Montserrat-Bold',fontSize: normalize(20),}} />
-          <TouchableOpacity>
-            <Text style={styles.restoreText}>Olvidé mi contraseña</Text>
-          </TouchableOpacity>
-      </View>
+            <Button onPress={() => { startShift(); onLoginPress(); }}
+              title="Ingresar"
+              color='#FFE828'
+              style={{
+                borderWidth: normalize(1),
+                borderColor: "#707070",
+                alignSelf: 'center',
+                width: '60%',
+                heigth: '10%',
+                margin: '2%',
+                paddingHorizontal: '11%',
+              }}
+              textStyle={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold', fontSize: normalize(20), }} />
+            <TouchableOpacity>
+              <Text style={styles.restoreText}>Olvidé mi contraseña</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
     </View>
-    </TouchableWithoutFeedback>
   );
 };
 

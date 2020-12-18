@@ -78,6 +78,7 @@ const LogoutIndex = (props) => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [total, setTotal] = useState(0);
+  const [shiftRecips, setShiftRecips] = useState('');
 
   const hq = props.hq;
   const [ inputValue, setInputValue] = useState(0);
@@ -92,6 +93,7 @@ const LogoutIndex = (props) => {
         });
         if(response.data.response === 1){
           setTotal(response.data.data.total);
+          setShiftRecips(response.data.data.recips);
         }
 
       } catch (error) {
@@ -193,7 +195,7 @@ const LogoutIndex = (props) => {
       
     <View style={{paddingBottom: 10, height: "54%"}}>
       <FlatList
-        data={recips.recips}
+        data={shiftRecips}
         keyExtractor={({ id }) => id}
         renderItem={({item}) => {
         return (

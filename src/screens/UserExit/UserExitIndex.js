@@ -11,6 +11,8 @@ import { MARKEXIT, FINISHPARKING, READ_HQ, READ_PARANOIC_USER } from '../../conf
 import { TIMEOUT } from '../../config/constants/constants';
 import store from '../../config/store';
 import Button from '../../components/Button';
+import numberWithPoints from '../../config/services/numberWithPoints';
+import normalize from '../../config/services/normalizeFontSize';
 
 
 
@@ -58,7 +60,7 @@ const UserOut = (props) => {
       marginRight: '5%',
       borderWidth: 1,
       borderRadius: 20,
-      fontSize: 50,
+      fontSize: normalize(45),
       fontFamily: 'Montserrat-Regular'
     },
     numberInput: {
@@ -72,7 +74,7 @@ const UserOut = (props) => {
       borderBottomRightRadius: 20,
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
-      fontSize: 25,
+      fontSize: normalize(25),
 
     },
     inputMoney: {
@@ -98,8 +100,9 @@ const UserOut = (props) => {
       textAlign: 'center',
       fontFamily: 'Montserrat-Regular'
     },
-    infoUSerText: {
+    infoUserText: {
       fontFamily: 'Montserrat-Regular',
+      fontSize:normalize(15)
     },
     centeredView: {
       flex: 1,
@@ -153,7 +156,7 @@ const UserOut = (props) => {
       borderWidth: 1,
       // margin: '5%',
       width: '23%',
-      height:'30%',
+      height: '30%',
       alignItems: 'center'
     },
     openButton: {
@@ -165,7 +168,7 @@ const UserOut = (props) => {
       borderWidth: 1,
       margin: '5%',
       width: '20%',
-      height:'40%',
+      height: '40%',
       alignItems: 'center'
     },
     textStyle: {
@@ -186,8 +189,8 @@ const UserOut = (props) => {
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  
-  function restart(){
+
+  function restart() {
     setTotalAmount(0);
     setTotalPay(0);
     setTotalPayModal(0);
@@ -215,25 +218,25 @@ const UserOut = (props) => {
             { timeout: TIMEOUT }
           )
           const splitPlate = (response.data.data.plate)
-          setPlateOne(splitPlate[0]+splitPlate[1]+splitPlate[2])
-          setPlateTwo(splitPlate[3]+splitPlate[4]+splitPlate[5])
+          setPlateOne(splitPlate[0] + splitPlate[1] + splitPlate[2])
+          setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlate[5])
           markExit()
           store.dispatch(actions.setPhone(''))
           setIsParanoicUser(true)
         }
       } catch (err) {
         console.log(err?.response)
-  
+
       }
     }
     readParanoicUser()
-  },[qr.phone]);
+  }, [qr.phone]);
 
   async function markExit() {
     try {
       if ((plateOne + plateTwo).length === 6) {
         let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
-        
+
         const response = await instance.post(
           MARKEXIT,
           {
@@ -250,7 +253,7 @@ const UserOut = (props) => {
         setTotalAmount(response.data.data.total)
         setLoading(false)
         console.log(recip)
-        
+
       }
     } catch (err) {
       console.log(err?.response)
@@ -263,13 +266,13 @@ const UserOut = (props) => {
     markExit()
   }, [plateOne, plateTwo]);
 
-  
-  async function readHq () {
+
+  async function readHq() {
     try {
       const response = await instance.post(READ_HQ, {
         id: officialHq
       });
-      if(response.data.response){
+      if (response.data.response) {
         store.dispatch(actions.setReservations(response.data.data.reservations));
       }
     } catch (error) {
@@ -282,29 +285,17 @@ const UserOut = (props) => {
       const response = await instance.post(GET_RECIPS, {
         hqId: officialHq
       });
-      if(response.data.response === 1){
+      if (response.data.response === 1) {
         store.dispatch(actions.setRecips(response.data.data.finished));
       }
     } catch (error) {
       //console.log("err: ", error);
     }
   };
-  
-  
+
+
   const finishParking = async (paymentStatus) => {
     try {
-      console.log({
-        plate: recip.plate,
-        hqId: recip.hqId,
-        phone: recip.phone,
-        recipId: recip.id,
-        paymentType: "cash",
-        cash: parseInt(totalPay),
-        change: totalPay - totalAmount,
-        status: paymentStatus,
-        isParanoic: isParanoicUser 
-      })
-      
       const response = await instance.post(
         FINISHPARKING,
         {
@@ -316,23 +307,23 @@ const UserOut = (props) => {
           cash: parseInt(totalPay),
           change: totalPay - totalAmount,
           status: paymentStatus,
-          isParanoic: isParanoicUser 
+          isParanoic: isParanoicUser
         },
         { timeout: TIMEOUT }
       )
       //props.navigation.navigate("home")
       // setLoading(false)
-      
+
       readHq()
       getRecips()
       setModalVisible(true)
 
-      if (isCharacterALetter(recip.plate[5])){
+      if (isCharacterALetter(recip.plate[5])) {
         store.dispatch(actions.subtractBike());
       } else {
         store.dispatch(actions.subtractCar());
-      } 
-      
+      }
+
     } catch (err) {
       console.log(err?.response)
       // setLoading(true)
@@ -343,160 +334,165 @@ const UserOut = (props) => {
   function isCharacterALetter(char) {
     return (/[a-zA-Z]/).test(char)
   }
-  
+
   return (
-    <View style={{ flex: 1, backgroundColor: '#ffffff'  }}>
-       <Button onPress={()=> navigation.navigate("Logout")} 
-              title="Cerrar sesión" 
-              color="transparent" 
-              style={{ borderWidth:1, 
-                       borderColor: "#008999", 
-                       alignSelf: 'flex-end',
-                       width: '30%',
-                       heigth: '10%',
-                       marginRight:'4%',
-                       marginTop:'6%',
-                       paddingHorizontal: '2%'
-                      }} 
-              textStyle={{color: "#008999"}} />
+    <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
+      <Button onPress={() => navigation.navigate("Logout")}
+        title="Cerrar sesión"
+        color="transparent"
+        style={{
+          borderWidth: 1,
+          borderColor: "#008999",
+          alignSelf: 'flex-end',
+          width: '30%',
+          heigth: '10%',
+          marginRight: '4%',
+          marginTop: '6%',
+          paddingHorizontal: '2%'
+        }}
+        textStyle={{ color: "#008999" }} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={{ flex: 1, marginTop: '4%', marginLeft: '13%', marginRight: '13%' }} >
-        <TouchableOpacity
-          style={
-            {
-              borderRadius: 20,
-              alignItems: 'center',
-              height: 50,
-              width: 50,
-              borderRadius: 15,
-              backgroundColor: "#008999"
-            }}
-          onPress={() => { navigation.navigate('QRscanner') }}>
-          <Image style={{width: 30, height: 30, marginTop: 8}} source={require('../../../assets/images/GrupoQR.png')}/>
-        </TouchableOpacity>
-        <View style={{ paddingLeft: '20%', flexDirection: "row", marginBottom: '5%' }}>
+        <View style={{ flex: 1, marginTop: '4%', marginLeft: '13%', marginRight: '13%' }} >
+          <TouchableOpacity style={
+              {
+                borderRadius: 20,
+                alignItems: 'center',
+                height: 50,
+                width: 50,
+                borderRadius: 5,
+                backgroundColor: "#008999"
+              }}
+              onPress={() => { navigation.navigate('QRscanner') }}
+            disabled={(plateOne + plateTwo).length < 6}>
+            <Image style={{ width: 34, height: 34, marginTop: 8 }} source={require('../../../assets/images/GrupoQR.png')} />
+          </TouchableOpacity>
+          
+          <View style={{ paddingLeft: '20%', flexDirection: "row", marginBottom: '5%' }}>
 
-          <TextInput
-            ref={refPlateOne}
-            style={styles.plateInput}
-            textAlign='center'
-            maxLength={3}
-            autoCapitalize={'characters'}
-            onChangeText={(text) => {setPlateOne(text);
-              if(refPlateTwo && text.length === 3 ){
-                 refPlateTwo.current.focus();
-              };}}
-            value={plateOne}
-            onFocus= {() => {clearPlateOne(); clearPlateTwo();}}
-          />
+            <TextInput
+              ref={refPlateOne}
+              style={styles.plateInput}
+              textAlign='center'
+              maxLength={3}
+              autoCapitalize={'characters'}
+              onChangeText={(text) => {
+                setPlateOne(text);
+                if (refPlateTwo && text.length === 3) {
+                  refPlateTwo.current.focus();
+                };
+              }}
+              value={plateOne}
+              onFocus={() => { clearPlateOne(); clearPlateTwo(); }}
+            />
 
-          <TextInput
-            ref={refPlateTwo}
-            value={plateTwo}
-            style={styles.plateInput}
-            textAlign='center'
-            maxLength={3}
-            autoCapitalize={'characters'}
-            onFocus={() => {clearPlateTwo();}}
-              onChangeText={text => 
-                {setPlateTwo(text);
-                  if(text.length === 3){
-                    if (plateOne.length === 3) Keyboard.dismiss()
-                  };
+            <TextInput
+              ref={refPlateTwo}
+              value={plateTwo}
+              style={styles.plateInput}
+              textAlign='center'
+              maxLength={3}
+              autoCapitalize={'characters'}
+              onFocus={() => { clearPlateTwo(); }}
+              onChangeText={text => {
+                setPlateTwo(text);
+                if (text.length === 3) {
+                  if (plateOne.length === 3) Keyboard.dismiss()
+                };
+              }}
+
+
+            />
+          </View>
+
+          <View style={{ alignItems: 'center', marginBottom: '5%' }}>
+            {<Text style={styles.infoUserText}>Celular/CódigoQR: {recip.phone} </Text>}
+            {/* <Text style={styles.infoUSerText}>Tiempo de inicio: {recip.dateStart && new Date(recip.dateStart)}</Text> */}
+            {/* <Text style={styles.infoUSerText}>Tiempo de salida: {recip.dateFinished && new Date(recip.dateFinished)}</Text> */}
+            <Text style={styles.infoUserText}>CODIGO: {recip.verificationCode} </Text>
+            <Text style={{ fontSize: normalize(20), fontFamily: 'Montserrat-Regular' }}>Total horas: {recip?.hours}</Text>
+            <Text style={styles.infoUserText}>{"A pagar"}</Text>
+            <Text style={{ fontSize: normalize(50), fontFamily: 'Montserrat-Regular' }}>{`$${numberWithPoints(totalAmount)}`}</Text>
+          </View>
+
+          <View style={{ alignItems: 'center' }}>
+
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ marginRight: 10, marginTop: 15 }}>
+                <Text style={{ fontFamily: 'Montserrat-Regular' }} >{"Valor ingresado"}</Text>
+              </View>
+              <View>
+
+                <TextInput
+                  style={styles.inputMoney}
+                  keyboardType='numeric'
+                  placeholder='$'
+                  value={totalPay == 0 ? '' : totalPay + ''}
+                  onChangeText={text => setTotalPay(text)}
+                />
+
+              </View>
+
+            </View>
+
+            <View style={{ marginLeft: '25%', marginBottom: 10 }}>
+              <View style={{ flexDirection: 'row', paddingBottom: '5%' }}>
+                <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(5000)}>
+                  <Text style={styles.miniButtonMoneyText}>$5.000</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(10000)}>
+                  <Text style={styles.miniButtonMoneyText}>$10.000</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(20000)}>
+                  <Text style={styles.miniButtonMoneyText}>$20.000</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(50000)}>
+                  <Text style={styles.miniButtonMoneyText}>$50.000</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={{ flexDirection: 'row', paddingBottom: '5%', marginLeft: '5%' }}>
+              <View style={{ marginLeft: 30, marginRight: 10, marginTop: 15 }}>
+                <Text style={{ fontFamily: 'Montserrat-Regular' }}>{"A devolver"}</Text>
+              </View>
+              <View style={{ marginRight: 20 }}>
+                <TextInput
+                  style={styles.inputMoney}
+                  keyboardType='numeric'
+                  placeholder='$'
+                  editable={false}
+                  value={(totalPay - totalAmount) <= 0 ? '$ 0' : '$ ' + (totalPay - totalAmount)}
+                />
+              </View>
+            </View>
+          </View>
+          {err !== "" && <Text style={{ color: "red", fontFamily: 'Montserrat-Regular' }}>{err}</Text>}
+          {!loading &&
+            <View style={{ padding: '5%', alignItems: 'center' }}>
+              <Button
+                title="Cobrar"
+                color='#008999'
+                disabled={loading}
+                onPress={() => {
+                  finishParking("payed")
+                }} />
+            </View>
+          }
+          {loading && <ActivityIndicator />}
+          {!loading &&
+            <View style={{ padding: '5%', alignItems: 'center' }}>
+              <Button
+                title="Pago pendiente"
+                color='gray'
+                disabled={loading}
+                onPress={() => {
+                  setModal2Visible(true);
+                  // finishParking("pending") 
                 }}
-            
-            
-          />
-        </View>
-
-        <View style={{ alignItems: 'center', marginBottom: '5%' }}>
-          {<Text style={styles.infoUSerText}>Celular/CódigoQR: {recip.phone} </Text>}
-          {/* <Text style={styles.infoUSerText}>Tiempo de inicio: {recip.dateStart && new Date(recip.dateStart)}</Text> */}
-          {/* <Text style={styles.infoUSerText}>Tiempo de salida: {recip.dateFinished && new Date(recip.dateFinished)}</Text> */}
-          <Text style={styles.infoUSerText}>CODIGO: {recip.verificationCode} </Text>
-          <Text style={{ fontSize: 20, fontFamily: 'Montserrat-Regular' }}>Total horas: {recip?.hours}</Text>
-          <Text style={styles.infoUSerText}>{"A pagar"}</Text>
-          <Text style={{ fontSize: 50, fontFamily: 'Montserrat-Regular' }}>$ {recip.total} </Text>
-        </View>
-
-        <View style={{ alignItems: 'center' }}>
-        
-          <View style={{ flexDirection: 'row' }}>
-            <View style={{ marginRight: 10, marginTop: 15 }}>
-              <Text style={{ fontFamily: 'Montserrat-Regular' }} >{"Valor ingresado"}</Text>
-            </View>
-            <View>
-            
-              <TextInput
-                style={styles.inputMoney}
-                keyboardType='numeric'
-                placeholder='$'
-                value={totalPay == 0 ? '' : totalPay + ''}
-                onChangeText={text => setTotalPay(text)}
-              />
-            
-            </View>
-
-          </View>
-       
-          <View style={{ marginLeft: '25%', marginBottom: 10 }}>
-            <View style={{ flexDirection: 'row', paddingBottom: '5%' }}>
-              <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(5000)}>
-                <Text style={styles.miniButtonMoneyText}>$5.000</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(10000)}>
-                <Text style={styles.miniButtonMoneyText}>$10.000</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(20000)}>
-                <Text style={styles.miniButtonMoneyText}>$20.000</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(50000)}>
-                <Text style={styles.miniButtonMoneyText}>$50.000</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={{ flexDirection: 'row', paddingBottom: '5%', marginLeft: '5%' }}>
-            <View style={{ marginLeft: 30, marginRight: 10, marginTop: 15 }}>
-              <Text style={{ fontFamily: 'Montserrat-Regular' }}>{"A devolver"}</Text>
-            </View>
-            <View style={{ marginRight: 20 }}>
-              <TextInput
-                style={styles.inputMoney}
-                keyboardType='numeric'
-                placeholder='$'
-                editable={false}
-                value={(totalPay - totalAmount) <= 0 ? '$ 0' : '$ ' + (totalPay - totalAmount)}
               />
             </View>
-          </View>
+          }
         </View>
-        {err !== "" && <Text style={{color: "red", fontFamily: 'Montserrat-Regular' }}>{err}</Text>}
-        {!loading && 
-        <View style={{ padding: '5%', alignItems: 'center'}}>
-          <Button
-            title="Cobrar"
-            color='#008999'
-            disabled={loading}
-            onPress={() => {
-              finishParking("payed") 
-              }} />
-        </View>
-         } 
-         {loading && <ActivityIndicator />} 
-         {!loading &&  
-        <View style={{ padding: '5%', alignItems: 'center' }}>
-          <Button
-            title="Pago pendiente"
-            color='gray'
-            disabled={loading}
-            onPress={() => { setModal2Visible(true); 
-              // finishParking("pending") 
-            }}
-          />
-        </View>
-         } 
-      </View>
       </TouchableWithoutFeedback>
       <FooterIndex navigation={navigation} />
       <Modal
@@ -513,7 +509,7 @@ const UserOut = (props) => {
               <Text>¡Cobro exitoso!</Text>
             </View>
             <TouchableHighlight
-              style={{ ...styles.openButtonCobrar}}
+              style={{ ...styles.openButtonCobrar }}
               onPress={() => {
                 setModalVisible(!modalVisible);
                 restart();
@@ -576,7 +572,7 @@ const UserOut = (props) => {
                 style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
                 onPress={() => {
                   setModal3Visible(!modal3Visible);
-                  finishParking("pending") 
+                  finishParking("pending")
                 }}
 
               >
@@ -606,39 +602,43 @@ const UserOut = (props) => {
           <View style={{ ...styles.modalView }}>
             <View style={{ marginBottom: '7%', alignItems: 'center' }}>
               <Text style={styles.modalText}>Ingresa el valor exacto de pago: </Text>
-              <Text style={{fontFamily: 'Montserrat-Regular', fontSize: 20}}>Total a pagar: $ {totalAmount}</Text>
-              <View style= {{flexDirection:"row", justifyContent: 'space-around', padding: '5%' }}>
-              <Text style={{fontFamily: 'Montserrat-Regular'}}>Pago parcial:  </Text>
-              <TextInput
-                style={{borderWidth: 1, 
-                        borderColor: 'gray',
-                        fontSize: 15,
-                        fontFamily: 'Montserrat-Regular',
-                        color: '#008999',
-                        width: '40%',
-                        fontFamily: 'Montserrat-Regular',
-                        borderRadius: 10}}
-                keyboardType='numeric'
-                placeholder='$'
-                keyboardType= {"numeric"}
-                textAlign='center'
-                value={totalPayModal == 0 ? '' : totalPayModal + ''}
-                onChangeText={text => setTotalPayModal(text)}
-              />
+              <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 20 }}>Total a pagar: $ {totalAmount}</Text>
+              <View style={{ flexDirection: "row", justifyContent: 'space-around', padding: '5%' }}>
+                <Text style={{ fontFamily: 'Montserrat-Regular' }}>Pago parcial:  </Text>
+                <TextInput
+                  style={{
+                    borderWidth: 1,
+                    borderColor: 'gray',
+                    fontSize: 15,
+                    fontFamily: 'Montserrat-Regular',
+                    color: '#008999',
+                    width: '40%',
+                    fontFamily: 'Montserrat-Regular',
+                    borderRadius: 10
+                  }}
+                  keyboardType='numeric'
+                  placeholder='$'
+                  keyboardType={"numeric"}
+                  textAlign='center'
+                  value={totalPayModal == 0 ? '' : totalPayModal + ''}
+                  onChangeText={text => setTotalPayModal(text)}
+                />
               </View>
-              <View style= {{flexDirection:"row", justifyContent: 'space-around' }}>
-              <Text style={{fontFamily: 'Montserrat-Regular'}}> Deuda:  </Text>
-              <TextInput
-                style={{borderWidth: 1, 
-                  borderColor: 'gray',
-                  fontSize: 15,
-                  fontFamily: 'Montserrat-Regular',
-                  width: '40%',
-                  borderRadius: 10}}
-                textAlign='center'
-                editable={false}
-                value={(totalAmount - totalPayModal) < 0 ? '0' : '$' + (totalAmount - totalPayModal)}
-              />
+              <View style={{ flexDirection: "row", justifyContent: 'space-around' }}>
+                <Text style={{ fontFamily: 'Montserrat-Regular' }}> Deuda:  </Text>
+                <TextInput
+                  style={{
+                    borderWidth: 1,
+                    borderColor: 'gray',
+                    fontSize: 15,
+                    fontFamily: 'Montserrat-Regular',
+                    width: '40%',
+                    borderRadius: 10
+                  }}
+                  textAlign='center'
+                  editable={false}
+                  value={(totalAmount - totalPayModal) < 0 ? '0' : '$' + (totalAmount - totalPayModal)}
+                />
               </View>
             </View>
             <View style={{ flexDirection: 'row' }}>
@@ -647,7 +647,7 @@ const UserOut = (props) => {
                 onPress={() => {
                   setModal4Visible(!modal4Visible);
                   setTotalPay(totalPayModal)
-                  finishParking("parcial-pending") 
+                  finishParking("parcial-pending")
                   setTotalPayModal(0);
                   restart();
                 }}
@@ -658,7 +658,7 @@ const UserOut = (props) => {
           </View>
         </View>
       </Modal>
-      
+
     </View>
   );
 }

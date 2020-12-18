@@ -6,7 +6,8 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#008999',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      marginBottom: '15%'
     },
     loginText: {
       color: 'white',
@@ -18,12 +19,12 @@ const styles = StyleSheet.create({
       color: 'white',
       fontSize: normalize(15),
       fontFamily: 'Montserrat-Bold',
-      paddingHorizontal: '4%'
+      paddingHorizontal: '2%'
     },
     alertText: {
       color: '#FFE828',
       fontSize: normalize(14),
-      fontFamily: 'Montserrat-Bold'
+      fontFamily: 'Montserrat-Regular'
     },
     enterText: {
       fontSize: normalize (20),
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
       fontFamily: 'Montserrat-Bold'
     },
     button:{
-      height: 30,
+      height: normalize(30),
       width: "50%",
       borderRadius:20,
       backgroundColor : '#FFE828',
@@ -56,11 +57,11 @@ const styles = StyleSheet.create({
     },
     textInputContainer: {
       backgroundColor: "#F0EEEE",
-      height: 40,
+      height: normalize(40),
       width: "49%",
-      borderRadius: 20,
+      borderRadius: normalize(18),
       flexDirection: "row",
-      paddingHorizontal: '4%',
+      paddingHorizontal: '3%',
       borderWidth: 1,
       borderColor: "#707070",
       marginBottom: 20,

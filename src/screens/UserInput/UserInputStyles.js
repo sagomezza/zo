@@ -16,50 +16,46 @@ const styles = StyleSheet.create({
     },
     plateInput: {
       width: '40%', 
-      height: '95%',
+      height: normalize(60),
       margin:'3%',
-      fontSize: normalize(25),
+      fontSize: normalize(35),
       fontFamily: 'Montserrat-Regular',
       color: '#008999',
       backgroundColor: 'rgba(0,0,0,0.04)'
     },
     textInput: {
       width: '86%', 
-      height: '80%',
+      height: normalize(60),
       marginRight: '5%',
       marginLeft: '5%', 
       borderColor: 'gray', 
       marginBottom: '10%',
-      fontSize:normalize(25),
+      fontSize:normalize(35),
       fontFamily: 'Montserrat-Regular',
       color: '#008999',
       backgroundColor: 'rgba(0,0,0,0.04)'
-
     },
     buttonI: {
-      borderRadius:20,
+      borderRadius: 4,
       alignItems: 'center',
-      height: 50,
-      width: 80,
-      borderWidth: 1,
-      borderRadius: 15,
-      borderColor: 'gray'
+      height: normalize(45),
+      width: '100%',
+      padding: '2%',
     },
     buttonT: {
-      borderRadius:20,
+      borderRadius: 4,
       alignItems: 'center',
-      height: 50,
-      width:50,
+      alignContent: 'center',
+      height:  normalize(45),
+      width: normalize(45) ,
       backgroundColor: "#008999",
-      borderRadius: 15,
-      
-      
+      padding: '1%',
+      marginLeft: '2%'
     },
     buttonText: {
-      color:'#707070',
-      fontSize: 20,
-      marginTop: '12%',
-      fontFamily: 'Montserrat-Bold'
+      color:'#FFFFFF',
+      fontSize: normalize(25),
+      fontFamily: 'Montserrat-Regular'
     },
     centeredView: {
       flex: 1,
