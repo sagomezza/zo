@@ -163,7 +163,9 @@ const UserInput = (props) => {
             heigth: '10%',
             marginRight: '5%',
             marginTop: '6%',
-            paddingHorizontal: '2%'
+            paddingHorizontal: '2%',
+            borderRadius: 9
+
           }}
           textStyle={{ color: "#008999" }} />
       </View>
@@ -298,14 +300,11 @@ const UserInput = (props) => {
                   marginRight: '5%',
                   marginTop: '5%',
                   paddingHorizontal: '4%',
-                  elevation: 2,
                 }}
                 textStyle={{
                   color: "#008999",
-                  textStyle: {
-                    textAlign: "center",
-                    fontFamily: 'Montserrat-Regular'
-                  }
+                  textAlign: "center",
+                  fontFamily: 'Montserrat-Regular'
                 }} />
             </View>
           </View>
@@ -322,7 +321,7 @@ const UserInput = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ margin: '6%', alignItems: 'center', paddingBottom:'4%' }}>
+            <View style={{ margin: '6%', alignItems: 'center', paddingBottom: '4%' }}>
               <Text style={{ ...styles.modalText, fontSize: normalize(25) }}> {plateOne + ' ' + plateTwo} </Text>
               <Text style={styles.modalText}>Ha iniciado el parqueo </Text>
               <Text style={styles.modalText}> Celular: {phone} </Text>
@@ -344,14 +343,11 @@ const UserInput = (props) => {
                 heigth: '10%',
                 margin: '5%',
                 paddingHorizontal: '4%',
-                elevation: 2,
               }}
               textStyle={{
                 color: "#008999",
-                textStyle: {
-                  textAlign: "center",
-                  fontFamily: 'Montserrat-Regular'
-                }
+                textAlign: "center",
+                fontFamily: 'Montserrat-Regular'
               }} />
           </View>
         </View>

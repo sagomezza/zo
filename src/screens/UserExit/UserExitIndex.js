@@ -15,8 +15,6 @@ import numberWithPoints from '../../config/services/numberWithPoints';
 import normalize from '../../config/services/normalizeFontSize';
 
 
-
-
 const UserOut = (props) => {
   const { navigation, officialProps, qr } = props;
   // const dateMonthIn = new Date('05/05/20');
@@ -25,7 +23,6 @@ const UserOut = (props) => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
   const [totalPayModal, setTotalPayModal] = useState(0);
-  const [isEditable, setIsEditable] = useState(true);
   const [recip, setRecip] = useState({})
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
@@ -130,7 +127,7 @@ const UserOut = (props) => {
       elevation: 5,
     },
     modalView: {
-      height: normalize(250),
+      height: normalize(220),
       padding: normalize(40),
       borderRadius: 10,
       borderColor: '#707070',
@@ -152,7 +149,6 @@ const UserOut = (props) => {
       backgroundColor: "#FFFFFF",
       borderRadius: 10,
       // padding: 10,
-      elevation: 2,
       borderColor: '#D9D9D9',
       borderWidth: 1,
       // margin: '5%',
@@ -164,7 +160,6 @@ const UserOut = (props) => {
       backgroundColor: "#F194FF",
       borderRadius: 10,
       // padding: 10,
-      elevation: 2,
       borderColor: '#D9D9D9',
       borderWidth: 1,
       margin: '5%',
@@ -197,7 +192,6 @@ const UserOut = (props) => {
     setTotalPayModal(0);
     setPlateOne("");
     setPlateTwo("");
-    setIsEditable(true);
     setRecip({})
     setLoading(false);
     setErr("")
@@ -237,7 +231,14 @@ const UserOut = (props) => {
     try {
       if ((plateOne + plateTwo).length === 6) {
         let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
-
+        // console.log("---111---")
+        // console.log({
+        //   plate: plateOne + plateTwo,
+        //   hqId: reserve[0].hqId,
+        //   phone: reserve[0].phone,
+        //   officialEmail: officialProps.email,
+        //   dateFinished: new Date()
+        // })
         const response = await instance.post(
           MARKEXIT,
           {
@@ -257,7 +258,6 @@ const UserOut = (props) => {
       console.log(err)
       console.log(err?.response)
       setLoading(true)
-
     }
   }
 
@@ -281,28 +281,20 @@ const UserOut = (props) => {
 
   const getRecips = async () => {
     try {
-      console.log(officialHq)
       const response = await instance.post(GET_RECIPS, {
         hqId: officialHq
       });
-
-      console.log("--------entroooooo---------")
-      console.log(response.data.data.finished)
-
       if (response.data.response === 1) {
         store.dispatch(actions.setRecips(response.data.data.finished));
       }
     } catch (err) {
-      console.log("--------1---------")
-      console.log(err)
       console.log(err?.response)
-      console.log("--------1---------")
       //console.log("err: ", error);
     }
   };
 
 
-  const finishParking = async (paymentStatus) => {
+  const finishParking = async (paymentStatus, showModal) => {
     try {
       const response = await instance.post(
         FINISHPARKING,
@@ -318,24 +310,22 @@ const UserOut = (props) => {
           isParanoic: isParanoicUser
         },
         { timeout: TIMEOUT }
-      )
-      //props.navigation.navigate("home")
-      // setLoading(false)
-      // if (response.data.response === 1) {
-      //   store.dispatch(actions.setRecips(response.data.data.finished));
-      // }
-      readHq()
-      getRecips()
-      setModalVisible(true)
-
+      );
+      console.log("entroooooo")
+      console.log(showModal)
+      
       if (isCharacterALetter(recip.plate[5])) {
         store.dispatch(actions.subtractBike());
       } else {
         store.dispatch(actions.subtractCar());
       }
+      readHq()
+      getRecips()
 
+      if (showModal) {
+        setModalVisible(true)
+      }
     } catch (err) {
-      console.log(err)
       console.log(err?.response)
       // setLoading(true)
       setErr("Algo malo pasó, vuelve a intentarlo más tarde")
@@ -345,7 +335,6 @@ const UserOut = (props) => {
   function isCharacterALetter(char) {
     return (/[a-zA-Z]/).test(char)
   }
-
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <Button onPress={() => navigation.navigate("Logout")}
@@ -359,7 +348,8 @@ const UserOut = (props) => {
           heigth: '10%',
           marginRight: '4%',
           marginTop: '6%',
-          paddingHorizontal: '2%'
+          paddingHorizontal: '2%',
+          borderRadius: 9
         }}
         textStyle={{ color: "#008999" }} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -417,8 +407,6 @@ const UserOut = (props) => {
 
           <View style={{ alignItems: 'center', marginBottom: '5%' }}>
             {<Text style={styles.infoUserText}>Celular/CódigoQR: {recip.phone} </Text>}
-            {/* <Text style={styles.infoUSerText}>Tiempo de inicio: {recip.dateStart && new Date(recip.dateStart)}</Text> */}
-            {/* <Text style={styles.infoUSerText}>Tiempo de salida: {recip.dateFinished && new Date(recip.dateFinished)}</Text> */}
             <Text style={styles.infoUserText}>CODIGO: {recip.verificationCode} </Text>
             <Text style={{ fontSize: normalize(20), fontFamily: 'Montserrat-Regular' }}>Total horas: {recip?.hours}</Text>
             <Text style={styles.infoUserText}>{"A pagar"}</Text>
@@ -477,25 +465,27 @@ const UserOut = (props) => {
               </View>
             </View>
           </View>
-          {err !== "" && <Text style={{ color: "red", fontFamily: 'Montserrat-Regular' }}>{err}</Text>}
+          {err !== "" && <Text style={{ color: "red", fontFamily: 'Montserrat-Regular', alignSelf:'center' }}>{err}</Text>}
           {!loading &&
-            <View style={{ padding: '5%', alignItems: 'center' }}>
+            <View style={{ padding: '2%', alignItems: 'center' }}>
               <Button
                 title="Cobrar"
                 color='#008999'
                 disabled={loading}
+                style={{ borderRadius: 9 }}
                 onPress={() => {
-                  finishParking("payed")
+                  finishParking("payed", true);
                 }} />
             </View>
           }
           {loading && <ActivityIndicator />}
           {!loading &&
-            <View style={{ padding: '5%', alignItems: 'center' }}>
+            <View style={{ padding: '2%', alignItems: 'center' }}>
               <Button
                 title="Pago pendiente"
                 color='gray'
                 disabled={loading}
+                style={{ borderRadius: 9 }}
                 onPress={() => {
                   setModal2Visible(true);
                   // finishParking("pending") 
@@ -511,13 +501,10 @@ const UserOut = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ margin: '6%', alignItems: 'center', paddingBottom: '4%' }}>
+            <View style={{ margin: '6%', alignItems: 'center', paddingBottom: '7%' }}>
               <Text style={{ ...styles.modalText, fontSize: normalize(25) }}> {recip.plate} </Text>
               <Text style={styles.modalText}> ¡Cobro exitoso! </Text>
               <Text style={styles.modalText}> Celular: {recip.phone} </Text>
@@ -537,14 +524,11 @@ const UserOut = (props) => {
                 heigth: '10%',
                 margin: '5%',
                 paddingHorizontal: '4%',
-                elevation: 2,
               }}
               textStyle={{
                 color: "#008999",
-                textStyle: {
-                  textAlign: "center",
-                  fontFamily: 'Montserrat-Regular'
-                }
+                textAlign: "center",
+                fontFamily: 'Montserrat-Regular'
               }} />
           </View>
         </View>
@@ -560,7 +544,7 @@ const UserOut = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ margin: '6%', alignItems: 'center', paddingBottom: '4%' }}>
+            <View style={{ margin: '3%', alignItems: 'center' }}>
               <Text style={styles.modalText}> ¿Estás seguro de que hay un pago pendiente? </Text>
             </View>
             <View style={{ flexDirection: 'row', width: '100%' }}>
@@ -574,18 +558,15 @@ const UserOut = (props) => {
                   borderWidth: 1,
                   borderColor: "#D9D9D9",
                   alignSelf: 'center',
-                  width: '30%',
+                  width: '90%',
                   heigth: '10%',
-                  margin: '5%',
+                  margin: '8%',
                   paddingHorizontal: '4%',
-                  elevation: 2,
                 }}
                 textStyle={{
                   color: "#008999",
-                  textStyle: {
-                    textAlign: "center",
-                    fontFamily: 'Montserrat-Regular'
-                  }
+                  textAlign: "center",
+                  fontFamily: 'Montserrat-Regular'
                 }} />
               <Button onPress={() => {
                 setModal2Visible(!modal2Visible);
@@ -596,18 +577,15 @@ const UserOut = (props) => {
                   borderWidth: 1,
                   borderColor: "#D9D9D9",
                   alignSelf: 'center',
-                  width: '30%',
+                  width: '90%',
                   heigth: '10%',
-                  margin: '5%',
+                  margin: '8%',
                   paddingHorizontal: '4%',
-                  elevation: 2,
                 }}
                 textStyle={{
                   color: "#008999",
-                  textStyle: {
-                    textAlign: "center",
-                    fontFamily: 'Montserrat-Regular'
-                  }
+                  textAlign: "center",
+                  fontFamily: 'Montserrat-Regular'
                 }} />
             </View>
           </View>
@@ -618,34 +596,56 @@ const UserOut = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modal3Visible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ marginBottom: '7%', alignItems: 'center' }}>
-              <Text style={styles.modalText}>Elija tipo de pago:</Text>
-
+            <View style={{ margin: '3%', alignItems: 'center' }}>
+              <Text style={styles.modalText}> Elija tipo de pago: </Text>
             </View>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
-                onPress={() => {
-                  setModal3Visible(!modal3Visible);
-                  finishParking("pending")
+            <View style={{ flexDirection: 'row', width: '100%' }}>
+              <Button onPress={() => {
+                setModal3Visible(!modal3Visible);
+                finishParking("pending", false);
+              }}
+                title="Total"
+                color="#ffffff"
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#D9D9D9",
+                  alignSelf: 'center',
+                  width: '90%',
+                  heigth: '10%',
+                  margin: '8%',
+                  paddingHorizontal: '4%',
                 }}
-
-              >
-                <Text style={styles.textStyle}>Total</Text>
-              </TouchableHighlight>
-
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
-                onPress={() => {
-                  setModal3Visible(!modal3Visible);
-                  setModal4Visible(!modal4Visible);
+                textStyle={{
+                  color: "#008999",
+                  textAlign: "center",
+                  fontFamily: 'Montserrat-Regular'
+                }} />
+              <Button onPress={() => {
+                setModal3Visible(!modal3Visible);
+                setModal4Visible(!modal4Visible);
+              }}
+                title="Parcial"
+                color="#ffffff"
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#D9D9D9",
+                  alignSelf: 'center',
+                  width: '90%',
+                  heigth: '10%',
+                  margin: '8%',
+                  paddingHorizontal: '4%',
                 }}
-              >
-                <Text style={styles.textStyle}>Parcial</Text>
-              </TouchableHighlight>
+                textStyle={{
+                  color: "#008999",
+                  textAlign: "center",
+                  fontFamily: 'Montserrat-Regular'
+                }} />
             </View>
           </View>
         </View>
@@ -657,62 +657,75 @@ const UserOut = (props) => {
         visible={modal4Visible}
       >
         <View style={styles.centeredView}>
-          <View style={{ ...styles.modalView }}>
-            <View style={{ marginBottom: '7%', alignItems: 'center' }}>
-              <Text style={styles.modalText}>Ingresa el valor exacto de pago: </Text>
-              <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 20 }}>Total a pagar: $ {totalAmount}</Text>
-              <View style={{ flexDirection: "row", justifyContent: 'space-around', padding: '5%' }}>
-                <Text style={{ fontFamily: 'Montserrat-Regular' }}>Pago parcial:  </Text>
-                <TextInput
-                  style={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
-                    fontSize: 15,
-                    fontFamily: 'Montserrat-Regular',
-                    color: '#008999',
-                    width: '40%',
-                    fontFamily: 'Montserrat-Regular',
-                    borderRadius: 10
-                  }}
-                  keyboardType='numeric'
-                  placeholder='$'
-                  keyboardType={"numeric"}
-                  textAlign='center'
-                  value={totalPayModal == 0 ? '' : totalPayModal + ''}
-                  onChangeText={text => setTotalPayModal(text)}
-                />
+          <View style={{ ...styles.modalView, height: normalize(370), paddingTop: '13%' }}>
+            <View style={{ margin: '6%', alignItems: 'center', paddingBottom: '4%', flexDirection: 'column' }}>
+              <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Ingresa el valor exacto de pago: </Text>
+              <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Total a pagar: {`$${numberWithPoints(totalAmount)}`}</Text>
+              <View style={{ justifyContent: 'flex-end' }}>
+                <View style={{ flexDirection: "row", justifyContent: 'flex-end', padding: '4%' }}>
+                  <Text style={{ ...styles.modalText, fontSize: normalize(20), marginRight: '5%' }}>Pago parcial:  </Text>
+                  <TextInput
+                    style={{
+                      borderWidth: 1,
+                      borderColor: 'gray',
+                      fontSize: normalize(15),
+                      fontFamily: 'Montserrat-Regular',
+                      color: '#008999',
+                      width: '60%',
+                      fontFamily: 'Montserrat-Regular',
+                      borderRadius: 7
+                    }}
+                    keyboardType='numeric'
+                    placeholder='$'
+                    keyboardType={"numeric"}
+                    textAlign='center'
+                    value={totalPayModal == 0 ? '' : totalPayModal + ''}
+                    onChangeText={text => setTotalPayModal(text)}
+                  />
+                </View>
+                <View style={{ flexDirection: "row", justifyContent: 'flex-end', padding: '4%' }}>
+                  <Text style={{ ...styles.modalText, fontSize: normalize(20), marginRight: '5%' }}> Deuda:  </Text>
+                  <TextInput
+                    style={{
+                      borderWidth: 1,
+                      borderColor: 'gray',
+                      fontSize: normalize(15),
+                      fontFamily: 'Montserrat-Regular',
+                      width: '60%',
+                      borderRadius: 7
+                    }}
+                    textAlign='center'
+                    editable={false}
+                    value={(totalAmount - totalPayModal) < 0 ? '0' : '$' + (totalAmount - totalPayModal)}
+                  />
+                </View>
               </View>
-              <View style={{ flexDirection: "row", justifyContent: 'space-around' }}>
-                <Text style={{ fontFamily: 'Montserrat-Regular' }}> Deuda:  </Text>
-                <TextInput
-                  style={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
-                    fontSize: 15,
-                    fontFamily: 'Montserrat-Regular',
-                    width: '40%',
-                    borderRadius: 10
-                  }}
-                  textAlign='center'
-                  editable={false}
-                  value={(totalAmount - totalPayModal) < 0 ? '0' : '$' + (totalAmount - totalPayModal)}
-                />
-              </View>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
-                onPress={() => {
-                  setModal4Visible(!modal4Visible);
-                  setTotalPay(totalPayModal)
-                  finishParking("parcial-pending")
-                  setTotalPayModal(0);
-                  restart();
+              <Button onPress={() => {
+                setModal4Visible(!modal4Visible);
+                setTotalPay(totalPayModal)
+                finishParking("parcial-pending", false)
+                setTotalPayModal(0);
+                restart();
+              }}
+                title="Guardar"
+                color="#ffffff"
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#D9D9D9",
+                  alignSelf: 'flex-end',
+                  width: '30%',
+                  heigth: '10%',
+                  margin: '5%',
+                  paddingHorizontal: '4%',
                 }}
-              >
-                <Text style={styles.textStyle}>Guardar</Text>
-              </TouchableHighlight>
+                textStyle={{
+                  color: "#008999",
+                  textAlign: "center",
+                  fontFamily: 'Montserrat-Regular'
+                }} />
             </View>
+
+
           </View>
         </View>
       </Modal>

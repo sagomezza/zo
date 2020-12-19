@@ -12,13 +12,16 @@ import * as actions from "../../redux/actions";
 import instance from '../../config/axios';
 import { GET_SHIFT_RECIPS, MARK_END_OF_SHIFT, READ_HQ } from '../../config/api';
 import numberWithPoints from '../../config/services/numberWithPoints';
+import Button from '../../components/Button/index';
+import normalize from '../../config/services/normalizeFontSize';
+
 
 
 const LogoutIndex = (props) => {
-  const {navigation, officialProps, recips} = props;
+  const { navigation, officialProps, recips } = props;
   const HomeStyles = StyleSheet.create({
     plateInput: {
-      borderColor: 'gray', 
+      borderColor: 'gray',
       borderWidth: 1,
       borderRadius: 20,
     },
@@ -33,12 +36,12 @@ const LogoutIndex = (props) => {
       alignItems: "center",
       marginTop: 22,
       backgroundColor: 'rgba(52, 52, 52, 0.8)',
-      
+
     },
     modalView: {
       height: 200,
       padding: 35,
-      borderRadius:20,
+      borderRadius: 20,
       borderColor: '#707070',
       borderWidth: 1,
       justifyContent: 'space-around',
@@ -56,12 +59,11 @@ const LogoutIndex = (props) => {
     openButton: {
       backgroundColor: "#F194FF",
       borderRadius: 10,
-      elevation: 2,
       borderColor: '#D9D9D9',
       borderWidth: 1,
       margin: '5%',
       width: '20%',
-      height:'40%',
+      height: '40%',
       alignItems: 'center',
       alignContent: 'center'
     },
@@ -81,18 +83,17 @@ const LogoutIndex = (props) => {
   const [shiftRecips, setShiftRecips] = useState('');
 
   const hq = props.hq;
-  const [ inputValue, setInputValue] = useState(0);
+  const [inputValue, setInputValue] = useState(0);
 
   useEffect(() => {
     const getShiftRecips = async () => {
       try {
-        const response = await instance.post (GET_SHIFT_RECIPS, {
-          email: officialProps.email, 
+        const response = await instance.post(GET_SHIFT_RECIPS, {
+          email: officialProps.email,
           hqId: officialProps.hq[0],
           date: new Date()
         });
-        console.log(response.data.data)
-        if(response.data.response === 1){
+        if (response.data.response === 1) {
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
         }
@@ -105,23 +106,16 @@ const LogoutIndex = (props) => {
 
   const markEndOfShift = async () => {
     try {
-      console.log({
+      const response = await instance.post(MARK_END_OF_SHIFT, {
         email: officialProps.email,
         id: officialProps.id,
         date: new Date(),
         total: total,
-        input: inputValue 
-      })
-      const response = await instance.post (MARK_END_OF_SHIFT, {
-        email: officialProps.email,
-        id: officialProps.id,
-        date: new Date(),
-        total: total,
-        input: inputValue 
+        input: inputValue
       });
-      firebase.auth().signOut().then(function() {
+      firebase.auth().signOut().then(function () {
         // Sign-out successful.
-      }).catch(function(error) {
+      }).catch(function (error) {
         // An error happened.
       });
     } catch (err) {
@@ -152,109 +146,152 @@ const LogoutIndex = (props) => {
   //     const recip = recips[index];
   //     totalValue += recip.total  
   //   }
-    
+
   // }
 
   return (
-  <View style={{flex: 1}}>
-    
-    <View style={{alignItems: 'center', marginTop: '20%'}}>
-        {<Text style={{fontSize: 20,fontFamily: 'Montserrat-Bold'}}>{officialProps.name + ' '+ officialProps.lastName}</Text>}
-        {<Text style={{fontFamily: 'Montserrat-Regular'}}>{hq.name}</Text>}
-        
+    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+
+      <View style={{ alignItems: 'center', marginTop: '20%' }}>
+        {<Text style={{ fontSize: 20, fontFamily: 'Montserrat-Bold' }}>{officialProps.name + ' ' + officialProps.lastName}</Text>}
+        {<Text style={{ fontFamily: 'Montserrat-Regular' }}>{hq.name}</Text>}
+
         {/* <Text>{"Hora de inicio: " + moment(dateMonthIn).format('hh:MM A ') + " Hora de salida: " + moment(dateMonthOut).format('hh:MM A')}</Text> */}
-        <View style={{flexDirection: 'row', paddingBottom: '5%', marginTop: '10%'}}>
+        <View style={{ flexDirection: 'row', paddingBottom: '5%', marginTop: '10%' }}>
           <View >
-            <Text style={{fontFamily: 'Montserrat-Regular'}}>{" Dinero en efectivo: "} </Text>
+            <Text style={{ fontFamily: 'Montserrat-Regular' }}>{" Dinero en efectivo: "} </Text>
           </View>
-          <View style={{justifyContent: "space-around",
-                        width: '50%',
-                        borderColor: 'gray',
-                        borderRadius: 20,
-                        borderWidth: 1,
-                    }}>
+          <View style={{
+            justifyContent: "space-around",
+            width: '50%',
+          }}>
             <TextInput
+              placeholder='$'
               style={{
-                      fontSize: 25,
-                      fontFamily: 'Montserrat-Regular',
-                      color: '#008999',
-                    }}
-              value={ inputValue + ''}
-              keyboardType= {"numeric"}
+                width: '86%',
+                height: normalize(30),
+                marginRight: '5%',
+                marginLeft: '5%',
+                borderColor: 'gray',
+                marginBottom: '10%',
+                fontSize: normalize(25),
+                fontFamily: 'Montserrat-Regular',
+                color: '#008999',
+                backgroundColor: 'rgba(0,0,0,0.04)'
+              }}
+              keyboardType='numeric'
               textAlign='center'
-              placeholder= '$'
-              onChangeText = {text => setInputValue(text) + ''}
+              onChangeText={text => setInputValue(text) + ''}
+              value={inputValue == 0 ? '' : inputValue + ''}
             />
-            
           </View>
         </View>
       </View>
-      
-    <View style={{paddingBottom: 10, height: "54%"}}>
-      <FlatList
-        data={shiftRecips}
-        keyExtractor={({ id }) => id}
-        renderItem={({item}) => {
-        return (
-        <View style={{ flexDirection: "row", position: 'relative',  borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: 60, marginRight:70, marginTop: 20 }} >
-          <View style={{marginBottom: 10}} >
-            <Text style={{fontFamily: 'Montserrat-Regular'}}>{item.plate}</Text>
-            <Text style={{fontFamily: 'Montserrat-Regular'}}>{`Pago por ${item.hours} horas`}</Text>
-          </View>
-          <View style={{ flex: 1, alignItems:'flex-end'}} >
-            <Text style={{fontFamily: 'Montserrat-Regular'}}>{`$${numberWithPoints(item.total)}`}</Text>
-          </View>
-        </View>
-        )}}
-      />   
-    </View>
-    <View style={{alignItems: 'center'}}>
-      <TouchableOpacity style={HomeStyles.plateInput} onPress={() => {setModalVisible(true)}}>
-        <Text style={{fontSize: 20, textAlign: 'center',fontFamily: 'Montserrat-Regular'}}>   Cerrar turno   </Text>
-      </TouchableOpacity>
-    </View>
-    <FooterIndex navigation={navigation}/>
-            <Modal
-              animationType="fade"
-              transparent={true}
-              backdropOpacity={0.3}
-              visible={modalVisible}
-              onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-              }}
-            >
-              <View style={HomeStyles.centeredView}>
-                <View style={HomeStyles.modalView}>
-                  <View style={{marginBottom: '7%', alignItems: 'center'}}>
-                    <Text>¿Quieres continuar con el cierre de sesión?</Text>
-                  </View>
-                  <View style={{flexDirection: 'row' }}>
-                  <TouchableHighlight
-                    style={{ ...HomeStyles.openButton, backgroundColor: "#ffffff" }}
-                    onPress={() => {
-                      setModalVisible(!modalVisible);
-                      markEndOfShift();
-                      
-                      navigation.navigate('Login')
-                    }}
-                  >
-                    <Text style={HomeStyles.textStyle}>SI</Text>
-                  </TouchableHighlight>
-                  <TouchableHighlight
-                    style={{ ...HomeStyles.openButton, backgroundColor: "#ffffff" }}
-                    onPress={() => {
-                      setModalVisible(!modalVisible);
-                      navigation.navigate('Logout');
-                    }}
-                  >
-                    <Text style={HomeStyles.textStyle}>NO</Text>
-                  </TouchableHighlight>
-                  
-                  </View>
+
+      <View style={{ paddingBottom: 10, height: "50%" }}>
+        <FlatList
+          data={shiftRecips}
+          keyExtractor={({ id }) => id}
+          renderItem={({ item }) => {
+            return (
+              <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: 60, marginRight: 70, marginTop: 20 }} >
+                <View style={{ marginBottom: 10 }} >
+                  <Text style={{ fontFamily: 'Montserrat-Regular' }}>{item.plate}</Text>
+                  <Text style={{ fontFamily: 'Montserrat-Regular' }}>{`Pago por ${item.hours} horas`}</Text>
+                </View>
+                <View style={{ flex: 1, alignItems: 'flex-end' }} >
+                  <Text style={{ fontFamily: 'Montserrat-Regular' }}>{`$${numberWithPoints(item.total)}`}</Text>
                 </View>
               </View>
-            </Modal>
-  </View>
+            )
+          }}
+        />
+      </View>
+      <View style={{ alignItems: 'center' }}>
+        <Button onPress={() => {
+          setModalVisible(true)
+        }}
+          title="Cerrar turno"
+          color="#ffffff"
+          style={{
+            borderWidth: 1,
+            borderColor: "#D9D9D9",
+            alignSelf: 'flex-end',
+            width: '30%',
+            heigth: '10%',
+            margin: '5%',
+            paddingHorizontal: '4%',
+            borderRadius: 9
+          }}
+          textStyle={{
+            color: "#008999",
+            textAlign: "center",
+            fontFamily: 'Montserrat-Regular'
+          }
+          } />
+      </View>
+      <FooterIndex navigation={navigation} />
+      <Modal
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
+      >
+        <View style={HomeStyles.centeredView}>
+          <View style={HomeStyles.modalView}>
+            <View style={{ margin: '3%', alignItems: 'center' }}>
+              <Text style={HomeStyles.modalText}> ¿Quieres continuar con el cierre de sesión? </Text>
+            </View>
+            <View style={{ flexDirection: 'row', width: '100%' }}>
+              <Button onPress={() => {
+                setModalVisible(!modalVisible);
+                markEndOfShift();
+                navigation.navigate('Login')
+              }}
+                title="Si"
+                color="#ffffff"
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#D9D9D9",
+                  alignSelf: 'center',
+                  width: '90%',
+                  heigth: '10%',
+                  margin: '8%',
+                  paddingHorizontal: '4%',
+                }}
+                textStyle={{
+                  color: "#008999",
+                  textAlign: "center",
+                  fontFamily: 'Montserrat-Regular'
+                }} />
+              <Button onPress={() => {
+                setModalVisible(!modalVisible);
+                navigation.navigate('Logout');
+              }}
+                title="No"
+                color="#ffffff"
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#D9D9D9",
+                  alignSelf: 'center',
+                  width: '90%',
+                  heigth: '10%',
+                  margin: '8%',
+                  paddingHorizontal: '4%',
+                }}
+                textStyle={{
+                  color: "#008999",
+                  textAlign: "center",
+                  fontFamily: 'Montserrat-Regular'
+                }} />
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </View>
   );
 }
 
