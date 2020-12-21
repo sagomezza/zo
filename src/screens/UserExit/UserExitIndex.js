@@ -24,7 +24,9 @@ const UserOut = (props) => {
   const [totalPay, setTotalPay] = useState(0);
   const [totalPayModal, setTotalPayModal] = useState(0);
   const [recip, setRecip] = useState({})
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [isDisabledValue, setIsDisabledValue] = useState(true);
   const [err, setErr] = useState("");
   const [isParanoicUser, setIsParanoicUser] = useState(false);
 
@@ -199,6 +201,7 @@ const UserOut = (props) => {
     setModal2Visible(false);
     setModal3Visible(false);
     setModal4Visible(false);
+
   }
 
   useEffect(() => {
@@ -252,12 +255,11 @@ const UserOut = (props) => {
         )
         setRecip(response.data.data);
         setTotalAmount(response.data.data.total)
-        setLoading(false)
+        setIsDisabled(false)
       }
     } catch (err) {
       console.log(err)
       console.log(err?.response)
-      setLoading(true)
     }
   }
 
@@ -295,6 +297,7 @@ const UserOut = (props) => {
 
 
   const finishParking = async (paymentStatus, showModal) => {
+    setLoading(true)
     try {
       const response = await instance.post(
         FINISHPARKING,
@@ -311,9 +314,6 @@ const UserOut = (props) => {
         },
         { timeout: TIMEOUT }
       );
-      console.log("entroooooo")
-      console.log(showModal)
-      
       if (isCharacterALetter(recip.plate[5])) {
         store.dispatch(actions.subtractBike());
       } else {
@@ -321,6 +321,9 @@ const UserOut = (props) => {
       }
       readHq()
       getRecips()
+      setLoading(false)
+      setIsDisabled(true);
+      setIsDisabledValue(true);
 
       if (showModal) {
         setModalVisible(true)
@@ -328,6 +331,9 @@ const UserOut = (props) => {
     } catch (err) {
       console.log(err?.response)
       // setLoading(true)
+      setLoading(false);
+      setIsDisabled(true);
+      setIsDisabledValue(true);
       setErr("Algo malo pasó, vuelve a intentarlo más tarde")
     }
   }
@@ -425,7 +431,7 @@ const UserOut = (props) => {
                   style={styles.inputMoney}
                   keyboardType='numeric'
                   placeholder='$'
-                  value={totalPay == 0 ? '' : totalPay + ''}
+                  value={totalPay == 0 ? '-' : totalPay + ''}
                   onChangeText={text => setTotalPay(text)}
                 />
 
@@ -465,15 +471,18 @@ const UserOut = (props) => {
               </View>
             </View>
           </View>
-          {err !== "" && <Text style={{ color: "red", fontFamily: 'Montserrat-Regular', alignSelf:'center' }}>{err}</Text>}
+          {err !== "" && <Text style={{ color: "red", fontFamily: 'Montserrat-Regular', alignSelf: 'center' }}>{err}</Text>}
           {!loading &&
             <View style={{ padding: '2%', alignItems: 'center' }}>
               <Button
                 title="Cobrar"
                 color='#008999'
-                disabled={loading}
+                disabled={isDisabled && isDisabledValue}
                 style={{ borderRadius: 9 }}
                 onPress={() => {
+                  if (totalPay === '-' && totalPay > 0) {
+                    setIsDisabledValue(false)
+                  }
                   finishParking("payed", true);
                 }} />
             </View>
@@ -484,7 +493,7 @@ const UserOut = (props) => {
               <Button
                 title="Pago pendiente"
                 color='gray'
-                disabled={loading}
+                disabled={isDisabled}
                 style={{ borderRadius: 9 }}
                 onPress={() => {
                   setModal2Visible(true);

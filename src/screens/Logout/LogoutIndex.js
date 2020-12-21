@@ -79,6 +79,7 @@ const LogoutIndex = (props) => {
   });
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [modal2Visible, setModal2Visible] = useState(false);
   const [total, setTotal] = useState(0);
   const [shiftRecips, setShiftRecips] = useState('');
 
@@ -231,6 +232,65 @@ const LogoutIndex = (props) => {
           } />
       </View>
       <FooterIndex navigation={navigation} />
+      {/* <Modal
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={modal2Visible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
+      >
+        <View style={HomeStyles.centeredView}>
+          <View style={HomeStyles.modalView}>
+            <View style={{ margin: '3%', alignItems: 'center' }}>
+              <Text style={HomeStyles.modalText}> ¿Estás seguro de que quieres guardar el total? </Text>
+            </View>
+            <View style={{ flexDirection: 'row', width: '100%' }}>
+              <Button onPress={() => {
+                setModalVisible(!modalVisible);
+                navigation.navigate('Login')
+              }}
+                title="Si"
+                color="#ffffff"
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#D9D9D9",
+                  alignSelf: 'center',
+                  width: '90%',
+                  heigth: '10%',
+                  margin: '8%',
+                  paddingHorizontal: '4%',
+                }}
+                textStyle={{
+                  color: "#008999",
+                  textAlign: "center",
+                  fontFamily: 'Montserrat-Regular'
+                }} />
+              <Button onPress={() => {
+                setModalVisible(!modalVisible);
+                navigation.navigate('Logout');
+              }}
+                title="No"
+                color="#ffffff"
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#D9D9D9",
+                  alignSelf: 'center',
+                  width: '90%',
+                  heigth: '10%',
+                  margin: '8%',
+                  paddingHorizontal: '4%',
+                }}
+                textStyle={{
+                  color: "#008999",
+                  textAlign: "center",
+                  fontFamily: 'Montserrat-Regular'
+                }} />
+            </View>
+          </View>
+        </View>
+      </Modal> */}
       <Modal
         animationType="fade"
         transparent={true}

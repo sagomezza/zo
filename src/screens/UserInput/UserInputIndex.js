@@ -20,6 +20,7 @@ import normalize from '../../config/services/normalizeFontSize';
 const UserInput = (props) => {
   const { navigation, officialProps } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
+  const [loading, setLoading] = useState(false);
 
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -65,11 +66,13 @@ const UserInput = (props) => {
           setFindUserByPlate(response.data.data);
           setExistingUser(false)
           setPhone((response.data.data[0]).substring(3, 13))
+
         } else {
           setPhone("")
         }
       } catch (err) {
         console.log(err?.response)
+
       }
 
     }
@@ -119,6 +122,7 @@ const UserInput = (props) => {
         setModalVisible(true);
         setStartParking(response.data.data);
         readHq();
+        setLoading(false)
 
         if (isCharacterALetter(plateTwo[2])) {
           store.dispatch(actions.addBike());
@@ -128,9 +132,10 @@ const UserInput = (props) => {
 
       }
     } catch (err) {
+      setLoading(true)
       if (err?.response.data.response === -2) setModal2Visible(true)
-
       console.log(err?.response)
+
     }
   };
 
@@ -241,24 +246,29 @@ const UserInput = (props) => {
 
             <View style={{ height: '14%' }}>
               <View style={{ height: '100%', width: '77%', justifyContent: 'flex-end', flexDirection: 'row', marginLeft: '9%' }}>
-                <Button onPress={() => startPark()}
-                  title="Iniciar"
-                  color="#0192A3"
-                  style={styles.buttonI}
-                  textStyle={styles.buttonText}
-                  disabled={existingUser} />
-
-                <TouchableOpacity style={styles.buttonT}
-                  onPress={() => {
-                    setPlateOne("");
-                    setPlateTwo("");
-                    setPhone("");
-                    store.dispatch(actions.setQr(plateOne + plateTwo));
-                    navigation.navigate('QRscanner')
-                  }}
-                  disabled={(plateOne + plateTwo).length < 6}>
-                  <Image style={{ width: '75%', height: '74%', marginTop: '12%' }} source={require('../../../assets/images/GrupoQR.png')} />
-                </TouchableOpacity>
+                {!loading &&
+                  <Button onPress={() => { startPark(); setLoading(true); }}
+                    title="Iniciar"
+                    color="#0192A3"
+                    style={styles.buttonI}
+                    textStyle={styles.buttonText}
+                    disabled={existingUser} />
+                }
+                {loading && <ActivityIndicator />}
+                {!loading &&
+                  <TouchableOpacity style={styles.buttonT}
+                    onPress={() => {
+                      setLoading(true);
+                      setPlateOne("");
+                      setPlateTwo("");
+                      setPhone("");
+                      store.dispatch(actions.setQr(plateOne + plateTwo));
+                      navigation.navigate('QRscanner')
+                    }}
+                    disabled={(plateOne + plateTwo).length < 6}>
+                    <Image style={{ width: '75%', height: '74%', marginTop: '12%' }} source={require('../../../assets/images/GrupoQR.png')} />
+                  </TouchableOpacity>
+                }
               </View>
             </View>
           </View>
