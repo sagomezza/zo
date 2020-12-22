@@ -6,7 +6,7 @@ const FooterIndex = ({navigation}) => {
     return (
       <View style={{flexDirection: 'row', position: 'absolute', bottom:0}}>
         <TouchableOpacity style ={FooterStyles.buttonH} onPress={() => navigation.navigate('Home')}>
-          <Text style ={FooterStyles.footerText} >H</Text>  
+          <Text style ={FooterStyles.footerText} ></Text>  
         </TouchableOpacity>
         <TouchableOpacity style ={FooterStyles.buttonI} onPress={() => navigation.navigate('UserInput')}>
           <Text style ={FooterStyles.footerText} >Ingresos</Text>  

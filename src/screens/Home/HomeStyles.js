@@ -20,17 +20,34 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     flexDirection: "row",
     margin: '4%',
+    paddingRight:'15%'
     // alignItems: 'center'
   },
   plateInputTextBig: {
-    fontSize: normalize(38),
-    textAlign: 'center',
-    marginTop: '35%',
+    fontSize: normalize(60),
+    marginTop: '15%',
+    marginLeft: '6%',
     // marginLeft: '0%',
     color: '#008999',
     fontFamily: 'Montserrat-Bold'
   },
   plateInputTextSmall: {
+    fontSize: normalize(28),
+    textAlign: 'center',
+    marginTop: '44%',
+    // marginLeft: '0%',
+    color: '#008999',
+    fontFamily: 'Montserrat-Regular'
+  },
+  plateInputTextBigC: {
+    fontSize: normalize(60),
+    marginTop: '12%',
+    marginLeft: '6%',
+    // marginLeft: '0%',
+    color: '#008999',
+    fontFamily: 'Montserrat-Bold'
+  },
+  plateInputTextSmallC: {
     fontSize: normalize(28),
     textAlign: 'center',
     marginTop: '35%',
