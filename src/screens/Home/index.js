@@ -21,13 +21,14 @@ const HomeIndex = (props) => {
         const response = await instance.post(GET_RECIPS, {
           hqId: officialProps.hq[0]
         });
-        // console.log(response.data)
+        console.log(response)
         if (response.data.response === 1) {
 
           store.dispatch(actions.setRecips(response.data.data.finished));
         }
       } catch (error) {
-        //console.log("err: ", error);
+        console.log("err: ", error);
+        console.log(error?.response)
       }
     };
 
@@ -61,6 +62,12 @@ const HomeIndex = (props) => {
     readHq();
     updateExpoToken();
   }, []);
+
+  const formatHours = (hours) => {
+    if(typeof hours === "number" || typeof hours === "double" || typeof hours === "long" || typeof hours === "float") {
+      return Math.round(hours)
+    } else return hours
+  }
 
 
   return (
@@ -116,10 +123,10 @@ const HomeIndex = (props) => {
                 keyExtractor={({ id }) => id}
                 renderItem={({ item }) => {
                   return (
-                    <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#008999", marginBottom: '4%', marginLeft: '14%', marginRight: '13%', marginTop: '2%' }} >
+                    <View key={item.id} style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#008999", marginBottom: '4%', marginLeft: '14%', marginRight: '13%', marginTop: '2%' }} >
                       <View style={{ marginBottom: '2%' }} >
                         <Text style={HomeStyles.textPlaca}>{item.plate}</Text>
-                        <Text style={HomeStyles.textPago}>{`Pago por ${item.hours} horas`}</Text>
+                        <Text style={HomeStyles.textPago}>{`Pago por ${formatHours(item.hours)} horas`}</Text>
                       </View>
                       <View style={{ flex: 1, alignItems: 'flex-end' }} >
                         <Text style={HomeStyles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
@@ -146,7 +153,7 @@ const HomeIndex = (props) => {
                 keyExtractor={({ id }) => id}
                 renderItem={({ item }) => {
                   return (
-                    <View style={{ flex: 1, flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#FFFFFF", marginLeft: '14%', marginRight: '13%', marginTop: '4%' }} >
+                    <View key={item.id} style={{ flex: 1, flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#FFFFFF", marginLeft: '14%', marginRight: '13%', marginTop: '4%' }} >
                       <View style={{ marginBottom: 10, marginleft: 10 }} >
                         <Text style={HomeStyles.textPlaca} >{item.plate}</Text>
                         <Text style={HomeStyles.textPago}>{item.verificationCode}</Text>
