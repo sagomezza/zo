@@ -13,7 +13,9 @@ const FooterStyles = StyleSheet.create({
       borderWidth: 1,
       borderColor:'#FFFFFF',
       flex:1,
-      height: normalize(48)
+      height: normalize(48),
+      alignContent: 'center',
+      alignItems: 'center'
         
     },
     buttonI: {

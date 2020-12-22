@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, FlatList, Modal, TouchableHighlight, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, FlatList, Modal, TouchableHighlight, Dimensions, Image } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
 import FooterIndex from '../../../src/components/Footer/index';
@@ -14,8 +14,7 @@ import { GET_SHIFT_RECIPS, MARK_END_OF_SHIFT, READ_HQ } from '../../config/api';
 import numberWithPoints from '../../config/services/numberWithPoints';
 import Button from '../../components/Button/index';
 import normalize from '../../config/services/normalizeFontSize';
-
-
+import { Icon } from 'react-native-elements';
 
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips } = props;
@@ -75,6 +74,16 @@ const LogoutIndex = (props) => {
     modalText: {
       marginBottom: 15,
       textAlign: "center"
+    },
+    buttonT: {
+      borderRadius: 4,
+      alignItems: 'center',
+      alignContent: 'center',
+      height:  normalize(30),
+      width: normalize(30) ,
+      backgroundColor: "#008999",
+      padding: '1%',
+      marginLeft: '2%'
     }
   });
 
@@ -82,9 +91,10 @@ const LogoutIndex = (props) => {
   const [modal2Visible, setModal2Visible] = useState(false);
   const [total, setTotal] = useState(0);
   const [shiftRecips, setShiftRecips] = useState('');
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const hq = props.hq;
-  const [inputValue, setInputValue] = useState(0);
+  const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
     const getShiftRecips = async () => {
@@ -164,12 +174,13 @@ const LogoutIndex = (props) => {
           </View>
           <View style={{
             justifyContent: "space-around",
+            flexDirection: 'row',
             width: '50%',
           }}>
             <TextInput
               placeholder='$'
               style={{
-                width: '86%',
+                width: '75%',
                 height: normalize(30),
                 marginRight: '5%',
                 marginLeft: '5%',
@@ -182,9 +193,18 @@ const LogoutIndex = (props) => {
               }}
               keyboardType='numeric'
               textAlign='center'
+              editable={isDisabled}
               onChangeText={text => setInputValue(text) + ''}
               value={inputValue == 0 ? '' : inputValue + ''}
+
             />
+            <TouchableOpacity style={HomeStyles.buttonT}
+              onPress={() => {
+                setModal2Visible(true)
+              }}
+              disabled={inputValue.length === 0}>
+              <Icon name='save' color='#FFFFFF'style={{marginTop: '4%' }} /> 
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -232,7 +252,7 @@ const LogoutIndex = (props) => {
           } />
       </View>
       <FooterIndex navigation={navigation} />
-      {/* <Modal
+      <Modal
         animationType="fade"
         transparent={true}
         backdropOpacity={0.3}
@@ -248,8 +268,8 @@ const LogoutIndex = (props) => {
             </View>
             <View style={{ flexDirection: 'row', width: '100%' }}>
               <Button onPress={() => {
-                setModalVisible(!modalVisible);
-                navigation.navigate('Login')
+                setModal2Visible(!modal2Visible);
+                setIsDisabled(false)
               }}
                 title="Si"
                 color="#ffffff"
@@ -268,8 +288,7 @@ const LogoutIndex = (props) => {
                   fontFamily: 'Montserrat-Regular'
                 }} />
               <Button onPress={() => {
-                setModalVisible(!modalVisible);
-                navigation.navigate('Logout');
+                setModal2Visible(!modal2Visible);
               }}
                 title="No"
                 color="#ffffff"
@@ -290,7 +309,7 @@ const LogoutIndex = (props) => {
             </View>
           </View>
         </View>
-      </Modal> */}
+      </Modal>
       <Modal
         animationType="fade"
         transparent={true}
@@ -308,6 +327,7 @@ const LogoutIndex = (props) => {
             <View style={{ flexDirection: 'row', width: '100%' }}>
               <Button onPress={() => {
                 setModalVisible(!modalVisible);
+                
                 markEndOfShift();
                 navigation.navigate('Login')
               }}
