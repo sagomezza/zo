@@ -4,7 +4,7 @@ import FooterIndex from '../../components/Footer';
 import HomeStyles from '../Home/HomeStyles';
 import Button from '../../components/Button';
 import instance from "../../config/axios";
-import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL } from "../../config/api";
+import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL, EDIT_ADMIN } from "../../config/api";
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import store from '../../config/store';
@@ -38,7 +38,15 @@ const HomeIndex = (props) => {
           expoToken: props.expoToken.expoToken
         });
       } catch (err) {
-        console.log(err)
+        try {
+          await instance.post(EDIT_ADMIN, {
+            id: officialProps.id,
+            expoToken: props.expoToken.expoToken
+          });
+        } catch (err) {
+          console.log("[updateExpoToken - Home screen]:", err)
+          console.log(err?.response)
+        }
       }
     }
 
@@ -63,7 +71,7 @@ const HomeIndex = (props) => {
   }, []);
 
   const formatHours = (hours) => {
-    if(typeof hours === "number" || typeof hours === "double" || typeof hours === "long" || typeof hours === "float") {
+    if (typeof hours === "number" || typeof hours === "double" || typeof hours === "long" || typeof hours === "float") {
       return Math.round(hours)
     } else return hours
   }
@@ -92,7 +100,7 @@ const HomeIndex = (props) => {
         <View style={HomeStyles.plateContainer}>
           <View style={HomeStyles.plateInput}>
             <Image style={{ width: "25%", height: "25%", marginTop: "5%", marginLeft: "5%" }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoM.png')} />
-            <View style={{flexDirection:'row', height: normalize(180)}}>
+            <View style={{ flexDirection: 'row', height: normalize(180) }}>
               <Text style={HomeStyles.plateInputTextBig}>
                 {`${hq.availableBikes}`}
               </Text>
@@ -102,7 +110,7 @@ const HomeIndex = (props) => {
           </View>
           <View style={HomeStyles.plateInput}>
             <Image style={{ width: "24%", height: "24%", marginTop: "5%", marginLeft: "5%" }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoC.png')} />
-            <View style={{flexDirection:'row', height: normalize(180)}} >
+            <View style={{ flexDirection: 'row', height: normalize(180) }} >
               <Text style={HomeStyles.plateInputTextBigC}>
                 {`${hq.availableCars}`}
               </Text>
@@ -172,7 +180,7 @@ const HomeIndex = (props) => {
             </View>
           }
         </View>
-        
+
       </View>
       <FooterIndex navigation={navigation} />
     </View>

@@ -20,3 +20,8 @@ export const READ_HQ = "/readHq";
 export const START_PARKING = "/startParking";
 export const MARKEXIT = "/markExit";
 export const FINISHPARKING = "/finishParking";
+
+//ADMIN 
+export const READ_ADMIN = "/readAdmin";
+export const EDIT_ADMIN = "/editAdmin";
+export const READ_CORPO = "/readCorporation";

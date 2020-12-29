@@ -24,7 +24,7 @@ import {
   API,
   READOFFICIAL
 } from '../../config/constants/api'
-import { START_SHIFT } from "../../config/api/index";
+import { START_SHIFT, READ_ADMIN, READ_CORPO } from "../../config/api/index";
 import * as actions from "../../redux/actions";
 import { TIMEOUT } from '../../config/constants/constants';
 //-------- Styling dependecies ------------
@@ -40,6 +40,7 @@ const LoginIndex = (props) => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [loading, setLoading] = useState("")
 
   const onLoginPress = async () => {
     try {
@@ -47,7 +48,7 @@ const LoginIndex = (props) => {
         setError("Por favor ingresa todos los datos: correo y contraseña")
         return;
       }
-
+      setLoading(true)
       /**
        * TO DO:
        * Implement validate.js here, check if email is an email, and password is alphanumeric
@@ -67,14 +68,38 @@ const LoginIndex = (props) => {
         { email: email },
         { timeout: TIMEOUT }
       )
+      await startShift();
       props.setOfficial(readOff.data.data)
+      setLoading(false)
       navigation.dispatch(CommonActions.reset({
         index: 1,
         routes: [{ name: 'Home' }]
       }));
     } catch (err) {
-      setError("El usuario y/o la contraseña que ingresaste son incorrectos.")
-      console.log(err?.response)
+      try {
+        let readOff = await axios.post(
+          `${API}${READ_ADMIN}`,
+          { email: email },
+          { timeout: TIMEOUT }
+        )
+        let data = readOff.data.data
+        readOff = await axios.post(
+          `${API}${READ_CORPO}`,
+          { name: data.context },
+          { timeout: TIMEOUT }
+        )
+        data.hqs = readOff.data.data.hqs
+        props.setOfficial(data)
+        setLoading(false)
+        navigation.dispatch(CommonActions.reset({
+          index: 1,
+          routes: [{ name: 'Home' }]
+        }));
+      } catch (err) {
+        setLoading(false)
+        setError("El usuario y/o la contraseña que ingresaste son incorrectos.")
+        console.log(err?.response)
+      }
     }
   }
 
@@ -97,7 +122,7 @@ const LoginIndex = (props) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
           <View style={{ height: normalize(160) }}>
-            <Image style={{ width: normalize(190), height: normalize(110)}} resizeMode={"contain"} source={require('../../../assets/images/icon.png')} />
+            <Image style={{ width: normalize(190), height: normalize(110) }} resizeMode={"contain"} source={require('../../../assets/images/icon.png')} />
           </View>
           <View style={{ height: normalize(60) }}>
             <Text style={styles.loginText} >Inicio de sesión</Text>
@@ -113,7 +138,7 @@ const LoginIndex = (props) => {
                   autoCapitalize={"none"}
                   autoCorrect={false}
                   value={email}
-                  onChangeText={(text) => setEmail(text)}
+                  onChangeText={(text) => setEmail(text.trim())}
                 />
               </View>
             </View>
@@ -145,7 +170,7 @@ const LoginIndex = (props) => {
             <Text style={styles.enterText}>Ingresar</Text>
             </View>
           </TouchableOpacity> */}
-            <Button onPress={() => { startShift(); onLoginPress(); }}
+            <Button onPress={() => { onLoginPress(); }}
               title="Ingresar"
               color='#FFE828'
               style={{
@@ -157,7 +182,9 @@ const LoginIndex = (props) => {
                 margin: '2%',
                 paddingHorizontal: '11%',
               }}
-              textStyle={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold', fontSize: normalize(20), }} />
+              textStyle={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold', fontSize: normalize(20), }}
+              activityIndicatorStatus={loading}
+            />
             <TouchableOpacity>
               <Text style={styles.restoreText}>Olvidé mi contraseña</Text>
             </TouchableOpacity>

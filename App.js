@@ -10,6 +10,7 @@ import * as Font from 'expo-font';
 import { AppLoading } from "expo";
 import instance from "./src/config/axios";
 import { READ_OFFICIAL } from "./src/config/api";
+import {  READ_ADMIN, READ_CORPO } from "./src/config/api/index";
 import { setOfficial, setExpoToken } from "./src/redux/actions";
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
@@ -52,6 +53,22 @@ const App = () => {
           store.dispatch(setOfficial(response.data.data));
         }
       } catch (error) {
+        try {
+          let readOff = await instance.post(
+            READ_ADMIN,
+            { email: userEmail }          )
+          let data = readOff.data.data
+          readOff = await instance.post(
+            READ_CORPO,
+            { name: data.context }
+          )
+          data.hq = readOff.data.data.hqs
+          store.dispatch(setOfficial(data));
+        } catch(err) {
+          console.log(err)
+          console.log(err?.response)
+        }
+       
         //console.log("err: ", error);
       }
     }
