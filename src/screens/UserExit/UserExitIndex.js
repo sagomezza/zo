@@ -348,7 +348,7 @@ const UserOut = (props) => {
         color="transparent"
         style={{
           borderWidth: 1,
-          borderColor: "#008999",
+          borderColor: "#00A9A0",
           alignSelf: 'flex-end',
           width: '30%',
           heigth: '10%',
@@ -357,7 +357,7 @@ const UserOut = (props) => {
           paddingHorizontal: '2%',
           borderRadius: 9
         }}
-        textStyle={{ color: "#008999" }} />
+        textStyle={{ color: "#00A9A0" }} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={{ flex: 1, marginTop: '4%', marginLeft: '13%', marginRight: '13%' }} >
           <TouchableOpacity style={
@@ -367,7 +367,7 @@ const UserOut = (props) => {
               height: 50,
               width: 50,
               borderRadius: 5,
-              backgroundColor: "#008999"
+              backgroundColor: "#00A9A0"
             }}
             onPress={() => { navigation.navigate('QRscanner') }}>
             {/* disabled={(plateOne + plateTwo).length === 6}> */}
@@ -476,7 +476,7 @@ const UserOut = (props) => {
             <View style={{ padding: '2%', alignItems: 'center' }}>
               <Button
                 title="Cobrar"
-                color='#008999'
+                color='#00A9A0'
                 disabled={isDisabled && isDisabledValue}
                 style={{ borderRadius: 9 }}
                 onPress={() => {
@@ -535,7 +535,7 @@ const UserOut = (props) => {
                 paddingHorizontal: '4%',
               }}
               textStyle={{
-                color: "#008999",
+                color: "#00A9A0",
                 textAlign: "center",
                 fontFamily: 'Montserrat-Regular'
               }} />
@@ -573,7 +573,7 @@ const UserOut = (props) => {
                   paddingHorizontal: '4%',
                 }}
                 textStyle={{
-                  color: "#008999",
+                  color: "#00A9A0",
                   textAlign: "center",
                   fontFamily: 'Montserrat-Regular'
                 }} />
@@ -592,7 +592,7 @@ const UserOut = (props) => {
                   paddingHorizontal: '4%',
                 }}
                 textStyle={{
-                  color: "#008999",
+                  color: "#00A9A0",
                   textAlign: "center",
                   fontFamily: 'Montserrat-Regular'
                 }} />
@@ -631,7 +631,7 @@ const UserOut = (props) => {
                   paddingHorizontal: '4%',
                 }}
                 textStyle={{
-                  color: "#008999",
+                  color: "#00A9A0",
                   textAlign: "center",
                   fontFamily: 'Montserrat-Regular'
                 }} />
@@ -651,7 +651,7 @@ const UserOut = (props) => {
                   paddingHorizontal: '4%',
                 }}
                 textStyle={{
-                  color: "#008999",
+                  color: "#00A9A0",
                   textAlign: "center",
                   fontFamily: 'Montserrat-Regular'
                 }} />
@@ -679,7 +679,7 @@ const UserOut = (props) => {
                       borderColor: 'gray',
                       fontSize: normalize(15),
                       fontFamily: 'Montserrat-Regular',
-                      color: '#008999',
+                      color: '#00A9A0',
                       width: '60%',
                       fontFamily: 'Montserrat-Regular',
                       borderRadius: 7
@@ -728,7 +728,7 @@ const UserOut = (props) => {
                   paddingHorizontal: '4%',
                 }}
                 textStyle={{
-                  color: "#008999",
+                  color: "#00A9A0",
                   textAlign: "center",
                   fontFamily: 'Montserrat-Regular'
                 }} />

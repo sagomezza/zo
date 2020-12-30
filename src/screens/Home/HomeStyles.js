@@ -3,56 +3,45 @@ import normalize from '../../config/services/normalizeFontSize';
 
 const styles = StyleSheet.create({
   plateContainer: {
-    paddingTop: '4%', 
     flexDirection: "row",
     alignContent: 'center',
     alignItems:'center',
-    marginLeft: '13%',
-    marginRight: '13%',
-    width: '79%',
-    height: '68%'
+    width: '100%',
+    height: '35%',
+    justifyContent: 'center',
+    borderWidth: 1
   },
   plateInput: {
     width: '45%', 
-    height: '100%',
-    borderColor: '#008999', 
-    borderWidth: 1,
-    borderRadius: 20,
-    flexDirection: "row",
-    margin: '4%',
-    paddingRight:'15%'
-    // alignItems: 'center'
+    height: '60%',
+    justifyContent: 'flex-end',
+    alignContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1
+
   },
   plateInputTextBig: {
-    fontSize: normalize(60),
-    marginTop: '15%',
-    marginLeft: '6%',
-    // marginLeft: '0%',
-    color: '#008999',
+    fontSize: normalize(36),
+    color: '#FFFFFF',
     fontFamily: 'Montserrat-Bold'
   },
   plateInputTextSmall: {
-    fontSize: normalize(28),
+    fontSize: normalize(25),
     textAlign: 'center',
-    marginTop: '44%',
-    // marginLeft: '0%',
-    color: '#008999',
+    marginTop: '4%',
+    color: '#FFFFFF',
     fontFamily: 'Montserrat-Regular'
   },
   plateInputTextBigC: {
-    fontSize: normalize(60),
-    marginTop: '12%',
-    marginLeft: '6%',
-    // marginLeft: '0%',
-    color: '#008999',
+    fontSize: normalize(36),
+    color: '#FFFFFF',
     fontFamily: 'Montserrat-Bold'
   },
   plateInputTextSmallC: {
-    fontSize: normalize(28),
+    fontSize: normalize(25),
     textAlign: 'center',
-    marginTop: '35%',
-    // marginLeft: '0%',
-    color: '#008999',
+    marginTop: '4%',
+    color: '#FFFFFF',
     fontFamily: 'Montserrat-Regular'
   },
   textPlaca: {

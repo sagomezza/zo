@@ -81,7 +81,7 @@ const LogoutIndex = (props) => {
       alignContent: 'center',
       height:  normalize(30),
       width: normalize(30) ,
-      backgroundColor: "#008999",
+      backgroundColor: "#00A9A0",
       padding: '1%',
       marginLeft: '2%'
     }
@@ -188,7 +188,7 @@ const LogoutIndex = (props) => {
                 marginBottom: '10%',
                 fontSize: normalize(25),
                 fontFamily: 'Montserrat-Regular',
-                color: '#008999',
+                color: '#00A9A0',
                 backgroundColor: 'rgba(0,0,0,0.04)'
               }}
               keyboardType='numeric'
@@ -245,7 +245,7 @@ const LogoutIndex = (props) => {
             borderRadius: 9
           }}
           textStyle={{
-            color: "#008999",
+            color: "#00A9A0",
             textAlign: "center",
             fontFamily: 'Montserrat-Regular'
           }
@@ -283,7 +283,7 @@ const LogoutIndex = (props) => {
                   paddingHorizontal: '4%',
                 }}
                 textStyle={{
-                  color: "#008999",
+                  color: "#00A9A0",
                   textAlign: "center",
                   fontFamily: 'Montserrat-Regular'
                 }} />
@@ -302,7 +302,7 @@ const LogoutIndex = (props) => {
                   paddingHorizontal: '4%',
                 }}
                 textStyle={{
-                  color: "#008999",
+                  color: "#00A9A0",
                   textAlign: "center",
                   fontFamily: 'Montserrat-Regular'
                 }} />
@@ -343,7 +343,7 @@ const LogoutIndex = (props) => {
                   paddingHorizontal: '4%',
                 }}
                 textStyle={{
-                  color: "#008999",
+                  color: "#00A9A0",
                   textAlign: "center",
                   fontFamily: 'Montserrat-Regular'
                 }} />
@@ -363,7 +363,7 @@ const LogoutIndex = (props) => {
                   paddingHorizontal: '4%',
                 }}
                 textStyle={{
-                  color: "#008999",
+                  color: "#00A9A0",
                   textAlign: "center",
                   fontFamily: 'Montserrat-Regular'
                 }} />

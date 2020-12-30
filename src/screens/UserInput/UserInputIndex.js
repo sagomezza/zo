@@ -162,7 +162,7 @@ const UserInput = (props) => {
           color="transparent"
           style={{
             borderWidth: 1,
-            borderColor: "#008999",
+            borderColor: "#00A9A0",
             alignSelf: 'flex-end',
             width: '30%',
             heigth: '10%',
@@ -172,7 +172,7 @@ const UserInput = (props) => {
             borderRadius: 9
 
           }}
-          textStyle={{ color: "#008999" }} />
+          textStyle={{ color: "#00A9A0" }} />
       </View>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
@@ -249,7 +249,7 @@ const UserInput = (props) => {
                 {!loading &&
                   <Button onPress={() => { startPark(); setLoading(true); }}
                     title="Iniciar"
-                    color="#0192A3"
+                    color="#00A9A0"
                     style={styles.buttonI}
                     textStyle={styles.buttonText}
                     disabled={existingUser} />
@@ -312,7 +312,7 @@ const UserInput = (props) => {
                   paddingHorizontal: '4%',
                 }}
                 textStyle={{
-                  color: "#008999",
+                  color: "#00A9A0",
                   textAlign: "center",
                   fontFamily: 'Montserrat-Regular'
                 }} />
@@ -355,7 +355,7 @@ const UserInput = (props) => {
                 paddingHorizontal: '4%',
               }}
               textStyle={{
-                color: "#008999",
+                color: "#00A9A0",
                 textAlign: "center",
                 fontFamily: 'Montserrat-Regular'
               }} />

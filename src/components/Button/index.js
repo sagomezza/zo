@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { height } from "../../config/constants/screenDimensions";
 import styles from "./styles";
 
 const Button = (props) => {
@@ -37,7 +38,7 @@ const Button = (props) => {
       ) : (
         <TouchableOpacity onPress={onPress} disabled={disabled}>
           <View
-            style={[styles.container, style, { backgroundColor: background }]}
+            style={[styles.container, style, { backgroundColor: background}]}
           >
             <Text style={[styles.text, textStyle]}>{title}</Text>
           </View>

@@ -1,13 +1,16 @@
 import { StyleSheet } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
+import {Dimensions} from 'react-native'; 
+
+const { height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#008999',
+      height,
       alignItems: 'center',
       justifyContent: 'center',
-      marginBottom: '15%'
+      marginBottom: '15%',
+      flexDirection: 'column'
     },
     loginText: {
       color: 'white',
@@ -17,9 +20,10 @@ const styles = StyleSheet.create({
     },
     titleInputText: {
       color: 'white',
-      fontSize: normalize(15),
+      fontSize: normalize(20),
       fontFamily: 'Montserrat-Bold',
-      paddingHorizontal: '2%'
+      paddingHorizontal: '0%',
+      paddingBottom: '1%'
     },
     alertText: {
       color: '#FFE828',
@@ -44,10 +48,10 @@ const styles = StyleSheet.create({
     restoreText: {
       color: 'white',
       fontSize: normalize(15),
-      fontFamily: 'Montserrat-Light'
+      fontFamily: 'Montserrat-Regular'
     },
     textInput: {
-      fontSize: normalize(20),
+      fontSize: normalize(17),
       color: 'black',
       flex: 1,
       fontFamily: 'Montserrat-Regular'
@@ -57,14 +61,14 @@ const styles = StyleSheet.create({
     },
     textInputContainer: {
       backgroundColor: "#F0EEEE",
-      height: normalize(40),
-      width: "49%",
+      height: normalize(35),
+      width: "55%",
       borderRadius: normalize(18),
       flexDirection: "row",
       paddingHorizontal: '3%',
       borderWidth: 1,
       borderColor: "#707070",
-      marginBottom: 20,
+      marginBottom: '7%',
       
     },
 });

@@ -32,7 +32,8 @@ import styles from './LoginStyles';
 import normalize from '../../config/services/normalizeFontSize';
 import Button from '../../components/Button';
 import instance from '../../config/axios';
-
+import { ImageBackground } from 'react-native';
+import { Dimensions } from 'react-native';
 
 const LoginIndex = (props) => {
   const { navigation, officialProps } = props;
@@ -117,80 +118,82 @@ const LoginIndex = (props) => {
     }
   }
 
-  return (
-    <View style={{ flex: 1, backgroundColor: '#008999' }}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={styles.container}>
-          <View style={{ height: normalize(160) }}>
-            <Image style={{ width: normalize(190), height: normalize(110) }} resizeMode={"contain"} source={require('../../../assets/images/icon.png')} />
-          </View>
-          <View style={{ height: normalize(60) }}>
-            <Text style={styles.loginText} >Inicio de sesión</Text>
-          </View>
-          <View style={{ width: '100%', height: normalize(190), alignContent: 'center', alignItems: 'center' }}>
-            <View>
-              <Text style={styles.titleInputText}>Correo</Text>
-              <View style={styles.textInputContainer}>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder={"Ingresa tu correo"}
-                  placeholderTextColor="#C9C1C1"
-                  autoCapitalize={"none"}
-                  autoCorrect={false}
-                  value={email}
-                  onChangeText={(text) => setEmail(text.trim())}
-                />
-              </View>
-            </View>
-            <View>
-              <Text style={styles.titleInputText}>Contraseña</Text>
-              <View style={styles.textInputContainer}>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder={"Ingresa tu contraseña"}
-                  placeholderTextColor="#C9C1C1"
-                  autoCapitalize={"none"}
-                  autoCorrect={false}
-                  value={password}
-                  onChangeText={(text) => setPassword(text)}
-                  secureTextEntry={true}
-                />
-              </View>
-            </View>
-            <View>
-              {error !== "" && <Text style={styles.alertText}>{error}</Text>}
-            </View>
-          </View>
-          <View style={{ alignContent: 'center', width: '100%', height: '8%', alignItems: 'center', }}>
+  const { height } = Dimensions.get('window');
 
-            {/* <TouchableOpacity
-            onPress={onLoginPress}
-            >
-            <View style={styles.button}>
-            <Text style={styles.enterText}>Ingresar</Text>
+  return (
+    <View style={{ flex: 1, backgroundColor: '#00A9A0' }} >
+      <ImageBackground style={{
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        height
+      }} source={require('../../../assets/images/Login.png')}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <View style={styles.container}>
+            <View style={{ height: normalize(180), marginBottom: '3%' }}>
+              <Image style={{ width: normalize(200), height: normalize(120) }} resizeMode={"contain"} source={require('../../../assets/images/icon.png')} />
             </View>
-          </TouchableOpacity> */}
-            <Button onPress={() => { onLoginPress(); }}
-              title="Ingresar"
-              color='#FFE828'
-              style={{
-                borderWidth: normalize(1),
-                borderColor: "#707070",
-                alignSelf: 'center',
-                width: '60%',
-                heigth: '10%',
-                margin: '2%',
-                paddingHorizontal: '11%',
-              }}
-              textStyle={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold', fontSize: normalize(20), }}
-              activityIndicatorStatus={loading}
-            />
-            <TouchableOpacity>
-              <Text style={styles.restoreText}>Olvidé mi contraseña</Text>
-            </TouchableOpacity>
+            <View style={{ height: normalize(100) }}>
+              <Text style={styles.loginText} >I  N  I  C  I  O     D  E     S  E  S  I  Ó  N</Text>
+            </View>
+            <View style={{ width: '100%', height: normalize(240), alignContent: 'center', alignItems: 'center' }}>
+              <View>
+                <Text style={styles.titleInputText}>Correo</Text>
+                <View style={styles.textInputContainer}>
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder={"Ingresa tu correo"}
+                    placeholderTextColor="#C9C1C1"
+                    autoCapitalize={"none"}
+                    autoCorrect={false}
+                    value={email}
+                    onChangeText={(text) => setEmail(text.trim())}
+                  />
+                </View>
+              </View>
+              <View>
+                <Text style={styles.titleInputText}>Contraseña</Text>
+                <View style={styles.textInputContainer}>
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder={"Ingresa tu contraseña"}
+                    placeholderTextColor="#C9C1C1"
+                    autoCapitalize={"none"}
+                    autoCorrect={false}
+                    value={password}
+                    onChangeText={(text) => setPassword(text)}
+                    secureTextEntry={true}
+                  />
+                </View>
+              </View>
+              <View>
+                {error !== "" && <Text style={styles.alertText}>{error}</Text>}
+              </View>
+            </View>
+            <View style={{ alignContent: 'flex-end', width: '100%', height: '8%', alignItems: 'center', marginTop: '15%' }}>
+              <Button onPress={() => { onLoginPress(); }}
+                title="I N G R E S A R"
+                color='#FFE828'
+                style={{
+                  borderWidth: normalize(1),
+                  borderColor: "#707070",
+                  alignSelf: 'center',
+                  width: '69%',
+                  heigth: '15%',
+                  margin: '2%',
+                  paddingHorizontal: '15%',
+                  paddingVertical: '1%'
+                }}
+                textStyle={{ color: "#00A9A0", fontFamily: 'Montserrat-Bold', fontSize: normalize(20), }}
+                activityIndicatorStatus={loading}
+              />
+              <TouchableOpacity>
+                <Text style={styles.restoreText}>Olvidé mi contraseña</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </ImageBackground>
     </View>
   );
 };

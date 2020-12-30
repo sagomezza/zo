@@ -9,7 +9,7 @@ const FooterStyles = StyleSheet.create({
       fontFamily: 'Montserrat-Regular'
     },
     buttonH: {
-      backgroundColor: '#008999',
+      backgroundColor: '#00A9A0',
       borderWidth: 1,
       borderColor:'#FFFFFF',
       flex:1,
@@ -19,7 +19,7 @@ const FooterStyles = StyleSheet.create({
         
     },
     buttonI: {
-      backgroundColor: '#008999',
+      backgroundColor: '#00A9A0',
       borderWidth:1,
       borderColor:'#FFFFFF',
       flex:3.5,
@@ -27,7 +27,7 @@ const FooterStyles = StyleSheet.create({
         
     },
     buttonS: {
-      backgroundColor: '#008999',
+      backgroundColor: '#00A9A0',
       borderWidth:1,
       borderColor:'#FFFFFF', 
       flex:3.5,

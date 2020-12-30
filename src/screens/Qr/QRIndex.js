@@ -223,7 +223,7 @@ const BarcodeScanner = (props) => {
                 paddingHorizontal: '4%',
               }}
               textStyle={{
-                color: "#008999",
+                color: "#00A9A0",
                 textAlign: "center",
                 fontFamily: 'Montserrat-Regular'
               }} />

@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
       margin:'3%',
       fontSize: normalize(35),
       fontFamily: 'Montserrat-Regular',
-      color: '#008999',
+      color: '#00A9A0',
       backgroundColor: 'rgba(0,0,0,0.04)'
     },
     textInput: {
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
       marginBottom: '10%',
       fontSize:normalize(35),
       fontFamily: 'Montserrat-Regular',
-      color: '#008999',
+      color: '#00A9A0',
       backgroundColor: 'rgba(0,0,0,0.04)'
     },
     buttonI: {
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
       alignContent: 'center',
       height:  normalize(45),
       width: normalize(45) ,
-      backgroundColor: "#008999",
+      backgroundColor: "#00A9A0",
       padding: '1%',
       marginLeft: '2%'
     },

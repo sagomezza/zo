@@ -11,6 +11,7 @@ import store from '../../config/store';
 import moment from 'moment';
 import numberWithPoints from '../../config/services/numberWithPoints';
 import normalize from '../../config/services/normalizeFontSize';
+import { ImageBackground } from 'react-native';
 
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
@@ -78,14 +79,14 @@ const HomeIndex = (props) => {
 
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
-      <View style={{ heigth: '14%' }} >
+    <View style={{ flex: 1, }}>
+      {/* <View style={{ heigth: '14%' }} >
         <Button onPress={() => navigation.navigate("Logout")}
           title="Cerrar sesión"
           color="transparent"
           style={{
             borderWidth: 1,
-            borderColor: "#008999",
+            borderColor: "#00A9A0",
             alignSelf: 'flex-end',
             width: '30%',
             heigth: '10%',
@@ -94,32 +95,59 @@ const HomeIndex = (props) => {
             paddingHorizontal: '2%',
             borderRadius: 9
           }}
-          textStyle={{ color: "#008999" }} />
-      </View>
-      <View style={{ alignItems: "flex-end", width: '100%', height: normalize(182), marginTop: 0 }}>
+          textStyle={{ color: "#00A9A0" }} />
+      </View> */}
+      <ImageBackground
+        style={{
+          flex: 1,
+          width: '100%',
+          height: '40%',
+          flexDirection: 'column'
+        }}
+        source={require('../../../assets/images/Home.png')}>
         <View style={HomeStyles.plateContainer}>
           <View style={HomeStyles.plateInput}>
-            <Image style={{ width: "25%", height: "25%", marginTop: "5%", marginLeft: "5%" }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoM.png')} />
-            <View style={{ flexDirection: 'row', height: normalize(180) }}>
-              <Text style={HomeStyles.plateInputTextBig}>
-                {`${hq.availableBikes}`}
-              </Text>
-              <Text style={HomeStyles.plateInputTextSmall} >{`/${hq.totalBikes}`}</Text>
-            </View>
-
+            <ImageBackground
+              style={{
+                width: '75%',
+                height: '95%',
+                marginLeft: '40%'
+              }}
+              resizeMode={"contain"}
+              source={require('../../../assets/images/Circulo.png')}>
+              <View style={{ height: '80%', justifyContent: 'space-between', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
+                <Image style={{ width: "25%", height: "25%" }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoM.png')} />
+                <View style={{ flexDirection: 'row', height: normalize(170) }}>
+                  <Text style={HomeStyles.plateInputTextBig}>
+                    {`${hq.availableBikes}`}
+                  </Text>
+                  <Text style={HomeStyles.plateInputTextSmall} >{`/${hq.totalBikes}`}</Text>
+                </View>
+              </View>
+            </ImageBackground>
           </View>
           <View style={HomeStyles.plateInput}>
-            <Image style={{ width: "24%", height: "24%", marginTop: "5%", marginLeft: "5%" }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoC.png')} />
-            <View style={{ flexDirection: 'row', height: normalize(180) }} >
-              <Text style={HomeStyles.plateInputTextBigC}>
-                {`${hq.availableCars}`}
-              </Text>
-              <Text style={HomeStyles.plateInputTextSmallC} >{`/${hq.totalCars}`}</Text>
-            </View>
+            <ImageBackground
+              style={{
+                width: '75%',
+                height: '95%',
+              }}
+              resizeMode={"contain"}
+              source={require('../../../assets/images/Circulo.png')}>
+              <View style={{ height: '80%', justifyContent: 'space-between', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
+                <Image style={{ width: "25%", height: "25%" }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoC.png')} />
+                <View style={{ flexDirection: 'row', height: normalize(170) }}>
+                  <Text style={HomeStyles.plateInputTextBig}>
+                    {`${hq.availableCars}`}
+                  </Text>
+                  <Text style={HomeStyles.plateInputTextSmall} >{`/${hq.totalCars}`}</Text>
+                </View>
+              </View>
+            </ImageBackground>
           </View>
         </View>
-      </View>
-      <View style={{ height: '72%', paddingBottom: '10%' }}>
+        <View style={{ height: '66%', backgroundColor:'#F8F8F8',borderTopLeftRadius: 30,borderTopRightRadius: 30,alignContent: 'center', alignItems: 'center', borderWidth: 1}}>
+        <View style={{ height: '37%', width: '73%', backgroundColor:'#FFFFFF', borderRadius: 10, borderWidth: 1}}>
         <View style={{ marginLeft: '13%', marginBottom: '2%' }}>
           <Text style={HomeStyles.textPago} >Historial de pagos</Text>
         </View>
@@ -131,7 +159,7 @@ const HomeIndex = (props) => {
               keyExtractor={({ id }) => id}
               renderItem={({ item }) => {
                 return (
-                  <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#008999", marginBottom: '4%', marginLeft: '14%', marginRight: '13%', marginTop: '2%' }} >
+                  <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#00A9A0", marginBottom: '4%', marginLeft: '14%', marginRight: '13%', marginTop: '2%' }} >
                     <View style={{ marginBottom: '2%' }} >
                       <Text style={HomeStyles.textPlaca}>{item.plate}</Text>
                       <Text style={HomeStyles.textPago}>{`Pago por ${formatHours(item.hours)} horas`}</Text>
@@ -149,7 +177,8 @@ const HomeIndex = (props) => {
             </View>
           }
         </View>
-        <View style={{ height: "36%", marginTop: '4%' }}>
+        </View>
+        {/* <View style={{ height: "36%", marginTop: '4%' }}>
           <View style={{ marginLeft: '13%', marginBottom: '2%' }}>
             <Text style={HomeStyles.textPago}>Vehículos parqueados</Text>
           </View>
@@ -179,10 +208,11 @@ const HomeIndex = (props) => {
               <Text style={HomeStyles.textPago}>No hay parqueos activos en este momento</Text>
             </View>
           }
-        </View>
+        </View> */}
 
-      </View>
-      <FooterIndex navigation={navigation} />
+        </View>
+        <FooterIndex navigation={navigation} />
+      </ImageBackground>
     </View>
   );
 };
