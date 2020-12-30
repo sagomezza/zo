@@ -414,7 +414,7 @@ const UserOut = (props) => {
           <View style={{ alignItems: 'center', marginBottom: '5%' }}>
             {<Text style={styles.infoUserText}>Celular/CódigoQR: {recip.phone} </Text>}
             <Text style={styles.infoUserText}>CODIGO: {recip.verificationCode} </Text>
-            <Text style={{ fontSize: normalize(20), fontFamily: 'Montserrat-Regular' }}>Total horas: {recip?.hours}</Text>
+            <Text style={{ fontSize: normalize(20), fontFamily: 'Montserrat-Regular' }}>Total horas: {Math.round(recip?.hours)}</Text>
             <Text style={styles.infoUserText}>{"A pagar"}</Text>
             <Text style={{ fontSize: normalize(50), fontFamily: 'Montserrat-Regular' }}>{`$${numberWithPoints(totalAmount)}`}</Text>
           </View>
