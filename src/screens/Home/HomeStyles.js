@@ -7,17 +7,12 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems:'center',
     width: '100%',
-    height: '35%',
+    height: '25%',
     justifyContent: 'center',
-    borderWidth: 1
   },
   plateInput: {
     width: '45%', 
-    height: '60%',
-    justifyContent: 'flex-end',
-    alignContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1
+    height: '90%',
 
   },
   plateInputTextBig: {
@@ -28,7 +23,7 @@ const styles = StyleSheet.create({
   plateInputTextSmall: {
     fontSize: normalize(25),
     textAlign: 'center',
-    marginTop: '4%',
+    marginTop: '6%',
     color: '#FFFFFF',
     fontFamily: 'Montserrat-Regular'
   },
@@ -40,21 +35,29 @@ const styles = StyleSheet.create({
   plateInputTextSmallC: {
     fontSize: normalize(25),
     textAlign: 'center',
-    marginTop: '4%',
+    marginTop: '6%',
     color: '#FFFFFF',
     fontFamily: 'Montserrat-Regular'
   },
   textPlaca: {
-    fontSize: normalize(25),
-    fontFamily: 'Montserrat-Regular'
+    fontSize: normalize(18),
+    color: '#5D5D5D',
+    fontFamily: 'Montserrat-Bold'
+  },
+  textListTitle: {
+    fontSize: normalize(15),
+    color: '#00A9A0',
+    fontFamily: 'Montserrat-Bold'
   },
   textPago: {
-    fontSize: normalize(15),
+    fontSize: normalize(13),
+    color: '#5D5D5D',
     fontFamily: 'Montserrat-Regular'
   },
   textMoney: {
-    fontSize: normalize(30),
-    fontFamily: 'Montserrat-Regular'
+    fontSize: normalize(19),
+    color: '#5D5D5D',
+    fontFamily: 'Montserrat-Bold'
   },
 });
 

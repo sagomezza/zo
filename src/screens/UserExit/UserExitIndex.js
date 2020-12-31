@@ -430,8 +430,8 @@ const UserOut = (props) => {
                 <TextInput
                   style={styles.inputMoney}
                   keyboardType='numeric'
-                  placeholder='$'
-                  value={totalPay == 0 ? '-' : totalPay + ''}
+                  placeholder='$ 0'
+                  value={totalPay === 0 ? '' : totalPay + ''}
                   onChangeText={text => setTotalPay(text)}
                 />
 
