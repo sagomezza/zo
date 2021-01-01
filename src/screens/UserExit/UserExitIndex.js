@@ -371,7 +371,7 @@ const UserOut = (props) => {
             }}
             onPress={() => { navigation.navigate('QRscanner') }}>
             {/* disabled={(plateOne + plateTwo).length === 6}> */}
-            <Image style={{ width: 34, height: 34, marginTop: 8 }} source={require('../../../assets/images/GrupoQR.png')} />
+            <Image style={{ width: 34, height: 34, marginTop: 8 }} source={require('../../../assets/images/qr.png')} />
           </TouchableOpacity>
 
           <View style={{ paddingLeft: '20%', flexDirection: "row", marginBottom: '5%' }}>

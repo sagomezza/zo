@@ -79,7 +79,7 @@ const HomeIndex = (props) => {
 
 
   return (
-    <View style={{ flex: 1, }}>
+    <View style={{ flex: 1 }}>
       {/* <View style={{ heigth: '14%' }} >
         <Button onPress={() => navigation.navigate("Logout")}
           title="Cerrar sesión"
