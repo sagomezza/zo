@@ -256,7 +256,7 @@ const UserInput = (props) => {
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%', justifyContent: 'space-evenly' }}>
               {!loading &&
-                <Button onPress={() => { startPark(); setLoading(true);  }}
+                <Button onPress={() => { startPark(); setLoading(true); }}
                   title="I N I C I AR"
                   color='#FFF200'
                   style={styles.buttonI}
@@ -264,7 +264,7 @@ const UserInput = (props) => {
                   disabled={existingUser}
                 />
               }
-              {loading && <ActivityIndicator size={"large"} color={'#FFF200'}  />}
+              {loading && <ActivityIndicator size={"large"} color={'#FFF200'} />}
               {!loading &&
                 <TouchableOpacity style={styles.buttonT}
                   onPress={() => {
@@ -276,7 +276,7 @@ const UserInput = (props) => {
                     navigation.navigate('QRscanner')
                   }}
                   disabled={(plateOne + plateTwo).length < 6}
-                  >
+                >
                   <Image style={{ width: '65%', height: '65%', marginTop: '6%' }} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
                 </TouchableOpacity>
               }
