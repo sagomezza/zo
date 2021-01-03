@@ -9,38 +9,38 @@ const styles = StyleSheet.create({
   },
   plateInput: {
     width: '46%',
-    height: normalize(48),
+    height: '70%',
     margin: '2%',
-    fontSize: normalize(40),
+    fontSize: normalize(38),
     fontFamily: 'Montserrat-Bold',
     backgroundColor: '#FFFFFF',
-    borderRadius: 30
+    borderRadius: 30,
+    color: '#00A9A0'
+
   },
   textInput: {
-    width: '96%',
+    width: '100%',
     height: normalize(39),
     fontSize: normalize(27),
     fontFamily: 'Montserrat-Regular',
     color: '#00A9A0',
     backgroundColor: '#FFFFFF',
     borderRadius: 30,
-    margin: '2%',
   },
   buttonI: {
     borderRadius: 30,
     height: normalize(35),
     width: '100%',
-    marginLeft: '3%',
-    paddingHorizontal: '21%'
+    marginLeft: '0%',
+    paddingHorizontal: '24%',
   },
   buttonNew: {
     borderRadius: 30,
-    height: normalize(35),
+    height: '75%',
     width: '100%',
-    marginLeft: '2%',
-    paddingHorizontal: '28%',
-    borderWidth: 1,
-    borderColor: '#FFFFFF'
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+    paddingHorizontal: '29%',
   },
   buttonT: {
     borderRadius: 30,
@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
     height: normalize(35),
     width: '20%',
     backgroundColor: "#FFF200",
-    marginRight: '2%',
 
   },
   buttonText: {
@@ -63,13 +62,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold'
   },
   textListTitle: {
-    fontSize: normalize(26),
+    fontSize: normalize(28),
     color: '#00A9A0',
     fontFamily: 'Montserrat-Bold',
     marginTop: '1%'
   },
   textList: {
-    fontSize: normalize(15),
+    fontSize: normalize(13),
     color: '#616161',
     fontFamily: 'Montserrat-Regular',
     marginTop: '1%'
@@ -78,9 +77,9 @@ const styles = StyleSheet.create({
     fontSize: normalize(15),
     color: '#616161',
     fontFamily: 'Montserrat-Bold',
-    marginTop: '6%'
+    marginTop: '4%'
   },
-  
+
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -90,12 +89,13 @@ const styles = StyleSheet.create({
 
   },
   modalView: {
-    height: normalize(250),
-    padding: normalize(40),
-    borderRadius: 10,
+    height: normalize(350),
+    width: normalize(350),
+    padding: normalize(20),
+    borderRadius: 50,
     borderColor: '#707070',
     borderWidth: 1,
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#FFF',
     shadowColor: '#FFF',
@@ -121,10 +121,21 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: 'Montserrat-Regular'
   },
-  modalText: {
-    marginBottom: 15,
+  modalPhoneText: {
     textAlign: "center",
-    fontFamily: 'Montserrat-Regular'
+    fontFamily: 'Montserrat-Bold',
+    color: '#00A9A0',
+    fontSize: normalize(25)
+  },
+  modalText: {
+    textAlign: "center",
+    fontFamily: 'Montserrat-Regular',
+    color: '#B7B7B7',
+    fontSize: normalize(20)
+  },
+  modalButton: {
+    width: '100%',
+    height: '70%',
   },
   tableText: {
     fontFamily: 'Montserrat-Regular',

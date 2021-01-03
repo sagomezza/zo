@@ -218,7 +218,7 @@ const LogoutIndex = (props) => {
               <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: 60, marginRight: 70, marginTop: 20 }} >
                 <View style={{ marginBottom: 10 }} >
                   <Text style={{ fontFamily: 'Montserrat-Regular' }}>{item.plate}</Text>
-                  <Text style={{ fontFamily: 'Montserrat-Regular' }}>{`Pago por ${item.hours} horas`}</Text>
+                  <Text style={{ fontFamily: 'Montserrat-Regular' }}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
                 </View>
                 <View style={{ flex: 1, alignItems: 'flex-end' }} >
                   <Text style={{ fontFamily: 'Montserrat-Regular' }}>{`$${numberWithPoints(item.total)}`}</Text>
