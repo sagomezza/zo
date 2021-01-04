@@ -165,7 +165,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <AuthProvider value={{ currentUser }}>
-        <NavigationContainer>
+        <NavigationContainer >
           <RootStack initialRouteName={initialRouteName} />
         </NavigationContainer>
       </AuthProvider>

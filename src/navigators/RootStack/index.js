@@ -5,6 +5,8 @@ import Login from "../../screens/Login";
 
 import HomeStack from "../HomeStack";
 import MainDrawer from "../MainDrawer/MainDrawer";
+import UserInputIndex from "../../screens/UserInput/UserInputIndex";
+import UserExitIndex from "../../screens/UserExit/UserExitIndex";
 // import HeaderTitle from "components/StackHeader";
 
 const Stack = createStackNavigator();
@@ -52,20 +54,12 @@ const RootStack = ({ initialRouteName }) => {
       
       <Stack.Screen
         name="Home"
-        component={HomeStack}
-        options={{
-          headerShown: false,
-          // title: "Home",
-        }}
-      />
-      {/* <Stack.Screen
-        name="MainDrawer"
         component={MainDrawer}
         options={{
           headerShown: false,
           // title: "Home",
         }}
-      /> */}
+      />
     </Stack.Navigator>
   );
 };

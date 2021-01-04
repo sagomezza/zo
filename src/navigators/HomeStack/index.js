@@ -11,6 +11,7 @@ import Qr from "../../screens/Qr/QRIndex";
 import { createDrawerNavigator, DrawerContent, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer"; 
 import MainDrawer from "../MainDrawer/MainDrawer";
 
+
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -64,7 +65,7 @@ const HomeStack = ({ navigation }) => {
       // }}
     >
       <Stack.Screen
-        name="Home"
+        name="Home1"
         component={HomeIndex}
         options={{
           headerShown: false,
@@ -82,6 +83,7 @@ const HomeStack = ({ navigation }) => {
           // ),
         }}
       />
+      
       <Stack.Screen
         name="Logout"
         component={LogoutIndex}
@@ -114,7 +116,6 @@ const HomeStack = ({ navigation }) => {
           headerLeft: null,
         }}
       />
-      
     </Stack.Navigator>
   );
 };

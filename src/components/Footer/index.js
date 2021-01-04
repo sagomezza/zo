@@ -6,10 +6,7 @@ import { Icon } from 'react-native-elements';
 const FooterIndex = ({navigation}) => {
     return (
       <View style={{flexDirection: 'row', position: 'absolute', bottom:0}}>
-        <TouchableOpacity style ={FooterStyles.buttonH} onPress={() => navigation.navigate('Home')}>
-
-          <Icon name='home' color='#FFFFFF'style={{marginTop: '12%' }} /> 
-        </TouchableOpacity>
+        
         <TouchableOpacity style ={FooterStyles.buttonI} onPress={() => navigation.navigate('UserInput')}>
           <Text style ={FooterStyles.footerText} >Ingresos</Text>  
        </TouchableOpacity>

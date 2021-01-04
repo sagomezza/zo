@@ -14,6 +14,7 @@ import Button from '../../components/Button';
 import numberWithPoints from '../../config/services/numberWithPoints';
 import normalize from '../../config/services/normalizeFontSize';
 import { ImageBackground } from 'react-native';
+import Header from '../../components/Header/HeaderIndex';
 
 
 const UserOut = (props) => {
@@ -446,20 +447,10 @@ const UserOut = (props) => {
           flex: 1,
           width: '100%',
           height: normalize(525),
-          flexDirection: 'column',
-          borderWidth: 1
+          flexDirection: 'column'
         }}
         source={require('../../../assets/images/Stripes.png')}>
-        <View style={{ height: normalize(110), alignContent: 'center', alignItems: 'center' }} >
-          <Image
-            style={{
-              marginTop: '5%',
-              width: '14%',
-            }}
-            resizeMode={"contain"}
-            source={require('../../../assets/images/HomeIcon.png')}
-          />
-        </View>
+        <Header navigation={navigation}/>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{ height: normalize(394), alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
             <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '20%', width: '80%', marginTop: '2%' }}>

@@ -15,6 +15,8 @@ import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { Keyboard } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
 import { ImageBackground } from 'react-native';
+import Header from '../../components/Header/HeaderIndex';
+import MainDrawer from '../../navigators/MainDrawer/MainDrawer';
 // import Feather from "react-native-feather";
 
 
@@ -181,19 +183,12 @@ const UserInput = (props) => {
           flex: 1,
           width: '100%',
           height: normalize(450),
-          flexDirection: 'column',
-          borderWidth: 1
+          flexDirection: 'column'
         }}
         source={require('../../../assets/images/Stripes.png')}>
 
-        <View style={{ height: normalize(110), alignContent: 'center', alignItems: 'center' }} >
-          <Image style={{
-            marginTop: '5%',
-            width: '14%',
-          }}
-            resizeMode={"contain"}
-            source={require('../../../assets/images/HomeIcon.png')} />
-        </View>
+        <Header navigation={navigation} />
+        <MainDrawer/>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{ height: normalize(315), alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%', marginTop: '2%' }}>
@@ -301,7 +296,7 @@ const UserInput = (props) => {
             alignContent: 'center',
             alignItems: 'center'
           }}>
-            <View style={{ height: normalize(340), width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
+            <View style={{ height: '50%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
               <View style={{ marginBottom: '3%', marginTop: '3%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                 <Text style={styles.textListTitle} >Gerardo Bedoya</Text>
                 <View style={{ flexDirection: 'row', height: '25%', marginTop: '1%' }}>

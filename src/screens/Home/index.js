@@ -12,6 +12,8 @@ import moment from 'moment';
 import numberWithPoints from '../../config/services/numberWithPoints';
 import normalize from '../../config/services/normalizeFontSize';
 import { ImageBackground } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Header from '../../components/Header/HeaderIndex';
 
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
@@ -105,14 +107,7 @@ const HomeIndex = (props) => {
           flexDirection: 'column'
         }}
         source={require('../../../assets/images/Home.png')}>
-        <View style={{ height: '12%', alignContent: 'center', alignItems: 'center' }} >
-          <Image style={{
-            marginTop: '5%',
-            width: '14%'
-          }}
-            resizeMode={"contain"}
-            source={require('../../../assets/images/HomeIcon.png')} />
-        </View>
+        <Header navigation={navigation}/>
         <View style={HomeStyles.plateContainer}>
 
           <View style={{ ...HomeStyles.plateInput, alignItems: 'center', alignContent: 'center' }}>
