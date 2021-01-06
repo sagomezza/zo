@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList, Modal, TouchableHighlight, Dimensions, Image } from 'react-native';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { TextInput, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import moment from 'moment';
 import FooterIndex from '../../../src/components/Footer/index';
 import { firebase } from '@firebase/app';
@@ -15,6 +15,10 @@ import numberWithPoints from '../../config/services/numberWithPoints';
 import Button from '../../components/Button/index';
 import normalize from '../../config/services/normalizeFontSize';
 import { Icon } from 'react-native-elements';
+import styles from '../Logout/LogoutStyles';
+import { ImageBackground } from 'react-native';
+import Header from '../../components/Header/HeaderIndex';
+import { Keyboard } from 'react-native';
 
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips } = props;
@@ -75,16 +79,7 @@ const LogoutIndex = (props) => {
       marginBottom: 15,
       textAlign: "center"
     },
-    buttonT: {
-      borderRadius: 4,
-      alignItems: 'center',
-      alignContent: 'center',
-      height:  normalize(30),
-      width: normalize(30) ,
-      backgroundColor: "#00A9A0",
-      padding: '1%',
-      marginLeft: '2%'
-    }
+
   });
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -163,95 +158,150 @@ const LogoutIndex = (props) => {
   return (
     <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
 
-      <View style={{ alignItems: 'center', marginTop: '20%' }}>
-        {<Text style={{ fontSize: 20, fontFamily: 'Montserrat-Bold' }}>{officialProps.name + ' ' + officialProps.lastName}</Text>}
-        {<Text style={{ fontFamily: 'Montserrat-Regular' }}>{hq.name}</Text>}
-
-        {/* <Text>{"Hora de inicio: " + moment(dateMonthIn).format('hh:MM A ') + " Hora de salida: " + moment(dateMonthOut).format('hh:MM A')}</Text> */}
-        <View style={{ flexDirection: 'row', paddingBottom: '5%', marginTop: '10%' }}>
-          <View >
-            <Text style={{ fontFamily: 'Montserrat-Regular' }}>{" Dinero en efectivo: "} </Text>
-          </View>
-          <View style={{
-            justifyContent: "space-around",
-            flexDirection: 'row',
-            width: '50%',
-          }}>
-            <TextInput
-              placeholder='$'
-              style={{
-                width: '75%',
-                height: normalize(30),
-                marginRight: '5%',
-                marginLeft: '5%',
-                borderColor: 'gray',
-                marginBottom: '10%',
-                fontSize: normalize(25),
-                fontFamily: 'Montserrat-Regular',
-                color: '#00A9A0',
-                backgroundColor: 'rgba(0,0,0,0.04)'
-              }}
-              keyboardType='numeric'
-              textAlign='center'
-              editable={isDisabled}
-              onChangeText={text => setInputValue(text) + ''}
-              value={inputValue == 0 ? '' : inputValue + ''}
-
-            />
-            <TouchableOpacity style={HomeStyles.buttonT}
-              onPress={() => {
-                setModal2Visible(true)
-              }}
-              disabled={inputValue.length === 0}>
-              <Icon name='save' color='#FFFFFF'style={{marginTop: '4%' }} /> 
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-
-      <View style={{ paddingBottom: 10, height: "50%" }}>
-        <FlatList
-          data={shiftRecips}
-          keyExtractor={({ id }) => id}
-          renderItem={({ item }) => {
-            return (
-              <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: 60, marginRight: 70, marginTop: 20 }} >
-                <View style={{ marginBottom: 10 }} >
-                  <Text style={{ fontFamily: 'Montserrat-Regular' }}>{item.plate}</Text>
-                  <Text style={{ fontFamily: 'Montserrat-Regular' }}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
-                </View>
-                <View style={{ flex: 1, alignItems: 'flex-end' }} >
-                  <Text style={{ fontFamily: 'Montserrat-Regular' }}>{`$${numberWithPoints(item.total)}`}</Text>
+      <ImageBackground
+        style={{
+          flex: 1,
+          width: '100%',
+          height: normalize(450),
+          flexDirection: 'column'
+        }}
+        source={require('../../../assets/images/Stripes.png')}>
+        <Header navigation={navigation} />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <View style={{ height: normalize(315), alignConten8t: 'center', alignItems: 'center', flexDirection: 'column' }}>
+            <View style={{ flexDirection: 'column', alignItems: 'center', alignContent: 'center', height: '30%', width: '60%', marginTop: '2%' }}>
+              <Text style={{ fontSize: normalize(29), fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>{officialProps.name + ' ' + officialProps.lastName}</Text>
+              <View style={{}}>
+                <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: normalize(23), color: '#FFFFFF' }}>{hq.name}</Text>
+              </View>
+            </View>
+            <View style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              alignContent: 'center',
+              height: '25%',
+              width: '80%',
+              justifyContent: 'space-between'
+            }}>
+              <View style={styles.timePlate}>
+                <Image
+                  style={{ width: '18%' }}
+                  resizeMode={"contain"}
+                  source={require('../../../assets/images/Inicio.png')} />
+                <View >
+                  <Text style={styles.timePlateTitle}>Tiempo de salida:</Text>
+                  <Text style={styles.timePlateInfo}>4:20 PM 11/11/2020</Text>
                 </View>
               </View>
-            )
-          }}
-        />
-      </View>
-      <View style={{ alignItems: 'center' }}>
-        <Button onPress={() => {
-          setModalVisible(true)
-        }}
-          title="Cerrar turno"
-          color="#ffffff"
-          style={{
-            borderWidth: 1,
-            borderColor: "#D9D9D9",
-            alignSelf: 'flex-end',
-            width: '30%',
-            heigth: '10%',
-            margin: '5%',
-            paddingHorizontal: '4%',
-            borderRadius: 9
-          }}
-          textStyle={{
-            color: "#00A9A0",
-            textAlign: "center",
-            fontFamily: 'Montserrat-Regular'
-          }
-          } />
-      </View>
-      <FooterIndex navigation={navigation} />
+              <View style={styles.timePlate}>
+                <Image
+                  style={{ width: '17%' }}
+                  resizeMode={"contain"}
+                  source={require('../../../assets/images/Salida.png')} />
+                <View>
+                  <Text style={styles.timePlateTitle}>Tiempo de salida:</Text>
+                  <Text style={styles.timePlateInfo}>4:20 PM 11/11/2020</Text>
+                </View>
+
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', width: '80%', height: '30%', alignItems: 'center', alignContent: 'center', padding: '2%', justifyContent: 'space-between' }}>
+              <View style={{ width: '30%' }}>
+                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: normalize(20) }}>{"DINERO EN EFECTIVO: "} </Text>
+              </View>
+              <View style={{
+                justifyContent: "center",
+                alignContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                width: '70%',
+                height: '80%'
+              }}>
+                <TextInput
+                  placeholder='$'
+                  style={
+                    styles.textInput
+                  }
+                  keyboardType='numeric'
+                  textAlign='center'
+                  editable={isDisabled}
+                  onChangeText={text => setInputValue(text) + ''}
+                  value={inputValue == 0 ? '' : inputValue + ''}
+
+                />
+                <TouchableOpacity style={styles.buttonT}
+                  onPress={() => {
+                    setModal2Visible(true)
+                  }}
+                  disabled={inputValue.length === 0}>
+                  <Icon name='save' color='#00A9A0' style={{ marginTop: '4%' }} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <View style={{
+            height: normalize(492),
+            backgroundColor: '#F8F8F8',
+            borderTopLeftRadius: 30,
+            borderTopRightRadius: 30,
+            alignContent: 'center',
+            alignItems: 'center'
+          }}>
+            <View style={{ height: '65%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
+              <View style={{ paddingBottom: 10, height: "50%" }}>
+                <FlatList
+                  data={shiftRecips}
+                  keyExtractor={({ id }) => id}
+                  renderItem={({ item }) => {
+                    return (
+                      <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: 60, marginRight: 70, marginTop: 20 }} >
+                        <View style={{ marginBottom: 10 }} >
+                          <Text style={styles.textPlaca}>{item.plate}</Text>
+                          <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
+                        </View>
+                        <View style={{ flex: 1, alignItems: 'flex-end' }} >
+                          <Text style={styles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
+                        </View>
+                      </View>
+                    )
+                  }}
+                />
+              </View>
+
+            </View>
+            <View style={{
+              flexDirection:'column',
+              width: '100%',
+              height: '13%',
+              justifyContent: 'flex-end',
+              alignContent: 'center'
+            }}>
+              <Button onPress={() => {
+                setModalVisible(true)
+              }}
+                title="C E R R A R  T U R N O"
+                color="#00A9A0"
+                style={
+                  styles.shiftButton
+                }
+                textStyle={{
+                  color: "#FFFFFF",
+                  textAlign: "center",
+                  fontFamily: 'Montserrat-Bold'
+                }
+                } />
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+
+
+        <FooterIndex navigation={navigation} />
+
+      </ImageBackground>
+
+      {/* <Text>{"Hora de inicio: " + moment(dateMonthIn).format('hh:MM A ') + " Hora de salida: " + moment(dateMonthOut).format('hh:MM A')}</Text> */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -327,7 +377,7 @@ const LogoutIndex = (props) => {
             <View style={{ flexDirection: 'row', width: '100%' }}>
               <Button onPress={() => {
                 setModalVisible(!modalVisible);
-                
+
                 markEndOfShift();
                 navigation.navigate('Login')
               }}

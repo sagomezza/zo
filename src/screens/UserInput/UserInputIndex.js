@@ -186,9 +186,7 @@ const UserInput = (props) => {
           flexDirection: 'column'
         }}
         source={require('../../../assets/images/Stripes.png')}>
-
         <Header navigation={navigation} />
-        <MainDrawer/>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{ height: normalize(315), alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%', marginTop: '2%' }}>

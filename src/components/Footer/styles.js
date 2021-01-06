@@ -5,34 +5,33 @@ const FooterStyles = StyleSheet.create({
     footerText: {
       textAlign: 'center',
       color: '#FFFFFF',
-      fontSize: normalize(32),
-      fontFamily: 'Montserrat-Regular'
+      fontSize: normalize(18),
+      fontFamily: 'Montserrat-Bold'
     },
-    buttonH: {
-      backgroundColor: '#00A9A0',
-      borderWidth: 1,
-      borderColor:'#FFFFFF',
-      flex:1,
-      height: normalize(48),
-      alignContent: 'center',
-      alignItems: 'center'
-        
+    footerTextI: {
+      textAlign: 'center',
+      color: '#00A9A0',
+      fontSize: normalize(18),
+      fontFamily: 'Montserrat-Bold'
     },
+    
     buttonI: {
-      backgroundColor: '#00A9A0',
-      borderWidth:1,
-      borderColor:'#FFFFFF',
-      flex:3.5,
-      height: normalize(48)
-        
+      borderRadius: 30,
+      height: '42%',
+      justifyContent: 'center',
+      alignContent: 'center',
+      alignItems: 'center',
+      paddingHorizontal: '10%',
+      margin: '3%'       
     },
     buttonS: {
-      backgroundColor: '#00A9A0',
-      borderWidth:1,
-      borderColor:'#FFFFFF', 
-      flex:3.5,
-      height: normalize(48)
-       
+      borderRadius: 30,
+      height: '42%',
+      justifyContent: 'center',
+      alignContent: 'center',
+      alignItems: 'center',
+      paddingHorizontal: '10%',
+      margin: '3%'      
     },
 });
 
