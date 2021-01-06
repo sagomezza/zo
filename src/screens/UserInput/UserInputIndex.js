@@ -1,5 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { TouchableOpacity, View, Text, Modal, TouchableHighlight, TouchableWithoutFeedback, Alert, Image, ActivityIndicator } from 'react-native';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  Modal,
+  TouchableHighlight,
+  TouchableWithoutFeedback,
+  Alert,
+  Image,
+  ActivityIndicator,
+  CheckBox
+} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from '../UserInput/UserInputStyles';
 import FooterIndex from '../../components/Footer/index';
@@ -23,14 +34,18 @@ import MainDrawer from '../../navigators/MainDrawer/MainDrawer';
 const UserInput = (props) => {
   const { navigation, officialProps } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  const [loading, setLoading] = useState(false);
+  const officialEmail = officialProps.email;
+  const [loadingStart, setLoadingStart] = useState(false);
+  const [loadingNewUser, setLoadingNewUser] = useState(false);
+  const [prepayDay, setPrepayDay] = useState(false);
+
 
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
   const [findUserByPlate, setFindUserByPlate] = useState([]);
   const [startParking, setStartParking] = useState({});
-  const [existingUser, setExistingUser] = useState(true)
+  const [existingUser, setExistingUser] = useState(false)
   const [codeError, setErrorText] = useState(false);
 
 
@@ -60,14 +75,13 @@ const UserInput = (props) => {
     async function findUserByPlate() {
       try {
         if ((plateOne + plateTwo).length === 6) {
-
           const response = await instance.post(
             FIND_USER_BY_PLATE,
             { plate: plateOne + plateTwo },
             { timeout: TIMEOUT }
           )
           setFindUserByPlate(response.data.data);
-          setExistingUser(false)
+          setExistingUser(true)
           setPhone((response.data.data[0]).substring(3, 13))
 
         } else {
@@ -82,28 +96,29 @@ const UserInput = (props) => {
     findUserByPlate()
   }, [plateOne, plateTwo]);
 
-  useEffect(() => {
-    async function createUser() {
-      try {
-        if ((plateOne + plateTwo).length === 6 && phone.length === 10 && findUserByPlate.length === 0) {
 
-          const response = await instance.post(
-            CREATE_USER,
-            {
-              phone: '+57' + phone,
-              plate: plateOne + plateTwo,
-              type: "starter"
-            },
-            { timeout: TIMEOUT }
-          )
-          setExistingUser(false)
-        }
-      } catch (err) {
-        console.log(err?.response)
+  async function createUser() {
+    try {
+      if ((plateOne + plateTwo).length === 6 && phone.length === 10 && findUserByPlate.length === 0) {
+
+        const response = await instance.post(
+          CREATE_USER,
+          {
+            phone: '+57' + phone,
+            plate: plateOne + plateTwo,
+            type: "starter"
+          },
+          { timeout: TIMEOUT }
+        )
+        setExistingUser(false);
+        setLoadingNewUser(false);
+        startPark();
+
       }
+    } catch (err) {
+      console.log(err?.response)
     }
-    createUser()
-  }, [phone]);
+  };
 
   async function startPark() {
     try {
@@ -118,6 +133,8 @@ const UserInput = (props) => {
             hqId: officialHq,
             dateStart: new Date(),
             phone: '+57' + phone,
+            prepaidDay: true,
+            officialEmail: officialEmail,
             type
           },
           { timeout: TIMEOUT }
@@ -125,7 +142,7 @@ const UserInput = (props) => {
         setModalVisible(true);
         setStartParking(response.data.data);
         readHq();
-        setLoading(false)
+        setLoadingStart(false)
 
         if (isCharacterALetter(plateTwo[2])) {
           store.dispatch(actions.addBike());
@@ -135,14 +152,12 @@ const UserInput = (props) => {
 
       }
     } catch (err) {
-      setLoading(true)
+      setLoadingStart(true)
       if (err?.response.data.response === -2) setModal2Visible(true)
       console.log(err?.response)
 
     }
   };
-
-
   async function readHq() {
     try {
       const response = await instance.post(READ_HQ, {
@@ -155,8 +170,6 @@ const UserInput = (props) => {
       console.log("err: ", error);
     }
   };
-
-
   return (
     <View style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
       {/* <View style={{ heigth: '14%' }} >
@@ -247,41 +260,57 @@ const UserInput = (props) => {
               />
               {codeError && <Text>{codeError}</Text>}
             </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '10%', width: '60%', justifyContent: 'center' }}>
+              <CheckBox
+                value={prepayDay}
+                onValueChange={setPrepayDay}
+                style={styles.checkbox}
+                tintColors={{ true: '#FFF200', false: 'transparent' }}
+              />
+              <Text style={{ color: '#FFF200', fontFamily: 'Montserrat-Bold', fontSize: normalize(19), textAlign: 'center' }}>PASE DIA</Text>
+            </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%', justifyContent: 'space-evenly' }}>
-              {!loading &&
-                <Button onPress={() => { startPark(); setLoading(true); }}
+              {!loadingStart &&
+                <Button onPress={() => { startPark(); setLoadingStart(true); }}
                   title="I N I C I AR"
                   color='#FFF200'
                   style={styles.buttonI}
                   textStyle={styles.buttonText}
-                  disabled={existingUser}
+                  disabled={!existingUser || plateOne === "" || plateTwo === "" || phone === ""}
                 />
               }
-              {loading && <ActivityIndicator size={"large"} color={'#FFF200'} />}
-              {!loading &&
+              {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
+              {!loadingStart &&
                 <TouchableOpacity style={styles.buttonT}
                   onPress={() => {
-                    setLoading(true);
+                    setLoadingStart(true);
                     setPlateOne("");
                     setPlateTwo("");
                     setPhone("");
                     store.dispatch(actions.setQr(plateOne + plateTwo));
                     navigation.navigate('QRscanner')
                   }}
-                  disabled={(plateOne + plateTwo).length < 6}
+                  disabled={(plateOne + plateTwo).length < 6 || !existingUser || plateOne === "" || plateTwo === "" || phone === ""}
                 >
                   <Image style={{ width: '65%', height: '65%', marginTop: '6%' }} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
                 </TouchableOpacity>
               }
             </View>
             <View style={{ alignItems: 'center', alignContent: 'center', height: '20%', width: '60%' }}>
-              <Button
-                title="Usuario Nuevo"
-                color='transparent'
-                style={styles.buttonNew}
-                textStyle={styles.buttonTextNew}
-                disabled={existingUser}
-                activityIndicatorStatus={loading} />
+              {loadingNewUser && <ActivityIndicator size={"large"} color={'#FFFFFF'} />}
+              {!loadingNewUser &&
+                <Button
+                  onPress={() => {
+                    setLoadingNewUser(true);
+                    createUser();
+                  }}
+                  title="Usuario Nuevo"
+                  color='transparent'
+                  style={styles.buttonNew}
+                  textStyle={styles.buttonTextNew}
+                  disabled={existingUser || plateOne === "" || plateTwo === "" || phone === ""}
+                  activityIndicatorStatus={loadingNewUser} />
+              }
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -294,15 +323,15 @@ const UserInput = (props) => {
             alignContent: 'center',
             alignItems: 'center'
           }}>
-            <View style={{ height: '50%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
+            <View style={{ height: '70%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
               <View style={{ marginBottom: '3%', marginTop: '3%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-                <Text style={styles.textListTitle} >Gerardo Bedoya</Text>
-                <View style={{ flexDirection: 'row', height: '25%', marginTop: '1%' }}>
+                {/* <Text style={styles.textListTitle} >Gerardo Bedoya</Text> */}
+                {/* <View style={{ flexDirection: 'row', height: '25%', marginTop: '1%' }}>
                   <Text style={styles.textList} >Mensualidad hasta </Text>
                   <View style={{ marginLeft: '1%', backgroundColor: '#FFF200', borderRadius: 30, width: '25%', alignContent: 'center', alignItems: 'center' }}>
                     <Text style={styles.textListDate} > 11/11/2020 </Text>
                   </View>
-                </View>
+                </View> */}
               </View>
               <View style={{ height: "72%" }}>
                 {/* {recips.recips.length > 0 ?
@@ -366,7 +395,7 @@ const UserInput = (props) => {
                     setPlateOne("");
                     setPlateTwo("");
                     setPhone("");
-                    setLoading(false);
+                    setLoadingStart(false);
 
                   }}
                     title="E N T E N D I D O"

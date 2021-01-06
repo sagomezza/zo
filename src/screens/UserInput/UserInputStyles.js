@@ -140,7 +140,21 @@ const styles = StyleSheet.create({
   tableText: {
     fontFamily: 'Montserrat-Regular',
   },
-
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    color: '#FFF200'
+  },
+  checkbox: {
+    alignSelf: "center",
+  },
+  label: {
+    margin: 8,
+  },
 });
 
 export default styles;

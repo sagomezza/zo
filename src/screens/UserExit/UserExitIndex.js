@@ -333,7 +333,8 @@ const UserOut = (props) => {
             hqId: reserve[0].hqId,
             phone: reserve[0].phone,
             officialEmail: officialProps.email,
-            dateFinished: new Date()
+            dateFinished: new Date(),
+            prepaidDay: true
           },
           { timeout: TIMEOUT }
         )
@@ -394,7 +395,9 @@ const UserOut = (props) => {
           cash: parseInt(totalPay),
           change: totalPay - totalAmount,
           status: paymentStatus,
-          isParanoic: isParanoicUser
+          isParanoic: isParanoicUser,
+          officialEmail: officialProps.email,
+          prepaidDay: true
         },
         { timeout: TIMEOUT }
       );
@@ -450,9 +453,9 @@ const UserOut = (props) => {
           flexDirection: 'column'
         }}
         source={require('../../../assets/images/Stripes.png')}>
-        <Header navigation={navigation}/>
+        <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={{ height: normalize(390), alignContent: 'center', alignItems: 'center', flexDirection: 'column'}} >
+          <View style={{ height: normalize(390), alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
             <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '20%', width: '80%', marginTop: '2%' }}>
               <TouchableOpacity
                 style={styles.buttonT}
@@ -583,7 +586,7 @@ const UserOut = (props) => {
               </View>
             </View>
 
-            <View style={{ width: '80%', height: '10%', alignContent: 'flex-end', alignItems: 'flex-end', justifyContent: 'center'  }}>
+            <View style={{ width: '80%', height: '10%', alignContent: 'flex-end', alignItems: 'flex-end', justifyContent: 'center' }}>
               <View style={{ flexDirection: 'row', width: '67%', justifyContent: 'space-between', height: '70%' }}>
                 <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(5000)}>
                   <Text style={styles.miniButtonMoneyText}>$5.000</Text>
@@ -600,7 +603,7 @@ const UserOut = (props) => {
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row', width: '80%', justifyContent: 'flex-end', alignContent: 'center', alignItems: 'center'  }}>
+            <View style={{ flexDirection: 'row', width: '80%', justifyContent: 'flex-end', alignContent: 'center', alignItems: 'center' }}>
               <View style={{ width: '33%', paddingRight: '2%' }}>
                 <Text style={{ fontFamily: 'Montserrat-Bold', fontSize: normalize(20), color: '#8F8F8F', textAlign: 'right' }}>{"A devolver"}</Text>
               </View>
@@ -616,39 +619,39 @@ const UserOut = (props) => {
             </View>
 
             {err !== "" && <Text style={{ color: "red", fontFamily: 'Montserrat-Regular', alignSelf: 'center' }}>{err}</Text>}
-            <View style={{ height: '30%', justifyContent: 'flex-end'}}>
-            {!loading &&
-              <View style={{ alignItems: 'center', width: '80%', height: ' 30%', marginTop: '2%' }}>
-                <Button
-                  title="C O B R A R"
-                  color='#00A9A0'
-                  disabled={isDisabled && isDisabledValue}
-                  style={styles.buttonStyle}
-                  textStyle={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: normalize(17) }}
-                  onPress={() => {
-                    if (totalPay === '-' && totalPay > 0) {
-                      setIsDisabledValue(false)
-                    }
-                    finishParking("payed", true);
-                  }} />
-              </View>
-            }
-            {loading && <ActivityIndicator size={"large"} color={'#00A9A0'} />}
-            {!loading &&
-              <View style={{ alignItems: 'center', width: '80%', height: ' 30%', marginTop: '2%' }}>
-                <Button
-                  title="P A G O   P E N D I E N T E"
-                  color='#FFFFFF'
-                  disabled={isDisabled}
-                  style={{ ...styles.buttonStylePP, borderColor: '#00A9A0', borderWidth: 1 }}
-                  textStyle={{ color: '#8F8F8F', fontFamily: 'Montserrat-Bold', fontSize: normalize(16) }}
-                  onPress={() => {
-                    setModal2Visible(true);
-                    // finishParking("pending") 
-                  }}
-                />
-              </View>
-            }
+            <View style={{ height: '30%', justifyContent: 'flex-end' }}>
+              {!loading &&
+                <View style={{ alignItems: 'center', width: '80%', height: ' 30%', marginTop: '2%' }}>
+                  <Button
+                    title="C O B R A R"
+                    color='#00A9A0'
+                    disabled={isDisabled && isDisabledValue}
+                    style={styles.buttonStyle}
+                    textStyle={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: normalize(17) }}
+                    onPress={() => {
+                      if (totalPay === '-' && totalPay > 0) {
+                        setIsDisabledValue(false)
+                      }
+                      finishParking("payed", true);
+                    }} />
+                </View>
+              }
+              {loading && <ActivityIndicator size={"large"} color={'#00A9A0'} />}
+              {!loading &&
+                <View style={{ alignItems: 'center', width: '80%', height: ' 30%', marginTop: '2%' }}>
+                  <Button
+                    title="P A G O   P E N D I E N T E"
+                    color='#FFFFFF'
+                    disabled={isDisabled}
+                    style={{ ...styles.buttonStylePP, borderColor: '#00A9A0', borderWidth: 1 }}
+                    textStyle={{ color: '#8F8F8F', fontFamily: 'Montserrat-Bold', fontSize: normalize(16) }}
+                    onPress={() => {
+                      setModal2Visible(true);
+                      // finishParking("pending") 
+                    }}
+                  />
+                </View>
+              }
             </View>
             {/* <Button onPress={() => navigation.navigate("Logout")}
               title="Cerrar sesión"
@@ -855,12 +858,12 @@ const UserOut = (props) => {
                       width: '60%',
                       borderRadius: 10,
                       color: '#00A9A0'
-                    
+
                     }}
                     keyboardType='numeric'
                     placeholder='$'
                     textAlign='center'
-                    
+
                     keyboardType={"numeric"}
                     value={totalPayModal == 0 ? '' : totalPayModal + ''}
                     onChangeText={text => setTotalPayModal(text)}
