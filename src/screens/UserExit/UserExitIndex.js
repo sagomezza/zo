@@ -152,6 +152,7 @@ const UserOut = (props) => {
       borderRadius: 30,
       textAlign: 'center',
       backgroundColor: '#FFFFFF',
+      color: '#8F8F8F'
 
     },
     miniButtonMoney: {
@@ -201,7 +202,7 @@ const UserOut = (props) => {
     },
     modalView: {
       height: normalize(350),
-      width: normalize(350),
+      width: normalize(400),
       padding: normalize(20),
       borderRadius: 50,
       borderColor: '#707070',
@@ -225,10 +226,10 @@ const UserOut = (props) => {
       color: '#00A9A0',
       fontSize: normalize(25)
     },
-    modal2Button: {
+    modalButton: {
       width: '100%',
-      height: '60%',
-      margin: '2%'
+      height: '70%',
+      alignSelf: 'flex-end'
     },
     openButtonCobrar: {
       backgroundColor: "#FFFFFF",
@@ -520,8 +521,8 @@ const UserOut = (props) => {
                   resizeMode={"contain"}
                   source={require('../../../assets/images/Inicio.png')} />
                 <View >
-                  <Text style={styles.timePlateTitle}>Tiempo de salida:</Text>
-                  <Text style={styles.timePlateInfo}>4:20 PM 11/11/2020</Text>
+                  <Text style={styles.timePlateTitle}>Tiempo de inicio:</Text>
+                  <Text style={styles.timePlateInfo}>----</Text>
                 </View>
               </View>
               <View style={styles.timePlate}>
@@ -531,7 +532,7 @@ const UserOut = (props) => {
                   source={require('../../../assets/images/Salida.png')} />
                 <View>
                   <Text style={styles.timePlateTitle}>Tiempo de salida:</Text>
-                  <Text style={styles.timePlateInfo}>4:20 PM 11/11/2020</Text>
+                  <Text style={styles.timePlateInfo}>-----</Text>
                 </View>
 
               </View>
@@ -619,15 +620,19 @@ const UserOut = (props) => {
             </View>
 
             {err !== "" && <Text style={{ color: "red", fontFamily: 'Montserrat-Regular', alignSelf: 'center' }}>{err}</Text>}
-            <View style={{ height: '30%', justifyContent: 'flex-end' }}>
+            <View style={{ height: '25%', justifyContent: 'flex-end' }}>
               {!loading &&
-                <View style={{ alignItems: 'center', width: '80%', height: ' 30%', marginTop: '2%' }}>
+                <View style={{ alignItems: 'center', width: '80%', height: ' 35%', marginTop: '2%' }}>
                   <Button
                     title="C O B R A R"
                     color='#00A9A0'
                     disabled={isDisabled && isDisabledValue}
                     style={styles.buttonStyle}
-                    textStyle={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: normalize(17) }}
+                    textStyle={{
+                      color: '#FFFFFF',
+                      fontFamily: 'Montserrat-Bold',
+                      fontSize: normalize(17)
+                    }}
                     onPress={() => {
                       if (totalPay === '-' && totalPay > 0) {
                         setIsDisabledValue(false)
@@ -638,7 +643,7 @@ const UserOut = (props) => {
               }
               {loading && <ActivityIndicator size={"large"} color={'#00A9A0'} />}
               {!loading &&
-                <View style={{ alignItems: 'center', width: '80%', height: ' 30%', marginTop: '2%' }}>
+                <View style={{ alignItems: 'center', width: '80%', height: ' 35%', marginTop: '2%' }}>
                   <Button
                     title="P A G O   P E N D I E N T E"
                     color='#FFFFFF'
@@ -668,12 +673,14 @@ const UserOut = (props) => {
                 borderRadius: 9
               }}
               textStyle={{ color: "#00A9A0" }} /> */}
+            <View style={{ height: '24%', width: '100%', justifyContent: 'flex-end' }}>
+              <FooterIndex navigation={navigation} />
 
+            </View>
 
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
-      <FooterIndex navigation={navigation} />
       <Modal
         animationType="fade"
         transparent={true}
@@ -685,8 +692,22 @@ const UserOut = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ flexDirection: 'column', height: '100%', width: '100%', alignContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: normalize(51), textAlign: 'center', color: '#00A9A0', fontFamily: 'Montserrat-Bold' }}> {recip.plate} </Text>
+            <View style={{
+              flexDirection: 'column',
+              height: '100%',
+              width: '100%',
+              alignContent: 'center',
+              alignItems: 'center',
+              padding: '3%'
+            }}>
+              <Text style={{
+                fontSize: normalize(51),
+                textAlign: 'center',
+                color: '#00A9A0',
+                fontFamily: 'Montserrat-Bold'
+              }}>
+                {recip.plate}
+              </Text>
 
               <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
                 <Text style={styles.modalPhoneText}>{recip.phone}</Text>
@@ -701,7 +722,7 @@ const UserOut = (props) => {
                 <Text style={styles.modalText}>¡Cobro exitoso! </Text>
                 <Text style={styles.modalText}> Hora: {moment().format('LT')}</Text>
               </View>
-              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+              <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
                   setModalVisible(!modalVisible);
                   restart();

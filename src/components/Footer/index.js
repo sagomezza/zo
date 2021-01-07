@@ -7,7 +7,7 @@ import normalize from '../../config/services/normalizeFontSize';
 
 const FooterIndex = ({ navigation }) => {
   return (
-    <View style={{ flexDirection: 'row', position: 'absolute', bottom: 0 , height: normalize(78), width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+    <View style={{ flexDirection: 'row', height: normalize(78), width: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: '#F8F8F8' }}>
 
       <Button
         title="I N G R E S O S"
@@ -22,10 +22,10 @@ const FooterIndex = ({ navigation }) => {
         style={FooterStyles.buttonS}
         onPress={() => navigation.navigate('UserOut')}
         textStyle={FooterStyles.footerText} />
-    
 
-      </View>
-    );
+
+    </View>
+  );
 }
 
 export default FooterIndex;

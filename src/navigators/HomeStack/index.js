@@ -10,6 +10,7 @@ import UserOut from "../../screens/UserExit/UserExitIndex";
 import Qr from "../../screens/Qr/QRIndex";
 import { createDrawerNavigator, DrawerContent, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer"; 
 import MainDrawer from "../MainDrawer/MainDrawer";
+import RNPrintExample from "../../screens/Pdf/PdfIndex";
 
 
 const Stack = createStackNavigator();
@@ -116,6 +117,15 @@ const HomeStack = ({ navigation }) => {
           headerLeft: null,
         }}
       />
+      <Stack.Screen
+        name="Pdf"
+        component={RNPrintExample}
+        options={{
+          headerShown: false,
+          headerLeft: null,
+        }}
+      />
+      
     </Stack.Navigator>
   );
 };

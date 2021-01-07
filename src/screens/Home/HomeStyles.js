@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   textMoney: {
     fontSize: normalize(19),
     color: '#5D5D5D',
-    fontFamily: 'Montserrat-Bold'
+    fontFamily: 'Montserrat-Regular'
   },
 });
 

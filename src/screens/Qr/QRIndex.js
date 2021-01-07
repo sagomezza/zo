@@ -16,6 +16,7 @@ import { TIMEOUT } from '../../config/constants/constants';
 import store from '../../config/store';
 import normalize from '../../config/services/normalizeFontSize';
 import Button from '../../components/Button';
+import Header from '../../components/Header/HeaderIndex';
 
 // export default class BarcodeScanner extends React.Component {
 const BarcodeScanner = (props) => {
@@ -124,7 +125,7 @@ const BarcodeScanner = (props) => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
       {/* <View style={{flexDirection: "row", marginTop: '15%', marginBottom: '10%', justifyContent: 'center'}}>
                 <TextInput
                 style={styles.plateInput}
@@ -135,6 +136,8 @@ const BarcodeScanner = (props) => {
                 
             </View> */}
       <View style={styles.container}>
+      <Header navigation={navigation} />
+
         <Camera
           style={styles.camera}
           barCodeScannerSettings={{
@@ -148,16 +151,20 @@ const BarcodeScanner = (props) => {
             <View style={styles.darkenSection}>
               <Text
                 style={{
-                  color: "white",
+                  color: "#00A9A0",
                   alignSelf: "center",
-                  fontSize: 22,
-                  top: "85%",
-                  fontFamily: 'Montserrat-Regular'
+                  fontSize: normalize(22),
+                  top: "80%",
+                  fontFamily: 'Montserrat-Bold'
                 }}
               >
-                Lector de códigos QR
+                ESCANEAR CÓDIGO QR
                     </Text>
             </View>
+            {/* <View style={{borderWidth: 1, flex: 1, backgroundColor: '#F8F8F8'}}>
+
+            </View> */}
+
             <View style={styles.middleSection}>
               <View style={styles.darkenSection}></View>
               <View style={styles.qrSquare}></View>

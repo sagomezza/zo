@@ -37,17 +37,17 @@ const LogoutIndex = (props) => {
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
-      marginTop: 22,
+      // marginTop: 22,
       backgroundColor: 'rgba(52, 52, 52, 0.8)',
-
     },
     modalView: {
-      height: 200,
-      padding: 35,
-      borderRadius: 20,
+      height: normalize(350),
+      width: normalize(400),
+      padding: normalize(20),
+      borderRadius: 50,
       borderColor: '#707070',
       borderWidth: 1,
-      justifyContent: 'space-around',
+      justifyContent: 'space-between',
       alignItems: 'center',
       backgroundColor: '#FFF',
       shadowColor: '#FFF',
@@ -58,6 +58,7 @@ const LogoutIndex = (props) => {
       shadowOpacity: 0,
       shadowRadius: 50,
       elevation: 5,
+      flexDirection: 'column'
     },
     openButton: {
       backgroundColor: "#F194FF",
@@ -103,8 +104,10 @@ const LogoutIndex = (props) => {
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
         }
-      } catch (error) {
-        //console.log("err: ", error);
+      } catch (err) {
+        console.log("err: ", err);
+        console.log(err?.response)
+
       }
     }
     getShiftRecips();
@@ -189,8 +192,8 @@ const LogoutIndex = (props) => {
                   resizeMode={"contain"}
                   source={require('../../../assets/images/Inicio.png')} />
                 <View >
-                  <Text style={styles.timePlateTitle}>Tiempo de salida:</Text>
-                  <Text style={styles.timePlateInfo}>4:20 PM 11/11/2020</Text>
+                  <Text style={styles.timePlateTitle}>Tiempo de inicio:</Text>
+                  <Text style={styles.timePlateInfo}>----</Text>
                 </View>
               </View>
               <View style={styles.timePlate}>
@@ -200,7 +203,7 @@ const LogoutIndex = (props) => {
                   source={require('../../../assets/images/Salida.png')} />
                 <View>
                   <Text style={styles.timePlateTitle}>Tiempo de salida:</Text>
-                  <Text style={styles.timePlateInfo}>4:20 PM 11/11/2020</Text>
+                  <Text style={styles.timePlateInfo}>----</Text>
                 </View>
 
               </View>
@@ -272,7 +275,7 @@ const LogoutIndex = (props) => {
 
             </View>
             <View style={{
-              flexDirection:'column',
+              flexDirection: 'column',
               width: '100%',
               height: '13%',
               justifyContent: 'flex-end',
@@ -292,6 +295,10 @@ const LogoutIndex = (props) => {
                   fontFamily: 'Montserrat-Bold'
                 }
                 } />
+            </View>
+            <View style={{ height: '15%', width: '100%', justifyContent: 'flex-end' }}>
+              <FooterIndex navigation={navigation} />
+
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -371,53 +378,69 @@ const LogoutIndex = (props) => {
       >
         <View style={HomeStyles.centeredView}>
           <View style={HomeStyles.modalView}>
-            <View style={{ margin: '3%', alignItems: 'center' }}>
-              <Text style={HomeStyles.modalText}> ¿Quieres continuar con el cierre de sesión? </Text>
+            <View style={{
+              height: '100%',
+              width: '100%',
+              justifyContent: 'space-between',
+              padding: '2%'
+            }}
+            >
+              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                <Text style={styles.modalText}> ¿Quieres continuar con el cierre de sesión? </Text>
+              </View>
+              <View style={{
+                height: '30%',
+                width: '100%',
+                justifyContent: 'space-between',
+                flexDirection: 'column',
+                alignItems: 'center'
+              }}>
+                <View style={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  height: '50%',
+                  alignItems: 'center'
+                }}>
+                  <Button onPress={() => {
+                    setModalVisible(!modalVisible);
+                    markEndOfShift();
+                    navigation.navigate('Login')
+                  }}
+                    title="S I"
+                    color="#00A9A0"
+                    style={
+                      styles.modal2Button
+                    }
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }}
+                  />
+                </View>
+                <View style={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  height: '50%',
+                  alignItems: 'center'
+                }}>
+                  <Button onPress={() => {
+                    setModalVisible(!modalVisible);
+                    navigation.navigate('Logout');
+                  }}
+                    title="N O"
+                    color="#00A9A0"
+                    style={styles.modal2Button}
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }}
+                  />
+                </View>
+              </View>
             </View>
-            <View style={{ flexDirection: 'row', width: '100%' }}>
-              <Button onPress={() => {
-                setModalVisible(!modalVisible);
 
-                markEndOfShift();
-                navigation.navigate('Login')
-              }}
-                title="Si"
-                color="#ffffff"
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#D9D9D9",
-                  alignSelf: 'center',
-                  width: '90%',
-                  heigth: '10%',
-                  margin: '8%',
-                  paddingHorizontal: '4%',
-                }}
-                textStyle={{
-                  color: "#00A9A0",
-                  textAlign: "center",
-                  fontFamily: 'Montserrat-Regular'
-                }} />
-              <Button onPress={() => {
-                setModalVisible(!modalVisible);
-                navigation.navigate('Logout');
-              }}
-                title="No"
-                color="#ffffff"
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#D9D9D9",
-                  alignSelf: 'center',
-                  width: '90%',
-                  heigth: '10%',
-                  margin: '8%',
-                  paddingHorizontal: '4%',
-                }}
-                textStyle={{
-                  color: "#00A9A0",
-                  textAlign: "center",
-                  fontFamily: 'Montserrat-Regular'
-                }} />
-            </View>
           </View>
         </View>
       </Modal>

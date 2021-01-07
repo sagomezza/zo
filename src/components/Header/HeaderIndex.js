@@ -5,15 +5,31 @@ import normalize from '../../config/services/normalizeFontSize';
 
 const Header = ({ navigation }) => {
     return (
-        <View style={{ height: normalize(110), alignContent: 'center', alignItems: 'center', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }} >
-            <View style={{ width: '20%', height: '100%', justifyContent: 'center' }}>
-                <View style={{ height: '60%', width: '70%', alignItems: 'flex-start', alignContent: 'center', justifyContent: 'flex-end' }}>
+        <View style={{
+            height: normalize(110),
+            alignContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+            width: '100%',
+            justifyContent: 'space-between',
+            backgroundColor: 'transparent'
+        }} >
+            <View style={{
+                width: '20%',
+                height: '100%',
+                justifyContent: 'center'
+            }}>
+                <View style={{ 
+                    height: '60%', 
+                    width: '70%', 
+                    alignItems: 'flex-start', 
+                    alignContent: 'center', justifyContent: 'flex-end' }}>
                     <TouchableOpacity
-                        style={{ height: '80%', width: '35%', justifyContent: 'center', marginLeft: '25%'}}
+                        style={{ height: '80%', width: '35%', justifyContent: 'center', marginLeft: '25%' }}
                         onPress={() => navigation.openDrawer()}
                     >
                         <Image
-                            style={{width: '100%'}}
+                            style={{ width: '100%' }}
                             resizeMode={"contain"}
                             source={require('../../../assets/images/Menu.png')} />
                     </TouchableOpacity>

@@ -107,7 +107,7 @@ const HomeIndex = (props) => {
           flexDirection: 'column'
         }}
         source={require('../../../assets/images/Home.png')}>
-        <Header navigation={navigation}/>
+        <Header navigation={navigation} />
         <View style={HomeStyles.plateContainer}>
 
           <View style={{ ...HomeStyles.plateInput, alignItems: 'center', alignContent: 'center' }}>
@@ -174,7 +174,8 @@ const HomeIndex = (props) => {
           borderTopLeftRadius: 30,
           borderTopRightRadius: 30,
           alignContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+
         }}>
           <View style={{ height: '38%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '2%', borderRadius: 10 }}>
             <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
@@ -207,7 +208,7 @@ const HomeIndex = (props) => {
               }
             </View>
           </View>
-          <View style={{ height: '38%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '2%', borderRadius: 10 }}>
+          <View style={{ height: '38%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '1%', borderRadius: 10 }}>
             <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
               <Text style={HomeStyles.textListTitle} >VEHÍCULOS PARQUEADOS</Text>
             </View>
@@ -239,8 +240,11 @@ const HomeIndex = (props) => {
               }
             </View>
           </View>
+          <View style={{ height: '17%', width: '100%', justifyContent: 'flex-end' }}>
+            <FooterIndex navigation={navigation} />
+          </View>
         </View>
-        <FooterIndex navigation={navigation} />
+
       </ImageBackground>
     </View>
   );

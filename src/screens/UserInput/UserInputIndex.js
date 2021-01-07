@@ -96,29 +96,29 @@ const UserInput = (props) => {
     findUserByPlate()
   }, [plateOne, plateTwo]);
 
+  useEffect(() => {
+    async function createUser() {
+      try {
+        if ((plateOne + plateTwo).length === 6 && phone.length === 10 && findUserByPlate.length === 0) {
 
-  async function createUser() {
-    try {
-      if ((plateOne + plateTwo).length === 6 && phone.length === 10 && findUserByPlate.length === 0) {
+          const response = await instance.post(
+            CREATE_USER,
+            {
+              phone: '+57' + phone,
+              plate: plateOne + plateTwo,
+              type: "starter"
+            },
+            { timeout: TIMEOUT }
+          )
+          setExistingUser(false);
 
-        const response = await instance.post(
-          CREATE_USER,
-          {
-            phone: '+57' + phone,
-            plate: plateOne + plateTwo,
-            type: "starter"
-          },
-          { timeout: TIMEOUT }
-        )
-        setExistingUser(false);
-        setLoadingNewUser(false);
-        startPark();
-
+        }
+      } catch (err) {
+        console.log(err?.response)
       }
-    } catch (err) {
-      console.log(err?.response)
-    }
-  };
+    };
+    createUser();
+  }, [phone]);
 
   async function startPark() {
     try {
@@ -296,7 +296,7 @@ const UserInput = (props) => {
                 </TouchableOpacity>
               }
             </View>
-            <View style={{ alignItems: 'center', alignContent: 'center', height: '20%', width: '60%' }}>
+            {/* <View style={{ alignItems: 'center', alignContent: 'center', height: '20%', width: '60%' }}>
               {loadingNewUser && <ActivityIndicator size={"large"} color={'#FFFFFF'} />}
               {!loadingNewUser &&
                 <Button
@@ -311,7 +311,7 @@ const UserInput = (props) => {
                   disabled={existingUser || plateOne === "" || plateTwo === "" || phone === ""}
                   activityIndicatorStatus={loadingNewUser} />
               }
-            </View>
+            </View> */}
           </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -360,9 +360,13 @@ const UserInput = (props) => {
               } */}
               </View>
             </View>
+            <View style={{ height: '23%', width: '100%', justifyContent: 'flex-end' }}>
+              <FooterIndex navigation={navigation} />
+
+            </View>
           </View>
         </TouchableWithoutFeedback>
-        <FooterIndex navigation={navigation} />
+
       </ImageBackground>
       {/* <TouchableOpacity
               style={{ height: "100%", justifyContent: "center" }}
@@ -385,7 +389,13 @@ const UserInput = (props) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <View style={{ height: '100%', width: '100%', justifyContent: 'space-between' }}>
+              <View style={{
+                height: '100%',
+                width: '100%',
+                justifyContent: 'space-between',
+                padding: '2%'
+
+              }}>
                 <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
                   <Text style={styles.modalText}> El vehículo con placas {plateOne + ' ' + plateTwo} ya se encuentra estacionado. </Text>
                 </View>
@@ -425,8 +435,22 @@ const UserInput = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ flexDirection: 'column', height: '100%', width: '100%', alignContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: normalize(51), textAlign: 'center', color: '#00A9A0', fontFamily: 'Montserrat-Bold' }}> {plateOne + ' ' + plateTwo} </Text>
+            <View style={{
+              flexDirection: 'column',
+              height: '100%',
+              width: '100%',
+              alignContent: 'center',
+              alignItems: 'center',
+              padding: '2%'
+            }}>
+              <Text style={{
+                fontSize: normalize(51),
+                textAlign: 'center',
+                color: '#00A9A0',
+                fontFamily: 'Montserrat-Bold'
+              }}>
+                {plateOne + ' ' + plateTwo}
+              </Text>
 
               <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
                 <Text style={styles.modalPhoneText}>+ {phone} </Text>

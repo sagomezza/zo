@@ -12,12 +12,16 @@ const styles = StyleSheet.create({
   },
   darkenSection: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.7)",
+    backgroundColor: "#F8F8F8",
+  },
+  plateContainer:{
+    flex: 1, 
   },
   middleSection: {
     flex: 1.3,
     backgroundColor: "transparent",
     flexDirection: "row",
+
   },
   header: {
     paddingTop: "5%",
@@ -34,10 +38,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   qrSquare: {
-    flex: 5,
+    flex: 4,
     backgroundColor: "transparent",
     borderWidth: 2,
-    borderColor: "white",
+    borderColor: "#F8F8F8",
+    borderRadius: 0
+
   },
   flashlightContainer: {
     backgroundColor: "white",

@@ -106,7 +106,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0,
     shadowRadius: 50,
     elevation: 5,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    borderWidth: 1
+
   },
   openButton: {
     backgroundColor: "#F194FF",

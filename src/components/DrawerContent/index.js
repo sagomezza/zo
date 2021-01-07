@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import {
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer';
 import { MaterialIcons } from "@expo/vector-icons";
 import { CommonActions } from '@react-navigation/native';
+import normalize from '../../config/services/normalizeFontSize';
 
 const DrawerContent = (props) => {
 
@@ -23,12 +24,13 @@ const DrawerContent = (props) => {
         <View style={{ flex: 1 }}>
             <DrawerContentScrollView {...props}>
                 <View style={styles.drawerContent}>
+
                     <DrawerItem
                         icon={({ color, size }) => (
                             <MaterialIcons
                                 name="home"
-                                color={color}
-                                size={size}
+                                color="#00A9A0"
+                                size={27}
                             />
                         )}
                         label="Home"
@@ -36,13 +38,65 @@ const DrawerContent = (props) => {
                     />
                     <DrawerItem
                         icon={({ color, size }) => (
-                            <MaterialIcons
-                                name="home"
-                                color={color}
-                                size={size}
+                            <Image
+                                style={{ width: normalize(25), height: normalize(25) }}
+                                resizeMode={"contain"}
+                                source={require('../../../assets/images/MenuTransacciones.png')} />
+                        )}
+                        label="Transacciones"
+                    // onPress={() => { props.navigation.navigate('Logout') }}
+                    />
+                    <DrawerItem
+                        icon={({ color, size }) => (
+                            <Image
+                                style={{ width: normalize(25), height: normalize(25) }}
+                                resizeMode={"contain"}
+                                source={require('../../../assets/images/MenuServicios.png')}
                             />
                         )}
-                        label="Logout"
+                        label="Servicios activos"
+                        // onPress={() => { props.navigation.navigate('Logout') }}
+                    />
+                    <DrawerItem
+                        icon={({ color, size }) => (
+                            <Image
+                                style={{ width: normalize(25), height: normalize(25) }}
+                                resizeMode={"contain"}
+                                source={require('../../../assets/images/MenuReporte.png')} />
+                        )}
+                        label="Reporte de novedad"
+                        // onPress={() => { props.navigation.navigate('Logout') }}
+                    />
+                    <DrawerItem
+                        icon={({ color, size }) => (
+                            <Image
+                                style={{ width: normalize(25), height: normalize(25) }}
+                                resizeMode={"contain"}
+                                source={require('../../../assets/images/MenuMensualidades.png')} />
+                        )}
+                        label="Mensualidades"
+                        // onPress={() => { props.navigation.navigate('Logout') }}
+                    />
+                    <DrawerItem
+                        // icon={({ color, size }) => (
+                        //     <Image
+                        //         style={{ width: normalize(25), height: normalize(25) }}
+                        //         resizeMode={"contain"}
+                        //         source={require('../../../assets/images/MenuMensualidades.png')} />
+                        // )}
+                        label="Pdf"
+                        onPress={() => { props.navigation.navigate('Pdf') }}
+                    />
+                    <DrawerItem
+
+                        icon={({ color, size }) => (
+                            <Image
+                                style={{ width: normalize(25), height: normalize(25) }}
+                                resizeMode={"contain"}
+                                source={require('../../../assets/images/MenuLogout.png')} />
+                        )}
+                        label="Cierre de sesión"
+
                         onPress={() => { props.navigation.navigate('Logout') }}
                     />
                 </View>

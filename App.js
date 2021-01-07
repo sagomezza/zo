@@ -147,7 +147,7 @@ const App = () => {
   if (loginState || initialRouteName === "") {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator size={50} color={"#2DD47F"} />
+        <ActivityIndicator size={50} color={"#00A9A0"} />
       </View>
     );
   }
