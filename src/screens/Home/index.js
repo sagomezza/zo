@@ -226,7 +226,7 @@ const HomeIndex = (props) => {
                           <Text style={HomeStyles.textPago}>{item.verificationCode}</Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'flex-end' }} >
-                          <Text style={HomeStyles.textMoney}>{moment(item.dateStart).format('LT')}</Text>
+                          <Text style={HomeStyles.textMoney}>{moment(item.dateStart).format('L')}  {moment(item.dateStart).format('LT')}</Text>
                           <Text style={HomeStyles.textPago}>Pago por horas</Text>
                         </View>
                       </View>

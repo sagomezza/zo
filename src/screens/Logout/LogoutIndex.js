@@ -104,6 +104,7 @@ const LogoutIndex = (props) => {
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
         }
+       
       } catch (err) {
         console.log("err: ", err);
         console.log(err?.response)

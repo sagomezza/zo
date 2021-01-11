@@ -44,7 +44,7 @@ const DrawerContent = (props) => {
                                 source={require('../../../assets/images/MenuTransacciones.png')} />
                         )}
                         label="Transacciones"
-                    // onPress={() => { props.navigation.navigate('Logout') }}
+                    onPress={() => { props.navigation.navigate('Transactions') }}
                     />
                     <DrawerItem
                         icon={({ color, size }) => (
@@ -55,7 +55,7 @@ const DrawerContent = (props) => {
                             />
                         )}
                         label="Servicios activos"
-                        // onPress={() => { props.navigation.navigate('Logout') }}
+                        onPress={() => { props.navigation.navigate('ActiveServices') }}
                     />
                     <DrawerItem
                         icon={({ color, size }) => (
@@ -65,7 +65,7 @@ const DrawerContent = (props) => {
                                 source={require('../../../assets/images/MenuReporte.png')} />
                         )}
                         label="Reporte de novedad"
-                        // onPress={() => { props.navigation.navigate('Logout') }}
+                        onPress={() => { props.navigation.navigate('NewsReport') }}
                     />
                     <DrawerItem
                         icon={({ color, size }) => (
@@ -75,7 +75,7 @@ const DrawerContent = (props) => {
                                 source={require('../../../assets/images/MenuMensualidades.png')} />
                         )}
                         label="Mensualidades"
-                        // onPress={() => { props.navigation.navigate('Logout') }}
+                        onPress={() => { props.navigation.navigate('MonthlyPayments') }}
                     />
                     <DrawerItem
                         // icon={({ color, size }) => (

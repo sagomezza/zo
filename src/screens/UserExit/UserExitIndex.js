@@ -34,6 +34,9 @@ const UserOut = (props) => {
 
   const [plateOne, setPlateOne] = useState('');
   const [plateTwo, setPlateTwo] = useState('');
+  const [dateStart, setDateStart] = useState('');
+  const [dateFinished, setDateFinished] = useState('');
+
 
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
@@ -286,6 +289,8 @@ const UserOut = (props) => {
     setModal2Visible(false);
     setModal3Visible(false);
     setModal4Visible(false);
+    setDateStart('');
+    setDateFinished('');
 
   }
 
@@ -319,14 +324,6 @@ const UserOut = (props) => {
     try {
       if ((plateOne + plateTwo).length === 6) {
         let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
-        // console.log("---111---")
-        // console.log({
-        //   plate: plateOne + plateTwo,
-        //   hqId: reserve[0].hqId,
-        //   phone: reserve[0].phone,
-        //   officialEmail: officialProps.email,
-        //   dateFinished: new Date()
-        // })
         const response = await instance.post(
           MARKEXIT,
           {
@@ -342,6 +339,8 @@ const UserOut = (props) => {
         setRecip(response.data.data);
         setTotalAmount(response.data.data.total)
         setIsDisabled(false)
+        setDateStart(response.data.data.dateStart); 
+        setDateFinished(response.data.data.dateFinished);
       }
     } catch (err) {
       console.log(err)
@@ -429,23 +428,30 @@ const UserOut = (props) => {
   function isCharacterALetter(char) {
     return (/[a-zA-Z]/).test(char)
   }
+  
+  function dateStartDate() {
+    if (dateStart) {
+      return (moment(dateStart).format('L')) 
+    }
+  }
+  function dateStartHour() {
+    if (dateStart) {
+      return (moment(dateStart).format('LT')) 
+    }
+  }
+  function dateFinishedDate() {
+    if (dateFinished) {
+      return (moment(dateFinished).format('L')) 
+    }
+  }
+  function dateFinishedHour() {
+    if (dateFinished) {
+      return (moment(dateFinished).format('LT')) 
+    }
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
-      {/* <Button onPress={() => navigation.navigate("Logout")}
-        title="Cerrar sesión"
-        color="transparent"
-        style={{
-          borderWidth: 1,
-          borderColor: "#00A9A0",
-          alignSelf: 'flex-end',
-          width: '30%',
-          heigth: '10%',
-          marginRight: '4%',
-          marginTop: '6%',
-          paddingHorizontal: '2%',
-          borderRadius: 9
-        }}
-        textStyle={{ color: "#00A9A0" }} /> */}
       <ImageBackground
         style={{
           flex: 1,
@@ -522,7 +528,7 @@ const UserOut = (props) => {
                   source={require('../../../assets/images/Inicio.png')} />
                 <View >
                   <Text style={styles.timePlateTitle}>Tiempo de inicio:</Text>
-                  <Text style={styles.timePlateInfo}>----</Text>
+                  <Text style={styles.timePlateInfo}>{dateStartDate()}  {dateStartHour()}</Text>
                 </View>
               </View>
               <View style={styles.timePlate}>
@@ -532,7 +538,7 @@ const UserOut = (props) => {
                   source={require('../../../assets/images/Salida.png')} />
                 <View>
                   <Text style={styles.timePlateTitle}>Tiempo de salida:</Text>
-                  <Text style={styles.timePlateInfo}>-----</Text>
+                  <Text style={styles.timePlateInfo}>{dateFinishedDate()}  {dateFinishedHour()}</Text>
                 </View>
 
               </View>
@@ -658,21 +664,6 @@ const UserOut = (props) => {
                 </View>
               }
             </View>
-            {/* <Button onPress={() => navigation.navigate("Logout")}
-              title="Cerrar sesión"
-              color="transparent"
-              style={{
-                borderWidth: 1,
-                borderColor: "#00A9A0",
-                alignSelf: 'flex-end',
-                width: '30%',
-                heigth: '10%',
-                marginRight: '4%',
-                marginTop: '6%',
-                paddingHorizontal: '2%',
-                borderRadius: 9
-              }}
-              textStyle={{ color: "#00A9A0" }} /> */}
             <View style={{ height: '24%', width: '100%', justifyContent: 'flex-end' }}>
               <FooterIndex navigation={navigation} />
 
@@ -931,60 +922,6 @@ const UserOut = (props) => {
           </View>
         </View>
       </Modal>
-      {/* <Modal
-
-      >
-        <View style={styles.centeredView}>
-          <View style={{ ...styles.modalView, height: normalize(370), paddingTop: '13%' }}>
-            <View style={{ margin: '6%', alignItems: 'center', paddingBottom: '4%', flexDirection: 'column' }}>
-
-              <View style={{ justifyContent: 'flex-end' }}>
-                <View style={{ flexDirection: "row", justifyContent: 'flex-end', padding: '4%' }}>
-                  <Text style={{ ...styles.modalText, fontSize: normalize(20), marginRight: '5%' }}>Pago parcial:  </Text>
-                  <TextInput
-                    style={{
-                      borderWidth: 1,
-                      borderColor: 'gray',
-                      fontSize: normalize(15),
-                      fontFamily: 'Montserrat-Regular',
-                      color: '#00A9A0',
-                      width: '60%',
-                      fontFamily: 'Montserrat-Regular',
-                      borderRadius: 7
-                    }}
-                    keyboardType='numeric'
-                    placeholder='$'
-                    keyboardType={"numeric"}
-                    textAlign='center'
-                    value={totalPayModal == 0 ? '' : totalPayModal + ''}
-                    onChangeText={text => setTotalPayModal(text)}
-                  />
-                </View>
-                <View style={{ flexDirection: "row", justifyContent: 'flex-end', padding: '4%' }}>
-                  <Text style={{ ...styles.modalText, fontSize: normalize(20), marginRight: '5%' }}> Deuda:  </Text>
-                  <TextInput
-                    style={{
-                      borderWidth: 1,
-                      borderColor: 'gray',
-                      fontSize: normalize(15),
-                      fontFamily: 'Montserrat-Regular',
-                      width: '60%',
-                      borderRadius: 7
-                    }}
-                    textAlign='center'
-                    editable={false}
-                    value={(totalAmount - totalPayModal) < 0 ? '0' : '$' + (totalAmount - totalPayModal)}
-                  />
-                </View>
-              </View>
-              
-            </View>
-
-
-          </View>
-        </View>
-      </Modal> */}
-
     </View>
   );
 }

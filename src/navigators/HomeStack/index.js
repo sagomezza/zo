@@ -11,6 +11,10 @@ import Qr from "../../screens/Qr/QRIndex";
 import { createDrawerNavigator, DrawerContent, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer"; 
 import MainDrawer from "../MainDrawer/MainDrawer";
 import RNPrintExample from "../../screens/Pdf/PdfIndex";
+import Transactions from "../../screens/Transactions/TransactionsIndex";
+import ActiveServices from "../../screens/ActiveServices/ActiveServicesIndex";
+import NewsReport from "../../screens/NewsReport/NewsReportIndex";
+import MonthlyPayments from "../../screens/MonthlyPayments/MonthlyPaymentsIndex";
 
 
 const Stack = createStackNavigator();
@@ -120,6 +124,38 @@ const HomeStack = ({ navigation }) => {
       <Stack.Screen
         name="Pdf"
         component={RNPrintExample}
+        options={{
+          headerShown: false,
+          headerLeft: null,
+        }}
+      />
+      <Stack.Screen
+        name="Transactions"
+        component={Transactions}
+        options={{
+          headerShown: false,
+          headerLeft: null,
+        }}
+      />
+      <Stack.Screen
+        name="ActiveServices"
+        component={ActiveServices}
+        options={{
+          headerShown: false,
+          headerLeft: null,
+        }}
+      />
+      <Stack.Screen
+        name="NewsReport"
+        component={NewsReport}
+        options={{
+          headerShown: false,
+          headerLeft: null,
+        }}
+      />
+      <Stack.Screen
+        name="MonthlyPayments"
+        component={MonthlyPayments}
         options={{
           headerShown: false,
           headerLeft: null,

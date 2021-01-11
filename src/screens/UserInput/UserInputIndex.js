@@ -29,14 +29,13 @@ import { ImageBackground } from 'react-native';
 import Header from '../../components/Header/HeaderIndex';
 import MainDrawer from '../../navigators/MainDrawer/MainDrawer';
 // import Feather from "react-native-feather";
-
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const UserInput = (props) => {
   const { navigation, officialProps } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const officialEmail = officialProps.email;
   const [loadingStart, setLoadingStart] = useState(false);
-  const [loadingNewUser, setLoadingNewUser] = useState(false);
   const [prepayDay, setPrepayDay] = useState(false);
 
 
@@ -46,12 +45,18 @@ const UserInput = (props) => {
   const [findUserByPlate, setFindUserByPlate] = useState([]);
   const [startParking, setStartParking] = useState({});
   const [existingUser, setExistingUser] = useState(false)
+  const [showPhoneInput, setShowPhoneInput] = useState(false)
   const [codeError, setErrorText] = useState(false);
 
 
   const [plateOne, setPlateOne] = useState('');
   const [plateTwo, setPlateTwo] = useState('');
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState(1);
+  const [phones, setPhones] = useState([{ label: 'Selecciona un número', value: 1 }]);
+  const [showDropdown, setShowDropdown] = useState(false)
+
+  const [newPhone, setNewPhone] = useState('');
+
 
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
@@ -62,9 +67,6 @@ const UserInput = (props) => {
   }
   const clearPlateTwo = () => {
     setPlateTwo('');
-  }
-  const clearPhone = () => {
-    setPhone('');
   }
 
   function isCharacterALetter(char) {
@@ -82,16 +84,20 @@ const UserInput = (props) => {
           )
           setFindUserByPlate(response.data.data);
           setExistingUser(true)
-          setPhone((response.data.data[0]).substring(3, 13))
-
-        } else {
-          setPhone("")
+          const auxPhones = []
+          // {label: 'UK', value: 'uk'},
+          response.data.data.forEach(phone => {
+            auxPhones.push({ label: phone, value: phone })
+          });
+          auxPhones.push({ label: 'Agregar nuevo número', value: 0 })
+          setPhones(auxPhones);
+          setShowDropdown(true);
         }
+
       } catch (err) {
         console.log(err?.response)
-
+        setShowPhoneInput(true);
       }
-
     }
     findUserByPlate()
   }, [plateOne, plateTwo]);
@@ -99,26 +105,24 @@ const UserInput = (props) => {
   useEffect(() => {
     async function createUser() {
       try {
-        if ((plateOne + plateTwo).length === 6 && phone.length === 10 && findUserByPlate.length === 0) {
+        if ((plateOne + plateTwo).length === 6 && newPhone.length === 10) {
 
           const response = await instance.post(
             CREATE_USER,
             {
-              phone: '+57' + phone,
+              phone: '+57' + newPhone,
               plate: plateOne + plateTwo,
               type: "starter"
             },
             { timeout: TIMEOUT }
           )
-          setExistingUser(false);
-
         }
       } catch (err) {
         console.log(err?.response)
       }
-    };
+    }
     createUser();
-  }, [phone]);
+  }, [newPhone]);
 
   async function startPark() {
     try {
@@ -126,13 +130,14 @@ const UserInput = (props) => {
         let type
         if (isCharacterALetter(plateTwo[2])) type = "bike"
         else type = "car"
+
         const response = await instance.post(
           START_PARKING,
           {
             plate: plateOne + plateTwo,
             hqId: officialHq,
             dateStart: new Date(),
-            phone: '+57' + phone,
+            phone: !showPhoneInput ? phone : '+57' + newPhone,
             prepaidDay: true,
             officialEmail: officialEmail,
             type
@@ -143,6 +148,9 @@ const UserInput = (props) => {
         setStartParking(response.data.data);
         readHq();
         setLoadingStart(false)
+        setPhones([{ label: 'Selecciona un número', value: 1 }]);
+        setPhone(1);
+
 
         if (isCharacterALetter(plateTwo[2])) {
           store.dispatch(actions.addBike());
@@ -170,27 +178,11 @@ const UserInput = (props) => {
       console.log("err: ", error);
     }
   };
+
+
+
   return (
     <View style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
-      {/* <View style={{ heigth: '14%' }} >
-        <Button onPress={() => navigation.navigate("Logout")}
-          title="Cerrar sesión"
-          color="transparent"
-          style={{
-            borderWidth: 1,
-            borderColor: "#00A9A0",
-            alignSelf: 'flex-end',
-            width: '30%',
-            heigth: '10%',
-            marginRight: '5%',
-            marginTop: '6%',
-            paddingHorizontal: '2%',
-            borderRadius: 9
-
-          }}
-          textStyle={{ color: "#00A9A0" }} />
-      </View> */}
-
       <ImageBackground
         style={{
           flex: 1,
@@ -218,7 +210,7 @@ const UserInput = (props) => {
                   ;
                 }}
                 value={plateOne}
-                onFocus={() => { clearPlateOne(); clearPlateTwo(); clearPhone(); }}
+                onFocus={() => { clearPlateOne(); clearPlateTwo(); }}
               />
               <TextInput
                 ref={refPlateTwo}
@@ -228,12 +220,9 @@ const UserInput = (props) => {
                 maxLength={3}
                 autoCapitalize={"characters"}
                 keyboardType='default'
-                onFocus={() => { clearPlateTwo(); clearPhone(); }}
+                onFocus={() => { clearPlateTwo(); }}
                 onChangeText={text => {
                   setPlateTwo(text);
-                  if (refPhone && text.length === 3) {
-                    refPhone.current.focus();
-                  };
                 }}
                 value={plateTwo}
               />
@@ -241,77 +230,85 @@ const UserInput = (props) => {
             <View style={{ alignItems: 'center', alignContent: 'center', height: '10%', width: '100%' }}>
               <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: normalize(21) }}>I  N  G  R  E  S  E     C  E  L  U  L  A  R</Text>
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%' }}>
-              <TextInput
-                ref={refPhone}
-                placeholder={''}
-                style={styles.textInput}
-                keyboardType='numeric'
-                textAlign='center'
-                maxLength={10}
-                onFocus={() => { clearPhone() }}
-                onChangeText={text => {
-                  setPhone(text);
-                  if (text.length === 10) {
-                    if (plateOne.length === 3 && plateTwo.length === 3) Keyboard.dismiss()
+            <View style={{ flexDirection: 'column', borderWidth: 1, alignItems: 'center', alignContent: 'center', zIndex: 10, height: '65%', width: '60%' }}>
+              {!showPhoneInput ?
+                <DropDownPicker
+                  items={phones}
+                  zIndex={30}
+                  defaultValue={phone}
+                  disabled={!showDropdown}
+                  placeholder={"Selecciona un celular"}
+                  containerStyle={{ height: '25%', width: '100%' }}
+                  style={{ backgroundColor: '#fafafa', borderRadius: 30 }}
+                  itemStyle={{
+                    justifyContent: 'center'
+                  }}
+                  dropDownStyle={{ backgroundColor: '#fafafa' }}
+                  onChangeItem={item => {
+                    if (item.value === 0) {
+                      setShowPhoneInput(true)
+                    } else {
+                      setPhone(item.value)
+                      console.log("item is ", item.value)
+                    }
                   }
-                }}
-                value={phone}
-              />
+                  }
+                /> :
+                <TextInput
+                  placeholder={''}
+                  style={styles.textInput}
+                  keyboardType='numeric'
+                  textAlign='center'
+                  maxLength={10}
+                  onChangeText={text => {
+                    setNewPhone(text);
+                    if (text.length === 10) {
+                      if (plateOne.length === 3 && plateTwo.length === 3) Keyboard.dismiss()
+                    }
+                  }}
+                  value={newPhone}
+                />}
               {codeError && <Text>{codeError}</Text>}
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '10%', width: '60%', justifyContent: 'center' }}>
-              <CheckBox
-                value={prepayDay}
-                onValueChange={setPrepayDay}
-                style={styles.checkbox}
-                tintColors={{ true: '#FFF200', false: 'transparent' }}
-              />
-              <Text style={{ color: '#FFF200', fontFamily: 'Montserrat-Bold', fontSize: normalize(19), textAlign: 'center' }}>PASE DIA</Text>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%', justifyContent: 'space-evenly' }}>
-              {!loadingStart &&
-                <Button onPress={() => { startPark(); setLoadingStart(true); }}
-                  title="I N I C I AR"
-                  color='#FFF200'
-                  style={styles.buttonI}
-                  textStyle={styles.buttonText}
-                  disabled={!existingUser || plateOne === "" || plateTwo === "" || phone === ""}
+              <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '10%', width: '60%', justifyContent: 'center' }}>
+                <CheckBox
+                  value={prepayDay}
+                  onValueChange={setPrepayDay}
+                  style={styles.checkbox}
+                  tintColors={{ true: '#FFF200', false: 'transparent' }}
                 />
-              }
-              {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
-              {!loadingStart &&
-                <TouchableOpacity style={styles.buttonT}
-                  onPress={() => {
-                    setLoadingStart(true);
-                    setPlateOne("");
-                    setPlateTwo("");
-                    setPhone("");
-                    store.dispatch(actions.setQr(plateOne + plateTwo));
-                    navigation.navigate('QRscanner')
-                  }}
-                  disabled={(plateOne + plateTwo).length < 6 || !existingUser || plateOne === "" || plateTwo === "" || phone === ""}
-                >
-                  <Image style={{ width: '65%', height: '65%', marginTop: '6%' }} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
-                </TouchableOpacity>
-              }
+                <Text style={{ color: '#FFF200', fontFamily: 'Montserrat-Bold', fontSize: normalize(19), textAlign: 'center' }}>PASE DIA</Text>
+              </View>
+
+
+              <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%', justifyContent: 'space-evenly' }}>
+                {!loadingStart &&
+                  <Button onPress={() => { startPark(); setLoadingStart(true); setPhones([{ label: 'Selecciona un número', value: 1 }]);
+                  setPhone(1); }}
+                    title="I N I C I A R"
+                    color='#FFF200'
+                    style={styles.buttonI}
+                    textStyle={styles.buttonText}
+                    disabled={!existingUser}
+                  />
+                }
+                {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
+                {!loadingStart &&
+                  <TouchableOpacity style={styles.buttonT}
+                    onPress={() => {
+                      setLoadingStart(true);
+                      setPlateOne("");
+                      setPlateTwo("");
+                      setPhone("");
+                      store.dispatch(actions.setQr(plateOne + plateTwo));
+                      navigation.navigate('QRscanner')
+                    }}
+                    disabled={(plateOne + plateTwo).length < 6 || !existingUser || plateOne === "" || plateTwo === "" || phone === ""}
+                  >
+                    <Image style={{ width: '65%', height: '65%', marginTop: '6%' }} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
+                  </TouchableOpacity>
+                }
+              </View>
             </View>
-            {/* <View style={{ alignItems: 'center', alignContent: 'center', height: '20%', width: '60%' }}>
-              {loadingNewUser && <ActivityIndicator size={"large"} color={'#FFFFFF'} />}
-              {!loadingNewUser &&
-                <Button
-                  onPress={() => {
-                    setLoadingNewUser(true);
-                    createUser();
-                  }}
-                  title="Usuario Nuevo"
-                  color='transparent'
-                  style={styles.buttonNew}
-                  textStyle={styles.buttonTextNew}
-                  disabled={existingUser || plateOne === "" || plateTwo === "" || phone === ""}
-                  activityIndicatorStatus={loadingNewUser} />
-              }
-            </View> */}
           </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -334,6 +331,12 @@ const UserInput = (props) => {
                 </View> */}
               </View>
               <View style={{ height: "72%" }}>
+
+                {/* <ModalPicker
+                  data={phones} */}
+                {/* // initValue={initValue}
+                  // onChange={set}
+                  // style={{ width: '30%', height: '30%'}} /> */}
                 {/* {recips.recips.length > 0 ?
                 <FlatList
                   style={{ height: "37%" }}
@@ -404,8 +407,11 @@ const UserInput = (props) => {
                     setModal2Visible(!modal2Visible);
                     setPlateOne("");
                     setPlateTwo("");
-                    setPhone("");
+                    setNewPhone("");
                     setLoadingStart(false);
+                    setShowDropdown(false);
+                    setShowPhoneInput(false);
+                    setPhones([{ label: 'Selecciona un número', value: 1 }]);
 
                   }}
                     title="E N T E N D I D O"
@@ -453,7 +459,7 @@ const UserInput = (props) => {
               </Text>
 
               <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
-                <Text style={styles.modalPhoneText}>+ {phone} </Text>
+                <Text style={styles.modalPhoneText}>+ {newPhone} </Text>
               </View>
               <View style={{ height: '35%', width: '75%', justifyContent: 'center' }}>
                 <Image
@@ -470,7 +476,12 @@ const UserInput = (props) => {
                   setModalVisible(!modalVisible);
                   setPlateOne("");
                   setPlateTwo("");
-                  setPhone("");
+                  setNewPhone("");
+                  setPhones([{ label: 'Selecciona un número', value: 1 }]);
+                  setPhone(1);
+                  setShowDropdown(false);
+
+                  setShowPhoneInput(false);
                 }}
                   title="E N T E N D I D O"
                   color="#00A9A0"
