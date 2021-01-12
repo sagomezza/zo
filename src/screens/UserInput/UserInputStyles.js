@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: normalize(39),
     fontSize: normalize(27),
-    fontFamily: 'Montserrat-Regular',
-    color: '#00A9A0',
+    fontFamily: 'Montserrat-Bold',
+    color: '#8F8F8F',
     backgroundColor: '#FFFFFF',
     borderRadius: 30,
   },
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     height: normalize(35),
     width: '20%',
     backgroundColor: "#FFF200",
+    marginLeft: '3%'
 
   },
   buttonText: {

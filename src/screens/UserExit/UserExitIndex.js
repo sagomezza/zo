@@ -269,11 +269,16 @@ const UserOut = (props) => {
       color: '#B7B7B7',
       fontSize: normalize(20)
     },
+    modal2Button: {
+      height: '80%'
+    }
   });
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
+  const [modal5Visible, setModal5Visible] = useState(false);
+
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
 
   function restart() {
@@ -339,12 +344,14 @@ const UserOut = (props) => {
         setRecip(response.data.data);
         setTotalAmount(response.data.data.total)
         setIsDisabled(false)
-        setDateStart(response.data.data.dateStart); 
+        setDateStart(response.data.data.dateStart);
         setDateFinished(response.data.data.dateFinished);
       }
     } catch (err) {
       console.log(err)
       console.log(err?.response)
+      setModal5Visible(true);
+
     }
   }
 
@@ -428,25 +435,25 @@ const UserOut = (props) => {
   function isCharacterALetter(char) {
     return (/[a-zA-Z]/).test(char)
   }
-  
+
   function dateStartDate() {
     if (dateStart) {
-      return (moment(dateStart).format('L')) 
+      return (moment(dateStart).format('L'))
     }
   }
   function dateStartHour() {
     if (dateStart) {
-      return (moment(dateStart).format('LT')) 
+      return (moment(dateStart).format('LT'))
     }
   }
   function dateFinishedDate() {
     if (dateFinished) {
-      return (moment(dateFinished).format('L')) 
+      return (moment(dateFinished).format('L'))
     }
   }
   function dateFinishedHour() {
     if (dateFinished) {
-      return (moment(dateFinished).format('LT')) 
+      return (moment(dateFinished).format('LT'))
     }
   }
 
@@ -544,7 +551,7 @@ const UserOut = (props) => {
               </View>
             </View>
             <View style={styles.textPhoneCode}>
-              <Text style={styles.infoUserText}> TOTAL HORAS: {Math.round(recip?.hours)}</Text>
+              <Text style={styles.infoUserText}> TOTAL HORAS:  {Object.keys(recip).length === 0 ? " " : Math.round(recip.hours)}</Text>
             </View>
             <View style={{
               flexDirection: 'row',
@@ -640,7 +647,7 @@ const UserOut = (props) => {
                       fontSize: normalize(17)
                     }}
                     onPress={() => {
-                      if (totalPay === '-' && totalPay > 0) {
+                      if (totalPay === '' && totalPay > 0) {
                         setIsDisabledValue(false)
                       }
                       finishParking("payed", true);
@@ -672,6 +679,48 @@ const UserOut = (props) => {
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={modal5Visible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{
+              height: '100%',
+              width: '100%',
+              justifyContent: 'space-between',
+              padding: '2%'
+
+            }}>
+              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                <Text style={styles.modalText}> El vehículo con placas {plateOne + ' ' + plateTwo} no se encuentra estacionado. </Text>
+              </View>
+              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                <Button onPress={() => {
+                  setModal5Visible(!modal5Visible);
+                  restart();
+                }}
+                  title="E N T E N D I D O"
+                  color="#00A9A0"
+                  style={
+                    styles.modalButton
+                  }
+                  textStyle={{
+                    color: "#FFFFFF",
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Bold'
+                  }} />
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
       <Modal
         animationType="fade"
         transparent={true}
@@ -745,12 +794,12 @@ const UserOut = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between' }}>
+            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
                 <Text style={styles.modalText}> ¿Estás seguro de que hay un pago pendiente?  </Text>
               </View>
-              <View style={{ height: '18%', width: '100%', justifyContent: 'space-between', flexDirection: 'row' }}>
-                <View style={{ width: '48%', justifyContent: 'flex-end' }}>
+              <View style={{ height: '30%', width: '100%', justifyContent: 'space-between', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
+                <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
                   <Button onPress={() => {
                     setModal2Visible(!modal2Visible);
                     setModal3Visible(!modal3Visible);
@@ -766,7 +815,7 @@ const UserOut = (props) => {
                       fontFamily: 'Montserrat-Bold'
                     }} />
                 </View>
-                <View style={{ width: '48%', justifyContent: 'flex-end' }}>
+                <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
                   <Button onPress={() => {
                     setModal2Visible(!modal2Visible);
 
@@ -798,12 +847,12 @@ const UserOut = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between' }}>
+            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
                 <Text style={styles.modalText}> Elija el tipo de pago  </Text>
               </View>
-              <View style={{ height: '18%', width: '100%', justifyContent: 'space-between', flexDirection: 'row' }}>
-                <View style={{ width: '48%', justifyContent: 'flex-end' }}>
+              <View style={{ height: '30%', width: '100%', justifyContent: 'space-between', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
+                <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
                   <Button onPress={() => {
                     setModal3Visible(!modal3Visible);
                     finishParking("pending", false);
@@ -819,7 +868,7 @@ const UserOut = (props) => {
                       fontFamily: 'Montserrat-Bold'
                     }} />
                 </View>
-                <View style={{ width: '48%', justifyContent: 'flex-end' }}>
+                <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
                   <Button onPress={() => {
                     setModal3Visible(!modal3Visible);
                     setModal4Visible(!modal4Visible);
@@ -852,12 +901,12 @@ const UserOut = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between' }}>
-              <View style={{ margin: '4%', justifyContent: 'space-between', height: ' 40%' }}>
+            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
+              <View style={{ margin: '4%', justifyContent: 'center', height: ' 30%'}}>
                 <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Ingresa el valor exacto de pago: </Text>
                 <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Total a pagar: {`$${numberWithPoints(totalAmount)}`}</Text>
               </View>
-              <View style={{ justifyContent: 'space-between', height: '30%', flexDirection: 'column' }}>
+              <View style={{ justifyContent: 'space-between', height: '40%', flexDirection: 'column', paddingBottom: '6%' }}>
                 <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
                   <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Pago parcial:  </Text>
                   <TextInput
@@ -898,7 +947,7 @@ const UserOut = (props) => {
                   />
                 </View>
               </View>
-              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end'}}>
                 <Button onPress={() => {
                   setModal4Visible(!modal4Visible);
                   setTotalPay(totalPayModal)

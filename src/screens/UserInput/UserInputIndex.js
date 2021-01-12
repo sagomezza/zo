@@ -89,7 +89,7 @@ const UserInput = (props) => {
           response.data.data.forEach(phone => {
             auxPhones.push({ label: phone, value: phone })
           });
-          auxPhones.push({ label: 'Agregar nuevo número', value: 0 })
+          auxPhones.push({ label: '+ agregar', value: 0 })
           setPhones(auxPhones);
           setShowDropdown(true);
         }
@@ -198,6 +198,7 @@ const UserInput = (props) => {
               <TextInput
                 ref={refPlateOne}
                 placeholder={'EVZ'}
+                placeholderTextColor={'#D9D9D9'}
                 style={styles.plateInput}
                 textAlign='center'
                 maxLength={3}
@@ -215,6 +216,7 @@ const UserInput = (props) => {
               <TextInput
                 ref={refPlateTwo}
                 placeholder={'123'}
+                placeholderTextColor={'#D9D9D9'}
                 style={styles.plateInput}
                 textAlign='center'
                 maxLength={3}
@@ -230,20 +232,35 @@ const UserInput = (props) => {
             <View style={{ alignItems: 'center', alignContent: 'center', height: '10%', width: '100%' }}>
               <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: normalize(21) }}>I  N  G  R  E  S  E     C  E  L  U  L  A  R</Text>
             </View>
-            <View style={{ flexDirection: 'column', borderWidth: 1, alignItems: 'center', alignContent: 'center', zIndex: 10, height: '65%', width: '60%' }}>
+            <View style={{ flexDirection: 'column', alignItems: 'center', alignContent: 'center', zIndex: 10, height: '62%', width: '60%' }}>
               {!showPhoneInput ?
                 <DropDownPicker
                   items={phones}
                   zIndex={30}
                   defaultValue={phone}
                   disabled={!showDropdown}
-                  placeholder={"Selecciona un celular"}
-                  containerStyle={{ height: '25%', width: '100%' }}
-                  style={{ backgroundColor: '#fafafa', borderRadius: 30 }}
-                  itemStyle={{
-                    justifyContent: 'center'
+                  placeholder={"Selecciona un numero"}
+                  selectedLabelStyle={{ color: '#8F8F8F', fontSize: normalize(25), textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
+                  containerStyle={{
+                    height: '23%', width: '100%'
                   }}
-                  dropDownStyle={{ backgroundColor: '#fafafa' }}
+                  style={{
+                    backgroundColor: '#fafafa',
+                    borderTopLeftRadius: 20, 
+                    borderTopRightRadius: 20,
+                    borderBottomLeftRadius: 20, 
+                    borderBottomRightRadius: 20
+                    
+                  }}
+                  labelStyle={{
+                    justifyContent: 'center', fontFamily: 'Montserrat-Bold', fontSize: normalize(20), color: '#D9D9D9'
+                  }}
+                  dropDownMaxHeight={100}
+                  dropDownStyle={{ backgroundColor: '#fafafa', borderBottomLeftRadius: 15,
+                  borderBottomRightRadius: 15 }}
+                  arrowColor={'#00A9A0'}
+                  arrowStyle={{alignItems: 'flex-start', alignContent: 'flex-start', justifyContent: 'flex-start'}}
+                  arrowSize={24}
                   onChangeItem={item => {
                     if (item.value === 0) {
                       setShowPhoneInput(true)
@@ -269,7 +286,7 @@ const UserInput = (props) => {
                   value={newPhone}
                 />}
               {codeError && <Text>{codeError}</Text>}
-              <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '10%', width: '60%', justifyContent: 'center' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '30%', width: '60%', justifyContent: 'center', paddingTop: '10%'}}>
                 <CheckBox
                   value={prepayDay}
                   onValueChange={setPrepayDay}
@@ -280,10 +297,12 @@ const UserInput = (props) => {
               </View>
 
 
-              <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%', justifyContent: 'space-evenly' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '40%', width: '100%', justifyContent: 'center' }}>
                 {!loadingStart &&
-                  <Button onPress={() => { startPark(); setLoadingStart(true); setPhones([{ label: 'Selecciona un número', value: 1 }]);
-                  setPhone(1); }}
+                  <Button onPress={() => {
+                    startPark(); setLoadingStart(true); setPhones([{ label: 'Selecciona un número', value: 1 }]);
+                    setPhone(1);
+                  }}
                     title="I N I C I A R"
                     color='#FFF200'
                     style={styles.buttonI}
@@ -302,7 +321,7 @@ const UserInput = (props) => {
                       store.dispatch(actions.setQr(plateOne + plateTwo));
                       navigation.navigate('QRscanner')
                     }}
-                    disabled={(plateOne + plateTwo).length < 6 || !existingUser || plateOne === "" || plateTwo === "" || phone === ""}
+                    disabled={(plateOne + plateTwo).length < 6 || !existingUser || plateOne === "" || plateTwo === "" || prepayDay}
                   >
                     <Image style={{ width: '65%', height: '65%', marginTop: '6%' }} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
                   </TouchableOpacity>
@@ -411,6 +430,7 @@ const UserInput = (props) => {
                     setLoadingStart(false);
                     setShowDropdown(false);
                     setShowPhoneInput(false);
+                    setPrepayDay();
                     setPhones([{ label: 'Selecciona un número', value: 1 }]);
 
                   }}
@@ -480,7 +500,7 @@ const UserInput = (props) => {
                   setPhones([{ label: 'Selecciona un número', value: 1 }]);
                   setPhone(1);
                   setShowDropdown(false);
-
+                  setPrepayDay();
                   setShowPhoneInput(false);
                 }}
                   title="E N T E N D I D O"
