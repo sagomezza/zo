@@ -48,7 +48,6 @@ const BarcodeScanner = (props) => {
 
   const handleBarCodeScanned = async ({ data }) => {
     setScanned(true);
-    console.log(data);
     try {
       const _data = JSON.parse(data);
       if ((qr.plate).length === 0) {
@@ -85,8 +84,6 @@ const BarcodeScanner = (props) => {
         // readHq();
         // setPlate(qr.plate);
         // setModalVisible(true);
-
-
       }
     }
     catch (err) {

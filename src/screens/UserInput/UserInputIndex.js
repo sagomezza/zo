@@ -151,9 +151,6 @@ const UserInput = (props) => {
         readHq();
         setLoadingStart(false)
         setPhones([{ label: 'Selecciona un número', value: 1 }]);
-        setPhone(1);
-
-
         if (isCharacterALetter(plateTwo[2])) {
           store.dispatch(actions.addBike());
         } else {
@@ -268,7 +265,6 @@ const UserInput = (props) => {
                       setShowPhoneInput(true)
                     } else {
                       setPhone(item.value)
-                      
                     }
                   }
                   }
@@ -302,8 +298,8 @@ const UserInput = (props) => {
               <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '40%', width: '100%', justifyContent: 'center' }}>
                 {!loadingStart &&
                   <Button onPress={() => {
-                    startPark(); setLoadingStart(true); setPhones([{ label: 'Selecciona un número', value: 1 }]);
-                    setPhone(1);
+                    startPark(); setLoadingStart(true); 
+                    
                   }}
                     title="I N I C I A R"
                     color='#FFF200'
@@ -482,7 +478,7 @@ const UserInput = (props) => {
               </Text>
 
               <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
-                <Text style={styles.modalPhoneText}>+ {newPhone} </Text>
+                <Text style={styles.modalPhoneText}> {newPhone? '+' + newPhone : phone} </Text>
               </View>
               <View style={{ height: '35%', width: '75%', justifyContent: 'center' }}>
                 <Image

@@ -7,7 +7,7 @@ import FooterIndex from '../../components/Footer/index';
 import { connect } from "react-redux";
 import instance from "../../config/axios";
 import * as actions from "../../redux/actions";
-import { MARKEXIT, FINISHPARKING, READ_HQ, READ_PARANOIC_USER, GET_RECIPS } from '../../config/api'
+import { FINISHPARKING, READ_HQ, READ_PARANOIC_USER, GET_RECIPS, CHECK_PARKING } from '../../config/api'
 import { TIMEOUT } from '../../config/constants/constants';
 import store from '../../config/store';
 import Button from '../../components/Button';
@@ -36,7 +36,7 @@ const UserOut = (props) => {
   const [plateTwo, setPlateTwo] = useState('');
   const [dateStart, setDateStart] = useState('');
   const [dateFinished, setDateFinished] = useState('');
-
+  const [check, setCheck] = useState({})
 
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
@@ -302,7 +302,7 @@ const UserOut = (props) => {
     setModal4Visible(false);
     setDateStart('');
     setDateFinished('');
-
+    setCheck({});
   }
 
   useEffect(() => {
@@ -319,24 +319,25 @@ const UserOut = (props) => {
           const splitPlate = (response.data.data.plate)
           setPlateOne(splitPlate[0] + splitPlate[1] + splitPlate[2])
           setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlate[5])
-          markExit()
+          checkParking()
           store.dispatch(actions.setPhone(''))
           setIsParanoicUser(true)
         }
       } catch (err) {
         console.log(err?.response)
+        console.log(err)
 
       }
     }
     readParanoicUser()
   }, [qr.phone]);
 
-  async function markExit() {
+  async function checkParking() {
     try {
       if ((plateOne + plateTwo).length === 6) {
         let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
         const response = await instance.post(
-          MARKEXIT,
+          CHECK_PARKING,
           {
             plate: plateOne + plateTwo,
             hqId: reserve[0].hqId,
@@ -347,22 +348,21 @@ const UserOut = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        setRecip(response.data.data);
-        setTotalAmount(response.data.data.total)
-        setIsDisabled(false)
+        setDateFinished(new Date());
         setDateStart(response.data.data.dateStart);
-        setDateFinished(response.data.data.dateFinished);
+        setTotalAmount(response.data.data.total);
+        setIsDisabled(false)
+        setCheck(response.data.data)
       }
     } catch (err) {
       console.log(err)
       console.log(err?.response)
       setModal5Visible(true);
-
     }
   }
 
   useEffect(() => {
-    markExit()
+    checkParking()
   }, [plateOne, plateTwo]);
 
 
@@ -374,8 +374,9 @@ const UserOut = (props) => {
       if (response.data.response) {
         store.dispatch(actions.setReservations(response.data.data.reservations));
       }
-    } catch (error) {
-      console.log("err: ", error);
+    } catch (err) {
+      console.log(err?.response)
+      console.log(err)
     }
   };
 
@@ -389,47 +390,65 @@ const UserOut = (props) => {
       }
     } catch (err) {
       console.log(err?.response)
-      //console.log("err: ", error);
+      console.log(err)
     }
   };
 
 
   const finishParking = async (paymentStatus, showModal) => {
     setLoading(true)
+    console.log({
+      plate: check.plate,
+      hqId: check.hqId,
+      phone: check.phone,
+      paymentType: "cash",
+      cash: parseInt(totalPay),
+      change: totalPay - totalAmount,
+      status: paymentStatus,
+      isParanoic: isParanoicUser,
+      officialEmail: officialProps.email,
+      prepaidDay: true,
+      dateFinished: new Date()
+    })
     try {
       const response = await instance.post(
         FINISHPARKING,
         {
-          plate: recip.plate,
-          hqId: recip.hqId,
-          phone: recip.phone,
-          recipId: recip.id,
+          plate: check.plate,
+          hqId: check.hqId,
+          phone: check.phone,
           paymentType: "cash",
           cash: parseInt(totalPay),
           change: totalPay - totalAmount,
           status: paymentStatus,
           isParanoic: isParanoicUser,
           officialEmail: officialProps.email,
-          prepaidDay: true
+          prepaidDay: true,
+          dateFinished: new Date()
         },
         { timeout: TIMEOUT }
       );
-      if (isCharacterALetter(recip.plate[5])) {
+      console.log('-----2-----')
+
+      if (isCharacterALetter(check.plate[5])) {
         store.dispatch(actions.subtractBike());
       } else {
         store.dispatch(actions.subtractCar());
       }
       readHq()
+      setRecip(response.data.data);
       getRecips()
       setLoading(false)
       setIsDisabled(true);
       setIsDisabledValue(true);
-
       if (showModal) {
         setModalVisible(true)
       }
     } catch (err) {
+      console.log('-----1-----')
       console.log(err?.response)
+      console.log('-----2-----')
+      console.log(err)
       // setLoading(true)
       setLoading(false);
       setIsDisabled(true);
@@ -463,7 +482,7 @@ const UserOut = (props) => {
     }
   }
 
-  let phoneNumber = recip.phone + ''
+  let phoneNumber = check.phone + ''
   let phoneNumberLength = phoneNumber.length
   // console.log(phoneNumberLength)
 
@@ -527,10 +546,10 @@ const UserOut = (props) => {
 
             </View>
             <View style={styles.textPhoneCode}>
-              <Text style={styles.infoUserText}> {phoneNumberLength > 13 ? '': recip.phone } </Text>
+              <Text style={styles.infoUserText}> {phoneNumberLength > 13 ? '' : check.phone} </Text>
             </View>
             <View style={styles.codeContainer}>
-              <Text style={styles.codeText}>CODIGO: {recip.verificationCode} </Text>
+              <Text style={styles.codeText}>CODIGO: {check.verificationCode} </Text>
             </View>
             <View style={{
               flexDirection: 'row',
@@ -563,7 +582,7 @@ const UserOut = (props) => {
               </View>
             </View>
             <View style={styles.textPhoneCode}>
-              <Text style={styles.infoUserText}> TOTAL HORAS:  {Object.keys(recip).length === 0 ? " " : Math.round(recip.hours)}</Text>
+              <Text style={styles.infoUserText}> TOTAL HORAS:  {Object.keys(check).length === 0 ? '' : Math.round(check.hours)}</Text>
             </View>
             <View style={{
               flexDirection: 'row',
@@ -762,7 +781,7 @@ const UserOut = (props) => {
               </Text>
 
               <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
-                <Text style={styles.modalPhoneText}>{phoneNumberLength > 13 ? '': recip.phone } </Text>
+                <Text style={styles.modalPhoneText}>{phoneNumberLength > 13 ? '' : recip.phone} </Text>
               </View>
               <View style={{ height: '35%', width: '75%', justifyContent: 'center' }}>
                 <Image
@@ -914,7 +933,7 @@ const UserOut = (props) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-              <View style={{ margin: '4%', justifyContent: 'center', height: ' 30%'}}>
+              <View style={{ margin: '4%', justifyContent: 'center', height: ' 30%' }}>
                 <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Ingresa el valor exacto de pago: </Text>
                 <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Total a pagar: {`$${numberWithPoints(totalAmount)}`}</Text>
               </View>
@@ -959,7 +978,7 @@ const UserOut = (props) => {
                   />
                 </View>
               </View>
-              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end'}}>
+              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
                   setModal4Visible(!modal4Visible);
                   setTotalPay(totalPayModal)

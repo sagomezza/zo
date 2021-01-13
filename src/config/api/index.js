@@ -18,7 +18,7 @@ export const GET_SHIFT_RECIPS = "/getShiftRecips";
 export const READ_HQ = "/readHq";
 //PARKING PROCESS
 export const START_PARKING = "/startParking";
-export const MARKEXIT = "/markExit";
+export const CHECK_PARKING = "/checkParking";
 export const FINISHPARKING = "/finishParking";
 
 //ADMIN 
