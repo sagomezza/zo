@@ -133,7 +133,13 @@ const styles = StyleSheet.create({
   modalText: {
     textAlign: "center",
     fontFamily: 'Montserrat-Regular',
-    color: '#B7B7B7',
+    color: '#B7B7B7', 
+    fontSize: normalize(20)
+  },
+  modalTextAlert: {
+    textAlign: "center",
+    fontFamily: 'Montserrat-Regular',
+    color: 'red',
     fontSize: normalize(20)
   },
   modalButton: {

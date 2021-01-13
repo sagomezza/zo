@@ -269,6 +269,12 @@ const UserOut = (props) => {
       color: '#B7B7B7',
       fontSize: normalize(20)
     },
+    modalTextAlert: {
+      textAlign: "center",
+      fontFamily: 'Montserrat-Regular',
+      color: 'red',
+      fontSize: normalize(20)
+    },
     modal2Button: {
       height: '80%'
     }
@@ -457,6 +463,10 @@ const UserOut = (props) => {
     }
   }
 
+  let phoneNumber = recip.phone + ''
+  let phoneNumberLength = phoneNumber.length
+  // console.log(phoneNumberLength)
+
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <ImageBackground
@@ -483,6 +493,7 @@ const UserOut = (props) => {
               <TextInput
                 ref={refPlateOne}
                 placeholder={'EVZ'}
+                placeholderTextColor={'#D9D9D9'}
                 style={styles.plateInput}
                 textAlign='center'
                 maxLength={3}
@@ -499,6 +510,7 @@ const UserOut = (props) => {
               <TextInput
                 ref={refPlateTwo}
                 placeholder={'123'}
+                placeholderTextColor={'#D9D9D9'}
                 value={plateTwo}
                 style={styles.plateInput}
                 textAlign='center'
@@ -515,7 +527,7 @@ const UserOut = (props) => {
 
             </View>
             <View style={styles.textPhoneCode}>
-              <Text style={styles.infoUserText}> {recip.phone} </Text>
+              <Text style={styles.infoUserText}> {phoneNumberLength > 13 ? '': recip.phone } </Text>
             </View>
             <View style={styles.codeContainer}>
               <Text style={styles.codeText}>CODIGO: {recip.verificationCode} </Text>
@@ -698,7 +710,7 @@ const UserOut = (props) => {
 
             }}>
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalText}> El vehículo con placas {plateOne + ' ' + plateTwo} no se encuentra estacionado. </Text>
+                <Text style={styles.modalTextAlert}> El vehículo con placas {plateOne + ' ' + plateTwo} no se encuentra estacionado. </Text>
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
@@ -750,7 +762,7 @@ const UserOut = (props) => {
               </Text>
 
               <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
-                <Text style={styles.modalPhoneText}>{recip.phone}</Text>
+                <Text style={styles.modalPhoneText}>{phoneNumberLength > 13 ? '': recip.phone } </Text>
               </View>
               <View style={{ height: '35%', width: '75%', justifyContent: 'center' }}>
                 <Image

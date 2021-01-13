@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import normalize from "../../config/services/normalizeFontSize";
 
 const styles = StyleSheet.create({
   container: {
@@ -79,17 +80,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    // marginTop: 22,
     backgroundColor: 'rgba(52, 52, 52, 0.8)',
-    
+
   },
   modalView: {
-    height: 200,
-    padding: 35,
-    borderRadius:20,
+    height: normalize(350),
+    width: normalize(350),
+    padding: normalize(20),
+    borderRadius: 50,
     borderColor: '#707070',
     borderWidth: 1,
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#FFF',
     shadowColor: '#FFF',
@@ -100,6 +102,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0,
     shadowRadius: 50,
     elevation: 5,
+    flexDirection: 'column',
+    borderWidth: 1
+
   },
   openButton: {
     backgroundColor: "#F194FF",
@@ -114,10 +119,21 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold'
   },
   modalText: {
-    marginBottom: 15,
     textAlign: "center",
-    fontFamily: 'Montserrat-Regular'
-  }
+    fontFamily: 'Montserrat-Regular',
+    color: '#B7B7B7',
+    fontSize: normalize(20)
+  },
+  modalTextAlert: {
+    textAlign: "center",
+    fontFamily: 'Montserrat-Regular',
+    color: 'red',
+    fontSize: normalize(20)
+  },
+  modalButton: {
+    width: '100%',
+    height: '70%',
+  },
 });
 
 export default styles;

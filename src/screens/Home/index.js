@@ -19,6 +19,8 @@ const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
 
+  
+
   useEffect(() => {
     const getRecips = async () => {
       try {
@@ -78,8 +80,7 @@ const HomeIndex = (props) => {
       return Math.round(hours)
     } else return hours
   }
-
-
+  
   return (
     <View style={{ flex: 1 }}>
       {/* <View style={{ heigth: '14%' }} >
@@ -192,7 +193,7 @@ const HomeIndex = (props) => {
                       <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
                         <View style={{ marginBottom: '2%' }} >
                           <Text style={HomeStyles.textPlaca}>{item.plate}</Text>
-                          <Text style={HomeStyles.textPago}>{`Pago por ${formatHours(item.hours)} horas`}</Text>
+                          <Text style={HomeStyles.textPago}>Pago por ${formatHours(item.hours)} horas</Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
                           <Text style={HomeStyles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
@@ -227,7 +228,7 @@ const HomeIndex = (props) => {
                         </View>
                         <View style={{ flex: 1, alignItems: 'flex-end' }} >
                           <Text style={HomeStyles.textMoney}>{moment(item.dateStart).format('L')}  {moment(item.dateStart).format('LT')}</Text>
-                          <Text style={HomeStyles.textPago}>Pago por horas</Text>
+                          <Text style={HomeStyles.textPago}>Pago por {item.prepaidDay === true ? "pase día": "horas"}</Text>
                         </View>
                       </View>
                     )

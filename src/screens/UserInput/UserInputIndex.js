@@ -114,9 +114,11 @@ const UserInput = (props) => {
               plate: plateOne + plateTwo,
               type: "starter"
             },
+            
             { timeout: TIMEOUT }
           )
         }
+        setExistingUser(true);
       } catch (err) {
         console.log(err?.response)
       }
@@ -266,7 +268,7 @@ const UserInput = (props) => {
                       setShowPhoneInput(true)
                     } else {
                       setPhone(item.value)
-                      console.log("item is ", item.value)
+                      
                     }
                   }
                   }
@@ -307,7 +309,7 @@ const UserInput = (props) => {
                     color='#FFF200'
                     style={styles.buttonI}
                     textStyle={styles.buttonText}
-                    disabled={!existingUser}
+                    disabled={!existingUser || plateOne === "" || plateTwo === ""}
                   />
                 }
                 {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
@@ -319,9 +321,10 @@ const UserInput = (props) => {
                       setPlateTwo("");
                       setPhone("");
                       store.dispatch(actions.setQr(plateOne + plateTwo));
-                      navigation.navigate('QRscanner')
+                      navigation.navigate('QRscanner');
+                      setLoadingStart(false)
                     }}
-                    disabled={(plateOne + plateTwo).length < 6 || !existingUser || plateOne === "" || plateTwo === "" || prepayDay}
+                    disabled={(plateOne + plateTwo).length < 6 || !existingUser }
                   >
                     <Image style={{ width: '65%', height: '65%', marginTop: '6%' }} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
                   </TouchableOpacity>
@@ -419,7 +422,7 @@ const UserInput = (props) => {
 
               }}>
                 <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                  <Text style={styles.modalText}> El vehículo con placas {plateOne + ' ' + plateTwo} ya se encuentra estacionado. </Text>
+                  <Text style={styles.modalTextAlert}> Este vehículo ya se encuentra parqueado. </Text>
                 </View>
                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                   <Button onPress={() => {
@@ -428,11 +431,11 @@ const UserInput = (props) => {
                     setPlateTwo("");
                     setNewPhone("");
                     setLoadingStart(false);
+                    setPhone(1);
                     setShowDropdown(false);
                     setShowPhoneInput(false);
                     setPrepayDay();
                     setPhones([{ label: 'Selecciona un número', value: 1 }]);
-
                   }}
                     title="E N T E N D I D O"
                     color="#00A9A0"

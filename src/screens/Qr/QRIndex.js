@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Modal, TouchableHighlight, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Modal, TouchableHighlight, Dimensions, Image } from 'react-native';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
@@ -44,18 +44,17 @@ const BarcodeScanner = (props) => {
     })();
   }, []);
 
+
+
   const handleBarCodeScanned = async ({ data }) => {
     setScanned(true);
+    console.log(data);
     try {
       const _data = JSON.parse(data);
-
       if ((qr.plate).length === 0) {
-
         store.dispatch(actions.setPhone(_data.id))
         navigation.navigate("UserOut")
-
       } else {
-
         let type
         if (isCharacterALetter(qr.plate[5])) type = "bike"
         else type = "car"
@@ -71,16 +70,23 @@ const BarcodeScanner = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        setStartParking(response.data.data);
-        readHq();
-        setPlate(qr.plate);
-        setModalVisible(true);
-
-        if (isCharacterALetter(qr.plate[5])) {
-          store.dispatch(actions.subtractBike());
-        } else {
-          store.dispatch(actions.subtractCar());
+        if (response !== undefined) {
+          setStartParking(response.data.data);
+          readHq();
+          setPlate(qr.plate);
+          setModalVisible(true);
+          if (isCharacterALetter(qr.plate[5])) {
+            store.dispatch(actions.subtractBike());
+          } else {
+            store.dispatch(actions.subtractCar());
+          }
         }
+        // setStartParking(response.data.data);
+        // readHq();
+        // setPlate(qr.plate);
+        // setModalVisible(true);
+
+
       }
     }
     catch (err) {
@@ -136,7 +142,7 @@ const BarcodeScanner = (props) => {
                 
             </View> */}
       <View style={styles.container}>
-      <Header navigation={navigation} />
+        <Header navigation={navigation} />
 
         <Camera
           style={styles.camera}
@@ -198,6 +204,7 @@ const BarcodeScanner = (props) => {
         </Camera>
       </View>
       <FooterIndex navigation={navigation} />
+      
       <Modal
         animationType="fade"
         transparent={true}
@@ -209,31 +216,50 @@ const BarcodeScanner = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ margin: '6%', alignItems: 'center', paddingBottom: '4%' }}>
-              <Text style={{ ...styles.modalText, fontSize: normalize(25) }}> {plate} </Text>
-              <Text style={styles.modalText}>Ha iniciado el parqueo </Text>
-              <Text style={styles.modalText}> Hora: {moment().format('LT')}</Text>
+            <View style={{
+              flexDirection: 'column',
+              height: '100%',
+              width: '100%',
+              alignContent: 'center',
+              alignItems: 'center',
+              padding: '2%',
+              justifyContent: 'space-between'
+            }}>
+              <Text style={{
+                fontSize: normalize(51),
+                textAlign: 'center',
+                color: '#00A9A0',
+                fontFamily: 'Montserrat-Bold'
+              }}>
+                {plate}
+              </Text>
+              <View style={{ height: '35%', width: '75%', justifyContent: 'center' }}>
+                <Image
+                  style={{ alignSelf: 'center', width: '50%', height: '50%' }}
+                  resizeMode={'contain'}
+                  source={require('../../../assets/images/Clock.png')} />
+              </View>
+              <View style={{ height: '15%', width: '76%', justifyContent: 'center' }}>
+                <Text style={styles.modalText}>Ha iniciado el parqueo </Text>
+                <Text style={styles.modalText}> Hora: {moment().format('LT')}</Text>
+              </View>
+              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                <Button onPress={() => {
+                  setModalVisible(!modalVisible);
+                  navigation.navigate("UserInput");
+                }}
+                  title="E N T E N D I D O"
+                  color="#00A9A0"
+                  style={
+                    styles.modalButton
+                  }
+                  textStyle={{
+                    color: "#FFFFFF",
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Bold'
+                  }} />
+              </View>
             </View>
-            <Button onPress={() => {
-              setModalVisible(!modalVisible);
-              navigation.navigate("UserInput");
-            }}
-              title="Entendido"
-              color="#ffffff"
-              style={{
-                borderWidth: 1,
-                borderColor: "#D9D9D9",
-                alignSelf: 'flex-end',
-                width: '30%',
-                heigth: '10%',
-                margin: '5%',
-                paddingHorizontal: '4%',
-              }}
-              textStyle={{
-                color: "#00A9A0",
-                textAlign: "center",
-                fontFamily: 'Montserrat-Regular'
-              }} />
           </View>
         </View>
       </Modal>
@@ -248,21 +274,37 @@ const BarcodeScanner = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ marginBottom: '7%', alignItems: 'center' }}>
-              <Text style={styles.modalText}> El vehículo ya se encuentra estacionado. </Text>
+            <View style={{
+              height: '100%',
+              width: '100%',
+              justifyContent: 'space-between',
+              padding: '2%'
+
+            }}>
+              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                <Text style={styles.modalTextAlert}> El vehículo con placas ya se encuentra estacionado. </Text>
+              </View>
+              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                <Button onPress={() => {
+                  setModal2Visible(!modal2Visible);
+                  navigation.navigate("UserInput");
+                }}
+                  title="E N T E N D I D O"
+                  color="#00A9A0"
+                  style={
+                    styles.modalButton
+                  }
+                  textStyle={{
+                    color: "#FFFFFF",
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Bold'
+                  }} />
+              </View>
             </View>
-            <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: "#ffffff" }}
-              onPress={() => {
-                setModal2Visible(!modal2Visible);
-                navigation.navigate("UserInput");
-              }}
-            >
-              <Text style={styles.textStyle}>Entendido</Text>
-            </TouchableHighlight>
           </View>
         </View>
       </Modal>
+
     </View>
   );
 }
