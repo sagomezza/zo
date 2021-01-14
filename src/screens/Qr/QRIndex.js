@@ -87,6 +87,10 @@ const BarcodeScanner = (props) => {
       }
     }
     catch (err) {
+      console.log('startparkinghqcatch-----------')
+      console.log(err);
+      console.log('startparkinghqcatch-----------')
+
       console.log(err?.response?.data);
       if (err?.response.data.response === -2) setModal2Visible(true)
     }
@@ -102,7 +106,12 @@ const BarcodeScanner = (props) => {
         store.dispatch(actions.setReservations(response.data.data.reservations));
       }
     } catch (error) {
+      console.log('qrreadhqcatch-----------')
       console.log("err: ", error);
+      console.log('qrreadhqcatch-----------')
+      console.log(err?.response?.data);
+      console.log('qrreadhqcatch-----------')
+
     }
   };
 

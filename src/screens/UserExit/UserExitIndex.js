@@ -407,7 +407,7 @@ const UserOut = (props) => {
       status: paymentStatus,
       isParanoic: isParanoicUser,
       officialEmail: officialProps.email,
-      prepayFullDay: false,
+      // prepayFullDay: false,
       dateFinished: new Date()
     })
     try {
