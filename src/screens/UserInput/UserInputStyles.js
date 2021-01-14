@@ -34,6 +34,14 @@ const styles = StyleSheet.create({
     marginLeft: '0%',
     paddingHorizontal: '24%',
   },
+  buttonIDisabled: {
+    borderRadius: 30,
+    height: normalize(35),
+    width: '100%',
+    marginLeft: '0%',
+    paddingHorizontal: '24%',
+    opacity: 0.5
+  },
   buttonNew: {
     borderRadius: 30,
     height: '75%',
@@ -50,7 +58,21 @@ const styles = StyleSheet.create({
     width: '20%',
     backgroundColor: "#FFF200",
     marginLeft: '3%'
-
+  },
+  qrImage:{
+    width: '65%', 
+    height: '65%', 
+    marginTop: '6%'
+  },
+  buttonTDisabled: {
+    borderRadius: 30,
+    alignItems: 'center',
+    alignContent: 'center',
+    height: normalize(35),
+    width: '20%',
+    backgroundColor: "#FFF200",
+    marginLeft: '3%',
+    opacity: 0.5
   },
   buttonText: {
     color: '#00A9A0',

@@ -159,6 +159,7 @@ const LogoutIndex = (props) => {
 
   // }
 
+
   return (
     <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
 
@@ -233,7 +234,7 @@ const LogoutIndex = (props) => {
                   value={inputValue == 0 ? '' : inputValue + ''}
 
                 />
-                <TouchableOpacity style={styles.buttonT}
+                <TouchableOpacity style={[!inputValue.length === 0? styles.buttonTDisabled : styles.buttonT]}
                   onPress={() => {
                     setModal2Visible(true)
                   }}
@@ -286,10 +287,9 @@ const LogoutIndex = (props) => {
                 setModalVisible(true)
               }}
                 title="C E R R A R  T U R N O"
+                disabled={!inputValue.length === 0}
                 color="#00A9A0"
-                style={
-                  styles.shiftButton
-                }
+                style={[ inputValue.length === 0 ? styles.shiftButtonDisabled :styles.shiftButton]}
                 textStyle={{
                   color: "#FFFFFF",
                   textAlign: "center",
@@ -319,51 +319,46 @@ const LogoutIndex = (props) => {
           Alert.alert("Modal has been closed.");
         }}
       >
-        <View style={HomeStyles.centeredView}>
-          <View style={HomeStyles.modalView}>
-            <View style={{ margin: '3%', alignItems: 'center' }}>
-              <Text style={HomeStyles.modalText}> ¿Estás seguro de que quieres guardar el total? </Text>
-            </View>
-            <View style={{ flexDirection: 'row', width: '100%' }}>
-              <Button onPress={() => {
-                setModal2Visible(!modal2Visible);
-                setIsDisabled(false)
-              }}
-                title="Si"
-                color="#ffffff"
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#D9D9D9",
-                  alignSelf: 'center',
-                  width: '90%',
-                  heigth: '10%',
-                  margin: '8%',
-                  paddingHorizontal: '4%',
-                }}
-                textStyle={{
-                  color: "#00A9A0",
-                  textAlign: "center",
-                  fontFamily: 'Montserrat-Regular'
-                }} />
-              <Button onPress={() => {
-                setModal2Visible(!modal2Visible);
-              }}
-                title="No"
-                color="#ffffff"
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#D9D9D9",
-                  alignSelf: 'center',
-                  width: '90%',
-                  heigth: '10%',
-                  margin: '8%',
-                  paddingHorizontal: '4%',
-                }}
-                textStyle={{
-                  color: "#00A9A0",
-                  textAlign: "center",
-                  fontFamily: 'Montserrat-Regular'
-                }} />
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
+              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                <Text style={styles.modalText}> ¿Estás seguro de que quieres guardar el total?  </Text>
+              </View>
+              <View style={{ height: '30%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
+                <View style={{ width: '75%', height: '50%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                  <Button onPress={() => {
+                    setModal2Visible(!modal2Visible);
+                    setIsDisabled(false)
+                  }}
+                    title="S I"
+                    color="#00A9A0"
+                    style={
+                      styles.modal2Button
+                    }
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }} />
+                </View>
+                <View style={{ width: '75%', height: '50%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                  <Button onPress={() => {
+                    setModal2Visible(!modal2Visible);
+
+                  }}
+                    title="N O"
+                    color="#00A9A0"
+                    style={
+                      styles.modal2Button
+                    }
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }} />
+                </View>
+              </View>
             </View>
           </View>
         </View>

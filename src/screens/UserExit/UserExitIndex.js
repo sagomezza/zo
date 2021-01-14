@@ -189,11 +189,29 @@ const UserOut = (props) => {
       paddingHorizontal: '40%',
       height: '90%'
     },
+    buttonStyleDisabled: {
+      borderRadius: 30,
+      width: '100%',
+      paddingHorizontal: '40%',
+      height: '90%',
+      opacity: 0.5
+    },
     buttonStylePP: {
       borderRadius: 25,
       width: '100%',
       paddingHorizontal: '30%',
-      height: '90%'
+      height: '90%',
+      borderColor: '#00A9A0', 
+      borderWidth: 1 
+    },
+    buttonStylePPDisabled: {
+      borderRadius: 25,
+      width: '100%',
+      paddingHorizontal: '30%',
+      height: '90%',
+      borderColor: '#00A9A0', 
+      borderWidth: 1,
+      opacity: 0.5 
     },
     centeredView: {
       flex: 1,
@@ -671,7 +689,7 @@ const UserOut = (props) => {
                     title="C O B R A R"
                     color='#00A9A0'
                     disabled={isDisabled && isDisabledValue}
-                    style={styles.buttonStyle}
+                    style={[isDisabled && isDisabledValue ? styles.buttonStyleDisabled : styles.buttonStyle]}
                     textStyle={{
                       color: '#FFFFFF',
                       fontFamily: 'Montserrat-Bold',
@@ -692,7 +710,7 @@ const UserOut = (props) => {
                     title="P A G O   P E N D I E N T E"
                     color='#FFFFFF'
                     disabled={isDisabled}
-                    style={{ ...styles.buttonStylePP, borderColor: '#00A9A0', borderWidth: 1 }}
+                    style={[isDisabled ? styles.buttonStylePPDisabled : styles.buttonStylePP ] }
                     textStyle={{ color: '#8F8F8F', fontFamily: 'Montserrat-Bold', fontSize: normalize(16) }}
                     onPress={() => {
                       setModal2Visible(true);

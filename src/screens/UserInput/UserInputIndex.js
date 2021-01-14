@@ -303,14 +303,16 @@ const UserInput = (props) => {
                   }}
                     title="I N I C I A R"
                     color='#FFF200'
-                    style={styles.buttonI}
+                    style={[styles.buttonI, !existingUser || plateOne === "" || plateTwo === "" ? styles.buttonIDisabled : styles.buttonI]}
                     textStyle={styles.buttonText}
                     disabled={!existingUser || plateOne === "" || plateTwo === ""}
+                    
                   />
                 }
                 {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
                 {!loadingStart &&
-                  <TouchableOpacity style={styles.buttonT}
+                  <TouchableOpacity 
+                    style={[styles.buttonT, (plateOne + plateTwo).length < 6 || !existingUser ? styles.buttonTDisabled : styles.buttonT]}
                     onPress={() => {
                       setLoadingStart(true);
                       setPlateOne("");
@@ -322,7 +324,7 @@ const UserInput = (props) => {
                     }}
                     disabled={(plateOne + plateTwo).length < 6 || !existingUser }
                   >
-                    <Image style={{ width: '65%', height: '65%', marginTop: '6%' }} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
+                    <Image style={styles.qrImage} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
                   </TouchableOpacity>
                 }
               </View>
