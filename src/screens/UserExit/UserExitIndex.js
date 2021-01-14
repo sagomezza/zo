@@ -407,7 +407,7 @@ const UserOut = (props) => {
       status: paymentStatus,
       isParanoic: isParanoicUser,
       officialEmail: officialProps.email,
-      prepaidDay: true,
+      prepayFullDay: false,
       dateFinished: new Date()
     })
     try {
@@ -423,7 +423,6 @@ const UserOut = (props) => {
           status: paymentStatus,
           isParanoic: isParanoicUser,
           officialEmail: officialProps.email,
-          prepaidDay: true,
           dateFinished: new Date()
         },
         { timeout: TIMEOUT }
@@ -436,6 +435,7 @@ const UserOut = (props) => {
         store.dispatch(actions.subtractCar());
       }
       readHq()
+      console.log(response.data)
       setRecip(response.data.data);
       getRecips()
       setLoading(false)

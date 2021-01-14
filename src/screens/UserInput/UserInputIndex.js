@@ -140,7 +140,7 @@ const UserInput = (props) => {
             hqId: officialHq,
             dateStart: new Date(),
             phone: !showPhoneInput ? phone : '+57' + newPhone,
-            prepaidDay: true,
+            prepayFullDay: false,
             officialEmail: officialEmail,
             type
           },
@@ -287,7 +287,7 @@ const UserInput = (props) => {
               <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '30%', width: '60%', justifyContent: 'center', paddingTop: '10%'}}>
                 <CheckBox
                   value={prepayDay}
-                  onValueChange={setPrepayDay}
+                  onValueChange={() => setPrepayDay(!prepayDay)}
                   style={styles.checkbox}
                   tintColors={{ true: '#FFF200', false: 'transparent' }}
                 />
