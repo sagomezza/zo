@@ -23,8 +23,7 @@ const UserOut = (props) => {
   // const dateMonthOut = new Date('07/05/20');
 
   const [totalAmount, setTotalAmount] = useState(0);
-  const [totalPay, setTotalPay] = useState(0);
-  const [totalPayModal, setTotalPayModal] = useState(0);
+  const [totalPay, setTotalPay] = useState(-1);
   const [recip, setRecip] = useState({})
   const [loading, setLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
@@ -201,17 +200,17 @@ const UserOut = (props) => {
       width: '100%',
       paddingHorizontal: '30%',
       height: '90%',
-      borderColor: '#00A9A0', 
-      borderWidth: 1 
+      borderColor: '#00A9A0',
+      borderWidth: 1
     },
     buttonStylePPDisabled: {
       borderRadius: 25,
       width: '100%',
       paddingHorizontal: '30%',
       height: '90%',
-      borderColor: '#00A9A0', 
+      borderColor: '#00A9A0',
       borderWidth: 1,
-      opacity: 0.5 
+      opacity: 0.5
     },
     centeredView: {
       flex: 1,
@@ -307,8 +306,7 @@ const UserOut = (props) => {
 
   function restart() {
     setTotalAmount(0);
-    setTotalPay(0);
-    setTotalPayModal(0);
+    setTotalPay(-1);
     setPlateOne("");
     setPlateTwo("");
     setRecip({})
@@ -371,6 +369,10 @@ const UserOut = (props) => {
         setTotalAmount(response.data.data.total);
         setIsDisabled(false)
         setCheck(response.data.data)
+        console.log('-----1-----')
+
+        console.log(response.data)
+        console.log('-----1-----')
       }
     } catch (err) {
       console.log(err)
@@ -413,6 +415,8 @@ const UserOut = (props) => {
   };
 
 
+
+
   const finishParking = async (paymentStatus, showModal) => {
     setLoading(true)
     console.log({
@@ -425,7 +429,6 @@ const UserOut = (props) => {
       status: paymentStatus,
       isParanoic: isParanoicUser,
       officialEmail: officialProps.email,
-      // prepayFullDay: false,
       dateFinished: new Date()
     })
     try {
@@ -454,11 +457,14 @@ const UserOut = (props) => {
       }
       readHq()
       console.log(response.data)
+      console.log('-----2-----')
+
       setRecip(response.data.data);
       getRecips()
       setLoading(false)
       setIsDisabled(true);
       setIsDisabledValue(true);
+      restart();
       if (showModal) {
         setModalVisible(true)
       }
@@ -503,6 +509,8 @@ const UserOut = (props) => {
   let phoneNumber = check.phone + ''
   let phoneNumberLength = phoneNumber.length
   // console.log(phoneNumberLength)
+
+  let textinputMoney = totalPay === -1 ? '' : totalPay + ''
 
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
@@ -643,7 +651,7 @@ const UserOut = (props) => {
                   style={styles.inputMoney}
                   keyboardType='numeric'
                   placeholder='$ 0'
-                  value={totalPay === 0 ? '' : totalPay + ''}
+                  value={textinputMoney}
                   onChangeText={text => setTotalPay(text)}
                 />
               </View>
@@ -696,8 +704,8 @@ const UserOut = (props) => {
                       fontSize: normalize(17)
                     }}
                     onPress={() => {
-                      if (totalPay === '' && totalPay > 0) {
-                        setIsDisabledValue(false)
+                      if (textinputMoney === '') {
+                        setIsDisabledValue(true)
                       }
                       finishParking("payed", true);
                     }} />
@@ -710,7 +718,7 @@ const UserOut = (props) => {
                     title="P A G O   P E N D I E N T E"
                     color='#FFFFFF'
                     disabled={isDisabled}
-                    style={[isDisabled ? styles.buttonStylePPDisabled : styles.buttonStylePP ] }
+                    style={[isDisabled ? styles.buttonStylePPDisabled : styles.buttonStylePP]}
                     textStyle={{ color: '#8F8F8F', fontFamily: 'Montserrat-Bold', fontSize: normalize(16) }}
                     onPress={() => {
                       setModal2Visible(true);
@@ -921,6 +929,7 @@ const UserOut = (props) => {
                   <Button onPress={() => {
                     setModal3Visible(!modal3Visible);
                     setModal4Visible(!modal4Visible);
+
                   }}
                     title="P A R C I A L"
                     color="#00A9A0"
@@ -968,15 +977,13 @@ const UserOut = (props) => {
                       width: '60%',
                       borderRadius: 10,
                       color: '#00A9A0'
-
                     }}
                     keyboardType='numeric'
                     placeholder='$'
                     textAlign='center'
-
                     keyboardType={"numeric"}
-                    value={totalPayModal == 0 ? '' : totalPayModal + ''}
-                    onChangeText={text => setTotalPayModal(text)}
+                    value={totalPay == -1 ? '' : totalPay + ''}
+                    onChangeText={text => setTotalPay(text)}
                   />
                 </View>
                 <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
@@ -992,17 +999,15 @@ const UserOut = (props) => {
                     }}
                     textAlign='center'
                     editable={false}
-                    value={(totalAmount - totalPayModal) < 0 ? '0' : '$' + (totalAmount - totalPayModal)}
+                    value={(totalAmount - totalPay) < 0 ? '0' : '$' + (totalAmount - totalPay)}
                   />
                 </View>
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
                   setModal4Visible(!modal4Visible);
-                  setTotalPay(totalPayModal)
                   finishParking("parcial-pending", false)
-                  setTotalPayModal(0);
-                  restart();
+
 
                 }}
                   title="G U A R D A R"

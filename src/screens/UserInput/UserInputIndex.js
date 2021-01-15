@@ -18,7 +18,7 @@ import { TIMEOUT } from '../../config/constants/constants';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import instance from "../../config/axios";
-import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ } from "../../config/api";
+import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ, READ_USER } from "../../config/api";
 import store from '../../config/store';
 import moment from 'moment';
 import Button from '../../components/Button';
@@ -30,6 +30,8 @@ import Header from '../../components/Header/HeaderIndex';
 import MainDrawer from '../../navigators/MainDrawer/MainDrawer';
 // import Feather from "react-native-feather";
 import DropDownPicker from 'react-native-dropdown-picker';
+import numberWithPoints from '../../config/services/numberWithPoints';
+
 
 const UserInput = (props) => {
   const { navigation, officialProps } = props;
@@ -39,12 +41,18 @@ const UserInput = (props) => {
   const [prepayDay, setPrepayDay] = useState(false);
 
 
-  const [modal2Visible, setModal2Visible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modal2Visible, setModal2Visible] = useState(false);
+  const [modal3Visible, setModal3Visible] = useState(false);
+
 
   const [findUserByPlate, setFindUserByPlate] = useState([]);
+  const [readUser, setReadUser] = useState ([]);
+  const [blacklist, setBlacklist] = useState(false)
   const [startParking, setStartParking] = useState({});
   const [existingUser, setExistingUser] = useState(false)
+  const [findMensualityPlate, setFindMensualityPlate] = useState([])
+
   const [showPhoneInput, setShowPhoneInput] = useState(false)
   const [codeError, setErrorText] = useState(false);
 
@@ -73,6 +81,12 @@ const UserInput = (props) => {
     return (/[a-zA-Z]/).test(char)
   }
 
+  let blacklistHqidPlate = blacklist.filter(debt => {return (debt.plate === plateOne+plateTwo && debt.hqId === officialHq)})
+  let debt = 0
+  blacklistHqidPlate.forEach(bl => {
+    debt += bl.value
+  })
+
   useEffect(() => {
     async function findUserByPlate() {
       try {
@@ -95,12 +109,61 @@ const UserInput = (props) => {
         }
 
       } catch (err) {
+        console.log(err)
         console.log(err?.response)
         setShowPhoneInput(true);
       }
     }
     findUserByPlate()
   }, [plateOne, plateTwo]);
+
+  useEffect(() => {
+    async function readUser() {
+      try {
+        if ((plateOne + plateTwo).length === 6 && phone ) {
+          const response = await instance.post(
+            READ_USER,
+            { phone: phone },
+            { timeout: TIMEOUT }
+          )
+          setReadUser(response.data.data);
+          // console.log(response.data.data);
+          // console.log(response.data.data.blackList);
+          setBlacklist(response.data.data.blackList);
+        }
+        if (debt != 0){setModal3Visible();} 
+        // console.log('----2----')
+        // console.log(blacklist)
+        // console.log('----1----')
+        // console.log(blacklistHqidPlate)
+        // console.log(debt)
+      } catch (err) {
+        console.log(err)
+        console.log(err?.response)
+        setShowPhoneInput(true);
+      }
+    }
+    readUser()
+  }, [phone]);
+
+  // useEffect(() => {
+  //   async function findMensualityPlate() {
+  //     try {
+  //       if ((plateOne + plateTwo).length === 6) {
+  //         const response = await instance.post(
+  //           FIND_MENSUALITY_PLATE,
+  //           { plate: plateOne + plateTwo },
+  //           { timeout: TIMEOUT }
+  //         )
+  //         setFindMensualityPlate(response.data.data);
+  //       }
+  //     } catch (err) {
+  //       console.log(err)
+  //       console.log(err?.response)
+  //     }
+  //   }
+  //   findUserByPlate()
+  // }, [phone]);
 
   useEffect(() => {
     async function createUser() {
@@ -114,12 +177,13 @@ const UserInput = (props) => {
               plate: plateOne + plateTwo,
               type: "starter"
             },
-            
+
             { timeout: TIMEOUT }
           )
         }
         setExistingUser(true);
       } catch (err) {
+        console.log(err)
         console.log(err?.response)
       }
     }
@@ -161,6 +225,7 @@ const UserInput = (props) => {
     } catch (err) {
       setLoadingStart(true)
       if (err?.response.data.response === -2) setModal2Visible(true)
+      console.log(err)
       console.log(err?.response)
 
     }
@@ -173,8 +238,9 @@ const UserInput = (props) => {
       if (response.data.response) {
         store.dispatch(actions.setReservations(response.data.data.reservations));
       }
-    } catch (error) {
-      console.log("err: ", error);
+    } catch (err) {
+      console.log(err)
+      console.log(err?.response)
     }
   };
 
@@ -224,6 +290,9 @@ const UserInput = (props) => {
                 onFocus={() => { clearPlateTwo(); }}
                 onChangeText={text => {
                   setPlateTwo(text);
+                  if (text.length === 3) {
+                    if (plateOne.length === 3) Keyboard.dismiss()
+                  };
                 }}
                 value={plateTwo}
               />
@@ -245,20 +314,22 @@ const UserInput = (props) => {
                   }}
                   style={{
                     backgroundColor: '#fafafa',
-                    borderTopLeftRadius: 20, 
+                    borderTopLeftRadius: 20,
                     borderTopRightRadius: 20,
-                    borderBottomLeftRadius: 20, 
+                    borderBottomLeftRadius: 20,
                     borderBottomRightRadius: 20
-                    
+
                   }}
                   labelStyle={{
                     justifyContent: 'center', fontFamily: 'Montserrat-Bold', fontSize: normalize(20), color: '#D9D9D9'
                   }}
                   dropDownMaxHeight={100}
-                  dropDownStyle={{ backgroundColor: '#fafafa', borderBottomLeftRadius: 15,
-                  borderBottomRightRadius: 15 }}
+                  dropDownStyle={{
+                    backgroundColor: '#fafafa', borderBottomLeftRadius: 15,
+                    borderBottomRightRadius: 15
+                  }}
                   arrowColor={'#00A9A0'}
-                  arrowStyle={{alignItems: 'flex-start', alignContent: 'flex-start', justifyContent: 'flex-start'}}
+                  arrowStyle={{ alignItems: 'flex-start', alignContent: 'flex-start', justifyContent: 'flex-start' }}
                   arrowSize={24}
                   onChangeItem={item => {
                     if (item.value === 0) {
@@ -284,7 +355,7 @@ const UserInput = (props) => {
                   value={newPhone}
                 />}
               {codeError && <Text>{codeError}</Text>}
-              <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '30%', width: '60%', justifyContent: 'center', paddingTop: '10%'}}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '30%', width: '60%', justifyContent: 'center', paddingTop: '10%' }}>
                 <CheckBox
                   value={prepayDay}
                   onValueChange={() => setPrepayDay(!prepayDay)}
@@ -298,20 +369,20 @@ const UserInput = (props) => {
               <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '40%', width: '100%', justifyContent: 'center' }}>
                 {!loadingStart &&
                   <Button onPress={() => {
-                    startPark(); setLoadingStart(true); 
-                    
+                    startPark(); setLoadingStart(true);
+
                   }}
                     title="I N I C I A R"
                     color='#FFF200'
                     style={[styles.buttonI, !existingUser || plateOne === "" || plateTwo === "" ? styles.buttonIDisabled : styles.buttonI]}
                     textStyle={styles.buttonText}
                     disabled={!existingUser || plateOne === "" || plateTwo === ""}
-                    
+
                   />
                 }
                 {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
                 {!loadingStart &&
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     style={[styles.buttonT, (plateOne + plateTwo).length < 6 || !existingUser ? styles.buttonTDisabled : styles.buttonT]}
                     onPress={() => {
                       setLoadingStart(true);
@@ -322,7 +393,7 @@ const UserInput = (props) => {
                       navigation.navigate('QRscanner');
                       setLoadingStart(false)
                     }}
-                    disabled={(plateOne + plateTwo).length < 6 || !existingUser }
+                    disabled={(plateOne + plateTwo).length < 6 || !existingUser}
                   >
                     <Image style={styles.qrImage} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
                   </TouchableOpacity>
@@ -351,55 +422,14 @@ const UserInput = (props) => {
                 </View> */}
               </View>
               <View style={{ height: "72%" }}>
-
-                {/* <ModalPicker
-                  data={phones} */}
-                {/* // initValue={initValue}
-                  // onChange={set}
-                  // style={{ width: '30%', height: '30%'}} /> */}
-                {/* {recips.recips.length > 0 ?
-                <FlatList
-                  style={{ height: "37%" }}
-                  data={recips.recips}
-                  keyExtractor={({ id }) => id}
-                  renderItem={({ item }) => {
-                    return (
-                      <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
-                        <View style={{ marginBottom: '2%' }} >
-                          <Text style={HomeStyles.textPlaca}>{item.plate}</Text>
-                          <Text style={HomeStyles.textPago}>{`Pago por ${formatHours(item.hours)} horas`}</Text>
-                        </View>
-                        <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
-                          <Text style={HomeStyles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
-                        </View>
-                      </View>
-                    )
-                  }}
-                />
-                :
-                <View style={{ marginLeft: '13%', padding: '10%' }}>
-                  <Text style={HomeStyles.textPago}> No se encuentran registros en el historial </Text>
-                </View>
-              } */}
               </View>
             </View>
             <View style={{ height: '23%', width: '100%', justifyContent: 'flex-end' }}>
               <FooterIndex navigation={navigation} />
-
             </View>
           </View>
         </TouchableWithoutFeedback>
-
       </ImageBackground>
-      {/* <TouchableOpacity
-              style={{ height: "100%", justifyContent: "center" }}
-              onPress={() => {setText("")}}
-            >
-             <Feather style={styles.closeIconStyle} name="x" />
-            </TouchableOpacity>
-          </View> */}
-
-      {/* </View> */}
       <View>
         <Modal
           animationType="fade"
@@ -480,7 +510,7 @@ const UserInput = (props) => {
               </Text>
 
               <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
-                <Text style={styles.modalPhoneText}> {newPhone? '+' + newPhone : phone} </Text>
+                <Text style={styles.modalPhoneText}> {newPhone ? '+' + newPhone : phone} </Text>
               </View>
               <View style={{ height: '35%', width: '75%', justifyContent: 'center' }}>
                 <Image
@@ -520,6 +550,48 @@ const UserInput = (props) => {
           </View>
         </View>
       </Modal>
+      <Modal
+          animationType="fade"
+          transparent={true}
+          backdropOpacity={0.3}
+          visible={modal3Visible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={{
+                height: '100%',
+                width: '100%',
+                justifyContent: 'space-between',
+                padding: '2%'
+
+              }}>
+                <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                  <Text style={styles.modalTextAlert}> Este usuario se encuentra en mora con un monto de: </Text>
+                  <Text style={styles.modalTextAlert}>{`$${numberWithPoints(debt)}`}</Text>
+
+                </View>
+                <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                  <Button onPress={() => {
+                    setModal3Visible(!modal3Visible);
+                  }}
+                    title="E N T E N D I D O"
+                    color="#00A9A0"
+                    style={
+                      styles.modalButton
+                    }
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }} />
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
     </View >
   );
 
