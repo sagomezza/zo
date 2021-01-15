@@ -417,7 +417,7 @@ const UserOut = (props) => {
       console.log(err)
     }
   };
-  
+
   const finishParking = async (paymentStatus, showModal) => {
     setLoading(true)
     console.log('----finishParking----')
@@ -468,7 +468,6 @@ const UserOut = (props) => {
       setLoading(false)
       setIsDisabled(true);
       setIsDisabledValue(true);
-      restart();
       if (showModal) {
         setModalVisible(true)
       }
@@ -807,7 +806,7 @@ const UserOut = (props) => {
                 color: '#00A9A0',
                 fontFamily: 'Montserrat-Bold'
               }}>
-                {recip.plate}
+                {plateOne + ' ' + plateTwo}
               </Text>
 
               <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
