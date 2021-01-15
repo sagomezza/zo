@@ -47,11 +47,13 @@ const UserInput = (props) => {
 
 
   const [findUserByPlate, setFindUserByPlate] = useState([]);
-  const [readUser, setReadUser] = useState ([]);
-  const [blacklist, setBlacklist] = useState(false)
+  const [readUserInfo, setReadUserInfo] = useState([]);
+  const [blacklist, setBlacklist] = useState([]);
+  const [blacklistExists, setBlacklistExists] = useState(false);
   const [startParking, setStartParking] = useState({});
   const [existingUser, setExistingUser] = useState(false)
   const [findMensualityPlate, setFindMensualityPlate] = useState([])
+  const [debtBlacklist, setDebtBlacklist] = useState(0)
 
   const [showPhoneInput, setShowPhoneInput] = useState(false)
   const [codeError, setErrorText] = useState(false);
@@ -81,11 +83,7 @@ const UserInput = (props) => {
     return (/[a-zA-Z]/).test(char)
   }
 
-  let blacklistHqidPlate = blacklist.filter(debt => {return (debt.plate === plateOne+plateTwo && debt.hqId === officialHq)})
-  let debt = 0
-  blacklistHqidPlate.forEach(bl => {
-    debt += bl.value
-  })
+
 
   useEffect(() => {
     async function findUserByPlate() {
@@ -118,54 +116,6 @@ const UserInput = (props) => {
   }, [plateOne, plateTwo]);
 
   useEffect(() => {
-    async function readUser() {
-      try {
-        if ((plateOne + plateTwo).length === 6 && phone ) {
-          const response = await instance.post(
-            READ_USER,
-            { phone: phone },
-            { timeout: TIMEOUT }
-          )
-          setReadUser(response.data.data);
-          // console.log(response.data.data);
-          // console.log(response.data.data.blackList);
-          setBlacklist(response.data.data.blackList);
-        }
-        if (debt != 0){setModal3Visible();} 
-        // console.log('----2----')
-        // console.log(blacklist)
-        // console.log('----1----')
-        // console.log(blacklistHqidPlate)
-        // console.log(debt)
-      } catch (err) {
-        console.log(err)
-        console.log(err?.response)
-        setShowPhoneInput(true);
-      }
-    }
-    readUser()
-  }, [phone]);
-
-  // useEffect(() => {
-  //   async function findMensualityPlate() {
-  //     try {
-  //       if ((plateOne + plateTwo).length === 6) {
-  //         const response = await instance.post(
-  //           FIND_MENSUALITY_PLATE,
-  //           { plate: plateOne + plateTwo },
-  //           { timeout: TIMEOUT }
-  //         )
-  //         setFindMensualityPlate(response.data.data);
-  //       }
-  //     } catch (err) {
-  //       console.log(err)
-  //       console.log(err?.response)
-  //     }
-  //   }
-  //   findUserByPlate()
-  // }, [phone]);
-
-  useEffect(() => {
     async function createUser() {
       try {
         if ((plateOne + plateTwo).length === 6 && newPhone.length === 10) {
@@ -177,7 +127,6 @@ const UserInput = (props) => {
               plate: plateOne + plateTwo,
               type: "starter"
             },
-
             { timeout: TIMEOUT }
           )
         }
@@ -189,6 +138,37 @@ const UserInput = (props) => {
     }
     createUser();
   }, [newPhone]);
+
+  async function readUser() {
+    try {
+      if ((plateOne + plateTwo).length === 6 && phone) {
+        const response = await instance.post(
+          READ_USER,
+          { phone: phone },
+          { timeout: TIMEOUT }
+        )
+        setLoadingStart(false)
+        setReadUserInfo(response.data.data);
+        console.log(response.data.data);
+        console.log(response.data.data.blackList);
+        setBlacklist(response.data.data.blackList);
+        if (response.data.data.blackList.length > 0) {
+          setModal3Visible()
+        } else {
+          startPark();
+        }
+      }
+
+
+    } catch (err) {
+      console.log(err)
+      console.log(err?.response)
+      setShowPhoneInput(true);
+      startPark();
+    }
+  };
+
+
 
   async function startPark() {
     try {
@@ -210,8 +190,10 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
+        setModal3Visible(false);
         setModalVisible(true);
         setStartParking(response.data.data);
+        setBlacklistExists(false);
         readHq();
         setLoadingStart(false)
         setPhones([{ label: 'Selecciona un número', value: 1 }]);
@@ -223,7 +205,7 @@ const UserInput = (props) => {
 
       }
     } catch (err) {
-      setLoadingStart(true)
+      setLoadingStart(false)
       if (err?.response.data.response === -2) setModal2Visible(true)
       console.log(err)
       console.log(err?.response)
@@ -369,7 +351,7 @@ const UserInput = (props) => {
               <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '40%', width: '100%', justifyContent: 'center' }}>
                 {!loadingStart &&
                   <Button onPress={() => {
-                    startPark(); setLoadingStart(true);
+                    setLoadingStart(true); readUser();
 
                   }}
                     title="I N I C I A R"
@@ -551,47 +533,50 @@ const UserInput = (props) => {
         </View>
       </Modal>
       <Modal
-          animationType="fade"
-          transparent={true}
-          backdropOpacity={0.3}
-          visible={modal3Visible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <View style={{
-                height: '100%',
-                width: '100%',
-                justifyContent: 'space-between',
-                padding: '2%'
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={modal3Visible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{
+              height: '100%',
+              width: '100%',
+              justifyContent: 'space-between',
+              padding: '2%'
 
-              }}>
-                <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                  <Text style={styles.modalTextAlert}> Este usuario se encuentra en mora con un monto de: </Text>
-                  <Text style={styles.modalTextAlert}>{`$${numberWithPoints(debt)}`}</Text>
+            }}>
+              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                <Text style={styles.modalTextAlert}> Este usuario se encuentra en mora  </Text>
+                {/* <Text style={styles.modalTextAlert}>{`$${numberWithPoints(debt)}`}</Text> */}
 
-                </View>
-                <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                  <Button onPress={() => {
-                    setModal3Visible(!modal3Visible);
-                  }}
-                    title="E N T E N D I D O"
-                    color="#00A9A0"
-                    style={
-                      styles.modalButton
-                    }
-                    textStyle={{
-                      color: "#FFFFFF",
-                      textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
-                    }} />
-                </View>
+              </View>
+              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                <Button onPress={() => {
+                  startPark();
+                  setLoadingStart(true)
+
+                }}
+                  title="E N T E N D I D O"
+                  color="#00A9A0"
+                  activityIndicatorStatus={loadingStart}
+                  style={
+                    styles.modalButton
+                  }
+                  textStyle={{
+                    color: "#FFFFFF",
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Bold'
+                  }} />
               </View>
             </View>
           </View>
-        </Modal>
+        </View>
+      </Modal>
     </View >
   );
 

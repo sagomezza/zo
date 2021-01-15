@@ -16,14 +16,12 @@ import normalize from '../../config/services/normalizeFontSize';
 import { ImageBackground } from 'react-native';
 import Header from '../../components/Header/HeaderIndex';
 
-
 const UserOut = (props) => {
   const { navigation, officialProps, qr } = props;
   // const dateMonthIn = new Date('05/05/20');
   // const dateMonthOut = new Date('07/05/20');
-
   const [totalAmount, setTotalAmount] = useState(0);
-  const [totalPay, setTotalPay] = useState(-1);
+  const [totalPay, setTotalPay] = useState(0);
   const [recip, setRecip] = useState({})
   const [loading, setLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
@@ -306,7 +304,7 @@ const UserOut = (props) => {
 
   function restart() {
     setTotalAmount(0);
-    setTotalPay(-1);
+    setTotalPay(0);
     setPlateOne("");
     setPlateTwo("");
     setRecip({})
@@ -352,6 +350,13 @@ const UserOut = (props) => {
     try {
       if ((plateOne + plateTwo).length === 6) {
         let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
+        console.log({
+          plate: plateOne + plateTwo,
+          officialEmail: officialProps.email,
+          dateFinished: new Date(),
+          prepaidDay: true,
+          totalPay: totalPay
+        })
         const response = await instance.post(
           CHECK_PARKING,
           {
@@ -369,11 +374,12 @@ const UserOut = (props) => {
         setTotalAmount(response.data.data.total);
         setIsDisabled(false)
         setCheck(response.data.data)
-        console.log('-----1-----')
-
+        console.log('-----1Checkparking-----')
         console.log(response.data)
-        console.log('-----1-----')
+        console.log('-----1Checkparking-----')
       }
+      console.log(totalPay)
+
     } catch (err) {
       console.log(err)
       console.log(err?.response)
@@ -384,7 +390,6 @@ const UserOut = (props) => {
   useEffect(() => {
     checkParking()
   }, [plateOne, plateTwo]);
-
 
   async function readHq() {
     try {
@@ -399,7 +404,6 @@ const UserOut = (props) => {
       console.log(err)
     }
   };
-
   const getRecips = async () => {
     try {
       const response = await instance.post(GET_RECIPS, {
@@ -413,12 +417,10 @@ const UserOut = (props) => {
       console.log(err)
     }
   };
-
-
-
-
+  
   const finishParking = async (paymentStatus, showModal) => {
     setLoading(true)
+    console.log('----finishParking----')
     console.log({
       plate: check.plate,
       hqId: check.hqId,
@@ -431,6 +433,8 @@ const UserOut = (props) => {
       officialEmail: officialProps.email,
       dateFinished: new Date()
     })
+    console.log('----finishParking----')
+
     try {
       const response = await instance.post(
         FINISHPARKING,
@@ -510,7 +514,7 @@ const UserOut = (props) => {
   let phoneNumberLength = phoneNumber.length
   // console.log(phoneNumberLength)
 
-  let textinputMoney = totalPay === -1 ? '' : totalPay + ''
+  let textinputMoney = totalPay === 0 ? '' : totalPay + ''
 
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
@@ -684,7 +688,7 @@ const UserOut = (props) => {
                   keyboardType='numeric'
                   placeholder='$'
                   editable={false}
-                  value={(totalPay - totalAmount) <= 0 ? '$ 0' : '$ ' + (totalPay - totalAmount)}
+                  value={(totalPay - totalAmount) <= 0 ? '' : '$ ' + (totalPay - totalAmount)}
                 />
               </View>
             </View>
@@ -982,7 +986,7 @@ const UserOut = (props) => {
                     placeholder='$'
                     textAlign='center'
                     keyboardType={"numeric"}
-                    value={totalPay == -1 ? '' : totalPay + ''}
+                    value={totalPay == 0 ? '' : totalPay + ''}
                     onChangeText={text => setTotalPay(text)}
                   />
                 </View>
@@ -1007,8 +1011,6 @@ const UserOut = (props) => {
                 <Button onPress={() => {
                   setModal4Visible(!modal4Visible);
                   finishParking("parcial-pending", false)
-
-
                 }}
                   title="G U A R D A R"
                   color="#00A9A0"
