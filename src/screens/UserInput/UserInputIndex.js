@@ -104,8 +104,8 @@ const UserInput = (props) => {
           auxPhones.push({ label: '+ agregar', value: 0 })
           setPhones(auxPhones);
           setShowDropdown(true);
+          setShowPhoneInput(false);
         }
-
       } catch (err) {
         console.log(err)
         console.log(err?.response)
@@ -356,9 +356,9 @@ const UserInput = (props) => {
                   }}
                     title="I N I C I A R"
                     color='#FFF200'
-                    style={[styles.buttonI, !existingUser || plateOne === "" || plateTwo === "" ? styles.buttonIDisabled : styles.buttonI]}
+                    style={[styles.buttonI, !existingUser || plateOne === "" || plateTwo === "" || newPhone === '' ? styles.buttonIDisabled : styles.buttonI]}
                     textStyle={styles.buttonText}
-                    disabled={!existingUser || plateOne === "" || plateTwo === ""}
+                    disabled={!existingUser || plateOne === "" || plateTwo === "" || newPhone === '' }
 
                   />
                 }
@@ -371,11 +371,13 @@ const UserInput = (props) => {
                       setPlateOne("");
                       setPlateTwo("");
                       setPhone("");
+                      setShowPhoneInput(false);
+                      setLoadingStart(false);
                       store.dispatch(actions.setQr(plateOne + plateTwo));
                       navigation.navigate('QRscanner');
-                      setLoadingStart(false)
+                      
                     }}
-                    disabled={(plateOne + plateTwo).length < 6 || !existingUser}
+                    disabled={(plateOne + plateTwo).length < 6 || !showPhoneInput}
                   >
                     <Image style={styles.qrImage} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
                   </TouchableOpacity>
@@ -513,6 +515,7 @@ const UserInput = (props) => {
                   setPhones([{ label: 'Selecciona un número', value: 1 }]);
                   setPhone(1);
                   setShowDropdown(false);
+                  setShowPhoneInput(false);
                   setPrepayDay();
                   setShowPhoneInput(false);
                 }}

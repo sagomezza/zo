@@ -288,7 +288,7 @@ const BarcodeScanner = (props) => {
 
             }}>
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalTextAlert}> El vehículo con placas ya se encuentra estacionado. </Text>
+                <Text style={styles.modalTextAlert}> Este código QR ya se encuentra estacionado. </Text>
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
