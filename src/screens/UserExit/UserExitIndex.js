@@ -15,6 +15,7 @@ import numberWithPoints from '../../config/services/numberWithPoints';
 import normalize from '../../config/services/normalizeFontSize';
 import { ImageBackground } from 'react-native';
 import Header from '../../components/Header/HeaderIndex';
+import { TabRouter } from '@react-navigation/native';
 
 const UserOut = (props) => {
   const { navigation, officialProps, qr } = props;
@@ -25,7 +26,6 @@ const UserOut = (props) => {
   const [recip, setRecip] = useState({})
   const [loading, setLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [isDisabledValue, setIsDisabledValue] = useState(true);
   const [err, setErr] = useState("");
   const [isParanoicUser, setIsParanoicUser] = useState(false);
 
@@ -376,6 +376,8 @@ const UserOut = (props) => {
         setCheck(response.data.data)
         console.log('-----1Checkparking-----')
         console.log(response.data)
+        console.log(totalPay - totalAmount)
+
         console.log('-----1Checkparking-----')
       }
       console.log(totalPay)
@@ -467,7 +469,6 @@ const UserOut = (props) => {
       getRecips()
       setLoading(false)
       setIsDisabled(true);
-      setIsDisabledValue(true);
       if (showModal) {
         setModalVisible(true)
       }
@@ -479,7 +480,6 @@ const UserOut = (props) => {
       // setLoading(true)
       setLoading(false);
       setIsDisabled(true);
-      setIsDisabledValue(true);
       setErr("Algo malo pasó, vuelve a intentarlo más tarde")
     }
   }
@@ -511,10 +511,11 @@ const UserOut = (props) => {
 
   let phoneNumber = check.phone + ''
   let phoneNumberLength = phoneNumber.length
-  // console.log(phoneNumberLength)
+  let textinputMoney = (totalPay === 0 ? '' : '' + totalPay )
+  let inputChange = (totalPay - totalAmount) <= 0 ? '' : '' + (totalPay - totalAmount) 
 
-  let textinputMoney = totalPay === 0 ? '' : totalPay + ''
-
+  
+ 
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <ImageBackground
@@ -655,7 +656,9 @@ const UserOut = (props) => {
                   keyboardType='numeric'
                   placeholder='$ 0'
                   value={textinputMoney}
-                  onChangeText={text => setTotalPay(text)}
+                  onChangeText={(text) => {
+                    setTotalPay(text);  
+                    }}
                 />
               </View>
             </View>
@@ -687,7 +690,7 @@ const UserOut = (props) => {
                   keyboardType='numeric'
                   placeholder='$'
                   editable={false}
-                  value={(totalPay - totalAmount) <= 0 ? '' : '$ ' + (totalPay - totalAmount)}
+                  value={`$${numberWithPoints(inputChange)}`}
                 />
               </View>
             </View>
@@ -699,17 +702,15 @@ const UserOut = (props) => {
                   <Button
                     title="C O B R A R"
                     color='#00A9A0'
-                    disabled={isDisabled && isDisabledValue}
-                    style={[isDisabled && isDisabledValue ? styles.buttonStyleDisabled : styles.buttonStyle]}
+                    disabled={totalPay-totalAmount < 0 && (plateOne + plateTwo).length !== 0}
+                    style={[ totalPay-totalAmount < 0 && (plateOne + plateTwo).length !== 0? styles.buttonStyleDisabled : styles.buttonStyle]}
                     textStyle={{
                       color: '#FFFFFF',
                       fontFamily: 'Montserrat-Bold',
                       fontSize: normalize(17)
                     }}
                     onPress={() => {
-                      if (textinputMoney === '') {
-                        setIsDisabledValue(true)
-                      }
+                      
                       finishParking("payed", true);
                     }} />
                 </View>

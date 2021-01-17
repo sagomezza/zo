@@ -31,8 +31,8 @@ const HomeIndex = (props) => {
           store.dispatch(actions.setRecips(response.data.data.finished));
         }
       } catch (error) {
-        //console.log(err?.response)
-        //console.log("err: ", error);
+        console.log(err?.response)
+        console.log("err: ", error);
       }
     };
 
@@ -61,11 +61,13 @@ const HomeIndex = (props) => {
           id: officialHq
         });
         if (response.data.response) {
+          console.log(response.data.data)
           store.dispatch(actions.setReservations(response.data.data.reservations));
           store.dispatch(actions.setHq(response.data.data));
         }
-      } catch (error) {
-        console.log("err: ", error);
+      } catch (err) {
+        console.log("err: ", err);
+        console.log(err?.response)
       }
     };
 
@@ -132,7 +134,7 @@ const HomeIndex = (props) => {
                 <Image style={{ width: "40%", height: "40%", marginTop: '10%' }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoM.png')} />
                 <View style={{ flexDirection: 'row', height: '100%' }}>
                   <Text style={HomeStyles.plateInputTextBig}>
-                    {`${hq.availableBikes}`}
+                    {`${hq. totalBikes - hq.availableBikes}`}
                   </Text>
                   <Text style={HomeStyles.plateInputTextSmall} >{`/${hq.totalBikes}`}</Text>
                 </View>
@@ -161,7 +163,7 @@ const HomeIndex = (props) => {
                 <Image style={{ width: "38%", height: "38%", marginTop: '10%' }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoC.png')} />
                 <View style={{ flexDirection: 'row', height: normalize(170) }}>
                   <Text style={HomeStyles.plateInputTextBig}>
-                    {`${hq.availableCars}`}
+                    {`${hq.totalCars - hq.availableCars}`}
                   </Text>
                   <Text style={HomeStyles.plateInputTextSmall} >{`/${hq.totalCars}`}</Text>
                 </View>
@@ -187,7 +189,7 @@ const HomeIndex = (props) => {
                 <FlatList
                   style={{ height: "37%" }}
                   data={recips.recips}
-                  keyExtractor={({ id }) => id}
+                  keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => {
                     return (
                       <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
@@ -218,7 +220,7 @@ const HomeIndex = (props) => {
                 <FlatList
                   style={{ height: "37%" }}
                   data={reservations.reservations}
-                  keyExtractor={({ id }) => id}
+                  keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => {
                     return (
                       <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >

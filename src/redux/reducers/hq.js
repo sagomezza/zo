@@ -28,22 +28,22 @@ const hqReducer = (state=initialState, action ) => {
         case SUBTRACT_CAR:
             return {
                 ...state,
-                availableCars: state.availableCars - 1
+                availableCars: state.availableCars + 1
             }; 
         case SUBTRACT_BIKE:
             return {
                 ...state,
-                availableBikes: state.availableBikes - 1
+                availableBikes: state.availableBikes + 1
             };    
         case ADD_CAR:
             return {
                 ...state,
-                availableCars: state.availableCars + 1
+                availableCars: state.availableCars - 1
             }; 
         case ADD_BIKE:
             return {
                 ...state,
-                availableBikes: state.availableBikes + 1
+                availableBikes: state.availableBikes - 1
             };                  
         default: 
             return state
