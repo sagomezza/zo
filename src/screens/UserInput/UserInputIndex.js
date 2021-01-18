@@ -292,6 +292,7 @@ const UserInput = (props) => {
                   zIndex={30}
                   disabled={!showDropdown}
                   placeholder={"Selecciona un numero"}
+                  placeholderStyle={{color: '#8F8F8F', fontSize: normalize(25), textAlign: 'center', fontFamily: 'Montserrat-Bold'}}
                   selectedLabelStyle={{ color: '#8F8F8F', fontSize: normalize(25), textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
                   containerStyle={{
                     height: '23%', width: '100%'
