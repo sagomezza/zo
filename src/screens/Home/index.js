@@ -61,7 +61,6 @@ const HomeIndex = (props) => {
           id: officialHq
         });
         if (response.data.response) {
-          console.log(response.data.data)
           store.dispatch(actions.setReservations(response.data.data.reservations));
           store.dispatch(actions.setHq(response.data.data));
         }
@@ -82,6 +81,8 @@ const HomeIndex = (props) => {
       return Math.round(hours)
     } else return hours
   }
+
+  const keyGenerator = () => '_' + Math.random().toString(36).substr(2, 9)
   
   return (
     <View style={{ flex: 1 }}>
@@ -189,7 +190,7 @@ const HomeIndex = (props) => {
                 <FlatList
                   style={{ height: "37%" }}
                   data={recips.recips}
-                  keyExtractor={(item, index) => index.toString()}
+                  keyExtractor={(item, index) => String(index)}
                   renderItem={({ item }) => {
                     return (
                       <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
@@ -220,7 +221,7 @@ const HomeIndex = (props) => {
                 <FlatList
                   style={{ height: "37%" }}
                   data={reservations.reservations}
-                  keyExtractor={(item, index) => index.toString()}
+                  keyExtractor={(item, index) => String(index)}
                   renderItem={({ item }) => {
                     return (
                       <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >

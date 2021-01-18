@@ -46,7 +46,7 @@ const UserInput = (props) => {
   const [modal3Visible, setModal3Visible] = useState(false);
 
 
-  const [findUserByPlate, setFindUserByPlate] = useState([]);
+  const [findUserByPlateInfo, setFindUserByPlateInfo] = useState([]);
   const [readUserInfo, setReadUserInfo] = useState([]);
   const [blacklist, setBlacklist] = useState([]);
   const [blacklistExists, setBlacklistExists] = useState(false);
@@ -88,27 +88,32 @@ const UserInput = (props) => {
   useEffect(() => {
     async function findUserByPlate() {
       try {
-        if ((plateOne + plateTwo).length === 6) {
+        if (plateOne.length === 3 && plateTwo.length === 3) {
           const response = await instance.post(
             FIND_USER_BY_PLATE,
             { plate: plateOne + plateTwo },
             { timeout: TIMEOUT }
           )
-          setFindUserByPlate(response.data.data);
+          setFindUserByPlateInfo(response.data.data);
           setExistingUser(true)
-          const auxPhones = []
           // {label: 'UK', value: 'uk'},
+          setPhone(1);
+          setShowPhoneInput(false);
+          setShowDropdown(true)
+          const auxPhones = []
           response.data.data.forEach(phone => {
             auxPhones.push({ label: phone, value: phone })
           });
           auxPhones.push({ label: '+ agregar', value: 0 })
           setPhones(auxPhones);
-          setShowDropdown(true);
-          setShowPhoneInput(false);
         }
+        
       } catch (err) {
-        console.log(err)
         console.log(err?.response)
+        console.log('dentro')
+        setFindUserByPlateInfo([]);
+        setExistingUser(false);
+        setShowDropdown(false);
         setShowPhoneInput(true);
       }
     }
@@ -149,8 +154,6 @@ const UserInput = (props) => {
         )
         setLoadingStart(false)
         setReadUserInfo(response.data.data);
-        console.log(response.data.data);
-        console.log(response.data.data.blackList);
         setBlacklist(response.data.data.blackList);
         if (response.data.data.blackList.length > 0) {
           setModal3Visible()
@@ -287,7 +290,6 @@ const UserInput = (props) => {
                 <DropDownPicker
                   items={phones}
                   zIndex={30}
-                  defaultValue={phone}
                   disabled={!showDropdown}
                   placeholder={"Selecciona un numero"}
                   selectedLabelStyle={{ color: '#8F8F8F', fontSize: normalize(25), textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
@@ -356,16 +358,16 @@ const UserInput = (props) => {
                   }}
                     title="I N I C I A R"
                     color='#FFF200'
-                    style={[styles.buttonI, !existingUser || plateOne === "" || plateTwo === "" || newPhone === '' ? styles.buttonIDisabled : styles.buttonI]}
+                    style={[!existingUser || plateOne === "" || plateTwo === ""  ? styles.buttonIDisabled : styles.buttonI]}
                     textStyle={styles.buttonText}
-                    disabled={!existingUser || plateOne === "" || plateTwo === "" || newPhone === '' }
+                    disabled={!existingUser || plateOne === "" || plateTwo === ""  }
 
                   />
                 }
                 {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
                 {!loadingStart &&
                   <TouchableOpacity
-                    style={[styles.buttonT, (plateOne + plateTwo).length < 6 || !existingUser ? styles.buttonTDisabled : styles.buttonT]}
+                    style={[styles.buttonT, (plateOne + plateTwo).length < 6 || existingUser ? styles.buttonTDisabled : styles.buttonT]}
                     onPress={() => {
                       setLoadingStart(true);
                       setPlateOne("");
@@ -377,7 +379,7 @@ const UserInput = (props) => {
                       navigation.navigate('QRscanner');
                       
                     }}
-                    disabled={(plateOne + plateTwo).length < 6 || !showPhoneInput}
+                    disabled={(plateOne + plateTwo).length <  6 || existingUser }
                   >
                     <Image style={styles.qrImage} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
                   </TouchableOpacity>
