@@ -34,6 +34,7 @@ const UserOut = (props) => {
   const [dateStart, setDateStart] = useState('');
   const [dateFinished, setDateFinished] = useState('');
   const [check, setCheck] = useState({})
+  const [pendingValue, setPendingValue] = useState(0)
 
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
@@ -135,7 +136,11 @@ const UserOut = (props) => {
       fontFamily: 'Montserrat-Regular',
       backgroundColor: '#FFF200',
       borderRadius: 20,
-      margin: '1%'
+      margin: '1%',
+      flexDirection: 'column',
+      alignContent: 'center',
+      alignItems: 'center'
+
     },
     payText: {
       fontSize: normalize(50),
@@ -317,6 +322,7 @@ const UserOut = (props) => {
     setDateStart('');
     setDateFinished('');
     setCheck({});
+    setPendingValue(0)
   }
 
   useEffect(() => {
@@ -348,6 +354,7 @@ const UserOut = (props) => {
 
   async function checkParking() {
     try {
+
       if ((plateOne + plateTwo).length === 6) {
         let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
         console.log({
@@ -373,15 +380,9 @@ const UserOut = (props) => {
         setDateStart(response.data.data.dateStart);
         setTotalAmount(response.data.data.total);
         setIsDisabled(false)
+        setPendingValue(response.data.data.pendingValue)
         setCheck(response.data.data)
-        console.log('-----1Checkparking-----')
-        console.log(response.data)
-        console.log(totalPay - totalAmount)
-
-        console.log('-----1Checkparking-----')
       }
-      console.log(totalPay)
-
     } catch (err) {
       console.log(err)
       console.log(err?.response)
@@ -511,11 +512,11 @@ const UserOut = (props) => {
 
   let phoneNumber = check.phone + ''
   let phoneNumberLength = phoneNumber.length
-  let textinputMoney = (totalPay === 0 ? '' : '' + totalPay )
-  let inputChange = (totalPay - totalAmount) <= 0 ? '' : '' + (totalPay - totalAmount) 
+  let textinputMoney = (totalPay === 0 ? '' : '' + totalPay)
+  let inputChange = (totalPay - totalAmount) <= 0 ? '' : '' + (totalPay - totalAmount)
 
-  
- 
+
+
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <ImageBackground
@@ -618,15 +619,23 @@ const UserOut = (props) => {
               flexDirection: 'row',
               alignItems: 'center',
               alignContent: 'center',
-              height: '20%',
+              height: '17%',
               width: '80%',
               justifyContent: 'space-between'
             }}>
               <Text style={styles.infoUserText}>{"TOTAL A PAGAR"}</Text>
               <View style={styles.payplate}>
                 <Text style={styles.payText}>{`$${numberWithPoints(totalAmount)}`}</Text>
+                <View style={{height: '35%', width: '60%', flexDirection: 'row', justifyContent: 'center' }}>
+                  <Text style={{ fontSize: normalize(20), color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{"Saldo pendiente:"}</Text>
+                  <Text style={{ fontSize: normalize(20), color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{` $${numberWithPoints(pendingValue)}`}</Text>
+
+                </View>
+
               </View>
+
             </View>
+
           </View>
         </TouchableWithoutFeedback>
 
@@ -657,8 +666,8 @@ const UserOut = (props) => {
                   placeholder='$ 0'
                   value={textinputMoney}
                   onChangeText={(text) => {
-                    setTotalPay(text);  
-                    }}
+                    setTotalPay(text);
+                  }}
                 />
               </View>
             </View>
@@ -702,15 +711,15 @@ const UserOut = (props) => {
                   <Button
                     title="C O B R A R"
                     color='#00A9A0'
-                    disabled={totalPay-totalAmount < 0 && (plateOne + plateTwo).length !== 0}
-                    style={[ totalPay-totalAmount < 0 && (plateOne + plateTwo).length !== 0? styles.buttonStyleDisabled : styles.buttonStyle]}
+                    disabled={totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0}
+                    style={[totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0 ? styles.buttonStyleDisabled : styles.buttonStyle]}
                     textStyle={{
                       color: '#FFFFFF',
                       fontFamily: 'Montserrat-Bold',
                       fontSize: normalize(17)
                     }}
                     onPress={() => {
-                      
+
                       finishParking("payed", true);
                     }} />
                 </View>
