@@ -22,6 +22,7 @@ import { Keyboard } from 'react-native';
 
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips } = props;
+  const startTime = officialProps.schedule.start
   const HomeStyles = StyleSheet.create({
     plateInput: {
       borderColor: 'gray',
@@ -82,7 +83,6 @@ const LogoutIndex = (props) => {
     },
 
   });
-
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [total, setTotal] = useState(0);
@@ -91,6 +91,7 @@ const LogoutIndex = (props) => {
 
   const hq = props.hq;
   const [inputValue, setInputValue] = useState('');
+  
 
   useEffect(() => {
     const getShiftRecips = async () => {
@@ -104,13 +105,13 @@ const LogoutIndex = (props) => {
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
         }
-       
+      
       } catch (err) {
         console.log("err: ", err);
         console.log(err?.response)
-
       }
     }
+    console.log(officialProps)
     getShiftRecips();
   }, []);
 
@@ -195,7 +196,7 @@ const LogoutIndex = (props) => {
                   source={require('../../../assets/images/Inicio.png')} />
                 <View >
                   <Text style={styles.timePlateTitle}>Tiempo de inicio:</Text>
-                  <Text style={styles.timePlateInfo}>----</Text>
+                  <Text style={styles.timePlateInfo}>{moment(startTime).format('L')} {moment(startTime).format('LT')} </Text>
                 </View>
               </View>
               <View style={styles.timePlate}>
@@ -205,7 +206,7 @@ const LogoutIndex = (props) => {
                   source={require('../../../assets/images/Salida.png')} />
                 <View>
                   <Text style={styles.timePlateTitle}>Tiempo de salida:</Text>
-                  <Text style={styles.timePlateInfo}>----</Text>
+                  <Text style={styles.timePlateInfo}>{moment().format('L')} {moment().format('LT')}</Text>
                 </View>
 
               </View>

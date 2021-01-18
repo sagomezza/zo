@@ -30,7 +30,7 @@ const HomeIndex = (props) => {
         if (response.data.response === 1) {
           store.dispatch(actions.setRecips(response.data.data.finished));
         }
-      } catch (error) {
+      } catch (err) {
         console.log(err?.response)
         console.log("err: ", error);
       }
@@ -81,8 +81,6 @@ const HomeIndex = (props) => {
       return Math.round(hours)
     } else return hours
   }
-
-  const keyGenerator = () => '_' + Math.random().toString(36).substr(2, 9)
   
   return (
     <View style={{ flex: 1 }}>

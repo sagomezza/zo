@@ -34,7 +34,7 @@ const UserOut = (props) => {
   const [dateStart, setDateStart] = useState('');
   const [dateFinished, setDateFinished] = useState('');
   const [check, setCheck] = useState({})
-  const [pendingValue, setPendingValue] = useState(0)
+  const [pendingValue, setPendingValue] = useState(pendingValue === undefined ? '0': pendingValue + '' )
 
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
@@ -57,7 +57,7 @@ const UserOut = (props) => {
     },
     plateInput: {
       width: '39%',
-      height: '60%',
+      height: '70%',
       margin: '1%',
       fontSize: normalize(38),
       fontFamily: 'Montserrat-Bold',
@@ -83,7 +83,7 @@ const UserOut = (props) => {
       borderRadius: 30,
       alignItems: 'center',
       alignContent: 'center',
-      height: '60%',
+      height: '70%',
       width: '15%',
       backgroundColor: "#FFFFFF",
       margin: '2%'
@@ -322,7 +322,7 @@ const UserOut = (props) => {
     setDateStart('');
     setDateFinished('');
     setCheck({});
-    setPendingValue(0)
+    setPendingValue()
   }
 
   useEffect(() => {
@@ -376,6 +376,8 @@ const UserOut = (props) => {
           },
           { timeout: TIMEOUT }
         )
+        console.log('checkparking-----------------------')
+        console.log(response.data.data)
         setDateFinished(new Date());
         setDateStart(response.data.data.dateStart);
         setTotalAmount(response.data.data.total);
@@ -384,7 +386,10 @@ const UserOut = (props) => {
         setCheck(response.data.data)
       }
     } catch (err) {
+      console.log('checkparking-----ERR------------------')
       console.log(err)
+      console.log('checkparking-----ERR----RESPONSE--------------')
+
       console.log(err?.response)
       setModal5Visible(true);
     }
@@ -530,16 +535,8 @@ const UserOut = (props) => {
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{ height: normalize(390), alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
-            <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '20%', width: '80%', marginTop: '2%' }}>
-              <TouchableOpacity
-                style={styles.buttonT}
-                onPress={() => { navigation.navigate('QRscanner') }}>
-                <Image
-                  style={{ width: '65%', height: '65%', marginTop: '10%' }}
-                  resizeMode={"contain"}
-                  source={require('../../../assets/images/qr.png')}
-                />
-              </TouchableOpacity>
+            <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '18%', width: '80%', marginTop: '0%'   }}>
+              
               <TextInput
                 ref={refPlateOne}
                 placeholder={'EVZ'}
@@ -574,6 +571,15 @@ const UserOut = (props) => {
                   };
                 }}
               />
+              <TouchableOpacity
+                style={styles.buttonT}
+                onPress={() => { navigation.navigate('QRscanner') }}>
+                <Image
+                  style={{ width: '65%', height: '65%', marginTop: '10%' }}
+                  resizeMode={"contain"}
+                  source={require('../../../assets/images/qr.png')}
+                />
+              </TouchableOpacity>
 
             </View>
             <View style={styles.textPhoneCode}>
@@ -619,16 +625,16 @@ const UserOut = (props) => {
               flexDirection: 'row',
               alignItems: 'center',
               alignContent: 'center',
-              height: '17%',
+              height: '20%',
               width: '80%',
               justifyContent: 'space-between'
             }}>
               <Text style={styles.infoUserText}>{"TOTAL A PAGAR"}</Text>
               <View style={styles.payplate}>
                 <Text style={styles.payText}>{`$${numberWithPoints(totalAmount)}`}</Text>
-                <View style={{height: '35%', width: '60%', flexDirection: 'row', justifyContent: 'center' }}>
+                <View style={{height: '40%', width: '60%', flexDirection: 'row', justifyContent: 'center', marginTop: '2%'  }}>
                   <Text style={{ fontSize: normalize(20), color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{"Saldo pendiente:"}</Text>
-                  <Text style={{ fontSize: normalize(20), color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{` $${numberWithPoints(pendingValue)}`}</Text>
+                  <Text style={{ fontSize: normalize(20), color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}></Text>
 
                 </View>
 

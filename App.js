@@ -51,6 +51,7 @@ const App = () => {
         });
         if (response.data.response) {
           store.dispatch(setOfficial(response.data.data));
+          console.log(response)
         }
       } catch (error) {
         try {

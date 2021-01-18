@@ -47,7 +47,6 @@ const UserInput = (props) => {
 
 
   const [findUserByPlateInfo, setFindUserByPlateInfo] = useState([]);
-  const [readUserInfo, setReadUserInfo] = useState([]);
   const [blacklist, setBlacklist] = useState([]);
   const [blacklistExists, setBlacklistExists] = useState(false);
   const [startParking, setStartParking] = useState({});
@@ -91,23 +90,31 @@ const UserInput = (props) => {
         if (plateOne.length === 3 && plateTwo.length === 3) {
           const response = await instance.post(
             FIND_USER_BY_PLATE,
-            { plate: plateOne + plateTwo },
+            {
+              plate: plateOne + plateTwo,
+              type: "full"
+            },
             { timeout: TIMEOUT }
           )
-          setFindUserByPlateInfo(response.data.data);
+          setFindUserByPlateInfo(response.data);
           setExistingUser(true)
           // {label: 'UK', value: 'uk'},
           setPhone(1);
           setShowPhoneInput(false);
-          setShowDropdown(true)
+          setShowDropdown(true);
+          setBlacklist(response.data.blackList);
+          console.log(response.data.fullData)
           const auxPhones = []
           response.data.data.forEach(phone => {
             auxPhones.push({ label: phone, value: phone })
           });
           auxPhones.push({ label: '+ agregar', value: 0 })
           setPhones(auxPhones);
+          // if (response.data.blackList.length > 0) {
+          //   setModal3Visible()
+          // } 
         }
-        
+
       } catch (err) {
         console.log(err?.response)
         console.log('dentro')
@@ -144,32 +151,32 @@ const UserInput = (props) => {
     createUser();
   }, [newPhone]);
 
-  async function readUser() {
-    try {
-      if ((plateOne + plateTwo).length === 6 && phone) {
-        const response = await instance.post(
-          READ_USER,
-          { phone: phone },
-          { timeout: TIMEOUT }
-        )
-        setLoadingStart(false)
-        setReadUserInfo(response.data.data);
-        setBlacklist(response.data.data.blackList);
-        if (response.data.data.blackList.length > 0) {
-          setModal3Visible()
-        } else {
-          startPark();
-        }
-      }
+  // async function readUser() {
+  //   try {
+  //     if ((plateOne + plateTwo).length === 6 && phone) {
+  //       const response = await instance.post(
+  //         READ_USER,
+  //         { phone: phone },
+  //         { timeout: TIMEOUT }
+  //       )
+  //       setLoadingStart(false)
+  //       setReadUserInfo(response.data.data);
+  //       setBlacklist(response.data.data.blackList);
+  //       if (response.data.data.blackList.length > 0) {
+  //         setModal3Visible()
+  //       } else {
+  //         startPark();
+  //       }
+  //     }
 
 
-    } catch (err) {
-      console.log(err)
-      console.log(err?.response)
-      setShowPhoneInput(true);
-      startPark();
-    }
-  };
+  //   } catch (err) {
+  //     console.log(err)
+  //     console.log(err?.response)
+  //     setShowPhoneInput(true);
+  //     startPark();
+  //   }
+  // };
 
 
 
@@ -292,7 +299,7 @@ const UserInput = (props) => {
                   zIndex={30}
                   disabled={!showDropdown}
                   placeholder={"Selecciona un numero"}
-                  placeholderStyle={{color: '#8F8F8F', fontSize: normalize(25), textAlign: 'center', fontFamily: 'Montserrat-Bold'}}
+                  placeholderStyle={{ color: '#8F8F8F', fontSize: normalize(25), textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
                   selectedLabelStyle={{ color: '#8F8F8F', fontSize: normalize(25), textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
                   containerStyle={{
                     height: '23%', width: '100%'
@@ -354,21 +361,21 @@ const UserInput = (props) => {
               <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '40%', width: '100%', justifyContent: 'center' }}>
                 {!loadingStart &&
                   <Button onPress={() => {
-                    setLoadingStart(true); readUser();
+                    setLoadingStart(true); startPark();
 
                   }}
                     title="I N I C I A R"
                     color='#FFF200'
-                    style={[!existingUser || plateOne === "" || plateTwo === ""  ? styles.buttonIDisabled : styles.buttonI]}
+                    style={[!existingUser || plateOne === "" || plateTwo === "" ? styles.buttonIDisabled : styles.buttonI]}
                     textStyle={styles.buttonText}
-                    disabled={!existingUser || plateOne === "" || plateTwo === ""  }
+                    disabled={!existingUser || plateOne === "" || plateTwo === ""}
 
                   />
                 }
                 {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
                 {!loadingStart &&
                   <TouchableOpacity
-                    style={[styles.buttonT, (plateOne + plateTwo).length < 6 || existingUser ? styles.buttonTDisabled : styles.buttonT]}
+                    style={[styles.buttonT, (plateOne + plateTwo).length < 6 ? styles.buttonTDisabled : styles.buttonT]}
                     onPress={() => {
                       setLoadingStart(true);
                       setPlateOne("");
@@ -378,9 +385,9 @@ const UserInput = (props) => {
                       setLoadingStart(false);
                       store.dispatch(actions.setQr(plateOne + plateTwo));
                       navigation.navigate('QRscanner');
-                      
+
                     }}
-                    disabled={(plateOne + plateTwo).length <  6 || existingUser }
+                    disabled={(plateOne + plateTwo).length < 6 }
                   >
                     <Image style={styles.qrImage} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
                   </TouchableOpacity>
@@ -557,7 +564,7 @@ const UserInput = (props) => {
 
             }}>
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalTextAlert}> Este usuario se encuentra en mora  </Text>
+                <Text style={styles.modalTextAlert}> Este usuario se encuentra en lista negra  </Text>
                 {/* <Text style={styles.modalTextAlert}>{`$${numberWithPoints(debt)}`}</Text> */}
 
               </View>

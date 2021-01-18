@@ -44,7 +44,7 @@ const BarcodeScanner = (props) => {
     })();
   }, []);
 
-
+ useEffect
 
   const handleBarCodeScanned = async ({ data }) => {
     setScanned(true);
