@@ -31,6 +31,7 @@ import MainDrawer from '../../navigators/MainDrawer/MainDrawer';
 // import Feather from "react-native-feather";
 import DropDownPicker from 'react-native-dropdown-picker';
 import numberWithPoints from '../../config/services/numberWithPoints';
+import { Table, Row, Rows } from 'react-native-table-component';
 
 
 const UserInput = (props) => {
@@ -40,36 +41,41 @@ const UserInput = (props) => {
   const [loadingStart, setLoadingStart] = useState(false);
   const [prepayDay, setPrepayDay] = useState(false);
 
-
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
 
-
   const [findUserByPlateInfo, setFindUserByPlateInfo] = useState([]);
+  const userData = findUserByPlateInfo.fullData !== undefined ? findUserByPlateInfo.fullData[0] : "";
   const [blacklist, setBlacklist] = useState([]);
   const [blacklistExists, setBlacklistExists] = useState(false);
   const [startParking, setStartParking] = useState({});
   const [existingUser, setExistingUser] = useState(false)
   const [findMensualityPlate, setFindMensualityPlate] = useState([])
   const [debtBlacklist, setDebtBlacklist] = useState(0)
-
   const [showPhoneInput, setShowPhoneInput] = useState(false)
   const [codeError, setErrorText] = useState(false);
 
-
   const [plateOne, setPlateOne] = useState('');
   const [plateTwo, setPlateTwo] = useState('');
+
   const [phone, setPhone] = useState(1);
   const [phones, setPhones] = useState([{ label: 'Selecciona un número', value: 1 }]);
   const [showDropdown, setShowDropdown] = useState(false)
-
   const [newPhone, setNewPhone] = useState('');
-
-
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
   const refPhone = useRef(null);
+
+  const [tableHead, setTableHead] = useState(['Vehículos', 'Fecha', 'Últimos pagos'])
+  const [tableData, setTableData] = useState([
+    ['EVT 123', '9/11/2020', '$9.600'],
+    ['EVT 123', '9/11/2020', '$9.600'],
+    ['EVT 123', '9/11/2020', '$9.600'],
+    ['EVT 123', '9/11/2020', '$9.600'],
+    ['EVT 123', '9/11/2020', '$9.600']
+  ]
+  )
 
   const clearPlateOne = () => {
     setPlateOne('');
@@ -102,8 +108,8 @@ const UserInput = (props) => {
           setPhone(1);
           setShowPhoneInput(false);
           setShowDropdown(true);
-          setBlacklist(response.data.blackList);
-          console.log(response.data.fullData)
+          setBlacklist(response.data.fullData[0].blackList);
+
           const auxPhones = []
           response.data.data.forEach(phone => {
             auxPhones.push({ label: phone, value: phone })
@@ -151,35 +157,6 @@ const UserInput = (props) => {
     createUser();
   }, [newPhone]);
 
-  // async function readUser() {
-  //   try {
-  //     if ((plateOne + plateTwo).length === 6 && phone) {
-  //       const response = await instance.post(
-  //         READ_USER,
-  //         { phone: phone },
-  //         { timeout: TIMEOUT }
-  //       )
-  //       setLoadingStart(false)
-  //       setReadUserInfo(response.data.data);
-  //       setBlacklist(response.data.data.blackList);
-  //       if (response.data.data.blackList.length > 0) {
-  //         setModal3Visible()
-  //       } else {
-  //         startPark();
-  //       }
-  //     }
-
-
-  //   } catch (err) {
-  //     console.log(err)
-  //     console.log(err?.response)
-  //     setShowPhoneInput(true);
-  //     startPark();
-  //   }
-  // };
-
-
-
   async function startPark() {
     try {
       if ((plateOne + plateTwo).length === 6) {
@@ -200,7 +177,6 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        setModal3Visible(false);
         setModalVisible(true);
         setStartParking(response.data.data);
         setBlacklistExists(false);
@@ -387,7 +363,7 @@ const UserInput = (props) => {
                       navigation.navigate('QRscanner');
 
                     }}
-                    disabled={(plateOne + plateTwo).length < 6 }
+                    disabled={(plateOne + plateTwo).length < 6}
                   >
                     <Image style={styles.qrImage} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
                   </TouchableOpacity>
@@ -405,17 +381,28 @@ const UserInput = (props) => {
             alignContent: 'center',
             alignItems: 'center'
           }}>
-            <View style={{ height: '70%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
-              <View style={{ marginBottom: '3%', marginTop: '3%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-                {/* <Text style={styles.textListTitle} >Gerardo Bedoya</Text> */}
-                {/* <View style={{ flexDirection: 'row', height: '25%', marginTop: '1%' }}>
+            <View style={{ height: '70%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10, alignItems: 'center' }}>
+              <View style={{ marginTop: '3%', height: '26%', width: '90%', alignContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
+                <Text style={styles.textListTitle} >{userData.name} Hello {userData.lastName}</Text>
+                <View style={{ flexDirection: 'row', height: '28%', marginTop: '1%' }}>
                   <Text style={styles.textList} >Mensualidad hasta </Text>
-                  <View style={{ marginLeft: '1%', backgroundColor: '#FFF200', borderRadius: 30, width: '25%', alignContent: 'center', alignItems: 'center' }}>
-                    <Text style={styles.textListDate} > 11/11/2020 </Text>
+                  <View style={{ marginLeft: '1%', backgroundColor: '#FFF200', borderRadius: 30, width: '25%', alignContent: 'center', alignItems: 'center', borderWidth: 1 }}>
+                    <Text style={styles.textListDate} >---</Text>
                   </View>
-                </View> */}
+                </View>
               </View>
-              <View style={{ height: "72%" }}>
+              <View style={{ height: "60%", width: '95%' }}>
+                <Table borderStyle={{ borderColor: '#00A9A0' }}>
+                  <Row 
+                  data={tableHead} 
+                  style={styles.head} 
+                  textStyle={styles.headText} 
+                  />
+                  <Rows 
+                  data={tableData} 
+                  textStyle={styles.text} 
+                  />
+                </Table>
               </View>
             </View>
             <View style={{ height: '23%', width: '100%', justifyContent: 'flex-end' }}>
@@ -570,8 +557,8 @@ const UserInput = (props) => {
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
-                  startPark();
-                  setLoadingStart(true)
+                  setModal3Visible(false);
+
 
                 }}
                   title="E N T E N D I D O"

@@ -741,6 +741,7 @@ const UserOut = (props) => {
                     textStyle={{ color: '#8F8F8F', fontFamily: 'Montserrat-Bold', fontSize: normalize(16) }}
                     onPress={() => {
                       setModal2Visible(true);
+                      setTotalPay(0)
                       // finishParking("pending") 
                     }}
                   />

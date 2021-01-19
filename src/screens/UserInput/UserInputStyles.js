@@ -2,10 +2,28 @@ import { StyleSheet } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
 
 const styles = StyleSheet.create({
+  container: { 
+    flex: 1, 
+    padding: 16, 
+    paddingTop: 30, 
+    backgroundColor: '#fff' 
+  },
+  head: { 
+    height: 40, 
+    alignContent: 'center',
+  },
+  text: { 
+    margin: 6,
+    color: '#8F8F8F',
+    alignSelf: 'center',
+    fontFamily: 'Montserrat-Regular' 
+  },
+  headText: { 
+    margin: 6,
+    color: '#00A9A0',
+    alignSelf: 'center',
+    fontFamily: 'Montserrat-Regular' 
 
-  HeadStyleTable: {
-    height: 40,
-    alignContent: "center",
   },
   plateInput: {
     width: '46%',
@@ -59,9 +77,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF200",
     marginLeft: '3%'
   },
-  qrImage:{
-    width: '65%', 
-    height: '65%', 
+  qrImage: {
+    width: '65%',
+    height: '65%',
     marginTop: '6%'
   },
   buttonTDisabled: {
@@ -155,7 +173,7 @@ const styles = StyleSheet.create({
   modalText: {
     textAlign: "center",
     fontFamily: 'Montserrat-Regular',
-    color: '#B7B7B7', 
+    color: '#B7B7B7',
     fontSize: normalize(20)
   },
   modalTextAlert: {
