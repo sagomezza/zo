@@ -70,15 +70,16 @@ const UserInput = (props) => {
 
   const [tableHead, setTableHead] = useState(['Vehículos', 'Fecha', 'Últimos pagos'])
   const [tableData, setTableData] = useState(
-  //   [
-  //   ['EVT 123', '9/11/2020', '$9.600'],
-  //   ['EVT 123', '9/11/2020', '$9.600'],
-  //   ['EVT 123', '9/11/2020', '$9.600'],
-  //   ['EVT 123', '9/11/2020', '$9.600'],
-  //   ['EVT 123', '9/11/2020', '$9.600']
-  // ]
+    //   [
+    //   ['EVT 123', '9/11/2020', '$9.600'],
+    //   ['EVT 123', '9/11/2020', '$9.600'],
+    //   ['EVT 123', '9/11/2020', '$9.600'],
+    //   ['EVT 123', '9/11/2020', '$9.600'],
+    //   ['EVT 123', '9/11/2020', '$9.600']
+    // ]
   )
   const [historyInfo, setHistoryInfo] = useState([])
+  const [historyExists, setHistoryExists] = useState(false)
 
   const clearPlateOne = () => {
     setPlateOne('');
@@ -145,6 +146,7 @@ const UserInput = (props) => {
             },
             { timeout: TIMEOUT }
           )
+          setHistoryExists(true)
           setHistoryInfo(response.data.data)
           console.log(response.data.data)
           const auxTable = []
@@ -162,6 +164,7 @@ const UserInput = (props) => {
         console.log(err)
         console.log(err?.response)
         console.log('dentro')
+        setHistoryExists(false)
       }
     }
     getRecipsByPlate()
@@ -417,30 +420,41 @@ const UserInput = (props) => {
             alignItems: 'center'
           }}>
             <View style={{ height: '70%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10, alignItems: 'center' }}>
-              <View style={{ marginTop: '3%', height: '26%', width: '90%', alignContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
+              <View style={{ marginTop: '3%', height: '26%', width: '90%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                 <Text style={styles.textListTitle} >{userData.name}  {userData.lastName}</Text>
                 <View style={{ flexDirection: 'row', height: '28%', marginTop: '1%' }}>
                   <Text style={styles.textList} >Mensualidad hasta </Text>
-                  <View style={{ marginLeft: '1%', backgroundColor: '#FFF200', borderRadius: 30, width: '25%', alignContent: 'center', alignItems: 'center'}}>
+                  <View style={{ marginLeft: '1%', backgroundColor: '#FFF200', borderRadius: 30, width: '25%', alignContent: 'center', alignItems: 'center' }}>
                     <Text style={styles.textListDate} >---</Text>
                   </View>
                 </View>
               </View>
               <View style={{ height: "60%", width: '95%' }}>
-                <Table borderStyle={{ borderColor: '#00A9A0' }}>
-                  <Row 
-                  data={tableHead} 
-                  style={styles.head} 
-                  textStyle={styles.headText} 
-                  />
-                  <Rows 
-                  data={tableData} 
-                  textStyle={styles.text} 
-                  />
-                </Table>
+                {historyExists ?
+                  <Table borderStyle={{ borderColor: '#00A9A0' }}>
+                    <Row
+                      data={tableHead}
+                      style={styles.head}
+                      textStyle={styles.headText}
+                    />
+                    <Rows
+                      data={tableData}
+                      textStyle={styles.text}
+                    />
+                  </Table>
+                  :
+                  <Table borderStyle={{ borderColor: '#00A9A0' }}>
+                    <Row
+                      data={tableHead}
+                      style={styles.head}
+                      textStyle={styles.headText}
+                    />
+
+                  </Table>
+                }
               </View>
             </View>
-            <View style={{ height: '23%', width: '100%', justifyContent: 'flex-end'}}>
+            <View style={{ height: '23%', width: '100%', justifyContent: 'flex-end' }}>
               <FooterIndex navigation={navigation} />
             </View>
           </View>
@@ -480,6 +494,8 @@ const UserInput = (props) => {
                     setShowPhoneInput(false);
                     setPrepayDay();
                     setPhones([{ label: 'Selecciona un número', value: 1 }]);
+                    setHistoryExists(false)
+
                   }}
                     title="E N T E N D I D O"
                     color="#00A9A0"
@@ -550,6 +566,8 @@ const UserInput = (props) => {
                   setShowPhoneInput(false);
                   setPrepayDay();
                   setShowPhoneInput(false);
+                  setHistoryExists(false)
+
                 }}
                   title="E N T E N D I D O"
                   color="#00A9A0"
@@ -593,8 +611,6 @@ const UserInput = (props) => {
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
                   setModal3Visible(false);
-
-
                 }}
                   title="E N T E N D I D O"
                   color="#00A9A0"
