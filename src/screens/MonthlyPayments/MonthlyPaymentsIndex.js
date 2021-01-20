@@ -29,6 +29,7 @@ const MonthlyPayments = (props) => {
     const [mensuality, setMensuality] = useState({})
     const mensualityInfo = mensuality.data !== undefined ? mensuality.data[0] : "";
 
+
     const clearPlateOne = () => {
         setPlateOne('');
     }
@@ -36,7 +37,13 @@ const MonthlyPayments = (props) => {
         setPlateTwo('');
     }
 
-  const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const firstPlate = mensualityInfo.plates !== undefined ? mensualityInfo.plates[0] + '' : ''
+    const secondPlate = mensualityInfo.plates !== undefined ? mensualityInfo.plates[1] + '' : ''
+    const thirdPlate = mensualityInfo.plates !== undefined ? mensualityInfo.plates[2] + '' : ''
+    const fourthPlate = mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + '' : ''
+    const fifthPlate = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + '' : ''
 
 
     async function findMensualityPlate() {
@@ -75,7 +82,7 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                
+
                 console.log(response.data.data)
             }
         } catch (err) {
@@ -186,6 +193,11 @@ const MonthlyPayments = (props) => {
                                     />
                                     <Button onPress={() => {
                                         setModalVisible(true)
+                                        plateO()
+                                        plateT()
+                                        plateTh()
+                                        plateF()
+                                        plateFi()
                                     }}
                                         title="E D I T A R"
                                         color='gray'
@@ -237,7 +249,7 @@ const MonthlyPayments = (props) => {
                             <View style={{ margin: '0%', justifyContent: 'center', height: '10%' }}>
                                 <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}>Placas asociadas a mensualidad </Text>
                             </View>
-                            <View style={{ justifyContent: 'space-between', height: '69%',width: '100%', flexDirection: 'column', paddingBottom: '6%'}}>
+                            <View style={{ justifyContent: 'space-between', height: '69%', width: '100%', flexDirection: 'column', paddingBottom: '6%' }}>
                                 <View style={{ flexDirection: "row", justifyContent: 'center', borderWidth: 1 }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 1:  </Text>
                                     <TextInput
@@ -254,8 +266,8 @@ const MonthlyPayments = (props) => {
                                         placeholder=''
                                         textAlign='center'
                                         // keyboardType={"numeric"}
-                                        // value={totalPay == 0 ? '' : totalPay + ''}
-                                        // onChangeText={text => setTotalPay(text)}
+                                        value={firstPlate !== undefined + '' ? firstPlate: ''}
+                                    // onChangeText={text => setTotalPay(text)}
                                     />
                                 </View>
                                 <View style={{ flexDirection: "row", justifyContent: 'center', borderWidth: 1 }}>
@@ -274,8 +286,9 @@ const MonthlyPayments = (props) => {
                                         placeholder=''
                                         textAlign='center'
                                         // keyboardType={"numeric"}
-                                        // value={totalPay == 0 ? '' : totalPay + ''}
-                                        // onChangeText={text => setTotalPay(text)}
+                                        value={secondPlate !== undefined + '' ? secondPlate: ''}
+
+                                    // onChangeText={text => setTotalPay(text)}
                                     />
                                 </View>
                                 <View style={{ flexDirection: "row", justifyContent: 'center', borderWidth: 1 }}>
@@ -294,8 +307,9 @@ const MonthlyPayments = (props) => {
                                         placeholder=''
                                         textAlign='center'
                                         // keyboardType={"numeric"}
-                                        // value={totalPay == 0 ? '' : totalPay + ''}
-                                        // onChangeText={text => setTotalPay(text)}
+                                        value={thirdPlate !== undefined + '' ? thirdPlate: ''}
+
+                                    // onChangeText={text => setTotalPay(text)}
                                     />
                                 </View>
                                 <View style={{ flexDirection: "row", justifyContent: 'center', borderWidth: 1 }}>
@@ -314,8 +328,9 @@ const MonthlyPayments = (props) => {
                                         placeholder=''
                                         textAlign='center'
                                         // keyboardType={"numeric"}
-                                        // value={totalPay == 0 ? '' : totalPay + ''}
-                                        // onChangeText={text => setTotalPay(text)}
+                                        value={fourthPlate !== undefined + '' ? fourthPlate: ''}
+
+                                    // onChangeText={text => setTotalPay(text)}
                                     />
                                 </View>
                                 <View style={{ flexDirection: "row", justifyContent: 'center', borderWidth: 1 }}>
@@ -334,8 +349,9 @@ const MonthlyPayments = (props) => {
                                         placeholder=''
                                         textAlign='center'
                                         // keyboardType={"numeric"}
-                                        // value={totalPay == 0 ? '' : totalPay + ''}
-                                        // onChangeText={text => setTotalPay(text)}
+                                        value={fifthPlate !== undefined + '' ? fifthPlate: ''}
+
+                                    // onChangeText={text => setTotalPay(text)}
                                     />
                                 </View>
                                 {/* <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
