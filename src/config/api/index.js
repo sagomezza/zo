@@ -4,6 +4,7 @@ export const READ_USER = "/readUser";
 export const EDIT_USER = "/editUser";
 export const FIND_USER_BY_PLATE = "/findUserByPlate";
 export const FIND_MENSUALITY_PLATE = "/findMensualityPlate";
+export const EDIT_MENSUALITY = "/editMensuality"
 export const CREATE_PARANOIC_USER = "/createParanoicUser";
 export const GET_PARANOICS_FROM_HQ = "/getParanoicsFromHq";
 export const READ_PARANOIC_USER = "/readParanoicUser";
@@ -14,6 +15,7 @@ export const START_SHIFT = "/startShift";
 export const EDIT_OFFICIAL = "/editOfficial"
 //RECIPS
 export const GET_RECIPS = "/getRecips";
+export const GET_RECIPS_BY_PLATE = "/getRecipsByPlate";
 export const GET_SHIFT_RECIPS = "/getShiftRecips";
 //HQ's
 export const READ_HQ = "/readHq";

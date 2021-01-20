@@ -71,7 +71,6 @@ const HomeIndex = (props) => {
     };
 
     getRecips();
-    // getShiftRecips();
     readHq();
     updateExpoToken();
   }, []);

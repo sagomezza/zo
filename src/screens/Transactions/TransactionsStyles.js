@@ -10,9 +10,10 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         alignItems: 'center',
         justifyContent: 'space-between',
+        borderWidth: 1
     },
     listContainer: {
-        height: '77%',
+        height: '70%',
         width: '73%',
         backgroundColor: '#FFFFFF',
         marginTop: '8%',

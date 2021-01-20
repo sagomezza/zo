@@ -18,7 +18,7 @@ import { TIMEOUT } from '../../config/constants/constants';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import instance from "../../config/axios";
-import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ, READ_USER } from "../../config/api";
+import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ, GET_RECIPS_BY_PLATE } from "../../config/api";
 import store from '../../config/store';
 import moment from 'moment';
 import Button from '../../components/Button';
@@ -76,6 +76,7 @@ const UserInput = (props) => {
     ['EVT 123', '9/11/2020', '$9.600']
   ]
   )
+  const [historyInfo, setHistoryInfo] = useState([])
 
   const clearPlateOne = () => {
     setPlateOne('');
@@ -130,6 +131,29 @@ const UserInput = (props) => {
         setShowPhoneInput(true);
       }
     }
+
+    async function getRecipsByPlate() {
+      try {
+        if (plateOne.length === 3 && plateTwo.length === 3) {
+          const response = await instance.post(
+            GET_RECIPS_BY_PLATE,
+            {
+              plate: plateOne + plateTwo,
+              limit: 5
+            },
+            { timeout: TIMEOUT }
+          )
+          setHistoryInfo(response.data.data)
+          console.log(response.data.data)
+        }
+
+      } catch (err) {
+        console.log(err)
+        console.log(err?.response)
+        console.log('dentro')
+      }
+    }
+    getRecipsByPlate()
     findUserByPlate()
   }, [plateOne, plateTwo]);
 
@@ -383,10 +407,10 @@ const UserInput = (props) => {
           }}>
             <View style={{ height: '70%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10, alignItems: 'center' }}>
               <View style={{ marginTop: '3%', height: '26%', width: '90%', alignContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
-                <Text style={styles.textListTitle} >{userData.name} Hello {userData.lastName}</Text>
+                <Text style={styles.textListTitle} >{userData.name}  {userData.lastName}</Text>
                 <View style={{ flexDirection: 'row', height: '28%', marginTop: '1%' }}>
                   <Text style={styles.textList} >Mensualidad hasta </Text>
-                  <View style={{ marginLeft: '1%', backgroundColor: '#FFF200', borderRadius: 30, width: '25%', alignContent: 'center', alignItems: 'center', borderWidth: 1 }}>
+                  <View style={{ marginLeft: '1%', backgroundColor: '#FFF200', borderRadius: 30, width: '25%', alignContent: 'center', alignItems: 'center'}}>
                     <Text style={styles.textListDate} >---</Text>
                   </View>
                 </View>
@@ -405,7 +429,7 @@ const UserInput = (props) => {
                 </Table>
               </View>
             </View>
-            <View style={{ height: '23%', width: '100%', justifyContent: 'flex-end' }}>
+            <View style={{ height: '23%', width: '100%', justifyContent: 'flex-end'}}>
               <FooterIndex navigation={navigation} />
             </View>
           </View>
