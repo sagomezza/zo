@@ -634,7 +634,7 @@ const UserOut = (props) => {
                 <Text style={styles.payText}>{`$${numberWithPoints(totalAmount)}`}</Text>
                 <View style={{height: '40%', width: '60%', flexDirection: 'row', justifyContent: 'center', marginTop: '2%'  }}>
                   <Text style={{ fontSize: normalize(20), color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{"Saldo pendiente: "}</Text>
-                  <Text style={{ fontSize: normalize(20), color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{`$${numberWithPoints(pendingValue)}`}</Text>
+                  <Text style={{ fontSize: normalize(20), color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>$ {pendingValue}</Text>
 
                 </View>
 

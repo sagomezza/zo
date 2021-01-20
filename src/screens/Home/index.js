@@ -19,7 +19,7 @@ const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
 
-  
+
 
   useEffect(() => {
     const getRecips = async () => {
@@ -61,6 +61,7 @@ const HomeIndex = (props) => {
           id: officialHq
         });
         if (response.data.response) {
+          console.log(response.data.data.reservations)
           store.dispatch(actions.setReservations(response.data.data.reservations));
           store.dispatch(actions.setHq(response.data.data));
         }
@@ -80,7 +81,7 @@ const HomeIndex = (props) => {
       return Math.round(hours)
     } else return hours
   }
-  
+
   return (
     <View style={{ flex: 1 }}>
       {/* <View style={{ heigth: '14%' }} >
@@ -132,7 +133,7 @@ const HomeIndex = (props) => {
                 <Image style={{ width: "40%", height: "40%", marginTop: '10%' }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoM.png')} />
                 <View style={{ flexDirection: 'row', height: '100%' }}>
                   <Text style={HomeStyles.plateInputTextBig}>
-                    {`${hq. totalBikes - hq.availableBikes}`}
+                    {`${hq.totalBikes - hq.availableBikes}`}
                   </Text>
                   <Text style={HomeStyles.plateInputTextSmall} >{`/${hq.totalBikes}`}</Text>
                 </View>
@@ -228,7 +229,13 @@ const HomeIndex = (props) => {
                         </View>
                         <View style={{ flex: 1, alignItems: 'flex-end' }} >
                           <Text style={HomeStyles.textMoney}>{moment(item.dateStart).format('L')}  {moment(item.dateStart).format('LT')}</Text>
-                          <Text style={HomeStyles.textPago}>Pago por {item.prepaidDay === true ? "pase día": "horas"}</Text>
+                          <Text style={HomeStyles.textPago}>
+                            Pago por 
+                            {item.prepayFullDay === true ? " pase día" : ""}
+                            {item.mensuality === true ? " mensualidad" : ""}
+                            {item.isParanoic === true ? " horas" : ""}
+                            {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? " horas": "" }
+                          </Text>
                         </View>
                       </View>
                     )

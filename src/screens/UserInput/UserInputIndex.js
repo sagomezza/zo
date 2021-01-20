@@ -124,6 +124,8 @@ const UserInput = (props) => {
           //   setModal3Visible()
           // } 
         }
+        console.log('--------prepayday-------')
+        console.log(prepayDay)
 
       } catch (err) {
         console.log(err?.response)
@@ -148,7 +150,6 @@ const UserInput = (props) => {
           )
           setHistoryExists(true)
           setHistoryInfo(response.data.data)
-          console.log(response.data.data)
           const auxTable = []
           response.data.data.forEach(element => {
             const auxElement = []
@@ -219,6 +220,9 @@ const UserInput = (props) => {
         setStartParking(response.data.data);
         setBlacklistExists(false);
         readHq();
+        console.log('--------prepaydaySTART-------')
+        console.log(prepayDay)
+
         setLoadingStart(false)
         setPhones([{ label: 'Selecciona un número', value: 1 }]);
         if (isCharacterALetter(plateTwo[2])) {
@@ -423,10 +427,10 @@ const UserInput = (props) => {
               <View style={{ marginTop: '3%', height: '26%', width: '90%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                 <Text style={styles.textListTitle} >{userData.name}  {userData.lastName}</Text>
                 <View style={{ flexDirection: 'row', height: '28%', marginTop: '1%' }}>
-                  <Text style={styles.textList} >Mensualidad hasta </Text>
+                  {/* <Text style={styles.textList} >Mensualidad hasta </Text>
                   <View style={{ marginLeft: '1%', backgroundColor: '#FFF200', borderRadius: 30, width: '25%', alignContent: 'center', alignItems: 'center' }}>
                     <Text style={styles.textListDate} >---</Text>
-                  </View>
+                  </View> */}
                 </View>
               </View>
               <View style={{ height: "60%", width: '95%' }}>
@@ -488,11 +492,11 @@ const UserInput = (props) => {
                     setPlateOne("");
                     setPlateTwo("");
                     setNewPhone("");
+                    setPrepayDay(false);
                     setLoadingStart(false);
                     setPhone(1);
                     setShowDropdown(false);
                     setShowPhoneInput(false);
-                    setPrepayDay();
                     setPhones([{ label: 'Selecciona un número', value: 1 }]);
                     setHistoryExists(false)
 
@@ -560,6 +564,7 @@ const UserInput = (props) => {
                   setPlateOne("");
                   setPlateTwo("");
                   setNewPhone("");
+                  setPrepayDay(false);
                   setPhones([{ label: 'Selecciona un número', value: 1 }]);
                   setPhone(1);
                   setShowDropdown(false);
