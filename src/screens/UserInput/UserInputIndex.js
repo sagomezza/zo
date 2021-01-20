@@ -195,7 +195,7 @@ const UserInput = (props) => {
             hqId: officialHq,
             dateStart: new Date(),
             phone: !showPhoneInput ? phone : '+57' + newPhone,
-            prepayFullDay: false,
+            prepayFullDay: prepayDay,
             officialEmail: officialEmail,
             type
           },
