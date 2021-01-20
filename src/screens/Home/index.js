@@ -18,7 +18,8 @@ import Header from '../../components/Header/HeaderIndex';
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-
+  const [occupiedBikes, setOccupiedBikes ] = useState(0);
+  const [occupiedCars, setOccupiedCars ] = useState(0);
 
 
   useEffect(() => {
@@ -28,7 +29,7 @@ const HomeIndex = (props) => {
           hqId: officialProps.hq[0]
         });
         if (response.data.response === 1) {
-          store.dispatch(actions.setRecips(response.data.data.finished));
+          store.dispatch(actions.setRecips(response.data.data.total));
         }
       } catch (err) {
         console.log(err?.response)
@@ -61,7 +62,11 @@ const HomeIndex = (props) => {
           id: officialHq
         });
         if (response.data.response) {
-          console.log(response.data.data.reservations)
+          console.log('--------readHQ------------')
+          console.log(response.data.data.occupiedBikes)
+          setOccupiedBikes(response.data.data.occupiedBikes)
+          console.log(response.data.data.occupiedCars)
+          setOccupiedCars(response.data.data.occupiedCars)
           store.dispatch(actions.setReservations(response.data.data.reservations));
           store.dispatch(actions.setHq(response.data.data));
         }
@@ -133,7 +138,7 @@ const HomeIndex = (props) => {
                 <Image style={{ width: "40%", height: "40%", marginTop: '10%' }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoM.png')} />
                 <View style={{ flexDirection: 'row', height: '100%' }}>
                   <Text style={HomeStyles.plateInputTextBig}>
-                    {`${hq.totalBikes - hq.availableBikes}`}
+                    {`${occupiedBikes}`}
                   </Text>
                   <Text style={HomeStyles.plateInputTextSmall} >{`/${hq.totalBikes}`}</Text>
                 </View>
@@ -162,7 +167,7 @@ const HomeIndex = (props) => {
                 <Image style={{ width: "38%", height: "38%", marginTop: '10%' }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoC.png')} />
                 <View style={{ flexDirection: 'row', height: normalize(170) }}>
                   <Text style={HomeStyles.plateInputTextBig}>
-                    {`${hq.totalCars - hq.availableCars}`}
+                    {`${occupiedCars}`}
                   </Text>
                   <Text style={HomeStyles.plateInputTextSmall} >{`/${hq.totalCars}`}</Text>
                 </View>

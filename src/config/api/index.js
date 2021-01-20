@@ -5,6 +5,7 @@ export const EDIT_USER = "/editUser";
 export const FIND_USER_BY_PLATE = "/findUserByPlate";
 export const FIND_MENSUALITY_PLATE = "/findMensualityPlate";
 export const EDIT_MENSUALITY = "/editMensuality"
+export const RENEW_MENSUALITY = "/renewMensuality"
 export const CREATE_PARANOIC_USER = "/createParanoicUser";
 export const GET_PARANOICS_FROM_HQ = "/getParanoicsFromHq";
 export const READ_PARANOIC_USER = "/readParanoicUser";

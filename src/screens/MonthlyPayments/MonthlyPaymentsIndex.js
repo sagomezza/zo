@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, Modal, ImageBackground, Keyboard } from 
 import { TextInput } from 'react-native-gesture-handler';
 import styles from '../MonthlyPayments/MonthlyPaymentsStyles';
 
-import { FIND_MENSUALITY_PLATE } from "../../config/api";
+import { FIND_MENSUALITY_PLATE, RENEW_MENSUALITY } from "../../config/api";
 import instance from "../../config/axios";
 import { TIMEOUT } from '../../config/constants/constants';
 
@@ -28,6 +28,7 @@ const MonthlyPayments = (props) => {
     const [mensualityExists, setMensualityExists] = useState(false)
     const [mensuality, setMensuality] = useState({})
     const mensualityInfo = mensuality.data !== undefined ? mensuality.data[0] : "";
+    const mensualityValue = mensualityInfo.value !== undefined ? mensualityInfo.value : 0;
 
 
     const clearPlateOne = () => {
@@ -83,6 +84,25 @@ const MonthlyPayments = (props) => {
                     { timeout: TIMEOUT }
                 )
 
+                console.log(response.data.data)
+            }
+        } catch (err) {
+            console.log(err)
+            console.log(err?.response)
+            console.log('dentro')
+        }
+    }
+
+    async function renewMensuality() {
+        try {
+            if (plateOne.length === 3 && plateTwo.length === 3) {
+                const response = await instance.post(
+                    RENEW_MENSUALITY,
+                    {
+                        plate: plateOne + plateTwo
+                    },
+                    { timeout: TIMEOUT }
+                )
                 console.log(response.data.data)
             }
         } catch (err) {
@@ -179,7 +199,7 @@ const MonthlyPayments = (props) => {
                                         Vigencia: {/* {mensualityInfo.validity} */}
                                     </Text>
                                     <Text style={styles.infoText}>
-                                        Valor: {`$${numberWithPoints(mensualityInfo.value)}`}
+                                        Valor: {`$${numberWithPoints(mensualityValue)}`}
                                     </Text>
                                 </View>
                                 <View style={{ height: '18%', width: '80%', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'column' }}>
@@ -193,11 +213,6 @@ const MonthlyPayments = (props) => {
                                     />
                                     <Button onPress={() => {
                                         setModalVisible(true)
-                                        plateO()
-                                        plateT()
-                                        plateTh()
-                                        plateF()
-                                        plateFi()
                                     }}
                                         title="E D I T A R"
                                         color='gray'
