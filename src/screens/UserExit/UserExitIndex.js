@@ -34,7 +34,7 @@ const UserOut = (props) => {
   const [dateStart, setDateStart] = useState('');
   const [dateFinished, setDateFinished] = useState('');
   const [check, setCheck] = useState({})
-  const [pendingValue, setPendingValue] = useState(pendingValue === undefined ? '0': pendingValue + '' )
+  const [pendingValue, setPendingValue] = useState(pendingValue === undefined ? '0' : pendingValue + '')
 
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
@@ -535,8 +535,8 @@ const UserOut = (props) => {
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{ height: normalize(390), alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
-            <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '18%', width: '80%', marginTop: '0%'   }}>
-              
+            <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '18%', width: '80%', marginTop: '0%' }}>
+
               <TextInput
                 ref={refPlateOne}
                 placeholder={'EVZ'}
@@ -632,7 +632,7 @@ const UserOut = (props) => {
               <Text style={styles.infoUserText}>{"TOTAL A PAGAR"}</Text>
               <View style={styles.payplate}>
                 <Text style={styles.payText}>{`$${numberWithPoints(totalAmount)}`}</Text>
-                <View style={{height: '40%', width: '60%', flexDirection: 'row', justifyContent: 'center', marginTop: '2%'  }}>
+                <View style={{ height: '40%', width: '60%', flexDirection: 'row', justifyContent: 'center', marginTop: '2%' }}>
                   <Text style={{ fontSize: normalize(20), color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{"Saldo pendiente: "}</Text>
                   <Text style={{ fontSize: normalize(20), color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>$ {pendingValue}</Text>
 
@@ -708,10 +708,13 @@ const UserOut = (props) => {
                   value={`$${numberWithPoints(inputChange)}`}
                 />
               </View>
+
             </View>
 
-            {err !== "" && <Text style={{ color: "red", fontFamily: 'Montserrat-Regular', alignSelf: 'center' }}>{err}</Text>}
             <View style={{ height: '25%', justifyContent: 'flex-end' }}>
+              {err !== "" &&
+                <Text style={{ color: "red", fontFamily: 'Montserrat-Regular', alignSelf: 'center'}}>{err}</Text>
+              }
               {!loading &&
                 <View style={{ alignItems: 'center', width: '80%', height: ' 35%', marginTop: '2%' }}>
                   <Button
