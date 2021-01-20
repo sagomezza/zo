@@ -179,7 +179,7 @@ const MonthlyPayments = (props) => {
                                         Vigencia: {/* {mensualityInfo.validity} */}
                                     </Text>
                                     <Text style={styles.infoText}>
-                                        Valor: {mensualityInfo.value}
+                                        Valor: {`$${numberWithPoints(mensualityInfo.value)}`}
                                     </Text>
                                 </View>
                                 <View style={{ height: '18%', width: '80%', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'column' }}>
