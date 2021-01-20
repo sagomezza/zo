@@ -34,6 +34,7 @@ import numberWithPoints from '../../config/services/numberWithPoints';
 import { Table, Row, Rows } from 'react-native-table-component';
 
 
+
 const UserInput = (props) => {
   const { navigation, officialProps } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
@@ -68,13 +69,14 @@ const UserInput = (props) => {
   const refPhone = useRef(null);
 
   const [tableHead, setTableHead] = useState(['Vehículos', 'Fecha', 'Últimos pagos'])
-  const [tableData, setTableData] = useState([
-    ['EVT 123', '9/11/2020', '$9.600'],
-    ['EVT 123', '9/11/2020', '$9.600'],
-    ['EVT 123', '9/11/2020', '$9.600'],
-    ['EVT 123', '9/11/2020', '$9.600'],
-    ['EVT 123', '9/11/2020', '$9.600']
-  ]
+  const [tableData, setTableData] = useState(
+  //   [
+  //   ['EVT 123', '9/11/2020', '$9.600'],
+  //   ['EVT 123', '9/11/2020', '$9.600'],
+  //   ['EVT 123', '9/11/2020', '$9.600'],
+  //   ['EVT 123', '9/11/2020', '$9.600'],
+  //   ['EVT 123', '9/11/2020', '$9.600']
+  // ]
   )
   const [historyInfo, setHistoryInfo] = useState([])
 
@@ -145,6 +147,15 @@ const UserInput = (props) => {
           )
           setHistoryInfo(response.data.data)
           console.log(response.data.data)
+          const auxTable = []
+          response.data.data.forEach(element => {
+            const auxElement = []
+            auxElement.push(element.plate)
+            auxElement.push(moment(element.dateFinished).format('L'))
+            auxElement.push(`$${numberWithPoints(element.total)}`)
+            auxTable.push(auxElement)
+          });
+          setTableData(auxTable);
         }
 
       } catch (err) {
