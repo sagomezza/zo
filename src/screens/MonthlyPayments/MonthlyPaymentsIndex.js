@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { ImageBackground, Keyboard } from 'react-native';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Modal, ImageBackground, Keyboard } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from '../MonthlyPayments/MonthlyPaymentsStyles';
 
@@ -8,14 +7,11 @@ import { FIND_MENSUALITY_PLATE } from "../../config/api";
 import instance from "../../config/axios";
 import { TIMEOUT } from '../../config/constants/constants';
 
-
-
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import normalize from '../../config/services/normalizeFontSize';
 
-
-
+import numberWithPoints from '../../config/services/numberWithPoints';
 import Header from '../../components/Header/HeaderIndex';
 import FooterIndex from '../../components/Footer';
 import Button from '../../components/Button';
@@ -40,6 +36,9 @@ const MonthlyPayments = (props) => {
         setPlateTwo('');
     }
 
+  const [modalVisible, setModalVisible] = useState(false);
+
+
     async function findMensualityPlate() {
         try {
             if (plateOne.length === 3 && plateTwo.length === 3) {
@@ -60,6 +59,7 @@ const MonthlyPayments = (props) => {
             console.log(err)
             console.log(err?.response)
             console.log('dentro')
+            setLoading(false);
             setMensualityExists(false);
         }
     }
@@ -71,10 +71,11 @@ const MonthlyPayments = (props) => {
                     EDIT_MENSUALITY,
                     {
                         id: mensualityInfo.id,
-                        plates: mensuality.plates 
+                        plates: mensuality.plates
                     },
                     { timeout: TIMEOUT }
                 )
+                
                 console.log(response.data.data)
             }
         } catch (err) {
@@ -156,8 +157,8 @@ const MonthlyPayments = (props) => {
                 <View style={styles.container}>
                     <View style={styles.listContainer}>
                         {mensualityExists ?
-                            <View style={{ borderWidth: 1, height: '96%', width: '80%', marginTop: '2%', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between'  }}>
-                                <View style={{ borderWidth: 1, height: '40%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                            <View style={{ height: '96%', width: '80%', marginTop: '2%', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <View style={{ height: '40%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                                     <Text style={styles.infoText}>
                                         Capacidad: {mensualityInfo.capacity}
                                     </Text>
@@ -174,7 +175,7 @@ const MonthlyPayments = (props) => {
                                         Valor: {mensualityInfo.value}
                                     </Text>
                                 </View>
-                                <View style={{ borderWidth: 1, height: '18%', width: '80%',alignContent: 'center',alignItems: 'center', justifyContent: 'space-between', flexDirection: 'column' }}>
+                                <View style={{ height: '18%', width: '80%', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'column' }}>
                                     <Button onPress={() => {
                                     }}
                                         title="R E N O V A R"
@@ -182,24 +183,31 @@ const MonthlyPayments = (props) => {
                                         style={[plateOne === "" || plateTwo === "" ? styles.buttonReDisabled : styles.buttonRe]}
                                         textStyle={styles.buttonTextRenew}
                                         disabled={plateOne === "" || plateTwo === ""}
-                                        activityIndicatorStatus={loading}
                                     />
                                     <Button onPress={() => {
+                                        setModalVisible(true)
                                     }}
                                         title="E D I T A R"
                                         color='gray'
                                         style={[plateOne === "" || plateTwo === "" ? styles.buttonEdDisabled : styles.buttonEd]}
                                         textStyle={styles.buttonTextRenew}
                                         disabled={plateOne === "" || plateTwo === ""}
-                                        activityIndicatorStatus={loading}
                                     />
                                 </View>
                             </View>
                             :
-                            <View style={{ height: '40%', justifyContent: 'center' }}>
-                                <Text style={styles.infoText}>
+                            <View style={{ height: '30%', justifyContent: 'space-between' }}>
+                                <Text style={{ fontSize: normalize(20), fontFamily: 'Montserrat-Regular' }}>
                                     No se encuentra mensualidad asociada.
                                 </Text>
+                                <Button onPress={() => {
+                                }}
+                                    title="C R E A R"
+                                    color='gray'
+                                    style={[!(plateOne.length === 3 && plateTwo.length === 3) || !mensualityExists ? styles.buttonEdDisabled : styles.buttonEd]}
+                                    textStyle={styles.buttonTextRenew}
+                                    disabled={!(plateOne.length === 3 && plateTwo.length === 3) || !mensualityExists}
+                                />
                             </View>
                         }
 
@@ -214,6 +222,158 @@ const MonthlyPayments = (props) => {
                 </View>
 
             </ImageBackground>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                backdropOpacity={0.3}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
+                            <View style={{ margin: '0%', justifyContent: 'center', height: '10%' }}>
+                                <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}>Placas asociadas a mensualidad </Text>
+                            </View>
+                            <View style={{ justifyContent: 'space-between', height: '69%',width: '100%', flexDirection: 'column', paddingBottom: '6%'}}>
+                                <View style={{ flexDirection: "row", justifyContent: 'center', borderWidth: 1 }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 1:  </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='numeric'
+                                        placeholder=''
+                                        textAlign='center'
+                                        // keyboardType={"numeric"}
+                                        // value={totalPay == 0 ? '' : totalPay + ''}
+                                        // onChangeText={text => setTotalPay(text)}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: 'center', borderWidth: 1 }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 2:  </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='numeric'
+                                        placeholder=''
+                                        textAlign='center'
+                                        // keyboardType={"numeric"}
+                                        // value={totalPay == 0 ? '' : totalPay + ''}
+                                        // onChangeText={text => setTotalPay(text)}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: 'center', borderWidth: 1 }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 3:  </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='numeric'
+                                        placeholder=''
+                                        textAlign='center'
+                                        // keyboardType={"numeric"}
+                                        // value={totalPay == 0 ? '' : totalPay + ''}
+                                        // onChangeText={text => setTotalPay(text)}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: 'center', borderWidth: 1 }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 4:  </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='numeric'
+                                        placeholder=''
+                                        textAlign='center'
+                                        // keyboardType={"numeric"}
+                                        // value={totalPay == 0 ? '' : totalPay + ''}
+                                        // onChangeText={text => setTotalPay(text)}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: 'center', borderWidth: 1 }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 5:  </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='numeric'
+                                        placeholder=''
+                                        textAlign='center'
+                                        // keyboardType={"numeric"}
+                                        // value={totalPay == 0 ? '' : totalPay + ''}
+                                        // onChangeText={text => setTotalPay(text)}
+                                    />
+                                </View>
+                                {/* <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}> Deuda:  </Text>
+                                    <TextInput
+                                        style={{
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            backgroundColor: '#FFF200',
+                                            color: '#00A9A0'
+                                        }}
+                                        textAlign='center'
+                                        editable={false}
+                                        // value={(totalAmount - totalPay) < 0 ? '0' : '$' + (totalAmount - totalPay)}
+                                    />
+                                </View> */}
+                            </View>
+                            <View style={{ height: '16%', width: '100%', justifyContent: 'flex-end', borderWidth: 1 }}>
+                                <Button onPress={() => {
+                                    setModalVisible(!modalVisible);
+                                }}
+                                    title="G U A R D A R"
+                                    color="#00A9A0"
+                                    style={
+                                        styles.modalButton
+                                    }
+                                    textStyle={{
+                                        color: "#FFFFFF",
+                                        textAlign: "center",
+                                        fontFamily: 'Montserrat-Bold'
+                                    }} />
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </View>
     )
 };

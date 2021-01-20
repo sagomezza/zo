@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
         marginTop: '5%',
         borderRadius: 10,
         alignItems: 'center',
+        justifyContent: 'center'
     },
     plateInput: {
         width: '46%',
@@ -88,8 +89,43 @@ const styles = StyleSheet.create({
         opacity: 0.5
     },
     infoText: {
-        fontFamily: 'Montserrat-Regular'
+        fontFamily: 'Montserrat-Regular',
+        fontSize: normalize(20)
     },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        // marginTop: 22,
+        backgroundColor: 'rgba(52, 52, 52, 0.8)',
+  
+      },
+      modalView: {
+        height: normalize(350),
+        width: normalize(400),
+        padding: normalize(20),
+        borderRadius: 50,
+        borderColor: '#707070',
+        borderWidth: 1,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        shadowColor: '#FFF',
+        shadowOffset: {
+          width: 50,
+          height: 50,
+        },
+        shadowOpacity: 0,
+        shadowRadius: 50,
+        elevation: 5,
+        flexDirection: 'column'
+      },
+      modalText: {
+        textAlign: "center",
+        fontFamily: 'Montserrat-Regular',
+        color: '#B7B7B7',
+        fontSize: normalize(20)
+      },
 });
 
 export default styles;
