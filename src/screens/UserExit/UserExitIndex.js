@@ -935,7 +935,7 @@ const UserOut = (props) => {
                 <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
                   <Button onPress={() => {
                     setModal3Visible(!modal3Visible);
-                    finishParking("pending", false);
+                    finishParking("pending", true);
                   }}
                     title="T O T A L"
                     color="#00A9A0"

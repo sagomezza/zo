@@ -120,9 +120,9 @@ const UserInput = (props) => {
           });
           auxPhones.push({ label: '+ agregar', value: 0 })
           setPhones(auxPhones);
-          // if (response.data.blackList.length > 0) {
-          //   setModal3Visible()
-          // } 
+          if (response.data.fullData[0].blackList.length > 0) {
+            setModal3Visible()
+          } 
         }
         console.log('--------prepayday-------')
         console.log(prepayDay)
@@ -202,6 +202,15 @@ const UserInput = (props) => {
         let type
         if (isCharacterALetter(plateTwo[2])) type = "bike"
         else type = "car"
+        console.log({
+          plate: plateOne + plateTwo,
+          hqId: officialHq,
+          dateStart: new Date(),
+          phone: !showPhoneInput ? phone : '+57' + newPhone,
+          prepayFullDay: prepayDay,
+          officialEmail: officialEmail,
+          type
+        })
 
         const response = await instance.post(
           START_PARKING,
@@ -222,6 +231,7 @@ const UserInput = (props) => {
         readHq();
         console.log('--------prepaydaySTART-------')
         console.log(prepayDay)
+        
 
         setLoadingStart(false)
         setPhones([{ label: 'Selecciona un número', value: 1 }]);
@@ -237,6 +247,8 @@ const UserInput = (props) => {
       if (err?.response.data.response === -2) setModal2Visible(true)
       console.log(err)
       console.log(err?.response)
+      console.log('--------prepaydaySTART-ERR------')
+      console.log(prepayDay)
 
     }
   };
