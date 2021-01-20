@@ -229,26 +229,14 @@ const UserInput = (props) => {
         setStartParking(response.data.data);
         setBlacklistExists(false);
         readHq();
-        console.log('--------prepaydaySTART-------')
-        console.log(prepayDay)
-        
-
         setLoadingStart(false)
         setPhones([{ label: 'Selecciona un número', value: 1 }]);
-        if (isCharacterALetter(plateTwo[2])) {
-          store.dispatch(actions.addBike());
-        } else {
-          store.dispatch(actions.addCar());
-        }
-
       }
     } catch (err) {
       setLoadingStart(false)
       if (err?.response.data.response === -2) setModal2Visible(true)
       console.log(err)
       console.log(err?.response)
-      console.log('--------prepaydaySTART-ERR------')
-      console.log(prepayDay)
 
     }
   };
@@ -258,7 +246,9 @@ const UserInput = (props) => {
         id: officialHq
       });
       if (response.data.response) {
+        console.log(response.data.data)
         store.dispatch(actions.setReservations(response.data.data.reservations));
+        store.dispatch(actions.setHq(response.data.data));
       }
     } catch (err) {
       console.log(err)

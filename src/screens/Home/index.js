@@ -62,11 +62,6 @@ const HomeIndex = (props) => {
           id: officialHq
         });
         if (response.data.response) {
-          console.log('--------readHQ------------')
-          console.log(response.data.data.occupiedBikes)
-          setOccupiedBikes(response.data.data.occupiedBikes)
-          console.log(response.data.data.occupiedCars)
-          setOccupiedCars(response.data.data.occupiedCars)
           store.dispatch(actions.setReservations(response.data.data.reservations));
           store.dispatch(actions.setHq(response.data.data));
         }
@@ -138,7 +133,7 @@ const HomeIndex = (props) => {
                 <Image style={{ width: "40%", height: "40%", marginTop: '10%' }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoM.png')} />
                 <View style={{ flexDirection: 'row', height: '100%' }}>
                   <Text style={HomeStyles.plateInputTextBig}>
-                    {`${occupiedBikes}`}
+                    {`${hq.occupiedBikes}`}
                   </Text>
                   <Text style={HomeStyles.plateInputTextSmall} >{`/${hq.totalBikes}`}</Text>
                 </View>
@@ -167,7 +162,7 @@ const HomeIndex = (props) => {
                 <Image style={{ width: "38%", height: "38%", marginTop: '10%' }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoC.png')} />
                 <View style={{ flexDirection: 'row', height: normalize(170) }}>
                   <Text style={HomeStyles.plateInputTextBig}>
-                    {`${occupiedCars}`}
+                    {`${hq.occupiedCars}`}
                   </Text>
                   <Text style={HomeStyles.plateInputTextSmall} >{`/${hq.totalCars}`}</Text>
                 </View>

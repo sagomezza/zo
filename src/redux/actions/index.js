@@ -54,29 +54,6 @@ export const setPhone = (phone) => {
   };
 };
 
-export const subtractCar = () => {
-  return {
-    type: SUBTRACT_CAR
-  };
-};
-
-export const subtractBike = () => {
-  return {
-    type: SUBTRACT_BIKE
-  };
-};
-
-export const addCar = () => {
-  return {
-    type: ADD_CAR
-  };
-};
-
-export const addBike = () => {
-  return {
-    type: ADD_BIKE
-  };
-};
 
 export const setExpoToken = (token) => {
   return {

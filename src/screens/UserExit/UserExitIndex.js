@@ -340,7 +340,6 @@ const UserOut = (props) => {
           setPlateOne(splitPlate[0] + splitPlate[1] + splitPlate[2])
           setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlate[5])
           checkParking()
-          store.dispatch(actions.setPhone(''))
           setIsParanoicUser(true)
         }
       } catch (err) {
@@ -406,12 +405,14 @@ const UserOut = (props) => {
       });
       if (response.data.response) {
         store.dispatch(actions.setReservations(response.data.data.reservations));
+        store.dispatch(actions.setHq(response.data.data));
       }
     } catch (err) {
       console.log(err?.response)
       console.log(err)
     }
   };
+
   const getRecips = async () => {
     try {
       const response = await instance.post(GET_RECIPS, {
@@ -461,16 +462,9 @@ const UserOut = (props) => {
         { timeout: TIMEOUT }
       );
       console.log('-----2-----')
-
-      if (isCharacterALetter(check.plate[5])) {
-        store.dispatch(actions.subtractBike());
-      } else {
-        store.dispatch(actions.subtractCar());
-      }
       readHq()
       console.log(response.data)
       console.log('-----2-----')
-
       setRecip(response.data.data);
       getRecips()
       setLoading(false)
@@ -713,7 +707,7 @@ const UserOut = (props) => {
 
             <View style={{ height: '25%', justifyContent: 'flex-end' }}>
               {err !== "" &&
-                <Text style={{ color: "red", fontFamily: 'Montserrat-Regular', alignSelf: 'center'}}>{err}</Text>
+                <Text style={{ color: "red", fontFamily: 'Montserrat-Regular', alignSelf: 'center' }}>{err}</Text>
               }
               {!loading &&
                 <View style={{ alignItems: 'center', width: '80%', height: ' 35%', marginTop: '2%' }}>
