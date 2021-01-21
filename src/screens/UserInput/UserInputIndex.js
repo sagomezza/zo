@@ -108,7 +108,6 @@ const UserInput = (props) => {
           )
           setFindUserByPlateInfo(response.data);
           setExistingUser(true)
-          // {label: 'UK', value: 'uk'},
           setPhone(1);
           setShowPhoneInput(false);
           setShowDropdown(true);
@@ -120,13 +119,20 @@ const UserInput = (props) => {
           });
           auxPhones.push({ label: '+ agregar', value: 0 })
           setPhones(auxPhones);
-          if (response.data.blackList.length > 0) {
+          console.log('---------g-g-g-g-');
+
+          if (response.data.blackList && response.data.blackList.length > 0  ) {
             setModal3Visible()
-          } 
+          }
         }
-       
+
+
       } catch (err) {
+        console.log('---------g-g-g-g-');
+        console.log(err)
+
         console.log(err?.response)
+
         console.log('dentro')
         setFindUserByPlateInfo([]);
         setExistingUser(false);
