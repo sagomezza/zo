@@ -112,7 +112,7 @@ const UserInput = (props) => {
           setPhone(1);
           setShowPhoneInput(false);
           setShowDropdown(true);
-          setBlacklist(response.data.fullData[0].blackList);
+          setBlacklist(response.data.blackList);
 
           const auxPhones = []
           response.data.data.forEach(phone => {
@@ -120,13 +120,11 @@ const UserInput = (props) => {
           });
           auxPhones.push({ label: '+ agregar', value: 0 })
           setPhones(auxPhones);
-          if (response.data.fullData[0].blackList.length > 0) {
+          if (response.data.blackList.length > 0) {
             setModal3Visible()
           } 
         }
-        console.log('--------prepayday-------')
-        console.log(prepayDay)
-
+       
       } catch (err) {
         console.log(err?.response)
         console.log('dentro')
