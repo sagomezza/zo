@@ -74,11 +74,7 @@ const BarcodeScanner = (props) => {
           readHq();
           setPlate(qr.plate);
           setModalVisible(true);
-          if (isCharacterALetter(qr.plate[5])) {
-            store.dispatch(actions.subtractBike());
-          } else {
-            store.dispatch(actions.subtractCar());
-          }
+          
         }
         // setStartParking(response.data.data);
         // readHq();
@@ -104,6 +100,7 @@ const BarcodeScanner = (props) => {
       });
       if (response.data.response) {
         store.dispatch(actions.setReservations(response.data.data.reservations));
+        store.dispatch(actions.setHq(response.data.data));
       }
     } catch (error) {
       console.log('qrreadhqcatch-----------')
