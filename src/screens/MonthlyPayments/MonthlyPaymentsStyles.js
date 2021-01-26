@@ -98,9 +98,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         // marginTop: 22,
         backgroundColor: 'rgba(52, 52, 52, 0.8)',
-  
-      },
-      modalView: {
+
+    },
+    modalView: {
         height: normalize(350),
         width: normalize(400),
         padding: normalize(20),
@@ -112,20 +112,24 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         shadowColor: '#FFF',
         shadowOffset: {
-          width: 50,
-          height: 50,
+            width: 50,
+            height: 50,
         },
         shadowOpacity: 0,
         shadowRadius: 50,
         elevation: 5,
         flexDirection: 'column'
-      },
-      modalText: {
+    },
+    modalText: {
         textAlign: "center",
         fontFamily: 'Montserrat-Regular',
         color: '#B7B7B7',
         fontSize: normalize(20)
-      },
+    },
+    modalButton: {
+        width: '100%',
+        height: '90%',
+    },
 });
 
 export default styles;

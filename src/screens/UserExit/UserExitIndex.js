@@ -35,6 +35,8 @@ const UserOut = (props) => {
   const [dateFinished, setDateFinished] = useState('');
   const [check, setCheck] = useState({})
   const [pendingValue, setPendingValue] = useState(pendingValue === undefined ? '0' : pendingValue + '')
+  const [inputVerificationCode, setInputVerificationCode] = useState('');
+  const verification = check.verificationCode === undefined ? '' : check.verificationCode + ''
 
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
@@ -105,7 +107,7 @@ const UserOut = (props) => {
       fontSize: normalize(20),
       fontFamily: 'Montserrat-Regular',
       color: '#00A9A0',
-      backgroundColor: '#05877F',
+      backgroundColor: '#FFFFFF',
       borderRadius: 30,
       margin: '1%'
     },
@@ -182,7 +184,7 @@ const UserOut = (props) => {
     codeText: {
       fontFamily: 'Montserrat-Bold',
       fontSize: normalize(20),
-      color: '#FFFFFF',
+      color:'#00A9A0',
       textAlign: 'center'
     },
     buttonStyle: {
@@ -322,7 +324,8 @@ const UserOut = (props) => {
     setDateStart('');
     setDateFinished('');
     setCheck({});
-    setPendingValue()
+    setPendingValue();
+    setInputVerificationCode('');
   }
 
   useEffect(() => {
@@ -576,11 +579,25 @@ const UserOut = (props) => {
               </TouchableOpacity>
 
             </View>
+            
+            <View style={styles.codeContainer}>
+              <TextInput
+                style={styles.codeText}
+                placeholder={'Ingrese código'}
+                placeholderTextColor={'#D9D9D9'}
+                value={inputVerificationCode}
+                // style={styles.plateInput}
+                textAlign='center'
+                maxLength={5}
+                autoCapitalize={'characters'}
+                // onFocus={() => { clearPlateTwo(); }}
+                onChangeText={text => {
+                  setInputVerificationCode(text);
+                }}
+                 />
+            </View>
             <View style={styles.textPhoneCode}>
               <Text style={styles.infoUserText}> {phoneNumberLength > 13 ? '' : check.phone} </Text>
-            </View>
-            <View style={styles.codeContainer}>
-              <Text style={styles.codeText}>CODIGO: {check.verificationCode} </Text>
             </View>
             <View style={{
               flexDirection: 'row',
@@ -714,8 +731,8 @@ const UserOut = (props) => {
                   <Button
                     title="C O B R A R"
                     color='#00A9A0'
-                    disabled={totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0}
-                    style={[totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0 ? styles.buttonStyleDisabled : styles.buttonStyle]}
+                    disabled={totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0 || inputVerificationCode !== verification}
+                    style={[totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0 || inputVerificationCode !== verification ? styles.buttonStyleDisabled : styles.buttonStyle]}
                     textStyle={{
                       color: '#FFFFFF',
                       fontFamily: 'Montserrat-Bold',
