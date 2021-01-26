@@ -8,9 +8,9 @@ import {
   TouchableWithoutFeedback,
   Alert,
   Image,
-  ActivityIndicator,
-  CheckBox
+  ActivityIndicator
 } from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from '../UserInput/UserInputStyles';
 import FooterIndex from '../../components/Footer/index';
