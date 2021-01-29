@@ -381,7 +381,7 @@ const UserInput = (props) => {
                   value={prepayDay}
                   onValueChange={() => setPrepayDay(!prepayDay)}
                   style={{ alignSelf: 'center' }}
-                  tintColors={{ true: '#FFF200', false: '#FFFFFF' }}
+                  tintColors={{ true: '#FFF200', false: '#FFF200' }}
                 />
                 <Text style={{ color: '#FFF200', fontFamily: 'Montserrat-Bold', fontSize: normalize(19), textAlign: 'center' }}>PASE DIA</Text>
               </View>
