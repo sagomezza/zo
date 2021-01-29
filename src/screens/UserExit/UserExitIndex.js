@@ -354,18 +354,10 @@ const UserOut = (props) => {
     readParanoicUser()
   }, [qr.phone]);
 
-  async function checkParking() {
+  async function checkParkingPlate() {
     try {
-
-      if ((plateOne + plateTwo).length === 6) {
+      if ((plateOne + plateTwo).length === 6 || inputVerificationCode.length === 5) {
         let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
-        console.log({
-          plate: plateOne + plateTwo,
-          officialEmail: officialProps.email,
-          dateFinished: new Date(),
-          prepaidDay: true,
-          totalPay: totalPay
-        })
         const response = await instance.post(
           CHECK_PARKING,
           {
@@ -374,7 +366,8 @@ const UserOut = (props) => {
             phone: reserve[0].phone,
             officialEmail: officialProps.email,
             dateFinished: new Date(),
-            prepaidDay: true
+            prepaidDay: true,
+            verificationCode: inputVerificationCode
           },
           { timeout: TIMEOUT }
         )
@@ -393,13 +386,64 @@ const UserOut = (props) => {
       console.log('checkparking-----ERR----RESPONSE--------------')
 
       console.log(err?.response)
+      console.log('checkparking-----ERR------------------')
+
+      setModal5Visible(true);
+    }
+  }
+  async function checkParkingCode() {
+    try {
+
+      if ( inputVerificationCode.length === 5) {
+        let reserve = props.reservations.reservations.filter(reserve => reserve.verificationCode === Number(inputVerificationCode));
+        console.log({
+          plate: plateOne + plateTwo,
+          officialEmail: officialProps.email,
+          dateFinished: new Date(),
+          prepaidDay: true,
+          totalPay: totalPay,
+          verificationCode: Number(inputVerificationCode)
+        })
+        const response = await instance.post(
+          CHECK_PARKING,
+          {
+            hqId: reserve[0].hqId,
+            phone: reserve[0].phone,
+            officialEmail: officialProps.email,
+            dateFinished: new Date(),
+            prepaidDay: true,
+            verificationCode: Number(inputVerificationCode)
+          },
+          { timeout: TIMEOUT }
+        )
+        console.log('checkparking-----------------------')
+        console.log(response.data.data)
+        setDateFinished(new Date());
+        setDateStart(response.data.data.dateStart);
+        setTotalAmount(response.data.data.total);
+        setIsDisabled(false)
+        setPendingValue(response.data.data.pendingValue)
+        setCheck(response.data.data)
+      }
+    } catch (err) {
+      console.log('checkparking-----ERR------------------')
+      console.log(err)
+      console.log('checkparking-----ERR----RESPONSE--------------')
+
+      console.log(err?.response)
+      console.log('checkparking-----ERR------------------')
+      console.log(props.reservations.reservations)
+
       setModal5Visible(true);
     }
   }
 
   useEffect(() => {
-    checkParking()
-  }, [plateOne, plateTwo]);
+    checkParkingPlate()
+  }, [plateOne, plateTwo ]);
+  useEffect(() => {
+    checkParkingCode()
+  }, [inputVerificationCode ]);
 
   async function readHq() {
     try {
@@ -410,6 +454,7 @@ const UserOut = (props) => {
         store.dispatch(actions.setReservations(response.data.data.reservations));
         store.dispatch(actions.setHq(response.data.data));
       }
+      restart();
     } catch (err) {
       console.log(err?.response)
       console.log(err)
@@ -789,7 +834,7 @@ const UserOut = (props) => {
 
             }}>
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalTextAlert}> El vehículo con placas {plateOne + ' ' + plateTwo} no se encuentra estacionado. </Text>
+                <Text style={styles.modalTextAlert}> El vehículo no se encuentra estacionado. </Text>
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
@@ -837,11 +882,11 @@ const UserOut = (props) => {
                 color: '#00A9A0',
                 fontFamily: 'Montserrat-Bold'
               }}>
-                {plateOne + ' ' + plateTwo}
+                {check.plate}
               </Text>
 
               <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
-                <Text style={styles.modalPhoneText}>{phoneNumberLength > 13 ? '' : recip.phone} </Text>
+                <Text style={styles.modalPhoneText}>{phoneNumberLength > 13 ? '' : check.phone} </Text>
               </View>
               <View style={{ height: '35%', width: '75%', justifyContent: 'center' }}>
                 <Image

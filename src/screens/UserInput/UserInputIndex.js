@@ -49,6 +49,8 @@ const UserInput = (props) => {
   const [findUserByPlateInfo, setFindUserByPlateInfo] = useState([]);
   const userData = findUserByPlateInfo.fullData !== undefined ? findUserByPlateInfo.fullData[0] : "";
   const [blacklist, setBlacklist] = useState([]);
+  let blacklistValue = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].value : 0; 
+
   const [blacklistExists, setBlacklistExists] = useState(false);
   const [startParking, setStartParking] = useState({});
   const [existingUser, setExistingUser] = useState(false)
@@ -119,6 +121,9 @@ const UserInput = (props) => {
           });
           auxPhones.push({ label: '+ agregar', value: 0 })
           setPhones(auxPhones);
+          console.log('---------g-g-g-LLLL-');
+
+          console.log(response.data.blackList)
           console.log('---------g-g-g-g-');
 
           if (response.data.blackList && response.data.blackList.length > 0  ) {
@@ -375,8 +380,8 @@ const UserInput = (props) => {
                 <CheckBox
                   value={prepayDay}
                   onValueChange={() => setPrepayDay(!prepayDay)}
-                  style={styles.checkbox}
-                  tintColors={{ true: '#FFF200', false: 'transparent' }}
+                  style={{ alignSelf: 'center' }}
+                  tintColors={{ true: '#FFF200', false: '#FFFFFF' }}
                 />
                 <Text style={{ color: '#FFF200', fontFamily: 'Montserrat-Bold', fontSize: normalize(19), textAlign: 'center' }}>PASE DIA</Text>
               </View>
@@ -615,8 +620,8 @@ const UserInput = (props) => {
 
             }}>
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalTextAlert}> Este usuario se encuentra en lista negra  </Text>
-                {/* <Text style={styles.modalTextAlert}>{`$${numberWithPoints(debt)}`}</Text> */}
+                <Text style={styles.modalTextAlert}> Este usuario se encuentra en lista negra:  </Text>
+                <Text style={styles.modalTextAlert}>Deuda: {`$${numberWithPoints(blacklistValue)}`}</Text>
 
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>

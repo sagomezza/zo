@@ -4,7 +4,7 @@ import CheckBox from '@react-native-community/checkbox';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from '../MonthlyPayments/MonthlyPaymentsStyles';
 
-import { FIND_MENSUALITY_PLATE, RENEW_MENSUALITY } from "../../config/api";
+import { FIND_MENSUALITY_PLATE, RENEW_MENSUALITY, EDIT_MENSUALITY } from "../../config/api";
 import instance from "../../config/axios";
 import { TIMEOUT } from '../../config/constants/constants';
 
@@ -31,7 +31,15 @@ const MonthlyPayments = (props) => {
     const [charge, setCharge] = useState(false)
     const mensualityInfo = mensuality.data !== undefined ? mensuality.data[0] : "";
     const mensualityValue = mensualityInfo.value !== undefined ? mensualityInfo.value : 0;
+    const [firstPlate, setFirstPlate] = useState('')
+    const [secondPlate, setSecondPlate] = useState('')
+    const [thirdPlate, setThirdPlate] = useState('')
+    const [fourthPlate, setFourthPlate] = useState('')
+    const [fifthPlate, setFifthPlate] = useState('')
 
+    let plates = [firstPlate, secondPlate, thirdPlate, fourthPlate, fifthPlate]
+
+    let newPlates = plates.filter(plate => plate != undefined && plate != '' )
 
     const clearPlateOne = () => {
         setPlateOne('');
@@ -39,15 +47,30 @@ const MonthlyPayments = (props) => {
     const clearPlateTwo = () => {
         setPlateTwo('');
     }
+    const clearFirstPlate = () => {
+        setFirstPlate('');
+    }
+    const clearSecondPlate = () => {
+        setSecondPlate('');
+    }
+    const clearThirdPlate = () => {
+        setThirdPlate('');
+    }
+    const clearFourthPlate = () => {
+        setFourthPlate('');
+    }
+    const clearFifthPlate = () => {
+        setFifthPlate('');
+    }
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modal2Visible, setModal2Visible] = useState(false);
 
-    const firstPlate = mensualityInfo.plates !== undefined ? mensualityInfo.plates[0] + '' : ''
-    const secondPlate = mensualityInfo.plates !== undefined ? mensualityInfo.plates[1] + '' : ''
-    const thirdPlate = mensualityInfo.plates !== undefined ? mensualityInfo.plates[2] + '' : ''
-    const fourthPlate = mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + '' : ''
-    const fifthPlate = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + '' : ''
+    const firstPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[0] + '' : ''
+    const secondPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[1] + '' : ''
+    const thirdPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[2] + '' : ''
+    const fourthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + '' : ''
+    const fifthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + '' : ''
 
 
     async function findMensualityPlate() {
@@ -82,11 +105,11 @@ const MonthlyPayments = (props) => {
                     EDIT_MENSUALITY,
                     {
                         id: mensualityInfo.id,
-                        plates: mensuality.plates
+                        plates: newPlates
                     },
                     { timeout: TIMEOUT }
                 )
-
+                setModalVisible(!modalVisible);    
                 console.log(response.data.data)
             }
         } catch (err) {
@@ -112,7 +135,7 @@ const MonthlyPayments = (props) => {
         } catch (err) {
             console.log(err)
             console.log(err?.response)
-            console.log('dentro')
+            console.log('dentroRENEW')
         }
     }
 
@@ -213,6 +236,11 @@ const MonthlyPayments = (props) => {
                                     />
                                     <Button onPress={() => {
                                         setModalVisible(true)
+                                        setFirstPlate(firstPlateData + '')
+                                        setSecondPlate(secondPlateData + '')
+                                        setThirdPlate(thirdPlateData + '')
+                                        setFourthPlate(fourthPlateData + '')
+                                        setFifthPlate(fifthPlateData + '')
                                     }}
                                         title="E D I T A R"
                                         color='gray'
@@ -262,11 +290,11 @@ const MonthlyPayments = (props) => {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-                            <View style={{ margin: '0%', justifyContent: 'center', height: '10%' }}>
+                            <View style={{ marginBottom: '4%', justifyContent: 'center', height: '10%' }}>
                                 <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}>Placas asociadas a mensualidad </Text>
                             </View>
-                            <View style={{ justifyContent: 'space-between', height: '69%', width: '100%', flexDirection: 'column', paddingBottom: '6%' }}>
-                                <View style={{ flexDirection: "row", justifyContent: 'center', borderWidth: 1 }}>
+                            <View style={{ justifyContent: 'space-between', height: '69%', width: '100%', flexDirection: 'column', paddingBottom: '10%' }}>
+                                <View style={{ flexDirection: "row", justifyContent: 'center'  }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 1:  </Text>
                                     <TextInput
                                         style={{
@@ -281,12 +309,14 @@ const MonthlyPayments = (props) => {
                                         keyboardType='numeric'
                                         placeholder=''
                                         textAlign='center'
-                                        // keyboardType={"numeric"}
                                         value={firstPlate !== undefined + '' ? firstPlate : ''}
-                                    // onChangeText={text => setTotalPay(text)}
+                                        onChangeText={text => setFirstPlate(text)}
+                                        onFocus={() => {
+                                            clearFirstPlate('')
+                                        }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center', borderWidth: 1 }}>
+                                <View style={{ flexDirection: "row", justifyContent: 'center'}}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 2:  </Text>
                                     <TextInput
                                         style={{
@@ -303,11 +333,13 @@ const MonthlyPayments = (props) => {
                                         textAlign='center'
                                         // keyboardType={"numeric"}
                                         value={secondPlate !== undefined + '' ? secondPlate : ''}
-
-                                    // onChangeText={text => setTotalPay(text)}
+                                        onChangeText={text => setSecondPlate(text)}
+                                        onFocus={() => {
+                                            clearSecondPlate('')
+                                        }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center', borderWidth: 1 }}>
+                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 3:  </Text>
                                     <TextInput
                                         style={{
@@ -324,11 +356,13 @@ const MonthlyPayments = (props) => {
                                         textAlign='center'
                                         // keyboardType={"numeric"}
                                         value={thirdPlate !== undefined + '' ? thirdPlate : ''}
-
-                                    // onChangeText={text => setTotalPay(text)}
+                                        onChangeText={text => setThirdPlate(text)}
+                                        onFocus={() => {
+                                            clearThirdPlate('')
+                                        }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center', borderWidth: 1 }}>
+                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 4:  </Text>
                                     <TextInput
                                         style={{
@@ -345,11 +379,13 @@ const MonthlyPayments = (props) => {
                                         textAlign='center'
                                         // keyboardType={"numeric"}
                                         value={fourthPlate !== undefined + '' ? fourthPlate : ''}
-
-                                    // onChangeText={text => setTotalPay(text)}
+                                        onChangeText={text => setFourthPlate(text)}
+                                        onFocus={() => {
+                                            clearFourthPlate('')
+                                        }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center', borderWidth: 1 }}>
+                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 5:  </Text>
                                     <TextInput
                                         style={{
@@ -366,26 +402,47 @@ const MonthlyPayments = (props) => {
                                         textAlign='center'
                                         // keyboardType={"numeric"}
                                         value={fifthPlate !== undefined + '' ? fifthPlate : ''}
-
-                                    // onChangeText={text => setTotalPay(text)}
+                                        onChangeText={text => setFifthPlate(text)}
+                                        onFocus={() => {
+                                            clearFifthPlate('')
+                                        }}
                                     />
                                 </View>
                             </View>
-                            <View style={{ height: '16%', width: '100%', justifyContent: 'flex-end', borderWidth: 1 }}>
-                                <Button onPress={() => {
-                                    setModalVisible(!modalVisible);
-                                }}
-                                    title="G U A R D A R"
-                                    color="#00A9A0"
-                                    style={
-                                        styles.modalButton
-                                    }
-                                    textStyle={{
-                                        color: "#FFFFFF",
-                                        textAlign: "center",
-                                        fontFamily: 'Montserrat-Bold'
-                                    }} />
+                            <View style={{ height: '20%', justifyContent: 'flex-end', flexDirection: 'column',  marginTop: '3%' }}>
+                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginBottom: '1%' }}>
+                                    <Button onPress={() => {
+                                        
+                                        editMensuality();
+                                    }}
+                                        title="G U A R D A R"
+                                        color="#00A9A0"
+                                        style={
+                                            styles.modalButton
+                                        }
+                                        textStyle={{
+                                            color: "#FFFFFF",
+                                            textAlign: "center",
+                                            fontFamily: 'Montserrat-Bold'
+                                        }} />
+                                </View>
+                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginTop: '2%',marginBottom: '1%' }}>
+                                    <Button onPress={() => {
+                                        setModalVisible(!modalVisible);
+                                    }}
+                                        title="V O L V E R"
+                                        color="gray"
+                                        style={
+                                            styles.modalButton
+                                        }
+                                        textStyle={{
+                                            color: "#FFFFFF",
+                                            textAlign: "center",
+                                            fontFamily: 'Montserrat-Bold'
+                                        }} />
+                                </View>
                             </View>
+                            
                         </View>
                     </View>
                 </View>
@@ -413,10 +470,10 @@ const MonthlyPayments = (props) => {
                                         style={{ alignSelf: 'center' }}
                                         tintColors={{ true: '#00A9A0', false: 'gray' }}
                                     />
-                                    <Text style={{ color: '#00A9A0', fontFamily: 'Montserrat-Bold', fontSize: normalize(19), textAlign: 'center' }}>Reclamado</Text>
+                                    <Text style={{ color: '#00A9A0', fontFamily: 'Montserrat-Bold', fontSize: normalize(19), textAlign: 'center' }}>Cobrado</Text>
                                 </View>
                             </View>
-                            <View style={{height: '45%', justifyContent: 'flex-end', flexDirection: 'column'}}>
+                            <View style={{ height: '45%', justifyContent: 'flex-end', flexDirection: 'column' }}>
                                 <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end', marginBottom: '2%' }}>
                                     <Button onPress={() => {
                                         renewMensuality()
@@ -424,14 +481,15 @@ const MonthlyPayments = (props) => {
                                     }}
                                         title="R E N O V A R"
                                         color="#00A9A0"
-                                        style={
-                                            styles.modalButton
-                                        }
+                                        style={charge === false ? styles.modalButtonDisabled : styles.modalButton}
                                         textStyle={{
                                             color: "#FFFFFF",
                                             textAlign: "center",
                                             fontFamily: 'Montserrat-Bold'
-                                        }} />
+                                        }}
+                                        disabled={charge === false}
+                                         />
+                                        
                                 </View>
                                 <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end', marginTop: '2%' }}>
                                     <Button onPress={() => {
