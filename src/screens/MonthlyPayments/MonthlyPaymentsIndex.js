@@ -86,13 +86,11 @@ const MonthlyPayments = (props) => {
                 )
                 setMensualityExists(true);
                 setMensuality(response.data)
-                console.log(response.data.data)
                 setLoading(false);
             }
         } catch (err) {
             console.log(err)
             console.log(err?.response)
-            console.log('dentro')
             setLoading(false);
             setMensualityExists(false);
         }
@@ -101,6 +99,10 @@ const MonthlyPayments = (props) => {
     async function editMensuality() {
         try {
             if (plateOne.length === 3 && plateTwo.length === 3) {
+                console.log({
+                    id: mensualityInfo.id,
+                    plates: newPlates
+                })
                 const response = await instance.post(
                     EDIT_MENSUALITY,
                     {
@@ -209,7 +211,7 @@ const MonthlyPayments = (props) => {
                             <View style={{ height: '96%', width: '80%', marginTop: '2%', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between' }}>
                                 <View style={{ height: '40%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                                     <Text style={styles.infoText}>
-                                        Capacidad: {mensualityInfo.capacity}
+                                        {/* Capacidad: {mensualityInfo.capacity} */}
                                     </Text>
                                     <Text style={styles.infoText}>
                                         Placas: {mensualityInfo.plates + ' '}

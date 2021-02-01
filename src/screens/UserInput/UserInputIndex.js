@@ -130,8 +130,6 @@ const UserInput = (props) => {
             setModal3Visible()
           }
         }
-
-
       } catch (err) {
         console.log('---------g-g-g-g-');
         console.log(err)
@@ -169,7 +167,6 @@ const UserInput = (props) => {
           });
           setTableData(auxTable);
         }
-
       } catch (err) {
         console.log(err)
         console.log(err?.response)
@@ -185,7 +182,6 @@ const UserInput = (props) => {
     async function createUser() {
       try {
         if ((plateOne + plateTwo).length === 6 && newPhone.length === 10) {
-
           const response = await instance.post(
             CREATE_USER,
             {
@@ -220,7 +216,6 @@ const UserInput = (props) => {
           officialEmail: officialEmail,
           type
         })
-
         const response = await instance.post(
           START_PARKING,
           {

@@ -371,39 +371,24 @@ const UserOut = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        console.log('checkparking-----------------------')
-        console.log(response.data.data)
         setDateFinished(new Date());
         setDateStart(response.data.data.dateStart);
         setTotalAmount(response.data.data.total);
         setIsDisabled(false)
         setPendingValue(response.data.data.pendingValue)
         setCheck(response.data.data)
+        console.log(response.data.data.verificationCode)
       }
     } catch (err) {
-      console.log('checkparking-----ERR------------------')
       console.log(err)
-      console.log('checkparking-----ERR----RESPONSE--------------')
-
       console.log(err?.response)
-      console.log('checkparking-----ERR------------------')
-
       setModal5Visible(true);
     }
   }
   async function checkParkingCode() {
     try {
-
       if ( inputVerificationCode.length === 5) {
         let reserve = props.reservations.reservations.filter(reserve => reserve.verificationCode === Number(inputVerificationCode));
-        console.log({
-          plate: plateOne + plateTwo,
-          officialEmail: officialProps.email,
-          dateFinished: new Date(),
-          prepaidDay: true,
-          totalPay: totalPay,
-          verificationCode: Number(inputVerificationCode)
-        })
         const response = await instance.post(
           CHECK_PARKING,
           {
@@ -416,24 +401,18 @@ const UserOut = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        console.log('checkparking-----------------------')
-        console.log(response.data.data)
         setDateFinished(new Date());
         setDateStart(response.data.data.dateStart);
         setTotalAmount(response.data.data.total);
         setIsDisabled(false)
         setPendingValue(response.data.data.pendingValue)
         setCheck(response.data.data)
+        console.log(response.data.data.plate)
+
       }
     } catch (err) {
-      console.log('checkparking-----ERR------------------')
       console.log(err)
-      console.log('checkparking-----ERR----RESPONSE--------------')
-
       console.log(err?.response)
-      console.log('checkparking-----ERR------------------')
-      console.log(props.reservations.reservations)
-
       setModal5Visible(true);
     }
   }
@@ -477,21 +456,6 @@ const UserOut = (props) => {
 
   const finishParking = async (paymentStatus, showModal) => {
     setLoading(true)
-    console.log('----finishParking----')
-    console.log({
-      plate: check.plate,
-      hqId: check.hqId,
-      phone: check.phone,
-      paymentType: "cash",
-      cash: parseInt(totalPay),
-      change: totalPay - totalAmount,
-      status: paymentStatus,
-      isParanoic: isParanoicUser,
-      officialEmail: officialProps.email,
-      dateFinished: new Date()
-    })
-    console.log('----finishParking----')
-
     try {
       const response = await instance.post(
         FINISHPARKING,
@@ -509,10 +473,7 @@ const UserOut = (props) => {
         },
         { timeout: TIMEOUT }
       );
-      console.log('-----2-----')
       readHq()
-      console.log(response.data)
-      console.log('-----2-----')
       setRecip(response.data.data);
       getRecips()
       setLoading(false)
@@ -521,11 +482,8 @@ const UserOut = (props) => {
         setModalVisible(true)
       }
     } catch (err) {
-      console.log('-----1-----')
       console.log(err?.response)
-      console.log('-----2-----')
       console.log(err)
-      // setLoading(true)
       setLoading(false);
       setIsDisabled(true);
       setErr("Algo malo pasó, vuelve a intentarlo más tarde")
@@ -562,8 +520,6 @@ const UserOut = (props) => {
   let textinputMoney = (totalPay === 0 ? '' : '' + totalPay)
   let inputChange = (totalPay - totalAmount) <= 0 ? '' : '' + (totalPay - totalAmount)
 
-
-
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <ImageBackground
@@ -593,14 +549,14 @@ const UserOut = (props) => {
                     refPlateTwo.current.focus();
                   };
                 }}
-                value={plateOne}
+                value={check.plate != undefined ? check.plate.substr(0,3):plateOne }
                 onFocus={() => { clearPlateOne(); clearPlateTwo(); }}
               />
               <TextInput
                 ref={refPlateTwo}
                 placeholder={'123'}
                 placeholderTextColor={'#D9D9D9'}
-                value={plateTwo}
+                value={check.plate != undefined ? check.plate.substr(3,6):plateTwo}
                 style={styles.plateInput}
                 textAlign='center'
                 maxLength={3}
@@ -630,7 +586,7 @@ const UserOut = (props) => {
                 style={styles.codeText}
                 placeholder={'Ingrese código'}
                 placeholderTextColor={'#D9D9D9'}
-                value={inputVerificationCode}
+                value={check.verificationCode != undefined ? check.verificationCode + '' : inputVerificationCode}
                 // style={styles.plateInput}
                 textAlign='center'
                 maxLength={5}
