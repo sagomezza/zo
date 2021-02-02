@@ -31,11 +31,15 @@ const UserOut = (props) => {
 
   const [plateOne, setPlateOne] = useState('');
   const [plateTwo, setPlateTwo] = useState('');
+  const [plateOneCall, setPlateOneCall] = useState('');
+  const [plateTwoCall, setPlateTwoCall] = useState('');
   const [dateStart, setDateStart] = useState('');
   const [dateFinished, setDateFinished] = useState('');
   const [check, setCheck] = useState({})
   const [pendingValue, setPendingValue] = useState(pendingValue === undefined ? '0' : pendingValue + '')
   const [inputVerificationCode, setInputVerificationCode] = useState('');
+  const [verificationCodeCall, setVerificationCodeCall] = useState('');
+
   const verification = check.verificationCode === undefined ? '' : check.verificationCode + ''
 
   const refPlateOne = useRef(null);
@@ -46,6 +50,9 @@ const UserOut = (props) => {
   }
   const clearPlateTwo = () => {
     setPlateTwo('');
+  }
+  const clearInputVerificationCode = () => {
+    setInputVerificationCode('');
   }
 
   const styles = StyleSheet.create({
@@ -184,7 +191,7 @@ const UserOut = (props) => {
     codeText: {
       fontFamily: 'Montserrat-Bold',
       fontSize: normalize(20),
-      color:'#00A9A0',
+      color: '#00A9A0',
       textAlign: 'center'
     },
     buttonStyle: {
@@ -356,7 +363,7 @@ const UserOut = (props) => {
 
   async function checkParkingPlate() {
     try {
-      if ((plateOne + plateTwo).length === 6 || inputVerificationCode.length === 5) {
+      if ((plateOne + plateTwo).length === 6) {
         let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
         const response = await instance.post(
           CHECK_PARKING,
@@ -377,7 +384,8 @@ const UserOut = (props) => {
         setIsDisabled(false)
         setPendingValue(response.data.data.pendingValue)
         setCheck(response.data.data)
-        console.log(response.data.data.verificationCode)
+        setInputVerificationCode(response.data.data.verificationCode + '')
+
       }
     } catch (err) {
       console.log(err)
@@ -387,7 +395,7 @@ const UserOut = (props) => {
   }
   async function checkParkingCode() {
     try {
-      if ( inputVerificationCode.length === 5) {
+      if (inputVerificationCode.length === 5) {
         let reserve = props.reservations.reservations.filter(reserve => reserve.verificationCode === Number(inputVerificationCode));
         const response = await instance.post(
           CHECK_PARKING,
@@ -407,7 +415,8 @@ const UserOut = (props) => {
         setIsDisabled(false)
         setPendingValue(response.data.data.pendingValue)
         setCheck(response.data.data)
-        console.log(response.data.data.plate)
+        setPlateOne(response.data.data.plate.substring(0, 3))
+        setPlateTwo(response.data.data.plate.substring(3, 6))
 
       }
     } catch (err) {
@@ -419,10 +428,10 @@ const UserOut = (props) => {
 
   useEffect(() => {
     checkParkingPlate()
-  }, [plateOne, plateTwo ]);
+  }, [plateOneCall, plateTwoCall]);
   useEffect(() => {
     checkParkingCode()
-  }, [inputVerificationCode ]);
+  }, [verificationCodeCall]);
 
   async function readHq() {
     try {
@@ -545,18 +554,19 @@ const UserOut = (props) => {
                 autoCapitalize={'characters'}
                 onChangeText={(text) => {
                   setPlateOne(text);
+                  setPlateOneCall(text);
                   if (refPlateTwo && text.length === 3) {
                     refPlateTwo.current.focus();
                   };
                 }}
-                value={check.plate != undefined ? check.plate.substr(0,3):plateOne }
+                value={plateOne}
                 onFocus={() => { clearPlateOne(); clearPlateTwo(); }}
               />
               <TextInput
                 ref={refPlateTwo}
                 placeholder={'123'}
                 placeholderTextColor={'#D9D9D9'}
-                value={check.plate != undefined ? check.plate.substr(3,6):plateTwo}
+                value={plateTwo}
                 style={styles.plateInput}
                 textAlign='center'
                 maxLength={3}
@@ -564,6 +574,7 @@ const UserOut = (props) => {
                 onFocus={() => { clearPlateTwo(); }}
                 onChangeText={text => {
                   setPlateTwo(text);
+                  setPlateTwoCall(text);
                   if (text.length === 3) {
                     if (plateOne.length === 3) Keyboard.dismiss()
                   };
@@ -580,22 +591,24 @@ const UserOut = (props) => {
               </TouchableOpacity>
 
             </View>
-            
+
             <View style={styles.codeContainer}>
               <TextInput
                 style={styles.codeText}
                 placeholder={'Ingrese código'}
                 placeholderTextColor={'#D9D9D9'}
-                value={check.verificationCode != undefined ? check.verificationCode + '' : inputVerificationCode}
+                value={inputVerificationCode}
                 // style={styles.plateInput}
                 textAlign='center'
                 maxLength={5}
                 autoCapitalize={'characters'}
-                // onFocus={() => { clearPlateTwo(); }}
+                onFocus={() => { clearInputVerificationCode(); }}
                 onChangeText={text => {
+                  if (text.length === 5) {Keyboard.dismiss()}
                   setInputVerificationCode(text);
+                  setVerificationCodeCall(text);
                 }}
-                 />
+              />
             </View>
             <View style={styles.textPhoneCode}>
               <Text style={styles.infoUserText}> {phoneNumberLength > 13 ? '' : check.phone} </Text>
