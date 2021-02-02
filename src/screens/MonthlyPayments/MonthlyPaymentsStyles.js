@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     },
     buttonTextSearch: {
         color: '#00A9A0',
-        fontSize: normalize(20),
+        fontSize: normalize(16),
         fontFamily: 'Montserrat-Bold'
     },
     buttonTextRenew: {
@@ -88,9 +88,16 @@ const styles = StyleSheet.create({
         paddingHorizontal: '24%',
         opacity: 0.5
     },
+    infoTextTitle: {
+        fontFamily: 'Montserrat-Bold',
+        fontSize: normalize(20),
+        color: '#00A9A0'
+
+    },
     infoText: {
         fontFamily: 'Montserrat-Regular',
-        fontSize: normalize(20)
+        fontSize: normalize(20),
+        color: '#00A9A0'
     },
     centeredView: {
         flex: 1,

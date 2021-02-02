@@ -11,6 +11,7 @@ import { TIMEOUT } from '../../config/constants/constants';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import normalize from '../../config/services/normalizeFontSize';
+import moment from 'moment';
 
 import numberWithPoints from '../../config/services/numberWithPoints';
 import Header from '../../components/Header/HeaderIndex';
@@ -39,7 +40,7 @@ const MonthlyPayments = (props) => {
 
     let plates = [firstPlate, secondPlate, thirdPlate, fourthPlate, fifthPlate]
 
-    let newPlates = plates.filter(plate => plate != undefined && plate != '' )
+    let newPlates = plates.filter(plate => plate != undefined && plate != '')
 
     const clearPlateOne = () => {
         setPlateOne('');
@@ -111,7 +112,7 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                setModalVisible(!modalVisible);    
+                setModalVisible(!modalVisible);
                 console.log(response.data.data)
             }
         } catch (err) {
@@ -199,7 +200,7 @@ const MonthlyPayments = (props) => {
                             title="B U S C A R"
                             color='#FFF200'
                             style={[plateOne === "" || plateTwo === "" ? styles.buttonIDisabled : styles.buttonI]}
-                            textStyle={styles.buttonText}
+                            textStyle={styles.buttonTextSearch}
                             disabled={plateOne === "" || plateTwo === ""}
                             activityIndicatorStatus={loading}
                         />
@@ -209,22 +210,55 @@ const MonthlyPayments = (props) => {
                     <View style={styles.listContainer}>
                         {mensualityExists ?
                             <View style={{ height: '96%', width: '80%', marginTop: '2%', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <View style={{ height: '40%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
-                                    <Text style={styles.infoText}>
-                                        {/* Capacidad: {mensualityInfo.capacity} */}
-                                    </Text>
-                                    <Text style={styles.infoText}>
-                                        Placas: {mensualityInfo.plates + ' '}
-                                    </Text>
-                                    <Text style={styles.infoText}>
-                                        Placas parqueadas: {mensualityInfo.parkedPlates}
-                                    </Text>
-                                    <Text style={styles.infoText}>
-                                        Vigencia: {/* {mensualityInfo.validity} */}
-                                    </Text>
-                                    <Text style={styles.infoText}>
-                                        Valor: {`$${numberWithPoints(mensualityValue)}`}
-                                    </Text>
+                                <View style={{ height: '60%', width: '100%', justifyContent: 'space-between', alignContent: 'center', alignItems: 'center'}}>
+                                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: "#ffffff", marginBottom: '5%'}}>
+                                        <Text style={styles.infoTextTitle}>
+                                            Placas asociadas:
+                                        </Text>
+                                        <View style={{ flexDirection: 'column', width: '40%', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
+
+                                            <Text style={styles.infoText}>
+                                                {mensualityInfo.plates ? mensualityInfo.plates[0] + ' ': ''}
+                                            </Text>
+                                            <Text style={styles.infoText}>
+                                                {mensualityInfo.plates ? mensualityInfo.plates[1] + ' ': ''}
+                                            </Text>
+                                            <Text style={styles.infoText}>
+                                                {mensualityInfo.plates ? mensualityInfo.plates[2] + ' ': ''}
+                                            </Text>
+                                            <Text style={styles.infoText}>
+                                                {mensualityInfo.plates ? mensualityInfo.plates[3] + ' ': ''}
+                                            </Text>
+                                            <Text style={styles.infoText}>
+                                                {mensualityInfo.plates ? mensualityInfo.plates[4] + ' ': ''}
+                                            </Text>
+                                        </View>
+                                    </View>
+
+                                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: "#ffffff", marginBottom: '5%' }}>
+                                        <Text style={styles.infoTextTitle}>
+                                            Placas parqueadas:
+                                        </Text>
+                                        <Text style={styles.infoText}>
+                                            {mensualityInfo.parkedPlates} 
+                                        </Text>
+                                    </View>
+                                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: "#ffffff", marginBottom: '5%' }}>
+                                        <Text style={styles.infoTextTitle}>
+                                            Vigencia:
+                                        </Text>
+                                        <Text style={styles.infoText}>
+                                            {moment(mensualityInfo.validity).format('L')} {moment(mensualityInfo.validity).format('LT')}
+                                        </Text>
+                                    </View>
+                                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: "#ffffff", marginBottom: '2%' }}>
+                                        <Text style={styles.infoTextTitle}>
+                                            Valor: 
+                                        </Text>
+                                        <Text style={styles.infoText}>
+                                            {`$${numberWithPoints(mensualityValue)}`}
+                                        </Text>
+                                    </View>
                                 </View>
                                 <View style={{ height: '18%', width: '80%', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'column' }}>
                                     <Button onPress={() => {
@@ -296,7 +330,7 @@ const MonthlyPayments = (props) => {
                                 <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}>Placas asociadas a mensualidad </Text>
                             </View>
                             <View style={{ justifyContent: 'space-between', height: '69%', width: '100%', flexDirection: 'column', paddingBottom: '10%' }}>
-                                <View style={{ flexDirection: "row", justifyContent: 'center'  }}>
+                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 1:  </Text>
                                     <TextInput
                                         style={{
@@ -318,7 +352,7 @@ const MonthlyPayments = (props) => {
                                         }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center'}}>
+                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 2:  </Text>
                                     <TextInput
                                         style={{
@@ -411,10 +445,10 @@ const MonthlyPayments = (props) => {
                                     />
                                 </View>
                             </View>
-                            <View style={{ height: '20%', justifyContent: 'flex-end', flexDirection: 'column',  marginTop: '3%' }}>
+                            <View style={{ height: '20%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
                                 <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginBottom: '1%' }}>
                                     <Button onPress={() => {
-                                        
+
                                         editMensuality();
                                     }}
                                         title="G U A R D A R"
@@ -428,7 +462,7 @@ const MonthlyPayments = (props) => {
                                             fontFamily: 'Montserrat-Bold'
                                         }} />
                                 </View>
-                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginTop: '2%',marginBottom: '1%' }}>
+                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginTop: '2%', marginBottom: '1%' }}>
                                     <Button onPress={() => {
                                         setModalVisible(!modalVisible);
                                     }}
@@ -444,7 +478,7 @@ const MonthlyPayments = (props) => {
                                         }} />
                                 </View>
                             </View>
-                            
+
                         </View>
                     </View>
                 </View>
@@ -490,8 +524,8 @@ const MonthlyPayments = (props) => {
                                             fontFamily: 'Montserrat-Bold'
                                         }}
                                         disabled={charge === false}
-                                         />
-                                        
+                                    />
+
                                 </View>
                                 <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end', marginTop: '2%' }}>
                                     <Button onPress={() => {
