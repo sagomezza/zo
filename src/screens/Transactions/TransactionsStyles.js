@@ -9,8 +9,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 30,
         alignContent: 'center',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        borderWidth: 1
+        justifyContent: 'space-between'
     },
     listContainer: {
         height: '70%',

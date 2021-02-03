@@ -349,6 +349,8 @@ const UserOut = (props) => {
           const splitPlate = (response.data.data.plate)
           setPlateOne(splitPlate[0] + splitPlate[1] + splitPlate[2])
           setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlate[5])
+          setPlateOneCall(splitPlate[0] + splitPlate[1] + splitPlate[2])
+          setPlateTwoCall(splitPlate[3] + splitPlate[4] + splitPlate[5])
           checkParking()
           setIsParanoicUser(true)
         }
@@ -488,6 +490,7 @@ const UserOut = (props) => {
       setLoading(false)
       setIsDisabled(true);
       if (showModal) {
+        console.log('----------modalapp----------')
         setModalVisible(true)
       }
     } catch (err) {
@@ -870,6 +873,7 @@ const UserOut = (props) => {
               <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
                   setModalVisible(!modalVisible);
+                  console.log('----------modaldisa----------')
                   restart();
                 }}
                   title="E N T E N D I D O"
