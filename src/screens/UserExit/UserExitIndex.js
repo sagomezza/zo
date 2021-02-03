@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Modal, TouchableHighlight, TouchableWithoutFeedback, Keyboard, ActivityIndicator, Image } from 'react-native';
+import { StyleSheet, View, Modal, TouchableWithoutFeedback, Keyboard, ActivityIndicator, Image } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { Text, TouchableOpacity } from 'react-native';
 import moment from 'moment';
@@ -15,12 +15,9 @@ import numberWithPoints from '../../config/services/numberWithPoints';
 import normalize from '../../config/services/normalizeFontSize';
 import { ImageBackground } from 'react-native';
 import Header from '../../components/Header/HeaderIndex';
-import { TabRouter } from '@react-navigation/native';
 
 const UserOut = (props) => {
   const { navigation, officialProps, qr } = props;
-  // const dateMonthIn = new Date('05/05/20');
-  // const dateMonthOut = new Date('07/05/20');
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
   const [recip, setRecip] = useState({})
@@ -28,7 +25,6 @@ const UserOut = (props) => {
   const [isDisabled, setIsDisabled] = useState(true);
   const [err, setErr] = useState("");
   const [isParanoicUser, setIsParanoicUser] = useState(false);
-
   const [plateOne, setPlateOne] = useState('');
   const [plateTwo, setPlateTwo] = useState('');
   const [plateOneCall, setPlateOneCall] = useState('');
@@ -39,21 +35,16 @@ const UserOut = (props) => {
   const [pendingValue, setPendingValue] = useState(pendingValue === undefined ? '0' : pendingValue + '')
   const [inputVerificationCode, setInputVerificationCode] = useState('');
   const [verificationCodeCall, setVerificationCodeCall] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modal2Visible, setModal2Visible] = useState(false);
+  const [modal3Visible, setModal3Visible] = useState(false);
+  const [modal4Visible, setModal4Visible] = useState(false);
+  const [modal5Visible, setModal5Visible] = useState(false);
 
   const verification = check.verificationCode === undefined ? '' : check.verificationCode + ''
-
+  const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
-
-  const clearPlateOne = () => {
-    setPlateOne('');
-  }
-  const clearPlateTwo = () => {
-    setPlateTwo('');
-  }
-  const clearInputVerificationCode = () => {
-    setInputVerificationCode('');
-  }
 
   const styles = StyleSheet.create({
     container: {
@@ -308,15 +299,12 @@ const UserOut = (props) => {
       height: '80%'
     }
   });
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modal2Visible, setModal2Visible] = useState(false);
-  const [modal3Visible, setModal3Visible] = useState(false);
-  const [modal4Visible, setModal4Visible] = useState(false);
-  const [modal5Visible, setModal5Visible] = useState(false);
-
-  const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
 
   function restart() {
+    setModalVisible(false);
+    setModal2Visible(false);
+    setModal3Visible(false);
+    setModal4Visible(false);
     setTotalAmount(0);
     setTotalPay(0);
     setPlateOne("");
@@ -324,10 +312,6 @@ const UserOut = (props) => {
     setRecip({})
     setLoading(false);
     setErr("")
-    setModalVisible(false);
-    setModal2Visible(false);
-    setModal3Visible(false);
-    setModal4Visible(false);
     setDateStart('');
     setDateFinished('');
     setCheck({});
@@ -444,7 +428,6 @@ const UserOut = (props) => {
         store.dispatch(actions.setReservations(response.data.data.reservations));
         store.dispatch(actions.setHq(response.data.data));
       }
-      restart();
     } catch (err) {
       console.log(err?.response)
       console.log(err)
@@ -489,11 +472,16 @@ const UserOut = (props) => {
       getRecips()
       setLoading(false)
       setIsDisabled(true);
+      console.log(showModal)
       if (showModal) {
         console.log('----------modalapp----------')
+        console.log(showModal)
         setModalVisible(true)
       }
+
     } catch (err) {
+      console.log('----------modalERR----------')
+
       console.log(err?.response)
       console.log(err)
       setLoading(false);
@@ -563,7 +551,7 @@ const UserOut = (props) => {
                   };
                 }}
                 value={plateOne}
-                onFocus={() => { clearPlateOne(); clearPlateTwo(); }}
+                onFocus={() => { setPlateOne(''); setPlateTwo(''); }}
               />
               <TextInput
                 ref={refPlateTwo}
@@ -574,7 +562,7 @@ const UserOut = (props) => {
                 textAlign='center'
                 maxLength={3}
                 autoCapitalize={'characters'}
-                onFocus={() => { clearPlateTwo(); }}
+                onFocus={() => { setPlateTwo(''); }}
                 onChangeText={text => {
                   setPlateTwo(text);
                   setPlateTwoCall(text);
@@ -605,9 +593,9 @@ const UserOut = (props) => {
                 textAlign='center'
                 maxLength={5}
                 autoCapitalize={'characters'}
-                onFocus={() => { clearInputVerificationCode(); }}
+                onFocus={() => { setInputVerificationCode(''); }}
                 onChangeText={text => {
-                  if (text.length === 5) {Keyboard.dismiss()}
+                  if (text.length === 5) { Keyboard.dismiss() }
                   setInputVerificationCode(text);
                   setVerificationCodeCall(text);
                 }}
@@ -756,7 +744,6 @@ const UserOut = (props) => {
                       fontSize: normalize(17)
                     }}
                     onPress={() => {
-
                       finishParking("payed", true);
                     }} />
                 </View>
@@ -872,9 +859,22 @@ const UserOut = (props) => {
               </View>
               <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
-                  setModalVisible(!modalVisible);
-                  console.log('----------modaldisa----------')
-                  restart();
+                  setModalVisible(false);
+                  setModal2Visible(false);
+                  setModal3Visible(false);
+                  setModal4Visible(false);
+                  setTotalAmount(0);
+                  setTotalPay(0);
+                  setPlateOne("");
+                  setPlateTwo("");
+                  setRecip({})
+                  setLoading(false);
+                  setErr("")
+                  setDateStart('');
+                  setDateFinished('');
+                  setCheck({});
+                  setPendingValue();
+                  setInputVerificationCode('');
                 }}
                   title="E N T E N D I D O"
                   color="#00A9A0"
