@@ -210,27 +210,27 @@ const MonthlyPayments = (props) => {
                     <View style={styles.listContainer}>
                         {mensualityExists ?
                             <View style={{ height: '96%', width: '80%', marginTop: '2%', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <View style={{ height: '60%', width: '100%', justifyContent: 'space-between', alignContent: 'center', alignItems: 'center'}}>
-                                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: "#ffffff", marginBottom: '5%'}}>
+                                <View style={{ height: '60%', width: '100%', justifyContent: 'space-between', alignContent: 'center', alignItems: 'center' }}>
+                                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: "#ffffff", marginBottom: '5%' }}>
                                         <Text style={styles.infoTextTitle}>
                                             Placas asociadas:
                                         </Text>
-                                        <View style={{ flexDirection: 'column', width: '40%', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
+                                        <View style={{ flexDirection: 'column', width: '40%', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
 
                                             <Text style={styles.infoText}>
-                                                {mensualityInfo.plates ? mensualityInfo.plates[0] + ' ': ''}
+                                                {mensualityInfo.plates ? mensualityInfo.plates[0] + ' ' : ''}
                                             </Text>
                                             <Text style={styles.infoText}>
-                                                {mensualityInfo.plates ? mensualityInfo.plates[1] + ' ': ''}
+                                                {mensualityInfo.plates ? mensualityInfo.plates[1] + ' ' : ''}
                                             </Text>
                                             <Text style={styles.infoText}>
-                                                {mensualityInfo.plates ? mensualityInfo.plates[2] + ' ': ''}
+                                                {mensualityInfo.plates ? mensualityInfo.plates[2] + ' ' : ''}
                                             </Text>
                                             <Text style={styles.infoText}>
-                                                {mensualityInfo.plates ? mensualityInfo.plates[3] + ' ': ''}
+                                                {mensualityInfo.plates ? mensualityInfo.plates[3] + ' ' : ''}
                                             </Text>
                                             <Text style={styles.infoText}>
-                                                {mensualityInfo.plates ? mensualityInfo.plates[4] + ' ': ''}
+                                                {mensualityInfo.plates ? mensualityInfo.plates[4] + ' ' : ''}
                                             </Text>
                                         </View>
                                     </View>
@@ -240,7 +240,7 @@ const MonthlyPayments = (props) => {
                                             Placas parqueadas:
                                         </Text>
                                         <Text style={styles.infoText}>
-                                            {mensualityInfo.parkedPlates} 
+                                            {mensualityInfo.parkedPlates}
                                         </Text>
                                     </View>
                                     <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: "#ffffff", marginBottom: '5%' }}>
@@ -251,16 +251,31 @@ const MonthlyPayments = (props) => {
                                             {moment(mensualityInfo.validity).format('L')} {moment(mensualityInfo.validity).format('LT')}
                                         </Text>
                                     </View>
-                                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: "#ffffff", marginBottom: '2%' }}>
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        width: '100%',
+                                        justifyContent: 'space-between',
+                                        borderBottomWidth: 1,
+                                        borderColor: "#ffffff",
+                                        marginBottom: '2%'
+                                    }}>
                                         <Text style={styles.infoTextTitle}>
-                                            Valor: 
+                                            Valor:
                                         </Text>
                                         <Text style={styles.infoText}>
                                             {`$${numberWithPoints(mensualityValue)}`}
                                         </Text>
                                     </View>
                                 </View>
-                                <View style={{ height: '18%', width: '80%', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'column' }}>
+                                <View style={{
+                                    height: '18%',
+                                    width: '80%',
+                                    alignContent: 'center',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    flexDirection: 'column',
+                                    marginBottom: '5%'
+                                }}>
                                     <Button onPress={() => {
                                         setModal2Visible(true);
                                     }}
@@ -510,7 +525,7 @@ const MonthlyPayments = (props) => {
                                 </View>
                             </View>
                             <View style={{ height: '45%', justifyContent: 'flex-end', flexDirection: 'column' }}>
-                                <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end', marginBottom: '2%' }}>
+                                <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end', marginBottom: '3%' }}>
                                     <Button onPress={() => {
                                         renewMensuality()
                                         setModal2Visible(!modal2Visible);

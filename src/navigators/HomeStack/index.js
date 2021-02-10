@@ -25,13 +25,10 @@ const HomeStack = ({ navigation }) => {
     <Stack.Navigator
       initialRouteName={"Home"}
       screenOptions={{
-        //headerTitle: (props) => <HeaderTitle {...props} />,
         headerStyle: {
           backgroundColor: "#2DD47F",
-          // backgroundColor: "#f0f0f0",
           height: 100 ,
         },
-        // headerTitleAlign: "center",
         headerTitleAlign: "center",
         headerTitleStyle: {
           color: "white",
@@ -39,35 +36,6 @@ const HomeStack = ({ navigation }) => {
         headerTintColor: "white",
         headerBackTitleVisible: false,
       }}
-      // drawerContent={(props) => {
-      //   const filteredProps = {
-      //     ...props,
-      //     state: {
-      //       ...props.state,
-      //       routeNames: props.state.routeNames.filter(
-      //         // To hide single option
-      //         // (routeName) => routeName !== 'HiddenPage1',
-      //         // To hide multiple options you can add & condition
-      //         (routeName) => {
-      //           console.log(routeName)
-      //           routeName !== 'Home'
-      //         },
-      //       ),
-      //       routes: props.state.routes.filter(
-      //         (route) =>{
-      //           console.log(2)
-      //           console.log(route)
-      //           route.name !== 'Home'
-      //         },
-      //       ),
-      //     },
-      //   };
-      //   return (
-      //     <DrawerContentScrollView {...filteredProps}>
-      //       <DrawerItemList {...filteredProps} />
-      //     </DrawerContentScrollView>
-      //   );
-      // }}
     >
       <Stack.Screen
         name="Home1"
@@ -76,16 +44,6 @@ const HomeStack = ({ navigation }) => {
           headerShown: false,
           headerLeft: null,
           sideMenu: null,
-          // drawerLabel: () => null
-          // headerLeft: () => (
-          //   <MaterialIcons.Button
-          //     name="menu"
-          //     // color={"#009387"}
-          //     backgroundColor="lightgray"
-          //     size={25}
-          //     onPress={() => navigation.openDrawer()}
-          //   />
-          // ),
         }}
       />
       

@@ -88,10 +88,12 @@ const LogoutIndex = (props) => {
   const [total, setTotal] = useState(0);
   const [shiftRecips, setShiftRecips] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
+  const [hqInfo , setHqInfo ] = useState([]);
+  
 
   const hq = props.hq;
   const [inputValue, setInputValue] = useState('');
-  
+
 
   useEffect(() => {
     const getShiftRecips = async () => {
@@ -105,7 +107,13 @@ const LogoutIndex = (props) => {
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
         }
-      
+        console.log(response.data.data)
+        console.log("--------------middle----------")
+
+        console.log(response.data)
+        console.log("--------------middle2----------")
+
+
       } catch (err) {
         console.log("err: ", err);
         console.log(err?.response)
@@ -211,6 +219,15 @@ const LogoutIndex = (props) => {
 
               </View>
             </View>
+            { officialProps.hq.length > 1 ?
+            <View style={{ width: '30%' }}>
+              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: normalize(25) }}>{"TOTAL: "}{total} </Text>
+            </View> 
+            :
+            <View style={{ width: '30%' }}>
+              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: normalize(25) }}> </Text>
+            </View> 
+            } 
             <View style={{ flexDirection: 'row', width: '80%', height: '30%', alignItems: 'center', alignContent: 'center', padding: '2%', justifyContent: 'space-between' }}>
               <View style={{ width: '30%' }}>
                 <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: normalize(20) }}>{"DINERO EN EFECTIVO: "} </Text>
@@ -235,7 +252,7 @@ const LogoutIndex = (props) => {
                   value={inputValue == 0 ? '' : inputValue + ''}
 
                 />
-                <TouchableOpacity style={[!inputValue.length === 0? styles.buttonTDisabled : styles.buttonT]}
+                <TouchableOpacity style={[!inputValue.length === 0 ? styles.buttonTDisabled : styles.buttonT]}
                   onPress={() => {
                     setModal2Visible(true)
                   }}
@@ -290,7 +307,7 @@ const LogoutIndex = (props) => {
                 title="C E R R A R  T U R N O"
                 disabled={!inputValue.length === 0}
                 color="#00A9A0"
-                style={[ inputValue.length === 0 ? styles.shiftButtonDisabled :styles.shiftButton]}
+                style={[inputValue.length === 0 ? styles.shiftButtonDisabled : styles.shiftButton]}
                 textStyle={{
                   color: "#FFFFFF",
                   textAlign: "center",

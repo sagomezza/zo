@@ -21,7 +21,7 @@ const DrawerContent = (props) => {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1}}>
             <DrawerContentScrollView {...props}>
                 <View style={styles.drawerContent}>
 
@@ -33,7 +33,7 @@ const DrawerContent = (props) => {
                                 size={27}
                             />
                         )}
-                        label="Home"
+                        label="Inicio"
                         onPress={() => { props.navigation.navigate('Home1') }}
                     />
                     <DrawerItem
@@ -84,6 +84,13 @@ const DrawerContent = (props) => {
                         //         resizeMode={"contain"}
                         //         source={require('../../../assets/images/MenuMensualidades.png')} />
                         // )}
+                        icon={({ color, size }) => (
+                            <MaterialIcons
+                                name="pages"
+                                color="#00A9A0"
+                                size={27}
+                            />
+                        )}
                         label="Pdf"
                         onPress={() => { props.navigation.navigate('Pdf') }}
                     /> */}
@@ -108,7 +115,7 @@ const DrawerContent = (props) => {
 
 const styles = StyleSheet.create({
     drawerContent: {
-        flex: 1,
+        flex: 1
     },
     userInfoSection: {
         paddingLeft: 20,

@@ -40,7 +40,6 @@ const UserOut = (props) => {
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
   const [modal5Visible, setModal5Visible] = useState(false);
-
   const verification = check.verificationCode === undefined ? '' : check.verificationCode + ''
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const refPlateOne = useRef(null);
@@ -474,14 +473,10 @@ const UserOut = (props) => {
       setIsDisabled(true);
       console.log(showModal)
       if (showModal) {
-        console.log('----------modalapp----------')
         console.log(showModal)
         setModalVisible(true)
       }
-
     } catch (err) {
-      console.log('----------modalERR----------')
-
       console.log(err?.response)
       console.log(err)
       setLoading(false);

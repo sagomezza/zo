@@ -4,7 +4,6 @@ import {
   View,
   Text,
   Modal,
-  TouchableHighlight,
   TouchableWithoutFeedback,
   Alert,
   Image,
@@ -22,12 +21,10 @@ import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ, GET_RECIPS_BY_
 import store from '../../config/store';
 import moment from 'moment';
 import Button from '../../components/Button';
-import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { Keyboard } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
 import { ImageBackground } from 'react-native';
 import Header from '../../components/Header/HeaderIndex';
-import MainDrawer from '../../navigators/MainDrawer/MainDrawer';
 // import Feather from "react-native-feather";
 import DropDownPicker from 'react-native-dropdown-picker';
 import numberWithPoints from '../../config/services/numberWithPoints';

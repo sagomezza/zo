@@ -113,9 +113,15 @@ import {
 
 // Import HTML to PDF
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import { connect } from 'react-redux';
+import * as actions from "../../redux/actions";
 
-const RNPrintExample = () => {
+import Header from '../../components/Header/HeaderIndex';
+
+
+const RNPrintExample = (props) => {
   const [filePath, setFilePath] = useState('');
+  const { navigation, officialProps } = props;
 
   const isPermitted = async () => {
     if (Platform.OS === 'android') {
@@ -156,8 +162,9 @@ const RNPrintExample = () => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
+      <Header navigation={navigation} />
       <Text style={styles.titleText}>
-        Example to Make PDF in React Native from HTML Text
+        PDF cierre de caja
       </Text>
       <View style={styles.container}>
         <TouchableOpacity onPress={createPDF}>
@@ -170,7 +177,7 @@ const RNPrintExample = () => {
               }}
               style={styles.imageStyle}
             />
-            <Text style={styles.textStyle}>Create PDF</Text>
+            <Text style={styles.textStyle}>Crear PDF</Text>
           </View>
         </TouchableOpacity>
         <Text style={styles.textStyle}>{filePath}</Text>
@@ -179,7 +186,11 @@ const RNPrintExample = () => {
   );
 };
 
-export default RNPrintExample;
+const mapStateToProps = (state) => ({
+  officialProps: state.official,
+  reservations: state.reservations,
+});
+export default connect(mapStateToProps, actions)(RNPrintExample);
 
 const styles = StyleSheet.create({
   container: {

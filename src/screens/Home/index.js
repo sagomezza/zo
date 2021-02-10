@@ -84,23 +84,6 @@ const HomeIndex = (props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* <View style={{ heigth: '14%' }} >
-        <Button onPress={() => navigation.navigate("Logout")}
-          title="Cerrar sesión"
-          color="transparent"
-          style={{
-            borderWidth: 1,
-            borderColor: "#00A9A0",
-            alignSelf: 'flex-end',
-            width: '30%',
-            heigth: '10%',
-            marginRight: '5%',
-            marginTop: '6%',
-            paddingHorizontal: '2%',
-            borderRadius: 9
-          }}
-          textStyle={{ color: "#00A9A0" }} />
-      </View> */}
       <ImageBackground
         style={{
           flex: 1,
@@ -257,7 +240,6 @@ const HomeIndex = (props) => {
     </View>
   );
 };
-
 
 const mapStateToProps = (state) => ({
   officialProps: state.official,
