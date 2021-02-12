@@ -1,5 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
+import { ImageBackground } from 'react-native';
+
 import {
   SafeAreaView,
   Text,
@@ -21,36 +23,10 @@ import * as MediaLibrary from "expo-media-library";
 import * as Sharing from "expo-sharing";
 import Button from "../../components/Button"
 import moment from 'moment';
-
 import Header from '../../components/Header/HeaderIndex';
+import PdfStyles from '../Pdf/PdfStyles'
 import normalize from '../../config/services/normalizeFontSize';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-  },
-  titleText: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    paddingVertical: 20,
-  },
-  textStyle: {
-    fontSize: 18,
-    padding: 10,
-    color: 'black',
-    textAlign: 'center',
-  },
-  imageStyle: {
-    width: 150,
-    height: 150,
-    margin: 5,
-    resizeMode: 'stretch',
-  },
-});
+import FooterIndex from '../../components/Footer';
 
 const txtGenerator = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
@@ -68,7 +44,7 @@ const txtGenerator = (props) => {
       console.log("------------end1----------")
       console.log(todayRecips)
       console.log("------------end2----------")
-   
+
       setDataToday(todayRecips)
     } catch (err) {
       console.log(err)
@@ -127,6 +103,7 @@ const txtGenerator = (props) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
+        title: 'TXT',
         message:
           `${txt}`,
       });
@@ -147,32 +124,50 @@ const txtGenerator = (props) => {
 
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Header navigation={navigation} />
-      <View>
-        <Text></Text>
-      </View>
-      <View style={{ borderWidth: 1, height: '50%', justifyContent: 'center' }} >
+    <View style={{ flex: 1 }}>
+      <ImageBackground
+        style={{
+          flex: 1,
+          width: '100%',
+          height: '40%',
+          flexDirection: 'column'
+        }}
+        source={require('../../../assets/images/Home.png')}>
+        <Header navigation={navigation} />
+        <View style={PdfStyles.container}>
+          <View style={PdfStyles.listContainer}>
+            <Button onPress={onShare}
+              title="G U A R D A R"
+              color='#00A9A0'
+              style={{
+                borderWidth: normalize(1),
+                borderColor: "#707070",
+                alignSelf: 'center',
+                width: '69%',
+                heigth: '15%',
+                margin: '2%',
+                paddingHorizontal: '15%',
+                paddingVertical: '1%'
+              }}
+              textStyle={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold', fontSize: normalize(20), }}
+            // activityIndicatorStatus={loading}
+            />
 
-        <Button onPress={onShare}
-          title="G U A R D A R"
-          color='#00A9A0'
-          style={{
-            borderWidth: normalize(1),
-            borderColor: "#707070",
-            alignSelf: 'center',
-            width: '69%',
-            heigth: '15%',
-            margin: '2%',
-            paddingHorizontal: '15%',
-            paddingVertical: '1%'
-          }}
-          textStyle={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold', fontSize: normalize(20), }}
-        // activityIndicatorStatus={loading}
-        />
-      </View>
+          </View>
+          <View style={{
+            height: '17%',
+            width: '100%',
+            justifyContent: 'flex-end'
+          }}>
+            <FooterIndex navigation={navigation} />
+          </View>
+        </View>
+      </ImageBackground>
 
-    </SafeAreaView>
+
+    </View>
+
+
 
   );
 }
@@ -181,7 +176,9 @@ const mapStateToProps = (state) => ({
   officialProps: state.official,
   reservations: state.reservations,
   recips: state.recips,
-  hq: state.hq
+  hq: state.hq,
+  expoToken: state.expoToken
+
 });
 
 export default connect(mapStateToProps, actions)(txtGenerator);
