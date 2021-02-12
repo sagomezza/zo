@@ -77,7 +77,7 @@ const DrawerContent = (props) => {
                         label="Mensualidades"
                         onPress={() => { props.navigation.navigate('MonthlyPayments') }}
                     />
-                    {/* <DrawerItem
+                    <DrawerItem
                         // icon={({ color, size }) => (
                         //     <Image
                         //         style={{ width: normalize(25), height: normalize(25) }}
@@ -91,9 +91,9 @@ const DrawerContent = (props) => {
                                 size={27}
                             />
                         )}
-                        label="Pdf"
+                        label="Cierre"
                         onPress={() => { props.navigation.navigate('Pdf') }}
-                    /> */}
+                    />
                     <DrawerItem
 
                         icon={({ color, size }) => (
