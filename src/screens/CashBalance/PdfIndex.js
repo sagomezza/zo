@@ -144,34 +144,37 @@ const txtGenerator = (props) => {
 
         <View style={styles.container}>
           <View style={styles.listContainer}>
-            <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
-              <Text style={styles.textListTitle} >HISTORIAL DE PAGOS</Text>
-            </View>
-            <View style={{ height: "72%" }}>
-              {/* {recips.recips.length > 0 ? */}
-              <FlatList
-                style={{ height: "37%" }}
-                data={dataToday}
-                keyExtractor={(item, index) => String(index)}
-                renderItem={({ item }) => {
-                  return (
-                    <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
-                      <View style={{ marginBottom: '2%' }} >
-                        <Text style={styles.textPlaca}>{item.plate}</Text>
-                        <Text style={styles.textPago}>Pago por ${formatHours(item.hours)} horas</Text>
-                      </View>
-                      <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
-                        <Text style={styles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
-                      </View>
-                    </View>
-                  )
-                }}
-              />
-              {/* : */}
-              <View style={{ marginLeft: '13%', padding: '10%' }}>
-                <Text style={styles.textPago}> No se encuentran registros en el historial </Text>
+            <View style={styles.listOne}>
+
+              <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
+                <Text style={styles.textListTitle} >TRANSACCIONES DEL DÍA</Text>
               </View>
-              {/* } */}
+              <View style={{ height: "72%" }}>
+                {/* {recips.recips.length > 0 ? */}
+                <FlatList
+                  style={{ height: "37%" }}
+                  data={dataToday}
+                  keyExtractor={(item, index) => String(index)}
+                  renderItem={({ item }) => {
+                    return (
+                      <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
+                        <View style={{ marginBottom: '2%' }} >
+                          <Text style={styles.textPlaca}>{item.plate}</Text>
+                          <Text style={styles.textPago}>Pago por ${formatHours(item.hours)} horas</Text>
+                        </View>
+                        <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
+                          <Text style={styles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
+                        </View>
+                      </View>
+                    )
+                  }}
+                />
+                {/* : */}
+                {/* <View style={{ marginLeft: '13%', padding: '10%' }}>
+                <Text style={styles.textPago}> No se encuentran registros en el historial </Text>
+              </View> */}
+                {/* } */}
+              </View>
             </View>
             <Button onPress={onShare}
               title="G U A R D A R"
@@ -189,6 +192,55 @@ const txtGenerator = (props) => {
               textStyle={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold', fontSize: normalize(20), }}
             // activityIndicatorStatus={loading}
             />
+            <View style={styles.listOne}>
+
+              <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
+                <Text style={styles.textListTitle} >CIERRES DE CAJA </Text>
+              </View>
+              <View style={{ height: "72%" }}>
+                {/* {recips.recips.length > 0 ? */}
+                <FlatList
+                  style={{ height: "37%" }}
+                  data={dataToday}
+                  keyExtractor={(item, index) => String(index)}
+                  renderItem={({ item }) => {
+                    return (
+                      <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
+                        <View style={{ flex: 1, marginBottom: '2%', marginTop: '2%'}} >
+                          <Text style={styles.textPlaca}>{item.plate}</Text>
+                        </View>
+                        <View style={{ flex: 1, alignItems: 'flex-end', marginTop:'2%'}} >
+                          <Text style={styles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
+                        </View>
+                        <View style={{ flex: 1, alignItems: 'flex-end', alignSelf: 'center' }} >
+                          <Button
+                            // onPress={onShare}
+                            title="Abierto"
+                            color='#00A9A0'
+                            style={{
+                              borderWidth: normalize(1),
+                              borderColor: "#707070",
+                              alignSelf: 'center',
+                              width: '80%',
+                              heigth: '20%',
+                              paddingHorizontal: '15%',
+                              paddingVertical: '1%'
+                            }}
+                            textStyle={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold', fontSize: normalize(15), }}
+                          // activityIndicatorStatus={loading}
+                          />
+                        </View>
+                      </View>
+                    )
+                  }}
+                />
+                {/* : */}
+                {/* <View style={{ marginLeft: '13%', padding: '10%' }}>
+  <Text style={styles.textPago}> No se encuentran registros en el historial </Text>
+</View> */}
+                {/* } */}
+              </View>
+            </View>
 
           </View>
           <View style={{

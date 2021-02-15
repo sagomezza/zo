@@ -9,8 +9,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 30,
         alignContent: 'center',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        borderWidth: 1
+        justifyContent: 'space-between'
     },
     listContainer: {
         height: '77%',
@@ -18,8 +17,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         marginTop: '8%',
         borderRadius: 10,
-        justifyContent: 'center',
-        borderWidth: 1
+        justifyContent: 'space-between'
+    },
+    listOne: {
+        height: '45%'
     },
     textPlaca: {
         fontSize: normalize(18),
