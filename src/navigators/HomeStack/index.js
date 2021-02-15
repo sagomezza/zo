@@ -10,7 +10,7 @@ import UserOut from "../../screens/UserExit/UserExitIndex";
 import Qr from "../../screens/Qr/QRIndex";
 import { createDrawerNavigator, DrawerContent, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer"; 
 import MainDrawer from "../MainDrawer/MainDrawer";
-import RNPrintExample from "../../screens/Pdf/PdfIndex";
+import CashBalance from "../../screens/CashBalance/PdfIndex";
 import Transactions from "../../screens/Transactions/TransactionsIndex";
 import ActiveServices from "../../screens/ActiveServices/ActiveServicesIndex";
 import NewsReport from "../../screens/NewsReport/NewsReportIndex";
@@ -80,8 +80,8 @@ const HomeStack = ({ navigation }) => {
         }}
       />
       <Stack.Screen
-        name="Pdf"
-        component={RNPrintExample}
+        name="CashBalance"
+        component={CashBalance}
         options={{
           headerShown: false,
           headerLeft: null,

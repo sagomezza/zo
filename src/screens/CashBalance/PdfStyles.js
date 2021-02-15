@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         alignItems: 'center',
         justifyContent: 'space-between',
+        borderWidth: 1
     },
     listContainer: {
         height: '77%',
@@ -17,7 +18,28 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         marginTop: '8%',
         borderRadius: 10,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        borderWidth: 1
+    },
+    textPlaca: {
+        fontSize: normalize(18),
+        color: '#5D5D5D',
+        fontFamily: 'Montserrat-Bold'
+    },
+    textListTitle: {
+        fontSize: normalize(15),
+        color: '#00A9A0',
+        fontFamily: 'Montserrat-Bold'
+    },
+    textPago: {
+        fontSize: normalize(13),
+        color: '#5D5D5D',
+        fontFamily: 'Montserrat-Regular'
+    },
+    textMoney: {
+        fontSize: normalize(19),
+        color: '#5D5D5D',
+        fontFamily: 'Montserrat-Regular'
     },
 });
 

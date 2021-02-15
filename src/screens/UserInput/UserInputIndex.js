@@ -47,6 +47,7 @@ const UserInput = (props) => {
   const userData = findUserByPlateInfo.fullData !== undefined ? findUserByPlateInfo.fullData[0] : "";
   const [blacklist, setBlacklist] = useState([]);
   let blacklistValue = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].value : 0; 
+  // let blacklistDate = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].creationDate : 0; 
 
   const [blacklistExists, setBlacklistExists] = useState(false);
   const [startParking, setStartParking] = useState({});
@@ -111,6 +112,7 @@ const UserInput = (props) => {
           setShowPhoneInput(false);
           setShowDropdown(true);
           setBlacklist(response.data.blackList);
+          console.log(response.data.blackList)
 
           const auxPhones = []
           response.data.data.forEach(phone => {
@@ -118,22 +120,13 @@ const UserInput = (props) => {
           });
           auxPhones.push({ label: '+ agregar', value: 0 })
           setPhones(auxPhones);
-          console.log('---------g-g-g-LLLL-');
-
-          console.log(response.data.blackList)
-          console.log('---------g-g-g-g-');
-
           if (response.data.blackList && response.data.blackList.length > 0  ) {
             setModal3Visible()
           }
         }
       } catch (err) {
-        console.log('---------g-g-g-g-');
         console.log(err)
-
         console.log(err?.response)
-
-        console.log('dentro')
         setFindUserByPlateInfo([]);
         setExistingUser(false);
         setShowDropdown(false);
@@ -611,9 +604,10 @@ const UserInput = (props) => {
               padding: '2%'
 
             }}>
-              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+              <View style={{ margin: '4%', justifyContent: 'center', height: ' 60%' }}>
                 <Text style={styles.modalTextAlert}> Este usuario se encuentra en lista negra:  </Text>
                 <Text style={styles.modalTextAlert}>Deuda: {`$${numberWithPoints(blacklistValue)}`}</Text>
+                <Text style={styles.modalTextAlert}>Fecha: </Text>
 
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>

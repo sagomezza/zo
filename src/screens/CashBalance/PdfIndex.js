@@ -11,7 +11,8 @@ import {
   Image,
   PermissionsAndroid,
   Platform,
-  Share
+  Share,
+  FlatList
 } from 'react-native';
 
 // Import HTML to PDF
@@ -24,8 +25,9 @@ import * as Sharing from "expo-sharing";
 import Button from "../../components/Button"
 import moment from 'moment';
 import Header from '../../components/Header/HeaderIndex';
-import PdfStyles from '../Pdf/PdfStyles'
+import styles from '../CashBalance/PdfStyles'
 import normalize from '../../config/services/normalizeFontSize';
+import numberWithPoints from '../../config/services/numberWithPoints';
 import FooterIndex from '../../components/Footer';
 
 const txtGenerator = (props) => {
@@ -122,6 +124,11 @@ const txtGenerator = (props) => {
     }
   };
 
+  const formatHours = (hours) => {
+    if (typeof hours === "number" || typeof hours === "double" || typeof hours === "long" || typeof hours === "float") {
+      return Math.round(hours)
+    } else return hours
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -134,8 +141,38 @@ const txtGenerator = (props) => {
         }}
         source={require('../../../assets/images/Home.png')}>
         <Header navigation={navigation} />
-        <View style={PdfStyles.container}>
-          <View style={PdfStyles.listContainer}>
+
+        <View style={styles.container}>
+          <View style={styles.listContainer}>
+            <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
+              <Text style={styles.textListTitle} >HISTORIAL DE PAGOS</Text>
+            </View>
+            <View style={{ height: "72%" }}>
+              {/* {recips.recips.length > 0 ? */}
+              <FlatList
+                style={{ height: "37%" }}
+                data={dataToday}
+                keyExtractor={(item, index) => String(index)}
+                renderItem={({ item }) => {
+                  return (
+                    <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
+                      <View style={{ marginBottom: '2%' }} >
+                        <Text style={styles.textPlaca}>{item.plate}</Text>
+                        <Text style={styles.textPago}>Pago por ${formatHours(item.hours)} horas</Text>
+                      </View>
+                      <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
+                        <Text style={styles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
+                      </View>
+                    </View>
+                  )
+                }}
+              />
+              {/* : */}
+              <View style={{ marginLeft: '13%', padding: '10%' }}>
+                <Text style={styles.textPago}> No se encuentran registros en el historial </Text>
+              </View>
+              {/* } */}
+            </View>
             <Button onPress={onShare}
               title="G U A R D A R"
               color='#00A9A0'

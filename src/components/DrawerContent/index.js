@@ -91,9 +91,11 @@ const DrawerContent = (props) => {
                                 size={27}
                             />
                         )}
-                        label="Cierre"
-                        onPress={() => { props.navigation.navigate('Pdf') }}
+                        label="Cierre de caja"
+                        onPress={() => { props.navigation.navigate('CashBalance') }}
                     />
+                      <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '4%', marginLeft: '4%', marginRight: '4%', marginTop: '4%' }} ></View>
+
                     <DrawerItem
 
                         icon={({ color, size }) => (

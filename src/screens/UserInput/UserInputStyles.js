@@ -180,7 +180,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: 'Montserrat-Regular',
     color: 'red',
-    fontSize: normalize(20)
+    fontSize: normalize(20),
+    margin: '2%'
   },
   modalButton: {
     width: '100%',
