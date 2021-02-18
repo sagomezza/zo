@@ -59,13 +59,10 @@ const txtGenerator = (props) => {
   const [date1, setDate1] = useState(new Date(moment().subtract(1, 'days')));
   const [date2, setDate2] = useState(new Date());
 
-  const [signature, setSign] = useState(null);
+  const [signature, setSign] = useState(false);
   const [signatureUri, setSignatureUri] = useState("")
 
-  // const handleSignature = signature => {
-  //   console.log(signature);
-  //   setSign(signature);
-  // };
+
 
   const handleEmpty = () => {
     console.log('Empty');
@@ -79,6 +76,7 @@ const txtGenerator = (props) => {
         console.log("-------1-----")
         console.log(file);
         setSignatureUri(file.uri);
+        setSign(true);
         console.log(file.uri);
 
         console.log("-------2-----")
@@ -156,6 +154,7 @@ const txtGenerator = (props) => {
 
   const readBoxReport = async (id) => {
     setLoadingReadBoxReport(true);
+    setSign(false);
     try {
       console.log(id)
       setBoxId(id);
@@ -180,6 +179,7 @@ const txtGenerator = (props) => {
   };
 
   const saveSignReport = async () => {
+    setLoadingBoxGenerator(true);
     try {
       const response = await instance.post(SAVE_SIGN_REPORT, {
         id: boxId,
@@ -193,7 +193,13 @@ const txtGenerator = (props) => {
       console.log('------------read---------')
       setModal2Visible(false);
       listBoxClose();
+      setSign(false);
+      setLoadingBoxGenerator(false);
+
+
     } catch (err) {
+      setLoadingBoxGenerator(false);
+
       console.log(err)
       console.log('------------createbox-ERR--------')
       console.log(err?.response)
@@ -354,7 +360,7 @@ const txtGenerator = (props) => {
                     }}
                   />
                   :
-                  <View style={{justifyContent: 'center', height: '100%'}}>
+                  <View style={{ justifyContent: 'center', height: '100%' }}>
                     <ActivityIndicator size={"large"} color={'#00A9A0'} />
                   </View>
                 }
@@ -473,12 +479,15 @@ const txtGenerator = (props) => {
               <View style={styles.centeredView}>
                 <View style={styles.modalViewSign}>
                   <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-                    <View style={{ margin: '2%', justifyContent: 'center', height: ' 70%' }}>
-                      <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Cierre de Caja:</Text>
-                      <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>{readBoxReportInfo.base}</Text>
-                      <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>{readBoxReportInfo.totalReported}</Text>
-                      <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>{moment(readBoxReportInfo.dateFinished).format('L')}</Text>
+                    <View style={{ margin: '0%', justifyContent: 'center', height: ' 75%' }}>
+                      <View style={{ margin: '2%', justifyContent: 'center', height: ' 30%' }}>
+                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Cierre de Caja:</Text>
+                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>{moment(readBoxReportInfo.dateFinished).format('L')} {moment(readBoxReportInfo.dateFinished).format('LT')}</Text>
+                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>{`$${numberWithPoints(Number(readBoxReportInfo.totalReported))}`}</Text>
+                      </View>
                       {boxStatus === "active" ?
+
+
                         <Signature
                           onOK={handleSignature}
                           onEmpty={handleEmpty}
@@ -487,44 +496,76 @@ const txtGenerator = (props) => {
                           confirmText="Save"
                           webStyle={style}
                         />
+
                         :
                         <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Firma guardada</Text>
 
                       }
-
                     </View>
+                    {signature ?
+                      <View style={{ margin: '0%', justifyContent: 'center', height: ' 10%' }}>
+                        <Text style={{ ...styles.modalText, fontSize: normalize(15), fontFamily: 'Montserrat-Bold', color: 'red' }}>¡ Firma guardada !</Text>
+                      </View>
+                      :
+                      <View style={{ margin: '0%', justifyContent: 'center', height: ' 10%' }}>
+                      </View>
+                    }
 
-                    <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end', marginTop: '5%' }}>
-                      <Button
-                        onPress={() => {
-                          saveSignReport();
 
-                        }}
-                        title="G U A R D A R"
-                        color="#00A9A0"
-                        style={
-                          styles.modalButton
-                        }
-                        textStyle={{
-                          color: "#FFFFFF",
-                          textAlign: "center",
-                          fontFamily: 'Montserrat-Bold'
-                        }} />
-                      <Button
-                        onPress={() => {
-                          setModal2Visible(!modal2Visible);
-                        }}
-                        title="V O L V E R"
-                        color="gray"
-                        style={
-                          styles.modalButton
-                        }
-                        textStyle={{
-                          color: "#FFFFFF",
-                          textAlign: "center",
-                          fontFamily: 'Montserrat-Bold'
-                        }} />
-                    </View>
+                    {boxStatus === "active" ?
+
+                      <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginTop: '5%' }}>
+
+                        <Button
+                          onPress={() => {
+                            saveSignReport();
+
+                          }}
+                          title="G U A R D A R"
+                          color="#00A9A0"
+                          style={
+                            styles.modalButtonSign
+                          }
+                          textStyle={{
+                            color: "#FFFFFF",
+                            textAlign: "center",
+                            fontFamily: 'Montserrat-Bold'
+                          }}
+                          activityIndicatorStatus={loadingBoxGenerator}
+                        />
+                        <Button
+                          onPress={() => {
+                            setModal2Visible(!modal2Visible);
+                          }}
+                          title="V O L V E R"
+                          color="gray"
+                          style={
+                            styles.modalButtonSign
+                          }
+                          textStyle={{
+                            color: "#FFFFFF",
+                            textAlign: "center",
+                            fontFamily: 'Montserrat-Bold'
+                          }} />
+                      </View>
+                      :
+                      <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginTop: '5%' }}>
+                        <Button
+                          onPress={() => {
+                            setModal2Visible(!modal2Visible);
+                          }}
+                          title="V O L V E R"
+                          color="gray"
+                          style={
+                            styles.modalButtonSign
+                          }
+                          textStyle={{
+                            color: "#FFFFFF",
+                            textAlign: "center",
+                            fontFamily: 'Montserrat-Bold'
+                          }} />
+                      </View>
+                    }
                   </View>
                 </View>
               </View>

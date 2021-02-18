@@ -116,6 +116,11 @@ const styles = StyleSheet.create({
         height: '70%',
         alignSelf: 'flex-end'
     },
+    modalButtonSign: {
+        width: '100%',
+        height: '60%',
+        alignSelf: 'flex-end'
+    },
     preview: {
         width: 335,
         height: 114,
