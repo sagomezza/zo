@@ -9,15 +9,24 @@ export const RENEW_MENSUALITY = "/renewMensuality"
 export const CREATE_PARANOIC_USER = "/createParanoicUser";
 export const GET_PARANOICS_FROM_HQ = "/getParanoicsFromHq";
 export const READ_PARANOIC_USER = "/readParanoicUser";
+
 //OFFICIAL
 export const READ_OFFICIAL = "/readOfficial";
 export const MARK_END_OF_SHIFT = "/markEndOfShift";
 export const START_SHIFT = "/startShift";
 export const EDIT_OFFICIAL = "/editOfficial"
+
+// BOX
+export const CREATE_BOX_REPORT = "/createBoxReport"
+export const SAVE_SIGN_REPORT = "/saveSignReport"
+export const READ_BOX_REPORT = "/readBoxReport";
+export const LIST_BOX_CLOSE = "/listBoxClose";
+
 //RECIPS
 export const GET_RECIPS = "/getRecips";
 export const GET_RECIPS_BY_PLATE = "/getRecipsByPlate";
 export const GET_SHIFT_RECIPS = "/getShiftRecips";
+
 //HQ's
 export const READ_HQ = "/readHq";
 //PARKING PROCESS
