@@ -10,11 +10,12 @@ import * as Font from 'expo-font';
 import { AppLoading } from "expo";
 import instance from "./src/config/axios";
 import { READ_OFFICIAL } from "./src/config/api";
-import {  READ_ADMIN, READ_CORPO } from "./src/config/api/index";
+import { READ_ADMIN, READ_CORPO } from "./src/config/api/index";
 import { setOfficial, setExpoToken } from "./src/redux/actions";
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import * as Permissions from "expo-permissions";
+import * as Sentry from 'sentry-expo';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -42,6 +43,16 @@ const App = () => {
   const notificationListener = useRef();
   const responseListener = useRef();
 
+  Sentry.init({
+    dsn: 'https://022b0475f7b147aba62d6d1988bf95df@o479500.ingest.sentry.io/5644578',
+    enableInExpoDevelopment: true,
+    debug: false, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
+  });
+
+  // useEffect(() => {
+  //   throw new Error("Zonap first Sentry error")
+  // }, [])
+
   const readUser = async (userEmail) => {
     //console.log("USER. ", userEmail);
     if (userEmail) {
@@ -57,7 +68,7 @@ const App = () => {
         try {
           let readOff = await instance.post(
             READ_ADMIN,
-            { email: userEmail }          )
+            { email: userEmail })
           let data = readOff.data.data
           readOff = await instance.post(
             READ_CORPO,
@@ -65,11 +76,11 @@ const App = () => {
           )
           data.hq = readOff.data.data.hqs
           store.dispatch(setOfficial(data));
-        } catch(err) {
+        } catch (err) {
           console.log(err)
           console.log(err?.response)
         }
-       
+
         //console.log("err: ", error);
       }
     }
@@ -132,7 +143,7 @@ const App = () => {
     } else {
       //alert('Must use physical device for Push Notifications');
     }
-  
+
     if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
         name: 'default',
@@ -141,7 +152,7 @@ const App = () => {
         lightColor: '#FF231F7C',
       });
     }
-  
+
     return token;
   }
 

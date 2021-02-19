@@ -27,6 +27,18 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "bluspot",
+            "project": "zonap",
+            "authToken": "f0821824f2624f409ef7d2c52ffe1bb318d42afe58a84f508c02ab91cbde4610"
+          }
+        }
+      ]
     }
   }
 }
