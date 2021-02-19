@@ -33,7 +33,7 @@ const HomeIndex = (props) => {
         }
       } catch (err) {
         console.log(err?.response)
-        console.log("err: ", error);
+        console.log("err: ", err);
       }
     };
 

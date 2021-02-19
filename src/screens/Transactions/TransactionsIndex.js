@@ -27,9 +27,9 @@ const Transactions = (props) => {
                 if (response.data.response === 1) {
                     store.dispatch(actions.setRecips(response.data.data.finished));
                 }
-            } catch (error) {
-                //console.log(err?.response)
-                //console.log("err: ", error);
+            } catch (err) {
+                console.log(err?.response)
+                console.log("err: ", err);
             }
         };
         getRecips();
