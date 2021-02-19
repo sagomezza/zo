@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { ImageBackground, Keyboard } from 'react-native';
 import { StyleSheet, Text, View, Image, TextInput, TouchableWithoutFeedback, Modal } from 'react-native';
 import { connect } from "react-redux";
+import instance from "../../config/axios";
+import { CREATE_NEWS_REPORT } from "../../config/api";
 import * as actions from "../../redux/actions";
 import Header from '../../components/Header/HeaderIndex';
 import styles from '../NewsReport/NewsReportStyles';
@@ -14,7 +16,26 @@ const NewsReport = (props) => {
     const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [report, setReport] = useState("")
+    const [loadingReport, setLoadingReport] = useState(false);
 
+    const createNewsReport = async () => {
+        setLoadingReport(true);
+        try{
+            const response = await instance.post(CREATE_NEWS_REPORT, {
+                officialEmail: officialProps.email,
+                report: report,
+                hqId: officialProps.hq[0]
+            });
+            setLoadingReport(false);
+            setModalVisible(true);
+        } catch (err) {
+            setLoadingReport(false);
+            console.log(err)
+            console.log(err?.response)
+
+        }
+    };
 
     return (
         <View style={{ flex: 1 }}>
@@ -40,20 +61,26 @@ const NewsReport = (props) => {
                                     numberOfLines={10}
                                     multiline={true}
                                     textAlign='center'
-                                    placeholder="Ingrese novedad" >
+                                    placeholder="Ingrese novedad"
+                                    value={report}
+                                    onChangeText ={(text) => {
+                                        setReport(text);
+                                    }}
+                                    >
 
                                 </TextInput>
 
                             </View>
                             <View style={{ height: '20%', width: '75%', alignSelf: 'center' }}>
                                 <Button onPress={() => {
-                                    setModalVisible(true);
+                                    createNewsReport();
                                 }}
                                     title="R E P O R T A R"
                                     color='#00A9A0'
-                                    style={styles.buttonEd}
+                                    style={report.length === 0?styles.buttonEdDisabled : styles.buttonEd}
                                     textStyle={styles.buttonTextRenew}
-                                // disabled={!(plateOne.length === 3 && plateTwo.length === 3) || !mensualityExists}
+                                    activityIndicatorStatus={loadingReport}
+                                    disabled={report.length === 0}
                                 />
                             </View>
                         </View>
@@ -92,6 +119,7 @@ const NewsReport = (props) => {
                                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                                     <Button onPress={() => {
                                         setModalVisible(false);
+                                        setReport("");
                                     }}
                                         title="E N T E N D I D O"
                                         color="#00A9A0"

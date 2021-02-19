@@ -37,6 +37,15 @@ const styles = StyleSheet.create({
         margin: '1%',
         paddingHorizontal: '28%',
     },
+    buttonEdDisabled: {
+        borderRadius: 30,
+        height: normalize(30),
+        width: '100%',
+        marginLeft: '0%',
+        margin: '1%',
+        paddingHorizontal: '28%',
+        opacity: 0.5
+    },
     centeredView: {
         flex: 1,
         justifyContent: "center",

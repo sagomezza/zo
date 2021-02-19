@@ -14,11 +14,12 @@ export const READ_PARANOIC_USER = "/readParanoicUser";
 export const READ_OFFICIAL = "/readOfficial";
 export const MARK_END_OF_SHIFT = "/markEndOfShift";
 export const START_SHIFT = "/startShift";
-export const EDIT_OFFICIAL = "/editOfficial"
+export const EDIT_OFFICIAL = "/editOfficial";
+export const CREATE_NEWS_REPORT = "/createNewsReport";
 
 // BOX
-export const CREATE_BOX_REPORT = "/createBoxReport"
-export const SAVE_SIGN_REPORT = "/saveSignReport"
+export const CREATE_BOX_REPORT = "/createBoxReport";
+export const SAVE_SIGN_REPORT = "/saveSignReport";
 export const READ_BOX_REPORT = "/readBoxReport";
 export const LIST_BOX_CLOSE = "/listBoxClose";
 
