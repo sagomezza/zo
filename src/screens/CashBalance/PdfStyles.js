@@ -12,10 +12,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     listContainer: {
-        height: '77%',
+        height: '76%',
         width: '73%',
         backgroundColor: '#FFFFFF',
-        marginTop: '8%',
+        marginTop: '2%',
         borderRadius: 10,
         justifyContent: 'space-between'
     },
@@ -33,6 +33,11 @@ const styles = StyleSheet.create({
     textListTitle: {
         fontSize: normalize(15),
         color: '#00A9A0',
+        fontFamily: 'Montserrat-Bold'
+    },
+    screenTitle: {
+        fontSize: normalize(20),
+        color: 'gray',
         fontFamily: 'Montserrat-Bold'
     },
     textPago: {

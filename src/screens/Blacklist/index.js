@@ -25,6 +25,8 @@ const Blacklist = (props) => {
     const refPlateTwo = useRef(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [modal2Visible, setModal2Visible] = useState(false);
+    const [modal3Visible, setModal3Visible] = useState(false);
+
     const [listHQDebts, setListHQDebts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [findUserByPlateInfo, setFindUserByPlateInfo] = useState([]);
@@ -36,6 +38,17 @@ const Blacklist = (props) => {
     }
     const clearPlateTwo = () => {
         setPlateTwo('');
+    }
+
+    const userNotFoundModal = () => {
+        clearPlateOne();
+        clearPlateTwo();
+        setModal2Visible(false);
+    }
+    const debtNotFoundModal = () => {
+        clearPlateOne();
+        clearPlateTwo();
+        setModal3Visible(false);
     }
 
     useEffect(() => {
@@ -57,16 +70,15 @@ const Blacklist = (props) => {
             } catch (err) {
                 console.log(err)
                 console.log(err?.response)
-                setModal2Visible();
+                if (err?.response.data.response === -1 ) setModal2Visible(true);
             }
         }
-
-
         findUserByPlate()
     }, [plateOne, plateTwo]);
 
     useEffect(() => {
         async function listHQDebts() {
+            console.log(blacklistValue)
             try {
                 const response = await instance.post(
                     LIST_HQ_DEBTS,
@@ -102,13 +114,14 @@ const Blacklist = (props) => {
                 setModalVisible(true);
                 clearPlateOne();
                 clearPlateTwo();
-
                 console.log("------------wiii------")
             }
         } catch (err) {
             console.log(err)
             console.log(err?.response)
             setLoading(false);
+            if (err?.response.data.response === -1 ) setModal3Visible(true);
+
         }
     }
 
@@ -185,7 +198,7 @@ const Blacklist = (props) => {
                     <View style={styles.listContainer}>
                         <View style={{ height: '95%', width: '95%', backgroundColor: '#FFFFFF', marginTop: '0%', borderRadius: 10 }}>
                             <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
-                                <Text style={styles.textListTitle} >MORAS</Text>
+                                <Text style={styles.textListTitle} >LISTA NEGRA</Text>
                             </View>
                             <View style={{ height: "90%" }}>
                                 {recips.recips.length > 0 ?
@@ -246,7 +259,87 @@ const Blacklist = (props) => {
                             </View>
                             <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                                 <Button onPress={() => {
-                                    setModal2Visible(!modal2Visible);
+                                    setModalVisible(false);
+                                }}
+                                    title="E N T E N D I D O"
+                                    color="#00A9A0"
+                                    style={
+                                        styles.modalButton
+                                    }
+                                    textStyle={{
+                                        color: "#FFFFFF",
+                                        textAlign: "center",
+                                        fontFamily: 'Montserrat-Bold'
+                                    }} />
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                backdropOpacity={0.3}
+                visible={modal2Visible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <View style={{
+                            height: '100%',
+                            width: '100%',
+                            justifyContent: 'space-between',
+                            padding: '2%'
+
+                        }}>
+                            <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                                <Text style={styles.modalTextAlert}> Esta placa no se encuentra asociada a un usuario. </Text>
+                            </View>
+                            <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                                <Button onPress={() => {
+                                    userNotFoundModal();
+                                }}
+                                    title="E N T E N D I D O"
+                                    color="#00A9A0"
+                                    style={
+                                        styles.modalButton
+                                    }
+                                    textStyle={{
+                                        color: "#FFFFFF",
+                                        textAlign: "center",
+                                        fontFamily: 'Montserrat-Bold'
+                                    }} />
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                backdropOpacity={0.3}
+                visible={modal3Visible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <View style={{
+                            height: '100%',
+                            width: '100%',
+                            justifyContent: 'space-between',
+                            padding: '2%'
+
+                        }}>
+                            <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                                <Text style={styles.modalTextAlert}> No se encuentra deuda asociada a este usuario. </Text>
+                            </View>
+                            <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                                <Button onPress={() => {
+                                    debtNotFoundModal();
                                 }}
                                     title="E N T E N D I D O"
                                     color="#00A9A0"

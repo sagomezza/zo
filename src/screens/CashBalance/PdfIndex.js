@@ -239,6 +239,9 @@ const txtGenerator = (props) => {
         <Header navigation={navigation} />
 
         <View style={styles.container}>
+        <View style={{ marginTop: '3%' }}>
+                <Text style={styles.screenTitle} >CIERRE DE CAJA</Text>
+              </View>
           <View style={styles.listContainer}>
             <View style={styles.listOne}>
 

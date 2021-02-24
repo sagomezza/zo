@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     },
     modalButton: {
         width: '100%',
-        height: '90%',
+        height: '70%',
     },
     modalButtonDisabled: {
         width: '100%',
