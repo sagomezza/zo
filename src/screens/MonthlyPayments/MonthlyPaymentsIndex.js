@@ -110,20 +110,25 @@ const MonthlyPayments = (props) => {
     const fourthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + '' : ''
     const fifthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + '' : ''
 
-    const user = firestore.collection("users")
-        .where('plates', "array-contains", firstPlateNewMen)
-        .where('phone', '==', phoneNewMen)
-        .get()
-        .then(snapshot => {
-            if (snapshot.empty) {
-                createUser();
-            } else {
-                setUserId(snapshot.docs[0].id)
-                if (userId) {
-                    createMensuality();
+    const user = () => {
+        firestore.collection("users")
+            .where('plates', "array-contains", firstPlateNewMen)
+            .where('phone', '==', phoneNewMen)
+            .get()
+            .then(snapshot => {
+                if (snapshot.empty) {
+                    createUser();
+                    setModal3Visible(false);
+                } else {
+                    setUserId(snapshot.docs[0].id)
+                    if (userId) {
+                        // agregar editUser para agregar su info personal
+                        createMensuality();
+                    }
+                    setModal3Visible(false);
                 }
-            }
-        })
+            })
+    };
 
     async function createUser() {
         setLoading(true);
@@ -163,18 +168,15 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                console.log("entro en createUSER---------------------------")
-                console.log(response.data)
-                setUserId(response.data.id)
-                console.log("entro en createUSER---------------------------")
+                setModal4Visible(true);
+                setLoading(false);
+            }
 
-            }
-            if (userId) {
-                createMensuality();
-            }
         } catch (err) {
             console.log(err)
             console.log(err?.response)
+            setLoading(false);
+
         }
     }
 
@@ -215,7 +217,7 @@ const MonthlyPayments = (props) => {
 
                 console.log(response.data.data)
                 setLoading(false);
-                setModal3Visible(false);
+                setModal4Visible(true);
             }
         } catch (err) {
             console.log(err)
@@ -846,7 +848,7 @@ const MonthlyPayments = (props) => {
                             <View style={{ height: '20%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%', borderWidth: 1 }}>
                                 <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginBottom: '1%' }}>
                                     <Button onPress={() => {
-                                        findUserByPlate();
+                                        user();
                                     }}
                                         title="G U A R D A R"
                                         color="#00A9A0"
@@ -895,7 +897,7 @@ const MonthlyPayments = (props) => {
                     <View style={styles.modalViewNewMensuality}>
                         <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
                             <View style={{ marginBottom: '0%', justifyContent: 'center', height: '10%' }}>
-                                <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> Ingrese la siguiente información: </Text>
+                                <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> La mensualidad fue creada con éxito.</Text>
                             </View>
                             <View style={{ justifyContent: 'space-between', height: '50%', width: '100%', flexDirection: 'column', paddingBottom: '8%' }}>
 
@@ -903,7 +905,7 @@ const MonthlyPayments = (props) => {
                             <View style={{ height: '20%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%', borderWidth: 1 }}>
                                 <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginBottom: '1%' }}>
                                     <Button onPress={() => {
-                                        createUser();
+                                        setModal4Visible(false);
                                     }}
                                         title="G U A R D A R"
                                         color="#00A9A0"
