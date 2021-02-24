@@ -3,6 +3,7 @@ export const CREATE_USER = "/createUser";
 export const READ_USER = "/readUser";
 export const EDIT_USER = "/editUser";
 export const FIND_USER_BY_PLATE = "/findUserByPlate";
+export const CREATE_MENSUALITY = "/createMensuality";
 export const FIND_MENSUALITY_PLATE = "/findMensualityPlate";
 export const EDIT_MENSUALITY = "/editMensuality"
 export const RENEW_MENSUALITY = "/renewMensuality"
@@ -27,6 +28,8 @@ export const LIST_BOX_CLOSE = "/listBoxClose";
 export const GET_RECIPS = "/getRecips";
 export const GET_RECIPS_BY_PLATE = "/getRecipsByPlate";
 export const GET_SHIFT_RECIPS = "/getShiftRecips";
+export const PAY_DEBTS = '/payDebts';
+export const LIST_HQ_DEBTS = '/listHQDebts'
 
 //HQ's
 export const READ_HQ = "/readHq";

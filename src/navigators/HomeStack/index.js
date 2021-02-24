@@ -15,7 +15,7 @@ import Transactions from "../../screens/Transactions/TransactionsIndex";
 import ActiveServices from "../../screens/ActiveServices/ActiveServicesIndex";
 import NewsReport from "../../screens/NewsReport/NewsReportIndex";
 import MonthlyPayments from "../../screens/MonthlyPayments/MonthlyPaymentsIndex";
-
+import Blacklist from '../../screens/Blacklist/index';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -114,6 +114,14 @@ const HomeStack = ({ navigation }) => {
       <Stack.Screen
         name="MonthlyPayments"
         component={MonthlyPayments}
+        options={{
+          headerShown: false,
+          headerLeft: null,
+        }}
+      />
+      <Stack.Screen
+        name="Blacklist"
+        component={Blacklist}
         options={{
           headerShown: false,
           headerLeft: null,

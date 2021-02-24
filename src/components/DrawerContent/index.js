@@ -64,8 +64,8 @@ const DrawerContent = (props) => {
                                 resizeMode={"contain"}
                                 source={require('../../../assets/images/MenuReporte.png')} />
                         )}
-                        label="Reporte de novedad"
-                        onPress={() => { props.navigation.navigate('NewsReport') }}
+                        label="Moras"
+                        onPress={() => { props.navigation.navigate('Blacklist') }}
                     />
                     <DrawerItem
                         icon={({ color, size }) => (
@@ -76,6 +76,16 @@ const DrawerContent = (props) => {
                         )}
                         label="Mensualidades"
                         onPress={() => { props.navigation.navigate('MonthlyPayments') }}
+                    />
+                    <DrawerItem
+                        icon={({ color, size }) => (
+                            <Image
+                                style={{ width: normalize(25), height: normalize(25) }}
+                                resizeMode={"contain"}
+                                source={require('../../../assets/images/MenuReporte.png')} />
+                        )}
+                        label="Reporte de novedad"
+                        onPress={() => { props.navigation.navigate('NewsReport') }}
                     />
                     <DrawerItem
                         // icon={({ color, size }) => (
