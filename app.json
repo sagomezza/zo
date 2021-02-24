@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "zona-p",
-    "slug": "zona-p",
+    "name": "Zona-p",
+    "slug": "Zona-p",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,9 +17,13 @@
       "**/*"
     ],
     "ios": {
+      "buildNumber": "1",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.corpaul.zonap",
+      "useNextNotificationsApi": true,
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#00A9A0"
