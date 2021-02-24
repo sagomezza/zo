@@ -4,9 +4,10 @@ import CheckBox from '@react-native-community/checkbox';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from '../MonthlyPayments/MonthlyPaymentsStyles';
 
-import { FIND_MENSUALITY_PLATE, RENEW_MENSUALITY, EDIT_MENSUALITY } from "../../config/api";
+import { FIND_MENSUALITY_PLATE, RENEW_MENSUALITY, EDIT_MENSUALITY, CREATE_USER, CREATE_MENSUALITY, READ_USER, FIND_USER_BY_PLATE } from "../../config/api";
 import instance from "../../config/axios";
 import { TIMEOUT } from '../../config/constants/constants';
+import { firestore } from '../../config/firebase'
 
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
@@ -26,21 +27,44 @@ const MonthlyPayments = (props) => {
     const [plateTwo, setPlateTwo] = useState('');
     const refPlateOne = useRef(null);
     const refPlateTwo = useRef(null);
-    const [loading, setLoading] = useState(false)
-    const [mensualityExists, setMensualityExists] = useState(false)
-    const [mensuality, setMensuality] = useState({})
-    const [charge, setCharge] = useState(false)
+    const [loading, setLoading] = useState(false);
+    const [mensualityExists, setMensualityExists] = useState(false);
+    const [mensuality, setMensuality] = useState({});
+    const [charge, setCharge] = useState(false);
     const mensualityInfo = mensuality.data !== undefined ? mensuality.data[0] : "";
     const mensualityValue = mensualityInfo.value !== undefined ? mensualityInfo.value : 0;
+    // Modals
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modal2Visible, setModal2Visible] = useState(false);
+    const [modal3Visible, setModal3Visible] = useState(false);
+    const [modal4Visible, setModal4Visible] = useState(false);
+
+    // To modify plates asociated to mensuality
     const [firstPlate, setFirstPlate] = useState('')
     const [secondPlate, setSecondPlate] = useState('')
     const [thirdPlate, setThirdPlate] = useState('')
     const [fourthPlate, setFourthPlate] = useState('')
     const [fifthPlate, setFifthPlate] = useState('')
+    // Info for new mensuality
+    const [phoneNewMen, setPhoneNewMen] = useState('');
+    const [emailNewMen, setEmailNewMen] = useState('');
+    const [nameNewMen, setNameNewMen] = useState('');
+    const [lastNameNewMen, setLastNameNewMen] = useState('');
+    const [userId, setUserId] = useState('');
+
+
+    const [firstPlateNewMen, setFirstPlateNewMen] = useState('')
+    const [secondPlateNewMen, setSecondPlateNewMen] = useState('')
+    const [thirdPlateNewMen, setThirdPlateNewMen] = useState('')
+    const [fourthPlateNewMen, setFourthPlateNewMen] = useState('')
+    const [fifthPlateNewMen, setFifthPlateNewMen] = useState('')
 
     let plates = [firstPlate, secondPlate, thirdPlate, fourthPlate, fifthPlate]
-
     let newPlates = plates.filter(plate => plate != undefined && plate != '')
+
+    let platesNewMen = [firstPlateNewMen, secondPlateNewMen, thirdPlateNewMen, fourthPlateNewMen, fifthPlateNewMen]
+    let platesNewMensuality = platesNewMen.filter(plate => plate != undefined && plate != '')
+
 
     const clearPlateOne = () => {
         setPlateOne('');
@@ -64,8 +88,21 @@ const MonthlyPayments = (props) => {
         setFifthPlate('');
     }
 
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modal2Visible, setModal2Visible] = useState(false);
+    const clearFirstPlateNewMen = () => {
+        setFirstPlateNewMen('');
+    }
+    const clearSecondPlateNewMen = () => {
+        setSecondPlateNewMen('');
+    }
+    const clearThirdPlateNewMen = () => {
+        setThirdPlateNewMen('');
+    }
+    const clearFourthPlateNewMen = () => {
+        setFourthPlateNewMen('');
+    }
+    const clearFifthPlateNewMen = () => {
+        setFifthPlateNewMen('');
+    }
 
     const firstPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[0] + '' : ''
     const secondPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[1] + '' : ''
@@ -73,6 +110,120 @@ const MonthlyPayments = (props) => {
     const fourthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + '' : ''
     const fifthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + '' : ''
 
+    const user = firestore.collection("users")
+        .where('plates', "array-contains", firstPlateNewMen)
+        .where('phone', '==', phoneNewMen)
+        .get()
+        .then(snapshot => {
+            if (snapshot.empty) {
+                createUser();
+            } else {
+                setUserId(snapshot.docs[0].id)
+                if (userId) {
+                    createMensuality();
+                }
+            }
+        })
+
+    async function createUser() {
+        setLoading(true);
+        try {
+            console.log({
+                type: "full",
+                email: emailNewMen,
+                phone: '+57' + phoneNewMen,
+                name: nameNewMen,
+                lastName: lastNameNewMen,
+                expoToken: "",
+                monthlyUser: true,
+                plate: firstPlateNewMen,
+                hqId: officialHq,
+                mensualityType: "personal",
+                validity: "2021-01-01T01:53:28.299Z",
+                capacity: 5
+
+            })
+            console.log("-------------INFO------------")
+            if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
+                const response = await instance.post(
+                    CREATE_USER,
+                    {
+                        type: "full",
+                        email: emailNewMen,
+                        phone: '+57' + phoneNewMen,
+                        name: nameNewMen,
+                        lastName: lastNameNewMen,
+                        expoToken: "",
+                        monthlyUser: true,
+                        plate: firstPlateNewMen,
+                        hqId: officialHq,
+                        mensualityType: "personal",
+                        validity: "2021-01-01T01:53:28.299Z",
+                        capacity: 5
+                    },
+                    { timeout: TIMEOUT }
+                )
+                console.log("entro en createUSER---------------------------")
+                console.log(response.data)
+                setUserId(response.data.id)
+                console.log("entro en createUSER---------------------------")
+
+            }
+            if (userId) {
+                createMensuality();
+            }
+        } catch (err) {
+            console.log(err)
+            console.log(err?.response)
+        }
+    }
+
+    async function createMensuality() {
+        setLoading(true);
+        console.log("entro en createMENSUALITYS---------------------------")
+        try {
+            console.log(
+                {
+                    userId: userId,
+                    capacity: 5,
+                    vehicleType: "car",
+                    validity: "2021-02-03T01:53:28.299Z",
+                    userPhone: phoneNewMen,
+                    plates: platesNewMensuality,
+                    hqId: officialHq,
+                    type: "personal",
+                    monthlyUser: true
+                }
+            )
+            if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10 && userId) {
+                const response = await instance.post(
+                    CREATE_MENSUALITY,
+                    {
+                        userId: userId,
+                        capacity: 5,
+                        vehicleType: "car",
+                        validity: "2021-02-03T01:53:28.299Z",
+                        userPhone: phoneNewMen,
+                        plates: platesNewMensuality,
+                        hqId: officialHq,
+                        type: "personal",
+                        monthlyUser: true
+                    },
+                    { timeout: TIMEOUT }
+                )
+                console.log("entro en CM---------------------------")
+
+                console.log(response.data.data)
+                setLoading(false);
+                setModal3Visible(false);
+            }
+        } catch (err) {
+            console.log(err)
+            console.log(err?.response)
+            setLoading(false);
+
+        }
+    }
 
     async function findMensualityPlate() {
         try {
@@ -307,12 +458,13 @@ const MonthlyPayments = (props) => {
                                     No se encuentra mensualidad asociada.
                                 </Text>
                                 <Button onPress={() => {
+                                    setModal3Visible(true);
                                 }}
                                     title="C R E A R"
                                     color='gray'
-                                    style={[!(plateOne.length === 3 && plateTwo.length === 3) || !mensualityExists ? styles.buttonEdDisabled : styles.buttonEd]}
+                                    style={styles.buttonEd}
                                     textStyle={styles.buttonTextRenew}
-                                    disabled={!(plateOne.length === 3 && plateTwo.length === 3) || !mensualityExists}
+                                // disabled={!(plateOne.length === 3 && plateTwo.length === 3) || !mensualityExists}
                                 />
                             </View>
                         }
@@ -326,9 +478,7 @@ const MonthlyPayments = (props) => {
                         <FooterIndex navigation={navigation} />
                     </View>
                 </View>
-
             </ImageBackground>
-
             <Modal
                 animationType="fade"
                 transparent={true}
@@ -460,11 +610,10 @@ const MonthlyPayments = (props) => {
                                     />
                                 </View>
                             </View>
-                            <View style={{ height: '20%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
-                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginBottom: '1%' }}>
+                            <View style={{ height: '20%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '0%' }}>
+                                <View style={{ height: '50%', width: '100%', justifyContent: 'flex-end', marginBottom: '1%' }}>
                                     <Button onPress={() => {
-
-                                        editMensuality();
+                                        user();
                                     }}
                                         title="G U A R D A R"
                                         color="#00A9A0"
@@ -477,7 +626,7 @@ const MonthlyPayments = (props) => {
                                             fontFamily: 'Montserrat-Bold'
                                         }} />
                                 </View>
-                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginTop: '2%', marginBottom: '1%' }}>
+                                <View style={{ height: '50%', width: '100%', justifyContent: 'flex-end', marginTop: '2%', marginBottom: '1%' }}>
                                     <Button onPress={() => {
                                         setModalVisible(!modalVisible);
                                     }}
@@ -545,6 +694,233 @@ const MonthlyPayments = (props) => {
                                 <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end', marginTop: '2%' }}>
                                     <Button onPress={() => {
                                         setModal2Visible(!modal2Visible);
+                                    }}
+                                        title="V O L V E R"
+                                        color="gray"
+                                        style={
+                                            styles.modalButton
+                                        }
+                                        textStyle={{
+                                            color: "#FFFFFF",
+                                            textAlign: "center",
+                                            fontFamily: 'Montserrat-Bold'
+                                        }} />
+                                </View>
+                            </View>
+
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                backdropOpacity={0.3}
+                visible={modal3Visible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalViewNewMensuality}>
+                        <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
+                            <View style={{ marginBottom: '0%', justifyContent: 'center', height: '10%' }}>
+                                <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> Ingrese la siguiente información: </Text>
+                            </View>
+                            <View style={{ justifyContent: 'space-between', height: '50%', width: '100%', flexDirection: 'column', paddingBottom: '8%' }}>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Nombre: </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='default'
+                                        placeholder=''
+                                        textAlign='center'
+                                        value={nameNewMen}
+                                        onChangeText={text => setNameNewMen(text)}
+                                    // onFocus={() => {
+                                    //     clearSecondPlateNewMen('')
+                                    // }}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Apellido: </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='default'
+                                        placeholder=''
+                                        textAlign='center'
+                                        value={lastNameNewMen}
+                                        onChangeText={text => setLastNameNewMen(text)}
+                                    // onFocus={() => {
+                                    //     clearSecondPlateNewMen('')
+                                    // }}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Celular:</Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='numeric'
+                                        placeholder=''
+                                        textAlign='center'
+                                        maxLength={10}
+                                        value={phoneNewMen}
+                                        onChangeText={text => setPhoneNewMen(text)}
+                                    // onFocus={() => {
+                                    //     clearFifthPlate('')
+                                    // }}
+                                    />
+                                </View>
+
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Correo:</Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='default'
+                                        placeholder=''
+                                        textAlign='center'
+                                        value={emailNewMen}
+                                        onChangeText={text => setEmailNewMen(text)}
+                                    // onFocus={() => {
+                                    //     clearThirdPlateNewMen('')
+                                    // }}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa:</Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='default'
+                                        placeholder=''
+                                        textAlign='center'
+                                        keyboardType={"default"}
+                                        autoCapitalize={"characters"}
+                                        value={firstPlateNewMen}
+                                        onChangeText={text => setFirstPlateNewMen(text)}
+                                    // onFocus={() => {
+                                    //     clearFirstPlateNewMen('')
+                                    // }}
+                                    />
+                                </View>
+                            </View>
+                            <View style={{ height: '20%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%', borderWidth: 1 }}>
+                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginBottom: '1%' }}>
+                                    <Button onPress={() => {
+                                        findUserByPlate();
+                                    }}
+                                        title="G U A R D A R"
+                                        color="#00A9A0"
+                                        style={
+                                            styles.modalButton
+                                        }
+                                        textStyle={{
+                                            color: "#FFFFFF",
+                                            textAlign: "center",
+                                            fontFamily: 'Montserrat-Bold'
+                                        }}
+                                        activityIndicatorStatus={loading}
+                                    />
+                                </View>
+                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginTop: '2%', marginBottom: '1%' }}>
+                                    <Button onPress={() => {
+                                        setModal3Visible(false);
+                                    }}
+                                        title="V O L V E R"
+                                        color="gray"
+                                        style={
+                                            styles.modalButton
+                                        }
+                                        textStyle={{
+                                            color: "#FFFFFF",
+                                            textAlign: "center",
+                                            fontFamily: 'Montserrat-Bold'
+                                        }} />
+                                </View>
+                            </View>
+
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                backdropOpacity={0.3}
+                visible={modal4Visible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalViewNewMensuality}>
+                        <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
+                            <View style={{ marginBottom: '0%', justifyContent: 'center', height: '10%' }}>
+                                <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> Ingrese la siguiente información: </Text>
+                            </View>
+                            <View style={{ justifyContent: 'space-between', height: '50%', width: '100%', flexDirection: 'column', paddingBottom: '8%' }}>
+
+                            </View>
+                            <View style={{ height: '20%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%', borderWidth: 1 }}>
+                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginBottom: '1%' }}>
+                                    <Button onPress={() => {
+                                        createUser();
+                                    }}
+                                        title="G U A R D A R"
+                                        color="#00A9A0"
+                                        style={
+                                            styles.modalButton
+                                        }
+                                        textStyle={{
+                                            color: "#FFFFFF",
+                                            textAlign: "center",
+                                            fontFamily: 'Montserrat-Bold'
+                                        }}
+                                        activityIndicatorStatus={loading}
+                                    />
+                                </View>
+                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginTop: '2%', marginBottom: '1%' }}>
+                                    <Button onPress={() => {
+                                        setModal3Visible(false);
                                     }}
                                         title="V O L V E R"
                                         color="gray"

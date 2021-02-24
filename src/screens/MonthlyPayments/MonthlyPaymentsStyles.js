@@ -127,6 +127,26 @@ const styles = StyleSheet.create({
         elevation: 5,
         flexDirection: 'column'
     },
+    modalViewNewMensuality: {
+        height: normalize(550),
+        width: normalize(450),
+        padding: normalize(20),
+        borderRadius: 50,
+        borderColor: '#707070',
+        borderWidth: 1,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        shadowColor: '#FFF',
+        shadowOffset: {
+            width: 50,
+            height: 50,
+        },
+        shadowOpacity: 0,
+        shadowRadius: 50,
+        elevation: 5,
+        flexDirection: 'column'
+    },
     modalText: {
         textAlign: "center",
         fontFamily: 'Montserrat-Regular',
@@ -135,13 +155,14 @@ const styles = StyleSheet.create({
     },
     modalButton: {
         width: '100%',
-        height: '90%',
+        height: '75%',
     },
     modalButtonDisabled: {
         width: '100%',
         height: '90%',
         opacity: 0.5
     },
+   
 });
 
 export default styles;
