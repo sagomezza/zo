@@ -64,7 +64,7 @@ const DrawerContent = (props) => {
                                 resizeMode={"contain"}
                                 source={require('../../../assets/images/MenuReporte.png')} />
                         )}
-                        label="Moras"
+                        label="Lista negra"
                         onPress={() => { props.navigation.navigate('Blacklist') }}
                     />
                     <DrawerItem

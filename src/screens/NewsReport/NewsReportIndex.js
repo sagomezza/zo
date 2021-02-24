@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Image, TextInput, TouchableWithoutFeedback, Mod
 import { connect } from "react-redux";
 import instance from "../../config/axios";
 import { CREATE_NEWS_REPORT } from "../../config/api";
+import { TIMEOUT } from '../../config/constants/constants';
 import * as actions from "../../redux/actions";
 import Header from '../../components/Header/HeaderIndex';
 import styles from '../NewsReport/NewsReportStyles';
@@ -21,12 +22,14 @@ const NewsReport = (props) => {
 
     const createNewsReport = async () => {
         setLoadingReport(true);
-        try{
+        try {
             const response = await instance.post(CREATE_NEWS_REPORT, {
                 officialEmail: officialProps.email,
                 report: report,
                 hqId: officialProps.hq[0]
-            });
+            },
+                { timeout: TIMEOUT }
+            );
             setLoadingReport(false);
             setModalVisible(true);
         } catch (err) {
@@ -63,10 +66,10 @@ const NewsReport = (props) => {
                                     textAlign='center'
                                     placeholder="Ingrese novedad"
                                     value={report}
-                                    onChangeText ={(text) => {
+                                    onChangeText={(text) => {
                                         setReport(text);
                                     }}
-                                    >
+                                >
 
                                 </TextInput>
 
@@ -77,7 +80,7 @@ const NewsReport = (props) => {
                                 }}
                                     title="R E P O R T A R"
                                     color='#00A9A0'
-                                    style={report.length === 0?styles.buttonEdDisabled : styles.buttonEd}
+                                    style={report.length === 0 ? styles.buttonEdDisabled : styles.buttonEd}
                                     textStyle={styles.buttonTextRenew}
                                     activityIndicatorStatus={loadingReport}
                                     disabled={report.length === 0}
@@ -113,7 +116,7 @@ const NewsReport = (props) => {
                             }}>
                                 <View style={{ margin: '4%', justifyContent: 'center', height: ' 60%' }}>
                                     <Text style={styles.modalTextAlert}> Tu novedad ha sido registrada con éxito  </Text>
-                                    
+
 
                                 </View>
                                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
