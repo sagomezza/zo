@@ -179,7 +179,7 @@ const LoginIndex = (props) => {
                   borderColor: "#707070",
                   alignSelf: 'center',
                   width: '69%',
-                  height: '15%',
+                  height: '50%',
                   margin: '2%',
                   paddingHorizontal: '15%',
                   paddingVertical: '1%'
