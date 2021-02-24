@@ -4,7 +4,7 @@ import CheckBox from '@react-native-community/checkbox';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from '../MonthlyPayments/MonthlyPaymentsStyles';
 
-import { FIND_MENSUALITY_PLATE, RENEW_MENSUALITY, EDIT_MENSUALITY, CREATE_USER, CREATE_MENSUALITY, READ_USER, FIND_USER_BY_PLATE } from "../../config/api";
+import { FIND_MENSUALITY_PLATE, RENEW_MENSUALITY, EDIT_MENSUALITY, CREATE_USER, CREATE_MENSUALITY, EDIT_USER } from "../../config/api";
 import instance from "../../config/axios";
 import { TIMEOUT } from '../../config/constants/constants';
 import { firestore } from '../../config/firebase'
@@ -113,22 +113,51 @@ const MonthlyPayments = (props) => {
     const user = () => {
         firestore.collection("users")
             .where('plates', "array-contains", firstPlateNewMen)
-            .where('phone', '==', phoneNewMen)
+            .where('phone', '==', '57' + phoneNewMen)
             .get()
             .then(snapshot => {
                 if (snapshot.empty) {
                     createUser();
-                    setModal3Visible(false);
                 } else {
                     setUserId(snapshot.docs[0].id)
                     if (userId) {
                         // agregar editUser para agregar su info personal
+                        editUser();
                         createMensuality();
                     }
-                    setModal3Visible(false);
+
                 }
             })
     };
+
+    async function editUser() {
+        setLoading(true);
+        console.log("entro en editUser---------------------------")
+        try {
+            if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10 && userId) {
+                const response = await instance.post(
+                    EDIT_USER,
+                    {
+                        userId: userId,
+                        name: nameNewMen,
+                        lastName: lastNameNewMen,
+                        phone: '+57' + phoneNewMen,
+                        email: emailNewMen,
+                        plate: firstPlateNewMen
+                    },
+                    { timeout: TIMEOUT }
+                )
+                console.log("entro en EU---------------------------")
+                console.log(response.data)
+                setLoading(false);
+            }
+        } catch (err) {
+            console.log(err)
+            console.log(err?.response)
+            setLoading(false);
+
+        }
+    }
 
     async function createUser() {
         setLoading(true);
@@ -148,7 +177,6 @@ const MonthlyPayments = (props) => {
                 capacity: 5
 
             })
-            console.log("-------------INFO------------")
             if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
                 const response = await instance.post(
                     CREATE_USER,
@@ -169,6 +197,7 @@ const MonthlyPayments = (props) => {
                     { timeout: TIMEOUT }
                 )
                 setModal4Visible(true);
+                setModal3Visible(false);
                 setLoading(false);
             }
 
@@ -218,6 +247,7 @@ const MonthlyPayments = (props) => {
                 console.log(response.data.data)
                 setLoading(false);
                 setModal4Visible(true);
+                setModal3Visible(false);
             }
         } catch (err) {
             console.log(err)
@@ -371,19 +401,19 @@ const MonthlyPayments = (props) => {
                                         <View style={{ flexDirection: 'column', width: '40%', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
 
                                             <Text style={styles.infoText}>
-                                                {mensualityInfo.plates ? mensualityInfo.plates[0] + ' ' : ''}
+                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[0] !== undefined  ?  mensualityInfo.plates[0] + ' ': ' '}
                                             </Text>
                                             <Text style={styles.infoText}>
-                                                {mensualityInfo.plates ? mensualityInfo.plates[1] + ' ' : ''}
+                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[1] !== undefined  ?  mensualityInfo.plates[1] + ' ': ' '}
                                             </Text>
                                             <Text style={styles.infoText}>
-                                                {mensualityInfo.plates ? mensualityInfo.plates[2] + ' ' : ''}
+                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[2] !== undefined  ?  mensualityInfo.plates[2] + ' ': ' '}
                                             </Text>
                                             <Text style={styles.infoText}>
-                                                {mensualityInfo.plates ? mensualityInfo.plates[3] + ' ' : ''}
+                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[3] !== undefined  ?  mensualityInfo.plates[3] + ' ': ' '}
                                             </Text>
                                             <Text style={styles.infoText}>
-                                                {mensualityInfo.plates ? mensualityInfo.plates[4] + ' ' : ''}
+                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[4] !== undefined ?  mensualityInfo.plates[4] + ' ': ' '}
                                             </Text>
                                         </View>
                                     </View>
