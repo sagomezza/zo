@@ -40,6 +40,13 @@ const Blacklist = (props) => {
         setPlateTwo('');
     }
 
+    const debtPayedSuccess =  () => {
+        clearPlateOne();
+        clearPlateTwo();
+        listHQDebtsCall();
+        setModalVisible(false);
+    }
+
     const userNotFoundModal = () => {
         clearPlateOne();
         clearPlateTwo();
@@ -50,6 +57,7 @@ const Blacklist = (props) => {
         clearPlateTwo();
         setModal3Visible(false);
     }
+
 
     useEffect(() => {
         async function findUserByPlate() {
@@ -70,32 +78,32 @@ const Blacklist = (props) => {
             } catch (err) {
                 console.log(err)
                 console.log(err?.response)
-                if (err?.response.data.response === -1 ) setModal2Visible(true);
+                if (err?.response.data.response === -1) setModal2Visible(true);
             }
         }
         findUserByPlate()
     }, [plateOne, plateTwo]);
 
     useEffect(() => {
-        async function listHQDebts() {
-            console.log(blacklistValue)
-            try {
-                const response = await instance.post(
-                    LIST_HQ_DEBTS,
-                    {
-                        hqId: officialHq
-                    },
-                    { timeout: TIMEOUT }
-                )
-                setListHQDebts(response.data.data)
-                console.log(response.data.data)
-            } catch (err) {
-                console.log(err)
-                console.log(err?.response)
-            }
+        listHQDebtsCall();
+    }, []);
+
+    const listHQDebtsCall = async () => {
+        try {
+            const response = await instance.post(
+                LIST_HQ_DEBTS,
+                {
+                    hqId: officialHq
+                },
+                { timeout: TIMEOUT }
+            )
+            setListHQDebts(response.data.data)
+            console.log(response.data.data)
+        } catch (err) {
+            console.log(err)
+            console.log(err?.response)
         }
-        listHQDebts()
-    },[]);
+    };
 
     async function payDebts() {
         setLoading(true);
@@ -112,15 +120,13 @@ const Blacklist = (props) => {
                 )
                 setLoading(false);
                 setModalVisible(true);
-                clearPlateOne();
-                clearPlateTwo();
                 console.log("------------wiii------")
             }
         } catch (err) {
             console.log(err)
             console.log(err?.response)
             setLoading(false);
-            if (err?.response.data.response === -1 ) setModal3Visible(true);
+            if (err?.response.data.response === -1) setModal3Visible(true);
 
         }
     }
@@ -259,7 +265,7 @@ const Blacklist = (props) => {
                             </View>
                             <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                                 <Button onPress={() => {
-                                    setModalVisible(false);
+                                    debtPayedSuccess();
                                 }}
                                     title="E N T E N D I D O"
                                     color="#00A9A0"
