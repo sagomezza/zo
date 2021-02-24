@@ -46,7 +46,9 @@ const UserInput = (props) => {
   const [findUserByPlateInfo, setFindUserByPlateInfo] = useState([]);
   const userData = findUserByPlateInfo.fullData !== undefined ? findUserByPlateInfo.fullData[0] : "";
   const [blacklist, setBlacklist] = useState([]);
-  let blacklistValue = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].value : 0; 
+  let blacklistValue = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].value : 0;
+  let blacklistDate = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].date : ''; 
+
   // let blacklistDate = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].creationDate : 0; 
 
   const [blacklistExists, setBlacklistExists] = useState(false);
@@ -607,7 +609,7 @@ const UserInput = (props) => {
               <View style={{ margin: '4%', justifyContent: 'center', height: ' 60%' }}>
                 <Text style={styles.modalTextAlert}> Este usuario se encuentra en lista negra:  </Text>
                 <Text style={styles.modalTextAlert}>Deuda: {`$${numberWithPoints(blacklistValue)}`}</Text>
-                <Text style={styles.modalTextAlert}>Fecha: </Text>
+                <Text style={styles.modalTextAlert}>Fecha: {moment(blacklistDate).format('L')} {moment(blacklistDate).format('LT')}</Text>
 
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
