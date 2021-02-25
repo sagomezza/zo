@@ -18,6 +18,8 @@ import numberWithPoints from '../../config/services/numberWithPoints';
 import Header from '../../components/Header/HeaderIndex';
 import FooterIndex from '../../components/Footer';
 import Button from '../../components/Button';
+import DropDownPicker from 'react-native-dropdown-picker';
+
 
 
 const MonthlyPayments = (props) => {
@@ -28,7 +30,7 @@ const MonthlyPayments = (props) => {
     const refPlateOne = useRef(null);
     const refPlateTwo = useRef(null);
     const [loading, setLoading] = useState(false);
-    const [mensualityExists, setMensualityExists] = useState(false);
+    const [mensualityExists, setMensualityExists] = useState();
     const [mensuality, setMensuality] = useState({});
     const [charge, setCharge] = useState(false);
     const mensualityInfo = mensuality.data !== undefined ? mensuality.data[0] : "";
@@ -51,7 +53,8 @@ const MonthlyPayments = (props) => {
     const [nameNewMen, setNameNewMen] = useState('');
     const [lastNameNewMen, setLastNameNewMen] = useState('');
     const [userId, setUserId] = useState('');
-
+    const [typeOptions, setTypeOptions] = useState(["personal", "corporate"]);
+    const [newMenType, setNewMenType] = useState('');
 
     const [firstPlateNewMen, setFirstPlateNewMen] = useState('')
     const [secondPlateNewMen, setSecondPlateNewMen] = useState('')
@@ -59,11 +62,20 @@ const MonthlyPayments = (props) => {
     const [fourthPlateNewMen, setFourthPlateNewMen] = useState('')
     const [fifthPlateNewMen, setFifthPlateNewMen] = useState('')
 
+    const firstPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[0] + '' : ''
+    const secondPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[1] + '' : ''
+    const thirdPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[2] + '' : ''
+    const fourthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + '' : ''
+    const fifthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + '' : ''
+
     let plates = [firstPlate, secondPlate, thirdPlate, fourthPlate, fifthPlate]
     let newPlates = plates.filter(plate => plate != undefined && plate != '')
 
     let platesNewMen = [firstPlateNewMen, secondPlateNewMen, thirdPlateNewMen, fourthPlateNewMen, fifthPlateNewMen]
     let platesNewMensuality = platesNewMen.filter(plate => plate != undefined && plate != '')
+
+    const [validityDate, setValidityDate] = useState(new Date(moment(new Date()).add(1, 'months')));
+    const [validityDateNewMen, setValidityDateNewMen] = useState(moment(validityDate).set("date", 5));
 
 
     const clearPlateOne = () => {
@@ -88,49 +100,57 @@ const MonthlyPayments = (props) => {
         setFifthPlate('');
     }
 
+    const clearNameNewMen = () => {
+        setNameNewMen('');
+    }
+    const clearLastNameNewMen = () => {
+        setLastNameNewMen('');
+    }
+    const clearPhoneNewMen = () => {
+        setPhoneNewMen('');
+    }
+    const clearEmailNewMen = () => {
+        setEmailNewMen('');
+    }
     const clearFirstPlateNewMen = () => {
         setFirstPlateNewMen('');
     }
-    const clearSecondPlateNewMen = () => {
-        setSecondPlateNewMen('');
-    }
-    const clearThirdPlateNewMen = () => {
-        setThirdPlateNewMen('');
-    }
-    const clearFourthPlateNewMen = () => {
-        setFourthPlateNewMen('');
-    }
-    const clearFifthPlateNewMen = () => {
-        setFifthPlateNewMen('');
+
+    const mensualityCreatedModal = () => {
+        setModal4Visible(false);
+        setNameNewMen('');
+        setLastNameNewMen('');
+        setPhoneNewMen('');
+        setEmailNewMen('');
+        setFirstPlateNewMen('');
     }
 
-    const firstPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[0] + '' : ''
-    const secondPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[1] + '' : ''
-    const thirdPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[2] + '' : ''
-    const fourthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + '' : ''
-    const fifthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + '' : ''
+    function isCharacterALetter(char) {
+        return (/[a-zA-Z]/).test(char)
+    }
 
     const user = () => {
+        setLoading(true);
         firestore.collection("users")
             .where('plates', "array-contains", firstPlateNewMen)
-            .where('phone', '==', '57' + phoneNewMen)
+            .where('phone', '==', '+57' + phoneNewMen)
             .get()
             .then(snapshot => {
                 if (snapshot.empty) {
                     createUser();
                 } else {
-                    setUserId(snapshot.docs[0].id)
-                    if (userId) {
-                        // agregar editUser para agregar su info personal
-                        editUser();
-                        createMensuality();
-                    }
+                    snapshot.forEach(doc => {
+                        setUserId(doc.id)
+                        editUser(doc.id);
+                        createMensuality(doc.id);
+                    })
+
 
                 }
             })
     };
 
-    async function editUser() {
+    async function editUser(idUser) {
         setLoading(true);
         console.log("entro en editUser---------------------------")
         try {
@@ -138,7 +158,7 @@ const MonthlyPayments = (props) => {
                 const response = await instance.post(
                     EDIT_USER,
                     {
-                        userId: userId,
+                        id: idUser,
                         name: nameNewMen,
                         lastName: lastNameNewMen,
                         phone: '+57' + phoneNewMen,
@@ -149,7 +169,6 @@ const MonthlyPayments = (props) => {
                 )
                 console.log("entro en EU---------------------------")
                 console.log(response.data)
-                setLoading(false);
             }
         } catch (err) {
             console.log(err)
@@ -172,8 +191,8 @@ const MonthlyPayments = (props) => {
                 monthlyUser: true,
                 plate: firstPlateNewMen,
                 hqId: officialHq,
-                mensualityType: "personal",
-                validity: "2021-01-01T01:53:28.299Z",
+                mensualityType: 'personal',
+                validity: validityDateNewMen,
                 capacity: 5
 
             })
@@ -190,8 +209,8 @@ const MonthlyPayments = (props) => {
                         monthlyUser: true,
                         plate: firstPlateNewMen,
                         hqId: officialHq,
-                        mensualityType: "personal",
-                        validity: "2021-01-01T01:53:28.299Z",
+                        mensualityType: 'personal',
+                        validity: validityDateNewMen,
                         capacity: 5
                     },
                     { timeout: TIMEOUT }
@@ -209,45 +228,44 @@ const MonthlyPayments = (props) => {
         }
     }
 
-    async function createMensuality() {
+    async function createMensuality(idUser) {
         setLoading(true);
-        console.log("entro en createMENSUALITYS---------------------------")
         try {
             console.log(
                 {
-                    userId: userId,
+                    userId: idUser,
                     capacity: 5,
                     vehicleType: "car",
-                    validity: "2021-02-03T01:53:28.299Z",
+                    validity: validityDateNewMen,
                     userPhone: phoneNewMen,
                     plates: platesNewMensuality,
                     hqId: officialHq,
-                    type: "personal",
+                    type: 'personal',
                     monthlyUser: true
                 }
             )
-            if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10 && userId) {
+            if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
+                let type
+                if (isCharacterALetter(firstPlateNewMen[5])) type = "bike"
+                else type = "car"
                 const response = await instance.post(
                     CREATE_MENSUALITY,
                     {
-                        userId: userId,
+                        userId: idUser,
                         capacity: 5,
-                        vehicleType: "car",
-                        validity: "2021-02-03T01:53:28.299Z",
+                        vehicleType: type,
+                        validity: validityDateNewMen,
                         userPhone: phoneNewMen,
                         plates: platesNewMensuality,
                         hqId: officialHq,
-                        type: "personal",
+                        type: 'personal',
                         monthlyUser: true
                     },
                     { timeout: TIMEOUT }
                 )
-                console.log("entro en CM---------------------------")
-
-                console.log(response.data.data)
-                setLoading(false);
                 setModal4Visible(true);
                 setModal3Visible(false);
+                setLoading(false);
             }
         } catch (err) {
             console.log(err)
@@ -401,19 +419,19 @@ const MonthlyPayments = (props) => {
                                         <View style={{ flexDirection: 'column', width: '40%', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
 
                                             <Text style={styles.infoText}>
-                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[0] !== undefined  ?  mensualityInfo.plates[0] + ' ': ' '}
+                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[0] !== undefined ? mensualityInfo.plates[0] + ' ' : ' '}
                                             </Text>
                                             <Text style={styles.infoText}>
-                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[1] !== undefined  ?  mensualityInfo.plates[1] + ' ': ' '}
+                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[1] !== undefined ? mensualityInfo.plates[1] + ' ' : ' '}
                                             </Text>
                                             <Text style={styles.infoText}>
-                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[2] !== undefined  ?  mensualityInfo.plates[2] + ' ': ' '}
+                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[2] !== undefined ? mensualityInfo.plates[2] + ' ' : ' '}
                                             </Text>
                                             <Text style={styles.infoText}>
-                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[3] !== undefined  ?  mensualityInfo.plates[3] + ' ': ' '}
+                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[3] !== undefined ? mensualityInfo.plates[3] + ' ' : ' '}
                                             </Text>
                                             <Text style={styles.infoText}>
-                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[4] !== undefined ?  mensualityInfo.plates[4] + ' ': ' '}
+                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[4] !== undefined ? mensualityInfo.plates[4] + ' ' : ' '}
                                             </Text>
                                         </View>
                                     </View>
@@ -486,9 +504,16 @@ const MonthlyPayments = (props) => {
                             </View>
                             :
                             <View style={{ height: '30%', justifyContent: 'space-between' }}>
-                                <Text style={{ fontSize: normalize(20), fontFamily: 'Montserrat-Regular' }}>
-                                    No se encuentra mensualidad asociada.
-                                </Text>
+                                {mensualityExists === false ?
+                                    <Text style={{ fontSize: normalize(20), fontFamily: 'Montserrat-Regular' }}>
+                                        No se encuentra mensualidad asociada.
+                                     </Text>
+                                    :
+                                    <Text style={{ fontSize: normalize(20), fontFamily: 'Montserrat-Regular' }}>
+
+                                    </Text>
+                                }
+
                                 <Button onPress={() => {
                                     setModal3Visible(true);
                                 }}
@@ -641,6 +666,8 @@ const MonthlyPayments = (props) => {
                                         }}
                                     />
                                 </View>
+
+
                             </View>
                             <View style={{ height: '20%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '0%' }}>
                                 <View style={{ height: '50%', width: '100%', justifyContent: 'flex-end', marginBottom: '1%' }}>
@@ -705,7 +732,7 @@ const MonthlyPayments = (props) => {
                                     <Text style={{ color: '#00A9A0', fontFamily: 'Montserrat-Bold', fontSize: normalize(19), textAlign: 'center' }}>Cobrado</Text>
                                 </View>
                             </View>
-                            <View style={{ height: '45%', justifyContent: 'flex-end', flexDirection: 'column' }}>
+                            <View style={{ height: '45%', justifyContent: 'space-between', flexDirection: 'column' }}>
                                 <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end', marginBottom: '3%' }}>
                                     <Button onPress={() => {
                                         renewMensuality()
@@ -777,9 +804,9 @@ const MonthlyPayments = (props) => {
                                         textAlign='center'
                                         value={nameNewMen}
                                         onChangeText={text => setNameNewMen(text)}
-                                    // onFocus={() => {
-                                    //     clearSecondPlateNewMen('')
-                                    // }}
+                                        onFocus={() => {
+                                            clearNameNewMen('')
+                                        }}
                                     />
                                 </View>
                                 <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
@@ -799,9 +826,9 @@ const MonthlyPayments = (props) => {
                                         textAlign='center'
                                         value={lastNameNewMen}
                                         onChangeText={text => setLastNameNewMen(text)}
-                                    // onFocus={() => {
-                                    //     clearSecondPlateNewMen('')
-                                    // }}
+                                        onFocus={() => {
+                                            clearLastNameNewMen('')
+                                        }}
                                     />
                                 </View>
                                 <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
@@ -822,9 +849,9 @@ const MonthlyPayments = (props) => {
                                         maxLength={10}
                                         value={phoneNewMen}
                                         onChangeText={text => setPhoneNewMen(text)}
-                                    // onFocus={() => {
-                                    //     clearFifthPlate('')
-                                    // }}
+                                        onFocus={() => {
+                                            clearPhoneNewMen('')
+                                        }}
                                     />
                                 </View>
 
@@ -845,9 +872,9 @@ const MonthlyPayments = (props) => {
                                         textAlign='center'
                                         value={emailNewMen}
                                         onChangeText={text => setEmailNewMen(text)}
-                                    // onFocus={() => {
-                                    //     clearThirdPlateNewMen('')
-                                    // }}
+                                        onFocus={() => {
+                                            clearEmailNewMen('')
+                                        }}
                                     />
                                 </View>
                                 <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
@@ -869,14 +896,51 @@ const MonthlyPayments = (props) => {
                                         autoCapitalize={"characters"}
                                         value={firstPlateNewMen}
                                         onChangeText={text => setFirstPlateNewMen(text)}
-                                    // onFocus={() => {
-                                    //     clearFirstPlateNewMen('')
-                                    // }}
+                                        onFocus={() => {
+                                            clearFirstPlateNewMen('')
+                                        }}
                                     />
                                 </View>
+                                {/* <View style={{ flexDirection: "row", justifyContent: 'space-between', borderWidth: 1, height: '20%' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 5:  </Text>
+                                    <DropDownPicker
+                                        items={typeOptions}
+                                        zIndex={30}
+                                        // disabled={!showDropdown}
+                                        placeholder={"Selecciona un numero"}
+                                        placeholderStyle={{ color: '#8F8F8F', fontSize: normalize(15), textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
+                                        selectedLabelStyle={{ color: '#8F8F8F', fontSize: normalize(15), textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
+                                        containerStyle={{
+                                            height: '100%', width: '60%'
+                                        }}
+                                        style={{
+                                            backgroundColor: '#fafafa',
+                                            borderTopLeftRadius: 20,
+                                            borderTopRightRadius: 20,
+                                            borderBottomLeftRadius: 20,
+                                            borderBottomRightRadius: 20
+
+                                        }}
+                                        labelStyle={{
+                                            justifyContent: 'center', fontFamily: 'Montserrat-Bold', fontSize: normalize(20), color: '#D9D9D9'
+                                        }}
+                                        dropDownMaxHeight={100}
+                                        dropDownStyle={{
+                                            backgroundColor: '#fafafa', borderBottomLeftRadius: 15,
+                                            borderBottomRightRadius: 15
+                                        }}
+                                        arrowColor={'#00A9A0'}
+                                        arrowStyle={{ alignItems: 'flex-start', alignContent: 'flex-start', justifyContent: 'flex-start' }}
+                                        arrowSize={24}
+                                        onChangeItem={item => {
+                                            setNewMenType(item)
+                                        }
+                                        }
+                                    />
+                                </View> */}
                             </View>
-                            <View style={{ height: '20%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%', borderWidth: 1 }}>
-                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginBottom: '1%' }}>
+                            <View style={{ height: '20%', justifyContent: 'space-between', flexDirection: 'column', marginTop: '3%' }}>
+                                <View style={{ height: '50%', width: '100%', justifyContent: 'flex-end' }}>
                                     <Button onPress={() => {
                                         user();
                                     }}
@@ -893,7 +957,7 @@ const MonthlyPayments = (props) => {
                                         activityIndicatorStatus={loading}
                                     />
                                 </View>
-                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginTop: '2%', marginBottom: '1%' }}>
+                                <View style={{ height: '50%', width: '100%', justifyContent: 'flex-end' }}>
                                     <Button onPress={() => {
                                         setModal3Visible(false);
                                     }}
@@ -924,20 +988,18 @@ const MonthlyPayments = (props) => {
                 }}
             >
                 <View style={styles.centeredView}>
-                    <View style={styles.modalViewNewMensuality}>
-                        <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-                            <View style={{ marginBottom: '0%', justifyContent: 'center', height: '10%' }}>
+                    <View style={styles.modalView}>
+                        <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '5%' }}>
+                            <View style={{ justifyContent: 'center', height: '30%' }}>
                                 <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> La mensualidad fue creada con éxito.</Text>
                             </View>
-                            <View style={{ justifyContent: 'space-between', height: '50%', width: '100%', flexDirection: 'column', paddingBottom: '8%' }}>
 
-                            </View>
-                            <View style={{ height: '20%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%', borderWidth: 1 }}>
-                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginBottom: '1%' }}>
+                            <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
+                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end' }}>
                                     <Button onPress={() => {
-                                        setModal4Visible(false);
+                                        mensualityCreatedModal();
                                     }}
-                                        title="G U A R D A R"
+                                        title="E N T E N D I D O"
                                         color="#00A9A0"
                                         style={
                                             styles.modalButton
@@ -949,21 +1011,6 @@ const MonthlyPayments = (props) => {
                                         }}
                                         activityIndicatorStatus={loading}
                                     />
-                                </View>
-                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end', marginTop: '2%', marginBottom: '1%' }}>
-                                    <Button onPress={() => {
-                                        setModal3Visible(false);
-                                    }}
-                                        title="V O L V E R"
-                                        color="gray"
-                                        style={
-                                            styles.modalButton
-                                        }
-                                        textStyle={{
-                                            color: "#FFFFFF",
-                                            textAlign: "center",
-                                            fontFamily: 'Montserrat-Bold'
-                                        }} />
                                 </View>
                             </View>
 
