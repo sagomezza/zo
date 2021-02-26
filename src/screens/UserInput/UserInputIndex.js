@@ -42,12 +42,13 @@ const UserInput = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
+  const [modal4Visible, setModal4Visible] = useState(false);
 
   const [findUserByPlateInfo, setFindUserByPlateInfo] = useState([]);
   const userData = findUserByPlateInfo.fullData !== undefined ? findUserByPlateInfo.fullData[0] : "";
   const [blacklist, setBlacklist] = useState([]);
   let blacklistValue = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].value : 0;
-  let blacklistDate = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].date : ''; 
+  let blacklistDate = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].date : '';
 
   // let blacklistDate = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].creationDate : 0; 
 
@@ -58,10 +59,8 @@ const UserInput = (props) => {
   const [debtBlacklist, setDebtBlacklist] = useState(0)
   const [showPhoneInput, setShowPhoneInput] = useState(false)
   const [codeError, setErrorText] = useState(false);
-
   const [plateOne, setPlateOne] = useState('');
   const [plateTwo, setPlateTwo] = useState('');
-
   const [phone, setPhone] = useState(1);
   const [phones, setPhones] = useState([{ label: 'Selecciona un número', value: 1 }]);
   const [showDropdown, setShowDropdown] = useState(false)
@@ -69,19 +68,10 @@ const UserInput = (props) => {
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
   const refPhone = useRef(null);
-
-  const [tableHead, setTableHead] = useState(['Vehículos', 'Fecha', 'Últimos pagos'])
-  const [tableData, setTableData] = useState(
-    //   [
-    //   ['EVT 123', '9/11/2020', '$9.600'],
-    //   ['EVT 123', '9/11/2020', '$9.600'],
-    //   ['EVT 123', '9/11/2020', '$9.600'],
-    //   ['EVT 123', '9/11/2020', '$9.600'],
-    //   ['EVT 123', '9/11/2020', '$9.600']
-    // ]
-  )
-  const [historyInfo, setHistoryInfo] = useState([])
-  const [historyExists, setHistoryExists] = useState(false)
+  const [tableHead, setTableHead] = useState(['Vehículos', 'Fecha', 'Últimos pagos']);
+  const [tableData, setTableData] = useState();
+  const [historyInfo, setHistoryInfo] = useState([]);
+  const [historyExists, setHistoryExists] = useState(false);
 
   const clearPlateOne = () => {
     setPlateOne('');
@@ -93,8 +83,6 @@ const UserInput = (props) => {
   function isCharacterALetter(char) {
     return (/[a-zA-Z]/).test(char)
   }
-
-
 
   useEffect(() => {
     async function findUserByPlate() {
@@ -122,7 +110,7 @@ const UserInput = (props) => {
           });
           auxPhones.push({ label: '+ agregar', value: 0 })
           setPhones(auxPhones);
-          if (response.data.blackList && response.data.blackList.length > 0  ) {
+          if (response.data.blackList && response.data.blackList.length > 0) {
             setModal3Visible()
           }
         }
@@ -221,13 +209,15 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        setModalVisible(true);
         setStartParking(response.data.data);
+        setPhones([{ label: 'Selecciona un número', value: 1 }]);
         setBlacklistExists(false);
         readHq();
-        setLoadingStart(false)
-        setPhones([{ label: 'Selecciona un número', value: 1 }]);
+        setLoadingStart(false);
+        setModalVisible(true);
+
       }
+
     } catch (err) {
       setLoadingStart(false)
       if (err?.response.data.response === -2) setModal2Visible(true)
@@ -242,7 +232,6 @@ const UserInput = (props) => {
         id: officialHq
       });
       if (response.data.response) {
-        console.log(response.data.data)
         store.dispatch(actions.setReservations(response.data.data.reservations));
         store.dispatch(actions.setHq(response.data.data));
       }
@@ -251,8 +240,6 @@ const UserInput = (props) => {
       console.log(err?.response)
     }
   };
-
-
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
@@ -524,69 +511,104 @@ const UserInput = (props) => {
           Alert.alert("Modal has been closed.");
         }}
       >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={{
-              flexDirection: 'column',
-              height: '100%',
-              width: '100%',
-              alignContent: 'center',
-              alignItems: 'center',
-              padding: '2%'
-            }}>
-              <Text style={{
-                fontSize: normalize(51),
-                textAlign: 'center',
-                color: '#00A9A0',
-                fontFamily: 'Montserrat-Bold'
+        {prepayDay ?
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={{
+                height: '100%',
+                width: '100%',
+                justifyContent: 'space-between',
+                padding: '2%'
+
               }}>
-                {plateOne + ' ' + plateTwo}
-              </Text>
-
-              <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
-                <Text style={styles.modalPhoneText}> {newPhone ? '+' + newPhone : phone} </Text>
+                
+                <View style={{ height: '15%', width: '76%', justifyContent: 'center' }}>
+                  <Text style={styles.modalText}>PREPAY </Text>
+                </View>
+                <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                  <Button onPress={() => {
+                    setPrepayDay(false);
+                  }}
+                    title="E N T E N D I D O"
+                    color="#00A9A0"
+                    style={
+                      styles.modalButton
+                    }
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }} />
+                </View>
               </View>
-              <View style={{ height: '35%', width: '75%', justifyContent: 'center' }}>
-                <Image
-                  style={{ alignSelf: 'center', width: '50%', height: '50%' }}
-                  resizeMode={'contain'}
-                  source={require('../../../assets/images/Clock.png')} />
-              </View>
-              <View style={{ height: '15%', width: '76%', justifyContent: 'center' }}>
-                <Text style={styles.modalText}>Ha iniciado el parqueo </Text>
-                <Text style={styles.modalText}> Hora: {moment().format('LT')}</Text>
-              </View>
-              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                <Button onPress={() => {
-                  setModalVisible(!modalVisible);
-                  setPlateOne("");
-                  setPlateTwo("");
-                  setNewPhone("");
-                  setPrepayDay(false);
-                  setPhones([{ label: 'Selecciona un número', value: 1 }]);
-                  setPhone(1);
-                  setShowDropdown(false);
-                  setShowPhoneInput(false);
-                  setPrepayDay();
-                  setShowPhoneInput(false);
-                  setHistoryExists(false)
-
-                }}
-                  title="E N T E N D I D O"
-                  color="#00A9A0"
-                  style={
-                    styles.modalButton
-                  }
-                  textStyle={{
-                    color: "#FFFFFF",
-                    textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
-                  }} />
-              </View>
-
             </View>
           </View>
-        </View>
+
+          :
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={{
+                flexDirection: 'column',
+                height: '100%',
+                width: '100%',
+                alignContent: 'center',
+                alignItems: 'center',
+                padding: '2%'
+              }}>
+                <Text style={{
+                  fontSize: normalize(51),
+                  textAlign: 'center',
+                  color: '#00A9A0',
+                  fontFamily: 'Montserrat-Bold'
+                }}>
+                  {plateOne + ' ' + plateTwo}
+                </Text>
+
+                <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
+                  <Text style={styles.modalPhoneText}> {newPhone ? '+' + newPhone : phone} </Text>
+                </View>
+                <View style={{ height: '35%', width: '75%', justifyContent: 'center' }}>
+                  <Image
+                    style={{ alignSelf: 'center', width: '50%', height: '50%' }}
+                    resizeMode={'contain'}
+                    source={require('../../../assets/images/Clock.png')} />
+                </View>
+                <View style={{ height: '15%', width: '76%', justifyContent: 'center' }}>
+                  <Text style={styles.modalText}>Ha iniciado el parqueo </Text>
+                  <Text style={styles.modalText}> Hora: {moment().format('LT')}</Text>
+                </View>
+                <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                  <Button onPress={() => {
+                    setModalVisible(!modalVisible);
+                    setPlateOne("");
+                    setPlateTwo("");
+                    setNewPhone("");
+                    setPrepayDay(false);
+                    setPhones([{ label: 'Selecciona un número', value: 1 }]);
+                    setPhone(1);
+                    setShowDropdown(false);
+                    setShowPhoneInput(false);
+                    setPrepayDay(false);
+                    setShowPhoneInput(false);
+                    setHistoryExists(false)
+
+                  }}
+                    title="E N T E N D I D O"
+                    color="#00A9A0"
+                    style={
+                      styles.modalButton
+                    }
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }} />
+                </View>
+
+              </View>
+            </View>
+          </View>
+        }
       </Modal>
       <Modal
         animationType="fade"
@@ -619,6 +641,58 @@ const UserInput = (props) => {
                   title="E N T E N D I D O"
                   color="#00A9A0"
                   activityIndicatorStatus={loadingStart}
+                  style={
+                    styles.modalButton
+                  }
+                  textStyle={{
+                    color: "#FFFFFF",
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Bold'
+                  }} />
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={modal4Visible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{
+              height: '100%',
+              width: '100%',
+              justifyContent: 'space-between',
+              padding: '2%'
+
+            }}>
+              <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
+                <Text style={styles.modalPhoneText}>  </Text>
+              </View>
+              <View style={{ height: '35%', width: '75%', justifyContent: 'center' }}>
+
+              </View>
+              <View style={{ height: '15%', width: '76%', justifyContent: 'center' }}>
+                <Text style={styles.modalText}>PREPAY </Text>
+                <Text style={styles.modalText}></Text>
+              </View>
+              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                <Text style={styles.modalTextAlert}>  </Text>
+              </View>
+              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                <Button onPress={() => {
+                  setModal4Visible(false);
+                  setModalVisible(true);
+
+                }}
+                  title="E N T E N D I D O"
+                  color="#00A9A0"
                   style={
                     styles.modalButton
                   }
