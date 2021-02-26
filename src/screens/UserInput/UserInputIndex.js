@@ -72,6 +72,7 @@ const UserInput = (props) => {
   const [tableData, setTableData] = useState();
   const [historyInfo, setHistoryInfo] = useState([]);
   const [historyExists, setHistoryExists] = useState(false);
+  const [prepayDayValue, setPrepayDayValue] = useState(0);
 
   const clearPlateOne = () => {
     setPlateOne('');
@@ -185,8 +186,14 @@ const UserInput = (props) => {
     try {
       if ((plateOne + plateTwo).length === 6) {
         let type
-        if (isCharacterALetter(plateTwo[2])) type = "bike"
-        else type = "car"
+        if (isCharacterALetter(plateTwo[2])) {
+          type = "bike"
+          setPrepayDayValue(14800)
+        } else {
+          type = "car"
+          setPrepayDayValue(25000)
+        }
+
         console.log({
           plate: plateOne + plateTwo,
           hqId: officialHq,
@@ -521,10 +528,11 @@ const UserInput = (props) => {
                 padding: '2%'
 
               }}>
-                
-                <View style={{ height: '15%', width: '76%', justifyContent: 'center' }}>
-                  <Text style={styles.modalText}>PREPAY </Text>
+                <View style={{ margin: '4%', justifyContent: 'center', height: ' 60%' }}>
+                  <Text style={styles.modalTextAlert}>Cobrar pase día </Text>
+                  <Text style={styles.modalTextAlert}>{`$${numberWithPoints(prepayDayValue)}`}</Text>
                 </View>
+
                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                   <Button onPress={() => {
                     setPrepayDay(false);
@@ -641,58 +649,6 @@ const UserInput = (props) => {
                   title="E N T E N D I D O"
                   color="#00A9A0"
                   activityIndicatorStatus={loadingStart}
-                  style={
-                    styles.modalButton
-                  }
-                  textStyle={{
-                    color: "#FFFFFF",
-                    textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
-                  }} />
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        backdropOpacity={0.3}
-        visible={modal4Visible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={{
-              height: '100%',
-              width: '100%',
-              justifyContent: 'space-between',
-              padding: '2%'
-
-            }}>
-              <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
-                <Text style={styles.modalPhoneText}>  </Text>
-              </View>
-              <View style={{ height: '35%', width: '75%', justifyContent: 'center' }}>
-
-              </View>
-              <View style={{ height: '15%', width: '76%', justifyContent: 'center' }}>
-                <Text style={styles.modalText}>PREPAY </Text>
-                <Text style={styles.modalText}></Text>
-              </View>
-              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalTextAlert}>  </Text>
-              </View>
-              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                <Button onPress={() => {
-                  setModal4Visible(false);
-                  setModalVisible(true);
-
-                }}
-                  title="E N T E N D I D O"
-                  color="#00A9A0"
                   style={
                     styles.modalButton
                   }
