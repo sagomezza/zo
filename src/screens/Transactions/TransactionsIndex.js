@@ -64,7 +64,7 @@ const Transactions = (props) => {
                                     <FlatList
                                         style={{ height: "37%" }}
                                         data={recips.recips}
-                                        keyExtractor={({ id }) => id}
+                                        keyExtractor={(item, index) => String(index)}
                                         renderItem={({ item }) => {
                                             return (
                                                 <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >

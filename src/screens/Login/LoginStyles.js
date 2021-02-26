@@ -6,16 +6,16 @@ const { height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     container: {
-      height,
+      height: '100%',
       alignItems: 'center',
       justifyContent: 'center',
-      marginBottom: '15%',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      borderWidth: 1
     },
     loginText: {
       color: 'white',
       fontSize: normalize (21),
-      marginBottom: 30,
+      marginBottom: '20%',
       fontFamily: 'Montserrat-Bold'
     },
     titleInputText: {

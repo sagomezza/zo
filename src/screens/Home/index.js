@@ -114,7 +114,7 @@ const HomeIndex = (props) => {
                 marginLeft: '4%'
               }} >
                 <Image style={{ width: "40%", height: "40%", marginTop: '10%' }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoM.png')} />
-                <View style={{ flexDirection: 'row', height: '100%' }}>
+                <View style={{ flexDirection: 'row', height: '30%' }}>
                   <Text style={HomeStyles.plateInputTextBig}>
                     {`${hq.occupiedBikes}`}
                   </Text>
@@ -143,7 +143,7 @@ const HomeIndex = (props) => {
                 marginLeft: '4%'
               }} >
                 <Image style={{ width: "38%", height: "38%", marginTop: '10%' }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoC.png')} />
-                <View style={{ flexDirection: 'row', height: normalize(170) }}>
+                <View style={{ flexDirection: 'row', height: '30%' }}>
                   <Text style={HomeStyles.plateInputTextBig}>
                     {`${hq.occupiedCars}`}
                   </Text>

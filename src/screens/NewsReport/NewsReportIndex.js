@@ -46,8 +46,7 @@ const NewsReport = (props) => {
                 style={{
                     flex: 1,
                     width: '100%',
-                    height: normalize(450),
-
+                    height: '40%',
                     flexDirection: 'column'
                 }}
                 source={require('../../../assets/images/Home.png')}>
@@ -88,7 +87,7 @@ const NewsReport = (props) => {
                             </View>
                         </View>
                         <View style={{
-                            height: '17%',
+                            height: '15%',
                             width: '100%',
                             justifyContent: 'flex-end'
                         }}>

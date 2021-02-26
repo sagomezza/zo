@@ -6,7 +6,8 @@ const styles = StyleSheet.create({
     flex: 1, 
     padding: 16, 
     paddingTop: 30, 
-    backgroundColor: '#fff' 
+    backgroundColor: '#fff',
+    borderWidth: 1 
   },
   head: { 
     height: 40, 

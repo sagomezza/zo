@@ -254,13 +254,13 @@ const UserInput = (props) => {
         style={{
           flex: 1,
           width: '100%',
-          height: normalize(450),
+          height: '50%',
           flexDirection: 'column'
         }}
         source={require('../../../assets/images/Stripes.png')}>
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={{ height: normalize(315), alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+          <View style={{ height: '30%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%', marginTop: '2%' }}>
               <TextInput
                 ref={refPlateOne}
@@ -408,7 +408,7 @@ const UserInput = (props) => {
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{
-            height: normalize(492),
+            height: '58%',
             backgroundColor: '#F8F8F8',
             borderTopLeftRadius: 30,
             borderTopRightRadius: 30,

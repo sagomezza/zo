@@ -349,12 +349,12 @@ const MonthlyPayments = (props) => {
                 style={{
                     flex: 1,
                     width: '100%',
-                    height: normalize(450),
+                    height: '40%',
                     flexDirection: 'column'
                 }}
                 source={require('../../../assets/images/Home.png')}>
                 <Header navigation={navigation} />
-                <View style={{ height: normalize(150), alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+                <View style={{ height: '17%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '35%', width: '60%', marginTop: '2%' }}>
                         <TextInput
                             ref={refPlateOne}

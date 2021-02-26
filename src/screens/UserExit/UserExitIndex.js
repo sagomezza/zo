@@ -414,6 +414,7 @@ const UserOut = (props) => {
   useEffect(() => {
     checkParkingPlate()
   }, [plateOneCall, plateTwoCall]);
+
   useEffect(() => {
     checkParkingCode()
   }, [verificationCodeCall]);
@@ -494,16 +495,19 @@ const UserOut = (props) => {
       return (moment(dateStart).format('L'))
     }
   }
+
   function dateStartHour() {
     if (dateStart) {
       return (moment(dateStart).format('LT'))
     }
   }
+
   function dateFinishedDate() {
     if (dateFinished) {
       return (moment(dateFinished).format('L'))
     }
   }
+
   function dateFinishedHour() {
     if (dateFinished) {
       return (moment(dateFinished).format('LT'))
@@ -521,13 +525,13 @@ const UserOut = (props) => {
         style={{
           flex: 1,
           width: '100%',
-          height: normalize(525),
+          height: '60%',
           flexDirection: 'column'
         }}
         source={require('../../../assets/images/Stripes.png')}>
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={{ height: normalize(390), alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
+          <View style={{ height: '42%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
             <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '18%', width: '80%', marginTop: '0%' }}>
 
               <TextInput
@@ -658,7 +662,7 @@ const UserOut = (props) => {
 
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{
-            height: normalize(414),
+            height: '47%',
             backgroundColor: '#F8F8F8',
             borderTopLeftRadius: 30,
             borderTopRightRadius: 30,
@@ -667,13 +671,13 @@ const UserOut = (props) => {
           }}>
             <View style={{
               flexDirection: 'row',
-              marginTop: '2%',
+              marginTop: '0%',
               width: '80%',
               justifyContent: 'space-between',
               alignContent: 'center',
               alignItems: 'center'
             }}>
-              <View style={{ width: '33%' }}>
+              <View style={{ width: '32%' }}>
                 <Text style={{ fontFamily: 'Montserrat-Bold', fontSize: normalize(20), color: '#8F8F8F' }} >{"Valor ingresado"}</Text>
               </View>
               <View style={{ alignContent: 'center', alignItems: 'center', width: '67%', height: '62%' }}>
@@ -722,7 +726,7 @@ const UserOut = (props) => {
 
             </View>
 
-            <View style={{ height: '25%', justifyContent: 'flex-end' }}>
+            <View style={{ height: '24%', justifyContent: 'flex-end' }}>
               {err !== "" &&
                 <Text style={{ color: "red", fontFamily: 'Montserrat-Regular', alignSelf: 'center' }}>{err}</Text>
               }

@@ -88,8 +88,8 @@ const LogoutIndex = (props) => {
   const [total, setTotal] = useState(0);
   const [shiftRecips, setShiftRecips] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
-  const [hqInfo , setHqInfo ] = useState([]);
-  
+  const [hqInfo, setHqInfo] = useState([]);
+
 
   const hq = props.hq;
   const [inputValue, setInputValue] = useState('');
@@ -176,13 +176,14 @@ const LogoutIndex = (props) => {
         style={{
           flex: 1,
           width: '100%',
-          height: normalize(450),
+          height: '60%',
           flexDirection: 'column'
         }}
         source={require('../../../assets/images/Stripes.png')}>
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={{ height: normalize(315), alignConten8t: 'center', alignItems: 'center', flexDirection: 'column' }}>
+          <View style={{ height: '40%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
+
             <View style={{ flexDirection: 'column', alignItems: 'center', alignContent: 'center', height: '30%', width: '60%', marginTop: '2%' }}>
               <Text style={{ fontSize: normalize(29), fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>{officialProps.name + ' ' + officialProps.lastName}</Text>
               <View style={{}}>
@@ -219,15 +220,9 @@ const LogoutIndex = (props) => {
 
               </View>
             </View>
-            { officialProps.hq.length > 1 ?
             <View style={{ width: '30%' }}>
               <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: normalize(25) }}>{"TOTAL: "}{total} </Text>
-            </View> 
-            :
-            <View style={{ width: '30%' }}>
-              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: normalize(25) }}> </Text>
-            </View> 
-            } 
+            </View>
             <View style={{ flexDirection: 'row', width: '80%', height: '30%', alignItems: 'center', alignContent: 'center', padding: '2%', justifyContent: 'space-between' }}>
               <View style={{ width: '30%' }}>
                 <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: normalize(20) }}>{"DINERO EN EFECTIVO: "} </Text>
@@ -261,18 +256,19 @@ const LogoutIndex = (props) => {
                 </TouchableOpacity>
               </View>
             </View>
+
+
           </View>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+
           <View style={{
-            height: normalize(492),
+            height: '56%',
             backgroundColor: '#F8F8F8',
             borderTopLeftRadius: 30,
             borderTopRightRadius: 30,
             alignContent: 'center',
             alignItems: 'center'
           }}>
-            <View style={{ height: '65%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
+            <View style={{ height: '57%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
               <View style={{ paddingBottom: 10, height: "50%" }}>
                 <FlatList
                   data={shiftRecips}
@@ -293,11 +289,12 @@ const LogoutIndex = (props) => {
                 />
               </View>
 
+
             </View>
             <View style={{
               flexDirection: 'column',
               width: '100%',
-              height: '13%',
+              height: '15%',
               justifyContent: 'flex-end',
               alignContent: 'center'
             }}>
@@ -315,19 +312,14 @@ const LogoutIndex = (props) => {
                 }
                 } />
             </View>
-            <View style={{ height: '15%', width: '100%', justifyContent: 'flex-end' }}>
+            <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end' }}>
               <FooterIndex navigation={navigation} />
 
             </View>
           </View>
         </TouchableWithoutFeedback>
-
-
-        <FooterIndex navigation={navigation} />
-
       </ImageBackground>
 
-      {/* <Text>{"Hora de inicio: " + moment(dateMonthIn).format('hh:MM A ') + " Hora de salida: " + moment(dateMonthOut).format('hh:MM A')}</Text> */}
       <Modal
         animationType="fade"
         transparent={true}

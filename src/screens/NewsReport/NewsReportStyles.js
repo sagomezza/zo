@@ -3,7 +3,7 @@ import normalize from '../../config/services/normalizeFontSize';
 
 const styles = StyleSheet.create({
     container: {
-        height: 806,
+        height: '88%',
         backgroundColor: '#F8F8F8',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
