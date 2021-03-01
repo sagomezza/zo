@@ -224,8 +224,8 @@ const UserOut = (props) => {
     },
     modalView: {
       height: normalize(350),
-      width: normalize(400),
-      padding: normalize(20),
+      width: '65%',
+      padding: '3%',
       borderRadius: 50,
       borderColor: '#707070',
       borderWidth: 1,
@@ -295,7 +295,7 @@ const UserOut = (props) => {
       fontSize: normalize(20)
     },
     modal2Button: {
-      height: '80%'
+      height: '75%'
     }
   });
 
@@ -468,6 +468,7 @@ const UserOut = (props) => {
         { timeout: TIMEOUT }
       );
       readHq()
+      restart();
       setRecip(response.data.data);
       getRecips()
       setLoading(false)

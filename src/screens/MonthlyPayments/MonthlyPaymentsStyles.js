@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     modalViewNewMensuality: {
         height: '50%',
         width: '70%',
-        padding: '5%',
+        padding: '4%',
         borderRadius: 50,
         borderColor: '#707070',
         borderWidth: 1,

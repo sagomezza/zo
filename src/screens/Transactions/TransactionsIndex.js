@@ -89,7 +89,7 @@ const Transactions = (props) => {
 
                     </View>
                     <View style={{
-                        height: '17%',
+                        height: '10%',
                         width: '100%',
                         justifyContent: 'flex-end'
                     }}>

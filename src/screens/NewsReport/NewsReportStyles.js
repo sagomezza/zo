@@ -55,9 +55,9 @@ const styles = StyleSheet.create({
 
     },
     modalView: {
-        height: normalize(350),
-        width: normalize(350),
-        padding: normalize(20),
+        height: '40%',
+        width: '60%',
+        padding: '4%',
         borderRadius: 50,
         borderColor: '#707070',
         borderWidth: 1,

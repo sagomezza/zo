@@ -30,16 +30,19 @@ const styles = StyleSheet.create({
     width: '46%',
     height: '70%',
     margin: '2%',
-    fontSize: normalize(38),
+    fontSize: normalize(36),
     fontFamily: 'Montserrat-Bold',
     backgroundColor: '#FFFFFF',
     borderRadius: 30,
-    color: '#00A9A0'
+    color: '#00A9A0',
+    alignContent: 'center',
+    justifyContent: 'center'
+
 
   },
   textInput: {
     width: '100%',
-    height: normalize(39),
+    height: '20%',
     fontSize: normalize(27),
     fontFamily: 'Montserrat-Bold',
     color: '#8F8F8F',
@@ -48,14 +51,14 @@ const styles = StyleSheet.create({
   },
   buttonI: {
     borderRadius: 30,
-    height: normalize(35),
+    height: '50%',
     width: '100%',
     marginLeft: '0%',
     paddingHorizontal: '24%',
   },
   buttonIDisabled: {
     borderRadius: 30,
-    height: normalize(35),
+    height: '50%',
     width: '100%',
     marginLeft: '0%',
     paddingHorizontal: '24%',
@@ -73,7 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: 'center',
     alignContent: 'center',
-    height: normalize(35),
+    height: '50%',
     width: '20%',
     backgroundColor: "#FFF200",
     marginLeft: '3%'
@@ -131,9 +134,9 @@ const styles = StyleSheet.create({
 
   },
   modalView: {
-    height: normalize(350),
-    width: normalize(350),
-    padding: normalize(20),
+    height: '40%',
+    width: '60%',
+    padding: '5%',
     borderRadius: 50,
     borderColor: '#707070',
     borderWidth: 1,

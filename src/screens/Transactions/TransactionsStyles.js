@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     listContainer: {
-        height: '70%',
+        height: '78%',
         width: '73%',
         backgroundColor: '#FFFFFF',
         marginTop: '8%',

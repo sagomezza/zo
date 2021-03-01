@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     shiftButton: {
         alignSelf: 'center',
         width: '86%',
-        height: '55%',
+        height: '43%',
         marginTop: '5%',
         paddingHorizontal: '3%',
         borderRadius: 20,
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     shiftButtonDisabled: {
         alignSelf: 'center',
         width: '86%',
-        height: '55%',
+        height: '43%',
         marginTop: '5%',
         paddingHorizontal: '3%',
         borderRadius: 20,

@@ -221,7 +221,7 @@ const LogoutIndex = (props) => {
               </View>
             </View>
             <View style={{ width: '30%' }}>
-              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: normalize(25) }}>{"TOTAL: "}{total} </Text>
+              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: normalize(23) }}>{"TOTAL: "}{`$${numberWithPoints(total)}`}</Text>
             </View>
             <View style={{ flexDirection: 'row', width: '80%', height: '30%', alignItems: 'center', alignContent: 'center', padding: '2%', justifyContent: 'space-between' }}>
               <View style={{ width: '30%' }}>
@@ -292,10 +292,9 @@ const LogoutIndex = (props) => {
 
             </View>
             <View style={{
-              flexDirection: 'column',
               width: '100%',
-              height: '15%',
-              justifyContent: 'flex-end',
+              height: '20%',
+              justifyContent: 'center',
               alignContent: 'center'
             }}>
               <Button onPress={() => {
@@ -312,7 +311,7 @@ const LogoutIndex = (props) => {
                 }
                 } />
             </View>
-            <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end' }}>
+            <View style={{ height: '15%', width: '100%', justifyContent: 'flex-end' }}>
               <FooterIndex navigation={navigation} />
 
             </View>

@@ -475,7 +475,11 @@ const UserInput = (props) => {
                 padding: '2%'
 
               }}>
-                <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                <View style={{
+                  margin: '4%',
+                  justifyContent: 'flex-end',
+                  height: ' 40%'
+                }}>
                   <Text style={styles.modalTextAlert}> Este vehículo ya se encuentra parqueado. </Text>
                 </View>
                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
