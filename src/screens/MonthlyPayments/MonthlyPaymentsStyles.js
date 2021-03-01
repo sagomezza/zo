@@ -108,9 +108,9 @@ const styles = StyleSheet.create({
 
     },
     modalView: {
-        height: normalize(350),
-        width: normalize(400),
-        padding: normalize(20),
+        height: '50%',
+        width: '70%',
+        padding: '5%',
         borderRadius: 50,
         borderColor: '#707070',
         borderWidth: 1,
@@ -128,9 +128,9 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     },
     modalViewNewMensuality: {
-        height: normalize(550),
-        width: normalize(450),
-        padding: normalize(20),
+        height: '50%',
+        width: '70%',
+        padding: '5%',
         borderRadius: 50,
         borderColor: '#707070',
         borderWidth: 1,
@@ -155,11 +155,11 @@ const styles = StyleSheet.create({
     },
     modalButton: {
         width: '100%',
-        height: '75%',
+        height: '79%',
     },
     modalButtonDisabled: {
         width: '100%',
-        height: '90%',
+        height: '75%',
         opacity: 0.5
     },
    

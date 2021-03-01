@@ -669,8 +669,17 @@ const MonthlyPayments = (props) => {
 
 
                             </View>
-                            <View style={{ height: '20%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '0%' }}>
-                                <View style={{ height: '50%', width: '100%', justifyContent: 'flex-end', marginBottom: '1%' }}>
+                            <View style={{
+                                height: '20%',
+                                justifyContent: 'flex-end',
+                                flexDirection: 'column',
+                                marginTop: '0%'
+                            }}>
+                                <View style={{
+                                    height: '50%',
+                                    width: '100%',
+                                    justifyContent: 'flex-end',
+                                }}>
                                     <Button onPress={() => {
                                         user();
                                     }}
@@ -685,7 +694,11 @@ const MonthlyPayments = (props) => {
                                             fontFamily: 'Montserrat-Bold'
                                         }} />
                                 </View>
-                                <View style={{ height: '50%', width: '100%', justifyContent: 'flex-end', marginTop: '2%', marginBottom: '1%' }}>
+                                <View style={{ 
+                                    height: '50%', 
+                                    width: '100%', 
+                                    justifyContent: 'flex-end'
+                                     }}>
                                     <Button onPress={() => {
                                         setModalVisible(!modalVisible);
                                     }}
@@ -717,23 +730,70 @@ const MonthlyPayments = (props) => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <View style={{ height: '100%', width: '100%', justifyContent: 'center', padding: '3%' }}>
-                            <View style={{ marginTop: '8%', justifyContent: 'center', height: '10%' }}>
-                                <Text style={{ ...styles.modalText, fontSize: normalize(30), color: '#00A9A0' }}>Reclame {`$${numberWithPoints(mensualityValue)}`} </Text>
+                        <View style={{
+                            height: '100%',
+                            width: '100%',
+                            justifyContent: 'center',
+                            padding: '3%'
+                        }}>
+                            <View style={{
+                                marginTop: '8%',
+                                justifyContent: 'center',
+                                height: '10%'
+                            }}>
+                                <Text style={{
+                                    ...styles.modalText,
+                                    fontSize: normalize(30),
+                                    color: '#00A9A0'
+                                }}>
+                                    Reclame {`$${numberWithPoints(mensualityValue)}`}
+                                </Text>
                             </View>
-                            <View style={{ justifyContent: 'space-between', height: '30%', width: '100%', flexDirection: 'column', paddingBottom: '6%', alignItems: 'center', alignContent: 'center' }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '30%', width: '60%', justifyContent: 'center', paddingTop: '10%' }}>
+                            <View style={{
+                                justifyContent: 'space-between',
+                                height: '45%',
+                                width: '100%',
+                                flexDirection: 'column',
+                                paddingBottom: '6%',
+                                alignItems: 'center',
+                                alignContent: 'center'
+                            }}>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    alignContent: 'center',
+                                    height: '30%',
+                                    width: '60%',
+                                    justifyContent: 'center',
+                                    paddingTop: '10%'
+                                }}>
                                     <CheckBox
                                         value={charge}
                                         onValueChange={() => setCharge(!charge)}
                                         style={{ alignSelf: 'center' }}
-                                        tintColors={{ true: '#00A9A0', false: 'gray' }}
+                                        tintColors={{
+                                            true: '#00A9A0',
+                                            false: 'gray'
+                                        }}
                                     />
-                                    <Text style={{ color: '#00A9A0', fontFamily: 'Montserrat-Bold', fontSize: normalize(19), textAlign: 'center' }}>Cobrado</Text>
+                                    <Text style={{
+                                        color: '#00A9A0',
+                                        fontFamily: 'Montserrat-Bold',
+                                        fontSize: normalize(19),
+                                        textAlign: 'center'
+                                    }}>Cobrado</Text>
                                 </View>
                             </View>
-                            <View style={{ height: '45%', justifyContent: 'space-between', flexDirection: 'column' }}>
-                                <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end', marginBottom: '3%' }}>
+                            <View style={{
+                                height: '30%',
+                                justifyContent: 'space-between',
+                                flexDirection: 'column'
+                            }}>
+                                <View style={{
+                                    height: '50%',
+                                    width: '100%',
+                                    justifyContent: 'flex-end'
+                                }}>
                                     <Button onPress={() => {
                                         renewMensuality()
                                         setModal2Visible(!modal2Visible);
@@ -750,7 +810,11 @@ const MonthlyPayments = (props) => {
                                     />
 
                                 </View>
-                                <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end', marginTop: '2%' }}>
+                                <View style={{
+                                    height: '50%',
+                                    width: '100%',
+                                    justifyContent: 'flex-end',
+                                }}>
                                     <Button onPress={() => {
                                         setModal2Visible(!modal2Visible);
                                     }}
