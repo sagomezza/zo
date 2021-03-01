@@ -188,10 +188,10 @@ const UserInput = (props) => {
         let type
         if (isCharacterALetter(plateTwo[2])) {
           type = "bike"
-          setPrepayDayValue(14800)
+          setPrepayDayValue(15000)
         } else {
           type = "car"
-          setPrepayDayValue(25000)
+          setPrepayDayValue(25200)
         }
 
         console.log({

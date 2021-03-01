@@ -239,13 +239,17 @@ const txtGenerator = (props) => {
         <Header navigation={navigation} />
 
         <View style={styles.container}>
-        <View style={{ marginTop: '3%' }}>
-                <Text style={styles.screenTitle} >CIERRE DE CAJA</Text>
-              </View>
+          <View style={{ marginTop: '3%' }}>
+            <Text style={styles.screenTitle} >CIERRE DE CAJA</Text>
+          </View>
           <View style={styles.listContainer}>
             <View style={styles.listOne}>
 
-              <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
+              <View style={{
+                marginLeft: '10%',
+                marginBottom: '3%',
+                marginTop: '3%'
+              }}>
                 <Text style={styles.textListTitle} >TRANSACCIONES DEL DÍA</Text>
               </View>
               <View style={{ height: "72%" }}>
@@ -256,7 +260,15 @@ const txtGenerator = (props) => {
                   keyExtractor={(item, index) => String(index)}
                   renderItem={({ item }) => {
                     return (
-                      <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
+                      <View style={{
+                        flexDirection: "row",
+                        borderBottomWidth: 1,
+                        borderColor: "#E9E9E9",
+                        marginBottom: '2%',
+                        marginLeft: '10%',
+                        marginRight: '10%',
+                        marginTop: '0%'
+                      }} >
                         <View style={{ marginBottom: '2%' }} >
                           <Text style={styles.textPlaca}>{item.plate}</Text>
                           <Text style={styles.textPago}>Pago por ${formatHours(item.hours)} horas</Text>
@@ -367,11 +379,6 @@ const txtGenerator = (props) => {
                     <ActivityIndicator size={"large"} color={'#00A9A0'} />
                   </View>
                 }
-                {/* : */}
-                {/* 
-  <Text style={styles.textPago}> No se encuentran registros en el historial </Text>
-</View> */}
-                {/* } */}
               </View>
             </View>
             <Modal
@@ -385,13 +392,41 @@ const txtGenerator = (props) => {
             >
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                  <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-                    <View style={{ margin: '2%', justifyContent: 'center', height: ' 30%' }}>
-                      <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Ingrese el valor exacto:</Text>
+                  <View style={{
+                    height: '100%',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                    padding: '3%'
+                  }}>
+                    <View style={{
+                      margin: '2%',
+                      justifyContent: 'center',
+                      height: ' 40%',
+                      borderWidth: 1
+                    }}>
+                      <Text style={{
+                        ...styles.modalText,
+                        fontSize: normalize(20),
+                        fontFamily: 'Montserrat-Bold'
+                      }}>
+                        Ingrese el valor exacto:
+                        </Text>
                     </View>
-                    <View style={{ justifyContent: 'space-around', height: '40%', flexDirection: 'column', paddingBottom: '6%', width: '95%' }}>
-                      <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
-                        <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Base:  </Text>
+                    <View style={{
+                      justifyContent: 'space-around',
+                      height: '40%',
+                      flexDirection: 'column',
+                      paddingBottom: '6%',
+                      width: '95%' 
+                    }}>
+                      <View style={{
+                        flexDirection: "row",
+                        justifyContent: 'flex-end'
+                      }}>
+                        <Text style={{
+                          ...styles.modalText,
+                          fontSize: normalize(20)
+                        }}>Base:  </Text>
                         <TextInput
                           style={{
                             borderWidth: 1,
@@ -432,7 +467,11 @@ const txtGenerator = (props) => {
                         />
                       </View>
                     </View>
-                    <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end', marginTop: '5%' }}>
+                    <View style={{
+                      height: '20%',
+                      width: '100%',
+                      justifyContent: 'space-between'
+                    }}>
                       <Button
                         onPress={() => {
                           createBoxReport();
