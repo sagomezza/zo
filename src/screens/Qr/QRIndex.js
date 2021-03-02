@@ -44,7 +44,7 @@ const BarcodeScanner = (props) => {
     })();
   }, []);
 
- useEffect
+  useEffect
 
   const handleBarCodeScanned = async ({ data }) => {
     setScanned(true);
@@ -74,7 +74,7 @@ const BarcodeScanner = (props) => {
           readHq();
           setPlate(qr.plate);
           setModalVisible(true);
-          
+
         }
         // setStartParking(response.data.data);
         // readHq();
@@ -144,8 +144,9 @@ const BarcodeScanner = (props) => {
                 />
                 
             </View> */}
+      <Header navigation={navigation} />
+
       <View style={styles.container}>
-        <Header navigation={navigation} />
 
         <Camera
           style={styles.camera}
@@ -206,8 +207,11 @@ const BarcodeScanner = (props) => {
                 </CustomModal> */}
         </Camera>
       </View>
-      <FooterIndex navigation={navigation} />
-      
+      <View style={{ height: '11%', width: '100%', justifyContent: 'flex-end' }}>
+        <FooterIndex navigation={navigation} />
+
+      </View>
+
       <Modal
         animationType="fade"
         transparent={true}
