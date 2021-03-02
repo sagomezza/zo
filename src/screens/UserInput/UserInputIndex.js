@@ -77,8 +77,8 @@ const UserInput = (props) => {
 
   const [totalPay, setTotalPay] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
-  
-  function priceVehicleType () {
+
+  function priceVehicleType() {
     if (isCharacterALetter(plateTwo[2])) {
       setPrepayDayValue(hq.dailyBikePrice)
     } else {
@@ -213,7 +213,9 @@ const UserInput = (props) => {
           phone: !showPhoneInput ? phone : '+57' + newPhone,
           prepayFullDay: prepayDay,
           officialEmail: officialEmail,
-          type
+          type,
+          cash: Number(totalPay),
+          change: totalPay - prepayDayValue
         })
         const response = await instance.post(
           START_PARKING,
@@ -225,7 +227,7 @@ const UserInput = (props) => {
             prepayFullDay: prepayDay,
             officialEmail: officialEmail,
             type,
-            cash: totalPay,
+            cash: Number(totalPay),
             change: totalPay - prepayDayValue
           },
           { timeout: TIMEOUT }
@@ -606,14 +608,14 @@ const UserInput = (props) => {
                   }}
                     title="G U A R D A R"
                     color="#00A9A0"
-                    
+
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
                       fontFamily: 'Montserrat-Bold'
                     }}
-                    style={[totalPay - prepayDayValue < 0  ? styles.modalButtonDisabled : styles.modalButton]}
-                    disabled={totalPay - prepayDayValue < 0 }
+                    style={[totalPay - prepayDayValue < 0 ? styles.modalButtonDisabled : styles.modalButton]}
+                    disabled={totalPay - prepayDayValue < 0}
                     activityIndicatorStatus={loadingStart} />
                 </View>
 
