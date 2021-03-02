@@ -211,6 +211,11 @@ const styles = StyleSheet.create({
         height: '70%',
         alignSelf: 'flex-end'
       },
+      modalButtonDisabled: {
+        width: '100%',
+        height: '70%',
+        opacity: 0.5
+      },
       openButtonCobrar: {
         backgroundColor: "#FFFFFF",
         borderRadius: 10,

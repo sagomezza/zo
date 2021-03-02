@@ -35,7 +35,7 @@ const hqReducer = (state=initialState, action ) => {
                 dailyBikePrice: action.payload.dailyBikePrice,
                 dailyCarPrice: action.payload.dailyCarPrice,
                 monthlyBikePrice: action.payload.monthlyBikePrice,
-                monthlyCarPrice: action.payload.monthñyCarPrice
+                monthlyCarPrice: action.payload.monthlyCarPrice
 
             };                  
         default: 

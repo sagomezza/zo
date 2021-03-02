@@ -78,6 +78,7 @@ const UserInput = (props) => {
   const [totalPay, setTotalPay] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
 
+
   function priceVehicleType() {
     if (isCharacterALetter(plateTwo[2])) {
       setPrepayDayValue(hq.dailyBikePrice)
@@ -206,17 +207,17 @@ const UserInput = (props) => {
           type = "car"
         }
 
-        console.log({
-          plate: plateOne + plateTwo,
-          hqId: officialHq,
-          dateStart: new Date(),
-          phone: !showPhoneInput ? phone : '+57' + newPhone,
-          prepayFullDay: prepayDay,
-          officialEmail: officialEmail,
-          type,
-          cash: Number(totalPay),
-          change: totalPay - prepayDayValue
-        })
+        // console.log({
+        //   plate: plateOne + plateTwo,
+        //   hqId: officialHq,
+        //   dateStart: new Date(),
+        //   phone: !showPhoneInput ? phone : '+57' + newPhone,
+        //   prepayFullDay: prepayDay,
+        //   officialEmail: officialEmail,
+        //   type,
+        //   cash: Number(totalPay),
+        //   change: totalPay - prepayDayValue
+        // })
         const response = await instance.post(
           START_PARKING,
           {

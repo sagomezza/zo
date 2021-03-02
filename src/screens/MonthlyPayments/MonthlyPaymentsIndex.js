@@ -56,6 +56,9 @@ const MonthlyPayments = (props) => {
     const [typeOptions, setTypeOptions] = useState(["personal", "corporate"]);
     const [newMenType, setNewMenType] = useState('');
 
+    const [showInputsCashChange, setShowInputsCashChange] = useState(false);
+    const [monthPrice, setMonthPrice] = useState(0);
+    const [totalPay, setTotalPay] = useState(0);
     const [image, setImage] = useState("")
 
 
@@ -79,6 +82,23 @@ const MonthlyPayments = (props) => {
 
     const [validityDate, setValidityDate] = useState(new Date(moment(new Date()).add(1, 'months')));
     const [validityDateNewMen, setValidityDateNewMen] = useState(moment(validityDate).set("date", 5));
+
+  
+    const showModalInfoNewMen = () => {
+        setModal3Visible(true);
+    }
+
+
+    function priceMonthVehicleType() {
+        if (isCharacterALetter(firstPlateNewMen[5])) {
+            setMonthPrice(hq.monthlyBikePrice)
+            setShowInputsCashChange(true);
+        } else {
+            setMonthPrice(hq.monthlyCarPrice)
+            setShowInputsCashChange(true);
+        }
+
+    }
 
 
     const clearPlateOne = () => {
@@ -126,6 +146,9 @@ const MonthlyPayments = (props) => {
         setPhoneNewMen('');
         setEmailNewMen('');
         setFirstPlateNewMen('');
+        setTotalPay(0);
+        setMonthPrice(0);
+        setShowInputsCashChange(false);
     }
 
     function isCharacterALetter(char) {
@@ -155,7 +178,6 @@ const MonthlyPayments = (props) => {
 
     async function editUser(idUser) {
         setLoading(true);
-        console.log("entro en editUser---------------------------")
         try {
             if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10 && userId) {
                 const response = await instance.post(
@@ -170,7 +192,6 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                console.log("entro en EU---------------------------")
                 console.log(response.data)
             }
         } catch (err) {
@@ -196,14 +217,21 @@ const MonthlyPayments = (props) => {
                 hqId: officialHq,
                 mensualityType: 'personal',
                 validity: validityDateNewMen,
-                capacity: 5
+                capacity: 5,
+                cash: Number(totalPay),
+                change: totalPay - monthPrice,
+                officialEmail: officialProps.email
 
             })
             if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
+                let type
+                if (isCharacterALetter(firstPlateNewMen[5])) type = "bike"
+                else type = "car"
                 const response = await instance.post(
                     CREATE_USER,
                     {
                         type: "full",
+                        vehicleType: type,
                         email: emailNewMen,
                         phone: '+57' + phoneNewMen,
                         name: nameNewMen,
@@ -214,7 +242,10 @@ const MonthlyPayments = (props) => {
                         hqId: officialHq,
                         mensualityType: 'personal',
                         validity: validityDateNewMen,
-                        capacity: 5
+                        capacity: 5,
+                        cash: Number(totalPay),
+                        change: totalPay - monthPrice,
+                        officialEmail: officialProps.email
                     },
                     { timeout: TIMEOUT }
                 )
@@ -244,7 +275,10 @@ const MonthlyPayments = (props) => {
                     plates: platesNewMensuality,
                     hqId: officialHq,
                     type: 'personal',
-                    monthlyUser: true
+                    monthlyUser: true,
+                    cash: Number(totalPay),
+                    change: totalPay - monthPrice,
+                    officialEmail: officialProps.email
                 }
             )
             if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
@@ -262,7 +296,10 @@ const MonthlyPayments = (props) => {
                         plates: platesNewMensuality,
                         hqId: officialHq,
                         type: 'personal',
-                        monthlyUser: true
+                        monthlyUser: true,
+                        cash: Number(totalPay),
+                        change: totalPay - monthPrice,
+                        officialEmail: officialProps.email
                     },
                     { timeout: TIMEOUT }
                 )
@@ -394,6 +431,9 @@ const MonthlyPayments = (props) => {
     //         setLoading(false)
     //     }
     // };
+
+    let textinputMoney = (totalPay === 0 ? '' : '' + totalPay)
+    let inputChange = (totalPay - monthPrice) <= 0 ? '' : '' + (totalPay - monthPrice)
 
     return (
         <View style={{ flex: 1 }}>
@@ -567,7 +607,8 @@ const MonthlyPayments = (props) => {
                                 }
 
                                 <Button onPress={() => {
-                                    setModal3Visible(true);
+                                    showModalInfoNewMen();
+
                                 }}
                                     title="C R E A R"
                                     color='gray'
@@ -896,128 +937,209 @@ const MonthlyPayments = (props) => {
                     Alert.alert("Modal has been closed.");
                 }}
             >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalViewNewMensuality}>
-                        <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-                            <View style={{ marginBottom: '0%', justifyContent: 'center', height: '10%' }}>
-                                <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> Ingrese la siguiente información: </Text>
-                            </View>
-                            <View style={{ justifyContent: 'space-between', height: '50%', width: '100%', flexDirection: 'column', paddingBottom: '8%' }}>
-                                <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Nombre: </Text>
-                                    <TextInput
-                                        style={{
-                                            borderWidth: 1,
-                                            borderColor: '#00A9A0',
-                                            fontSize: normalize(20),
-                                            fontFamily: 'Montserrat-Bold',
-                                            width: '60%',
-                                            borderRadius: 10,
-                                            color: '#00A9A0'
-                                        }}
-                                        keyboardType='default'
-                                        placeholder=''
-                                        textAlign='center'
-                                        value={nameNewMen}
-                                        onChangeText={text => setNameNewMen(text)}
-                                        onFocus={() => {
-                                            clearNameNewMen('')
-                                        }}
-                                    />
+                {showInputsCashChange ?
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <View style={{
+                                height: '100%',
+                                width: '100%',
+                                justifyContent: 'space-between',
+                                padding: '2%'
+
+                            }}>
+                                <View style={{ margin: '4%', justifyContent: 'center', height: ' 30%' }}>
+                                    <Text style={styles.modalTextAlert}>Cobrar mensualidad </Text>
+                                    <Text style={styles.modalTextAlert}>{`$${numberWithPoints(monthPrice)}`}</Text>
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Apellido: </Text>
-                                    <TextInput
-                                        style={{
-                                            borderWidth: 1,
-                                            borderColor: '#00A9A0',
-                                            fontSize: normalize(20),
-                                            fontFamily: 'Montserrat-Bold',
-                                            width: '60%',
-                                            borderRadius: 10,
-                                            color: '#00A9A0'
-                                        }}
-                                        keyboardType='default'
-                                        placeholder=''
-                                        textAlign='center'
-                                        value={lastNameNewMen}
-                                        onChangeText={text => setLastNameNewMen(text)}
-                                        onFocus={() => {
-                                            clearLastNameNewMen('')
-                                        }}
-                                    />
+                                <View style={{ justifyContent: 'space-between', height: '40%', flexDirection: 'column', paddingBottom: '6%' }}>
+                                    <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
+                                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Pago:  </Text>
+                                        <TextInput
+                                            style={{
+                                                borderWidth: 1,
+                                                borderColor: '#00A9A0',
+                                                fontSize: normalize(20),
+                                                fontFamily: 'Montserrat-Bold',
+                                                backgroundColor: '#FFFFFF',
+                                                width: '60%',
+                                                borderRadius: 10,
+                                                color: '#00A9A0'
+                                            }}
+                                            keyboardType='numeric'
+                                            placeholder='$ 0'
+                                            textAlign='center'
+
+                                            value={textinputMoney}
+                                            onChangeText={(text) => {
+                                                setTotalPay(text);
+                                            }}
+                                        />
+                                    </View>
+                                    <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
+                                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}> A devolver:  </Text>
+                                        <TextInput
+                                            style={{
+                                                borderWidth: 1,
+                                                borderColor: '#00A9A0',
+                                                fontSize: normalize(20),
+                                                fontFamily: 'Montserrat-Bold',
+                                                backgroundColor: '#FFFFFF',
+                                                width: '60%',
+                                                borderRadius: 10,
+                                                color: '#00A9A0'
+                                            }}
+                                            keyboardType='numeric'
+                                            placeholder='$'
+                                            textAlign='center'
+
+                                            editable={false}
+                                            value={`$${numberWithPoints(inputChange)}`}
+                                        />
+                                    </View>
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Celular:</Text>
-                                    <TextInput
-                                        style={{
-                                            borderWidth: 1,
-                                            borderColor: '#00A9A0',
-                                            fontSize: normalize(20),
-                                            fontFamily: 'Montserrat-Bold',
-                                            width: '60%',
-                                            borderRadius: 10,
-                                            color: '#00A9A0'
+                                <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                                    <Button onPress={() => {
+                                        user();
+                                    }}
+                                        title="G U A R D A R"
+                                        color="#00A9A0"
+                                        textStyle={{
+                                            color: "#FFFFFF",
+                                            textAlign: "center",
+                                            fontFamily: 'Montserrat-Bold'
                                         }}
-                                        keyboardType='numeric'
-                                        placeholder=''
-                                        textAlign='center'
-                                        maxLength={10}
-                                        value={phoneNewMen}
-                                        onChangeText={text => setPhoneNewMen(text)}
-                                        onFocus={() => {
-                                            clearPhoneNewMen('')
-                                        }}
-                                    />
+                                        style={[totalPay - monthPrice < 0 ? styles.modalButtonDisabled : styles.modalButton]}
+                                        disabled={totalPay - monthPrice < 0}
+                                        activityIndicatorStatus={loading} />
                                 </View>
 
-                                <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Correo:</Text>
-                                    <TextInput
-                                        style={{
-                                            borderWidth: 1,
-                                            borderColor: '#00A9A0',
-                                            fontSize: normalize(20),
-                                            fontFamily: 'Montserrat-Bold',
-                                            width: '60%',
-                                            borderRadius: 10,
-                                            color: '#00A9A0'
-                                        }}
-                                        keyboardType='default'
-                                        placeholder=''
-                                        textAlign='center'
-                                        value={emailNewMen}
-                                        onChangeText={text => setEmailNewMen(text)}
-                                        onFocus={() => {
-                                            clearEmailNewMen('')
-                                        }}
-                                    />
+
+                            </View>
+                        </View>
+                    </View>
+                    :
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalViewNewMensuality}>
+                            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
+                                <View style={{ marginBottom: '0%', justifyContent: 'center', height: '10%' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> Ingrese la siguiente información: </Text>
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa:</Text>
-                                    <TextInput
-                                        style={{
-                                            borderWidth: 1,
-                                            borderColor: '#00A9A0',
-                                            fontSize: normalize(20),
-                                            fontFamily: 'Montserrat-Bold',
-                                            width: '60%',
-                                            borderRadius: 10,
-                                            color: '#00A9A0'
-                                        }}
-                                        keyboardType='default'
-                                        placeholder=''
-                                        textAlign='center'
-                                        keyboardType={"default"}
-                                        autoCapitalize={"characters"}
-                                        value={firstPlateNewMen}
-                                        onChangeText={text => setFirstPlateNewMen(text)}
-                                        onFocus={() => {
-                                            clearFirstPlateNewMen('')
-                                        }}
-                                    />
-                                </View>
-                                {/* <View style={{ flexDirection: "row", justifyContent: 'space-between', borderWidth: 1, height: '20%' }}>
+                                <View style={{ justifyContent: 'space-between', height: '50%', width: '100%', flexDirection: 'column', paddingBottom: '8%' }}>
+                                    <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
+                                        <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Nombre: </Text>
+                                        <TextInput
+                                            style={{
+                                                borderWidth: 1,
+                                                borderColor: '#00A9A0',
+                                                fontSize: normalize(20),
+                                                fontFamily: 'Montserrat-Bold',
+                                                width: '60%',
+                                                borderRadius: 10,
+                                                color: '#00A9A0'
+                                            }}
+                                            keyboardType='default'
+                                            placeholder=''
+                                            textAlign='center'
+                                            value={nameNewMen}
+                                            onChangeText={text => setNameNewMen(text)}
+                                            onFocus={() => {
+                                                clearNameNewMen('')
+                                            }}
+                                        />
+                                    </View>
+                                    <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
+                                        <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Apellido: </Text>
+                                        <TextInput
+                                            style={{
+                                                borderWidth: 1,
+                                                borderColor: '#00A9A0',
+                                                fontSize: normalize(20),
+                                                fontFamily: 'Montserrat-Bold',
+                                                width: '60%',
+                                                borderRadius: 10,
+                                                color: '#00A9A0'
+                                            }}
+                                            keyboardType='default'
+                                            placeholder=''
+                                            textAlign='center'
+                                            value={lastNameNewMen}
+                                            onChangeText={text => setLastNameNewMen(text)}
+                                            onFocus={() => {
+                                                clearLastNameNewMen('')
+                                            }}
+                                        />
+                                    </View>
+                                    <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
+                                        <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Celular:</Text>
+                                        <TextInput
+                                            style={{
+                                                borderWidth: 1,
+                                                borderColor: '#00A9A0',
+                                                fontSize: normalize(20),
+                                                fontFamily: 'Montserrat-Bold',
+                                                width: '60%',
+                                                borderRadius: 10,
+                                                color: '#00A9A0'
+                                            }}
+                                            keyboardType='numeric'
+                                            placeholder=''
+                                            textAlign='center'
+                                            maxLength={10}
+                                            value={phoneNewMen}
+                                            onChangeText={text => setPhoneNewMen(text)}
+                                            onFocus={() => {
+                                                clearPhoneNewMen('')
+                                            }}
+                                        />
+                                    </View>
+
+                                    <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
+                                        <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Correo:</Text>
+                                        <TextInput
+                                            style={{
+                                                borderWidth: 1,
+                                                borderColor: '#00A9A0',
+                                                fontSize: normalize(20),
+                                                fontFamily: 'Montserrat-Bold',
+                                                width: '60%',
+                                                borderRadius: 10,
+                                                color: '#00A9A0'
+                                            }}
+                                            keyboardType='default'
+                                            placeholder=''
+                                            textAlign='center'
+                                            value={emailNewMen}
+                                            onChangeText={text => setEmailNewMen(text)}
+                                            onFocus={() => {
+                                                clearEmailNewMen('')
+                                            }}
+                                        />
+                                    </View>
+                                    <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
+                                        <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa:</Text>
+                                        <TextInput
+                                            style={{
+                                                borderWidth: 1,
+                                                borderColor: '#00A9A0',
+                                                fontSize: normalize(20),
+                                                fontFamily: 'Montserrat-Bold',
+                                                width: '60%',
+                                                borderRadius: 10,
+                                                color: '#00A9A0'
+                                            }}
+                                            keyboardType='default'
+                                            placeholder=''
+                                            textAlign='center'
+                                            keyboardType={"default"}
+                                            autoCapitalize={"characters"}
+                                            value={firstPlateNewMen}
+                                            onChangeText={text => setFirstPlateNewMen(text)}
+                                            onFocus={() => {
+                                                clearFirstPlateNewMen('')
+                                            }}
+                                        />
+                                    </View>
+                                    {/* <View style={{ flexDirection: "row", justifyContent: 'space-between', borderWidth: 1, height: '20%' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 5:  </Text>
                                     <DropDownPicker
                                         items={typeOptions}
@@ -1054,45 +1176,48 @@ const MonthlyPayments = (props) => {
                                         }
                                     />
                                 </View> */}
-                            </View>
-                            <View style={{ height: '20%', justifyContent: 'space-between', flexDirection: 'column', marginTop: '3%' }}>
-                                <View style={{ height: '50%', width: '100%', justifyContent: 'flex-end' }}>
-                                    <Button onPress={() => {
-                                        user();
-                                    }}
-                                        title="G U A R D A R"
-                                        color="#00A9A0"
-                                        style={
-                                            styles.modalButton
-                                        }
-                                        textStyle={{
-                                            color: "#FFFFFF",
-                                            textAlign: "center",
-                                            fontFamily: 'Montserrat-Bold'
-                                        }}
-                                        activityIndicatorStatus={loading}
-                                    />
                                 </View>
-                                <View style={{ height: '50%', width: '100%', justifyContent: 'flex-end' }}>
-                                    <Button onPress={() => {
-                                        setModal3Visible(false);
-                                    }}
-                                        title="V O L V E R"
-                                        color="gray"
-                                        style={
-                                            styles.modalButton
-                                        }
-                                        textStyle={{
-                                            color: "#FFFFFF",
-                                            textAlign: "center",
-                                            fontFamily: 'Montserrat-Bold'
-                                        }} />
-                                </View>
-                            </View>
+                                <View style={{ height: '20%', justifyContent: 'space-between', flexDirection: 'column', marginTop: '3%' }}>
+                                    <View style={{ height: '50%', width: '100%', justifyContent: 'flex-end' }}>
+                                        <Button onPress={() => {
+                                            priceMonthVehicleType();
 
+
+                                        }}
+                                            title="G U A R D A R"
+                                            color="#00A9A0"
+                                            style={
+                                                styles.modalButton
+                                            }
+                                            textStyle={{
+                                                color: "#FFFFFF",
+                                                textAlign: "center",
+                                                fontFamily: 'Montserrat-Bold'
+                                            }}
+                                            activityIndicatorStatus={loading}
+                                        />
+                                    </View>
+                                    <View style={{ height: '50%', width: '100%', justifyContent: 'flex-end' }}>
+                                        <Button onPress={() => {
+                                            setModal3Visible(false);
+                                        }}
+                                            title="V O L V E R"
+                                            color="gray"
+                                            style={
+                                                styles.modalButton
+                                            }
+                                            textStyle={{
+                                                color: "#FFFFFF",
+                                                textAlign: "center",
+                                                fontFamily: 'Montserrat-Bold'
+                                            }} />
+                                    </View>
+                                </View>
+
+                            </View>
                         </View>
                     </View>
-                </View>
+                }
             </Modal>
             <Modal
                 animationType="fade"

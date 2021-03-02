@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
 
     },
     modalView: {
-        height: '50%',
+        height: normalize(450),
         width: '70%',
         padding: '5%',
         borderRadius: 50,
@@ -153,6 +153,13 @@ const styles = StyleSheet.create({
         color: '#B7B7B7',
         fontSize: normalize(20)
     },
+    modalTextAlert: {
+        textAlign: "center",
+        fontFamily: 'Montserrat-Regular',
+        color: 'red',
+        fontSize: normalize(22),
+        margin: '2%'
+      },
     modalButton: {
         width: '100%',
         height: '79%',
