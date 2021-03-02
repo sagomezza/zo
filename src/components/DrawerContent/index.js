@@ -114,7 +114,7 @@ const DrawerContent = (props) => {
                                 resizeMode={"contain"}
                                 source={require('../../../assets/images/MenuLogout.png')} />
                         )}
-                        label="Cierre de sesión"
+                        label="Cierre de turno"
 
                         onPress={() => { props.navigation.navigate('Logout') }}
                     />

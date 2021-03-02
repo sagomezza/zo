@@ -6,7 +6,7 @@ import normalize from '../../config/services/normalizeFontSize';
 const Header = ({ navigation }) => {
     return (
         <View style={{
-            height: normalize(110),
+            height: '13%',
             alignContent: 'center',
             alignItems: 'center',
             flexDirection: 'row',

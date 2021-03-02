@@ -1,5 +1,8 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
+
+const {width, height} = Dimensions.get('window');
+
 
 const styles = StyleSheet.create({
   container: { 
@@ -30,7 +33,7 @@ const styles = StyleSheet.create({
     width: '46%',
     height: '70%',
     margin: '2%',
-    fontSize: normalize(36),
+    fontSize: width * 0.05,
     fontFamily: 'Montserrat-Bold',
     backgroundColor: '#FFFFFF',
     borderRadius: 30,
@@ -43,7 +46,7 @@ const styles = StyleSheet.create({
   textInput: {
     width: '100%',
     height: '20%',
-    fontSize: normalize(27),
+    fontSize: width * 0.04,
     fontFamily: 'Montserrat-Bold',
     color: '#8F8F8F',
     backgroundColor: '#FFFFFF',
@@ -90,7 +93,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: 'center',
     alignContent: 'center',
-    height: normalize(35),
+    height: '50%',
     width: '20%',
     backgroundColor: "#FFF200",
     marginLeft: '3%',
@@ -98,19 +101,13 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#00A9A0',
-    fontSize: normalize(20),
+    fontSize: width * 0.03,
     fontFamily: 'Montserrat-Bold'
   },
   buttonTextNew: {
     color: '#FFFFFF',
-    fontSize: normalize(20),
+    fontSize: width * 0.03,
     fontFamily: 'Montserrat-Bold'
-  },
-  textListTitle: {
-    fontSize: normalize(28),
-    color: '#00A9A0',
-    fontFamily: 'Montserrat-Bold',
-    marginTop: '1%'
   },
   textList: {
     fontSize: normalize(13),

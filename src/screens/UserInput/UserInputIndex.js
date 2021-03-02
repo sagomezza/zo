@@ -7,7 +7,8 @@ import {
   TouchableWithoutFeedback,
   Alert,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
+  Dimensions
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { TextInput } from 'react-native-gesture-handler';
@@ -30,7 +31,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import numberWithPoints from '../../config/services/numberWithPoints';
 import { Table, Row, Rows } from 'react-native-table-component';
 
-
+const {width, height} = Dimensions.get('window');
 
 const UserInput = (props) => {
   const { navigation, officialProps } = props;
@@ -300,7 +301,7 @@ const UserInput = (props) => {
               />
             </View>
             <View style={{ alignItems: 'center', alignContent: 'center', height: '10%', width: '100%' }}>
-              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: normalize(21) }}>I  N  G  R  E  S  E     C  E  L  U  L  A  R</Text>
+              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.03 }}>I  N  G  R  E  S  E     C  E  L  U  L  A  R</Text>
             </View>
             <View style={{ flexDirection: 'column', alignItems: 'center', alignContent: 'center', zIndex: 10, height: '62%', width: '60%' }}>
               {!showPhoneInput ?
@@ -309,7 +310,7 @@ const UserInput = (props) => {
                   zIndex={30}
                   disabled={!showDropdown}
                   placeholder={"Selecciona un numero"}
-                  placeholderStyle={{ color: '#8F8F8F', fontSize: normalize(25), textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
+                  placeholderStyle={{ color: '#8F8F8F', fontSize: width * 0.04, textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
                   selectedLabelStyle={{ color: '#8F8F8F', fontSize: normalize(25), textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
                   containerStyle={{
                     height: '23%', width: '100%'
@@ -323,7 +324,10 @@ const UserInput = (props) => {
 
                   }}
                   labelStyle={{
-                    justifyContent: 'center', fontFamily: 'Montserrat-Bold', fontSize: normalize(20), color: '#D9D9D9'
+                    justifyContent: 'center', 
+                    fontFamily: 'Montserrat-Bold', 
+                    color: '#D9D9D9',
+                    fontSize: width * 0.02
                   }}
                   dropDownMaxHeight={100}
                   dropDownStyle={{
@@ -364,7 +368,7 @@ const UserInput = (props) => {
                   style={{ alignSelf: 'center' }}
                   tintColors={{ true: '#FFF200', false: '#FFF200' }}
                 />
-                <Text style={{ color: '#FFF200', fontFamily: 'Montserrat-Bold', fontSize: normalize(19), textAlign: 'center' }}>PASE DIA</Text>
+                <Text style={{ color: '#FFF200', fontFamily: 'Montserrat-Bold', fontSize: width * 0.03 , textAlign: 'center' }}>PASE DIA</Text>
               </View>
 
 
@@ -408,24 +412,17 @@ const UserInput = (props) => {
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{
-            height: '58%',
+            height: '57%',
             backgroundColor: '#F8F8F8',
             borderTopLeftRadius: 30,
             borderTopRightRadius: 30,
             alignContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            justifyContent: 'space-between'
           }}>
-            <View style={{ height: '70%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10, alignItems: 'center' }}>
-              <View style={{ marginTop: '3%', height: '26%', width: '90%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-                <Text style={styles.textListTitle} >{userData.name}  {userData.lastName}</Text>
-                <View style={{ flexDirection: 'row', height: '28%', marginTop: '1%' }}>
-                  {/* <Text style={styles.textList} >Mensualidad hasta </Text>
-                  <View style={{ marginLeft: '1%', backgroundColor: '#FFF200', borderRadius: 30, width: '25%', alignContent: 'center', alignItems: 'center' }}>
-                    <Text style={styles.textListDate} >---</Text>
-                  </View> */}
-                </View>
-              </View>
-              <View style={{ height: "60%", width: '95%' }}>
+            <View style={{ height: '70%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+
+              <View style={{ height: "90%", width: '90%'}}>
                 {historyExists ?
                   <Table borderStyle={{ borderColor: '#00A9A0' }}>
                     <Row
@@ -450,7 +447,7 @@ const UserInput = (props) => {
                 }
               </View>
             </View>
-            <View style={{ height: '23%', width: '100%', justifyContent: 'flex-end' }}>
+            <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end' }}>
               <FooterIndex navigation={navigation} />
             </View>
           </View>

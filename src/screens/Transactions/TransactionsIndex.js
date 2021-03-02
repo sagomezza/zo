@@ -25,7 +25,7 @@ const Transactions = (props) => {
                     hqId: officialProps.hq[0]
                 });
                 if (response.data.response === 1) {
-                    store.dispatch(actions.setRecips(response.data.data.finished));
+                    store.dispatch(actions.setRecips(response.data.data));
                 }
             } catch (err) {
                 console.log(err?.response)
