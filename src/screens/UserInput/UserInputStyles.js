@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
 
   },
   modalView: {
-    height: '40%',
+    height: normalize(400),
     width: '60%',
     padding: '5%',
     borderRadius: 50,
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: 'Montserrat-Regular',
     color: 'red',
-    fontSize: normalize(20),
+    fontSize: normalize(22),
     margin: '2%'
   },
   modalButton: {

@@ -7,8 +7,8 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems:'center',
     width: '100%',
-    height: '25%',
-    justifyContent: 'center',
+    height: '23%',
+    justifyContent: 'center'
   },
   plateInput: {
     width: '45%', 

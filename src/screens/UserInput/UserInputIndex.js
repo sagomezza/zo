@@ -31,10 +31,10 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import numberWithPoints from '../../config/services/numberWithPoints';
 import { Table, Row, Rows } from 'react-native-table-component';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const UserInput = (props) => {
-  const { navigation, officialProps } = props;
+  const { navigation, officialProps, hq } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const officialEmail = officialProps.email;
   const [loadingStart, setLoadingStart] = useState(false);
@@ -75,6 +75,11 @@ const UserInput = (props) => {
   const [historyExists, setHistoryExists] = useState(false);
   const [prepayDayValue, setPrepayDayValue] = useState(0);
 
+  const [totalPay, setTotalPay] = useState(0);
+  const [totalAmount, setTotalAmount] = useState(0);
+
+
+
   const clearPlateOne = () => {
     setPlateOne('');
   }
@@ -104,7 +109,7 @@ const UserInput = (props) => {
           setShowPhoneInput(false);
           setShowDropdown(true);
           setBlacklist(response.data.blackList);
-          console.log(response.data.blackList)
+          console.log(hq)
 
           const auxPhones = []
           response.data.data.forEach(phone => {
@@ -189,10 +194,10 @@ const UserInput = (props) => {
         let type
         if (isCharacterALetter(plateTwo[2])) {
           type = "bike"
-          setPrepayDayValue(15000)
+          setPrepayDayValue(hq.dailyBikePrice)
         } else {
           type = "car"
-          setPrepayDayValue(25200)
+          setPrepayDayValue(hq.dailyCarPrice)
         }
 
         console.log({
@@ -248,6 +253,10 @@ const UserInput = (props) => {
       console.log(err?.response)
     }
   };
+
+
+  let textinputMoney = (totalPay === 0 ? '' : '' + totalPay)
+  let inputChange = (totalPay - prepayDayValue) <= 0 ? '' : '' + (totalPay - prepayDayValue)
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
@@ -324,8 +333,8 @@ const UserInput = (props) => {
 
                   }}
                   labelStyle={{
-                    justifyContent: 'center', 
-                    fontFamily: 'Montserrat-Bold', 
+                    justifyContent: 'center',
+                    fontFamily: 'Montserrat-Bold',
                     color: '#D9D9D9',
                     fontSize: width * 0.02
                   }}
@@ -368,7 +377,7 @@ const UserInput = (props) => {
                   style={{ alignSelf: 'center' }}
                   tintColors={{ true: '#FFF200', false: '#FFF200' }}
                 />
-                <Text style={{ color: '#FFF200', fontFamily: 'Montserrat-Bold', fontSize: width * 0.03 , textAlign: 'center' }}>PASE DIA</Text>
+                <Text style={{ color: '#FFF200', fontFamily: 'Montserrat-Bold', fontSize: width * 0.03, textAlign: 'center' }}>PASE DIA</Text>
               </View>
 
 
@@ -422,7 +431,7 @@ const UserInput = (props) => {
           }}>
             <View style={{ height: '70%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
 
-              <View style={{ height: "90%", width: '90%'}}>
+              <View style={{ height: "90%", width: '90%' }}>
                 {historyExists ?
                   <Table borderStyle={{ borderColor: '#00A9A0' }}>
                     <Row
@@ -529,16 +538,63 @@ const UserInput = (props) => {
                 padding: '2%'
 
               }}>
-                <View style={{ margin: '4%', justifyContent: 'center', height: ' 60%' }}>
+                <View style={{ margin: '4%', justifyContent: 'center', height: ' 30%' }}>
                   <Text style={styles.modalTextAlert}>Cobrar pase día </Text>
                   <Text style={styles.modalTextAlert}>{`$${numberWithPoints(prepayDayValue)}`}</Text>
                 </View>
+                <View style={{ justifyContent: 'space-between', height: '40%', flexDirection: 'column', paddingBottom: '6%' }}>
+                  <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
+                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Pago:  </Text>
+                    <TextInput
+                      style={{
+                        borderWidth: 1,
+                        borderColor: '#00A9A0',
+                        fontSize: normalize(20),
+                        fontFamily: 'Montserrat-Bold',
+                        backgroundColor: '#FFFFFF',
+                        width: '60%',
+                        borderRadius: 10,
+                        color: '#00A9A0'
+                      }}
+                      keyboardType='numeric'
+                      placeholder='$ 0'
+                      textAlign='center'
 
+                      value={textinputMoney}
+                      onChangeText={(text) => {
+                        setTotalPay(text);
+                      }}
+                    />
+                  </View>
+                  <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
+                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}> A devolver:  </Text>
+                    <TextInput
+                      style={{
+                        borderWidth: 1,
+                        borderColor: '#00A9A0',
+                        fontSize: normalize(20),
+                        fontFamily: 'Montserrat-Bold',
+                        backgroundColor: '#FFFFFF',
+                        width: '60%',
+                        borderRadius: 10,
+                        color: '#00A9A0'
+                      }}
+                      keyboardType='numeric'
+                      placeholder='$'
+                      textAlign='center'
+
+                      editable={false}
+                      value={`$${numberWithPoints(inputChange)}`}
+                    />
+                  </View>
+                </View>
                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                   <Button onPress={() => {
                     setPrepayDay(false);
+                    setPrepayDayValue(0);
+                    setTotalPay(0);
                   }}
-                    title="E N T E N D I D O"
+                    title="G U A R D A R"
                     color="#00A9A0"
                     style={
                       styles.modalButton
@@ -549,6 +605,8 @@ const UserInput = (props) => {
                       fontFamily: 'Montserrat-Bold'
                     }} />
                 </View>
+
+
               </View>
             </View>
           </View>
@@ -670,6 +728,7 @@ const UserInput = (props) => {
 const mapStateToProps = (state) => ({
   officialProps: state.official,
   reservations: state.reservations,
+  hq: state.hq
 });
 
 export default connect(mapStateToProps, actions)(UserInput);

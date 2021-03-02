@@ -56,6 +56,9 @@ const MonthlyPayments = (props) => {
     const [typeOptions, setTypeOptions] = useState(["personal", "corporate"]);
     const [newMenType, setNewMenType] = useState('');
 
+    const [image, setImage] = useState("")
+
+
     const [firstPlateNewMen, setFirstPlateNewMen] = useState('')
     const [secondPlateNewMen, setSecondPlateNewMen] = useState('')
     const [thirdPlateNewMen, setThirdPlateNewMen] = useState('')
@@ -342,6 +345,55 @@ const MonthlyPayments = (props) => {
             console.log('dentroRENEW')
         }
     }
+
+    // const uploadImageToFirebase = async () => {
+    //     try {
+    //         setLoading(true)
+    //         const sourceURI = image
+    //         const userUID = props.profile.id
+    //         const id = (
+    //             Date.now().toString() +
+    //             "_" +
+    //             Math.random().toString(36).substr(2, 5)
+    //         ).toUpperCase();
+    //         const fileName = "Pic_" + userUID + "_" + id + ".jpeg";
+    //         //const resizedImage = await resizeImage(sourceURI);
+    //         const response = await fetch(sourceURI.uri);
+    //         const blob = await response.blob();
+    //         const result = await firebase
+    //             .storage()
+    //             .ref()
+    //             .child(userUID + "/" + fileName)
+    //             .put(blob);
+
+    //         const downloadUri = await result.ref.getDownloadURL();
+    //         let aux = await axios.put(
+    //             `${LEANCOREAPI}${USER}`,
+    //             {
+    //                 email: user.email,
+    //                 name: user.name,
+    //                 lastName: user.lastName,
+    //                 nit: user.nit,
+    //                 documentId: user.documentId,
+    //                 profilePic: downloadUri
+    //             },
+    //             {
+    //                 timeout: TIMEOUT,
+    //             }
+    //         );
+    //         setLoading(false)
+    //         confirmRef.current.close()
+    //         return downloadUri;
+    //     } catch (err) {
+    //         console.log(err);
+    //         console.log(err?.response)
+    //         Sentry.Native.captureEvent(new Error(err))
+    //         if (err.response) Sentry.Native.captureEvent(new Error(err.respose))
+    //         confirmRef.current.close()
+    //         errorRef.current.show()
+    //         setLoading(false)
+    //     }
+    // };
 
     return (
         <View style={{ flex: 1 }}>
@@ -694,11 +746,11 @@ const MonthlyPayments = (props) => {
                                             fontFamily: 'Montserrat-Bold'
                                         }} />
                                 </View>
-                                <View style={{ 
-                                    height: '50%', 
-                                    width: '100%', 
+                                <View style={{
+                                    height: '50%',
+                                    width: '100%',
                                     justifyContent: 'flex-end'
-                                     }}>
+                                }}>
                                     <Button onPress={() => {
                                         setModalVisible(!modalVisible);
                                     }}
