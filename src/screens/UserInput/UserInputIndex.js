@@ -77,7 +77,14 @@ const UserInput = (props) => {
 
   const [totalPay, setTotalPay] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
-
+  
+  function priceVehicleType () {
+    if (isCharacterALetter(plateTwo[2])) {
+      setPrepayDayValue(hq.dailyBikePrice)
+    } else {
+      setPrepayDayValue(hq.dailyCarPrice)
+    }
+  }
 
 
   const clearPlateOne = () => {
@@ -189,15 +196,14 @@ const UserInput = (props) => {
   }, [newPhone]);
 
   async function startPark() {
+    setLoadingStart(true);
     try {
       if ((plateOne + plateTwo).length === 6) {
         let type
         if (isCharacterALetter(plateTwo[2])) {
           type = "bike"
-          setPrepayDayValue(hq.dailyBikePrice)
         } else {
           type = "car"
-          setPrepayDayValue(hq.dailyCarPrice)
         }
 
         console.log({
@@ -218,7 +224,9 @@ const UserInput = (props) => {
             phone: !showPhoneInput ? phone : '+57' + newPhone,
             prepayFullDay: prepayDay,
             officialEmail: officialEmail,
-            type
+            type,
+            cash: totalPay,
+            change: totalPay - prepayDayValue
           },
           { timeout: TIMEOUT }
         )
@@ -227,7 +235,10 @@ const UserInput = (props) => {
         setBlacklistExists(false);
         readHq();
         setLoadingStart(false);
-        setModalVisible(true);
+        setPrepayDay(false);
+        setPrepayDayValue(0);
+        setTotalPay(0);
+
 
       }
 
@@ -384,7 +395,8 @@ const UserInput = (props) => {
               <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '40%', width: '100%', justifyContent: 'center' }}>
                 {!loadingStart &&
                   <Button onPress={() => {
-                    setLoadingStart(true); startPark();
+                    setModalVisible(true);
+                    priceVehicleType();
 
                   }}
                     title="I N I C I A R"
@@ -590,20 +602,19 @@ const UserInput = (props) => {
                 </View>
                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                   <Button onPress={() => {
-                    setPrepayDay(false);
-                    setPrepayDayValue(0);
-                    setTotalPay(0);
+                    startPark();
                   }}
                     title="G U A R D A R"
                     color="#00A9A0"
-                    style={
-                      styles.modalButton
-                    }
+                    
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
                       fontFamily: 'Montserrat-Bold'
-                    }} />
+                    }}
+                    style={[totalPay - prepayDayValue < 0  ? styles.modalButtonDisabled : styles.modalButton]}
+                    disabled={totalPay - prepayDayValue < 0 }
+                    activityIndicatorStatus={loadingStart} />
                 </View>
 
 

@@ -188,6 +188,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '70%',
   },
+  modalButtonDisabled: {
+    width: '100%',
+    height: '70%',
+    opacity: 0.5
+  },
   tableText: {
     fontFamily: 'Montserrat-Regular',
   },
