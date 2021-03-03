@@ -914,7 +914,7 @@ const MonthlyPayments = (props) => {
                                     }}>Cobrado</Text>
                                 </View>
                             </View> */}
-                            <View style={{ justifyContent: 'space-between', height: '30%', flexDirection: 'column', paddingBottom: '6%'}}>
+                            <View style={{ justifyContent: 'space-between', height: '30%', flexDirection: 'column', paddingBottom: '6%' }}>
                                 <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Pago:  </Text>
                                     <TextInput
@@ -1153,6 +1153,26 @@ const MonthlyPayments = (props) => {
                                         />
                                     </View>
                                     <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
+                                        <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Cédula:</Text>
+                                        <TextInput
+                                            style={{
+                                                borderWidth: 1,
+                                                borderColor: '#00A9A0',
+                                                fontSize: normalize(20),
+                                                fontFamily: 'Montserrat-Bold',
+                                                width: '60%',
+                                                borderRadius: 10,
+                                                color: '#00A9A0'
+                                            }}
+                                            keyboardType='numeric'
+                                            placeholder=''
+                                            textAlign='center'
+                                            autoCapitalize={"characters"}
+                                            value={newMenNid}
+                                            onChangeText={text => setNewMenNid(text)}
+                                        />
+                                    </View>
+                                    <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
                                         <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Celular:</Text>
                                         <TextInput
                                             style={{
@@ -1223,26 +1243,7 @@ const MonthlyPayments = (props) => {
                                             }}
                                         />
                                     </View>
-                                    <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
-                                        <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Cédula:</Text>
-                                        <TextInput
-                                            style={{
-                                                borderWidth: 1,
-                                                borderColor: '#00A9A0',
-                                                fontSize: normalize(20),
-                                                fontFamily: 'Montserrat-Bold',
-                                                width: '60%',
-                                                borderRadius: 10,
-                                                color: '#00A9A0'
-                                            }}
-                                            keyboardType='numeric'
-                                            placeholder=''
-                                            textAlign='center'
-                                            autoCapitalize={"characters"}
-                                            value={newMenNid}
-                                            onChangeText={text => setNewMenNid(text)}
-                                        />
-                                    </View>
+
                                     {/* <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
 
                                         <DropDownPicker

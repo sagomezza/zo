@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image } from 'react-native';
+import { View, Text, FlatList, Image, Dimensions } from 'react-native';
 import FooterIndex from '../../components/Footer';
 import HomeStyles from '../Home/HomeStyles';
 import Button from '../../components/Button';
@@ -14,6 +14,8 @@ import normalize from '../../config/services/normalizeFontSize';
 import { ImageBackground } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Header from '../../components/Header/HeaderIndex';
+
+const { width, height} = Dimensions.get('window');
 
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
@@ -177,7 +179,9 @@ const HomeIndex = (props) => {
                       <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
                         <View style={{ marginBottom: '2%' }} >
                           <Text style={HomeStyles.textPlaca}>{item.plate}</Text>
-                          <Text style={HomeStyles.textPago}>Pago por {`${formatHours(item.hours)}`} horas</Text>
+                          <Text style={HomeStyles.textPago}>Pago por {
+                          item.hours === '1 month' ? 'mensualidad': `${formatHours(item.hours)} horas`
+                          } </Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
                           <Text style={HomeStyles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>

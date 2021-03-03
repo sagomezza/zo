@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
+
+const {width, height} = Dimensions.get('window');
 
 const FooterStyles = StyleSheet.create({ 
     footerText: {
