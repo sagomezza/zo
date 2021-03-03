@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     },
     modalViewNewMensuality: {
-        height: normalize(450),
+        height: normalize(550),
         width: '70%',
         padding: '4%',
         borderRadius: 50,

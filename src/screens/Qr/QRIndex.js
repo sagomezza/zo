@@ -51,7 +51,7 @@ const BarcodeScanner = (props) => {
     try {
       const _data = JSON.parse(data);
       if ((qr.plate).length === 0) {
-        store.dispatch(actions.setPhone(_data.id))
+        await store.dispatch(actions.setPhone(_data.id))
         navigation.navigate("UserOut")
       } else {
         let type
