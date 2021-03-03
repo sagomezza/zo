@@ -41,6 +41,8 @@ const MonthlyPayments = (props) => {
     const [modal2Visible, setModal2Visible] = useState(false);
     const [modal3Visible, setModal3Visible] = useState(false);
     const [modal4Visible, setModal4Visible] = useState(false);
+    const [modal5Visible, setModal5Visible] = useState(false);
+
 
     // To modify plates asociated to mensuality
     const [firstPlate, setFirstPlate] = useState('')
@@ -89,7 +91,6 @@ const MonthlyPayments = (props) => {
     const showModalInfoNewMen = () => {
         setModal3Visible(true);
     }
-
 
     function priceMonthVehicleType() {
         if (isCharacterALetter(firstPlateNewMen[5])) {
@@ -149,6 +150,7 @@ const MonthlyPayments = (props) => {
     }
 
     const mensualityCreatedModal = () => {
+        setModal3Visible(false);
         setModal4Visible(false);
         setNameNewMen('');
         setLastNameNewMen('');
@@ -158,6 +160,7 @@ const MonthlyPayments = (props) => {
         setTotalPay(0);
         setMonthPrice(0);
         setShowInputsCashChange(false);
+        setModal5Visible(false);
     }
     const mensualityRenewedModal = () => {
         setModal2Visible(false);
@@ -273,7 +276,7 @@ const MonthlyPayments = (props) => {
             console.log(err)
             console.log(err?.response)
             setLoading(false);
-
+            setModal5Visible(true);
         }
     }
 
@@ -326,6 +329,7 @@ const MonthlyPayments = (props) => {
             console.log(err)
             console.log(err?.response)
             setLoading(false);
+            setModal5Visible(true);
 
         }
     }
@@ -636,7 +640,6 @@ const MonthlyPayments = (props) => {
 
                                 <Button onPress={() => {
                                     showModalInfoNewMen();
-
                                 }}
                                     title="C R E A R"
                                     color='gray'
@@ -1095,11 +1098,11 @@ const MonthlyPayments = (props) => {
                     :
                     <View style={styles.centeredView}>
                         <View style={styles.modalViewNewMensuality}>
-                            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%', borderWidth: 1 }}>
+                            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
                                 <View style={{ marginBottom: '0%', justifyContent: 'center', height: '10%' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> Ingrese la siguiente información: </Text>
                                 </View>
-                                <View style={{ justifyContent: 'space-between', height: '70%', width: '100%', flexDirection: 'column', paddingBottom: '8%', borderWidth: 1 }}>
+                                <View style={{ justifyContent: 'space-between', height: '70%', width: '100%', flexDirection: 'column', paddingBottom: '8%' }}>
                                     <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
                                         <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Nombre: </Text>
                                         <TextInput
@@ -1214,7 +1217,7 @@ const MonthlyPayments = (props) => {
                                             }}
                                         />
                                     </View>
-                                    <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
+                                    {/* <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
 
                                         <DropDownPicker
                                             items={mensualityType}
@@ -1265,7 +1268,7 @@ const MonthlyPayments = (props) => {
                                             // }
                                             // }
                                         />
-                                    </View>
+                                    </View> */}
                                     {/* <View style={{ flexDirection: "row", justifyContent: 'space-between', borderWidth: 1, height: '20%' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 5:  </Text>
                                     <DropDownPicker
@@ -1360,6 +1363,46 @@ const MonthlyPayments = (props) => {
                         <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '5%' }}>
                             <View style={{ justifyContent: 'center', height: '30%' }}>
                                 <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> La mensualidad fue creada con éxito.</Text>
+                            </View>
+
+                            <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
+                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end' }}>
+                                    <Button onPress={() => {
+                                        mensualityCreatedModal();
+                                    }}
+                                        title="E N T E N D I D O"
+                                        color="#00A9A0"
+                                        style={
+                                            styles.modalButton
+                                        }
+                                        textStyle={{
+                                            color: "#FFFFFF",
+                                            textAlign: "center",
+                                            fontFamily: 'Montserrat-Bold'
+                                        }}
+                                        activityIndicatorStatus={loading}
+                                    />
+                                </View>
+                            </View>
+
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                backdropOpacity={0.3}
+                visible={modal5Visible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '5%' }}>
+                            <View style={{ justifyContent: 'center', height: '30%' }}>
+                                <Text style={{ ...styles.modalText, fontSize: normalize(20), color: 'red' }}> La mensualidad no fue creada, inténtelo más tarde.</Text>
                             </View>
 
                             <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
