@@ -84,7 +84,7 @@ const UserOut = (props) => {
           setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlate[5])
           setPlateOneCall(splitPlate[0] + splitPlate[1] + splitPlate[2])
           setPlateTwoCall(splitPlate[3] + splitPlate[4] + splitPlate[5])
-          checkParking()
+          checkParkingPlate();
           setIsParanoicUser(true)
         }
       } catch (err) {
@@ -201,6 +201,18 @@ const UserOut = (props) => {
   const finishParking = async (paymentStatus, showModal) => {
     setLoading(true)
     try {
+      console.log({
+        plate: check.plate,
+        hqId: check.hqId,
+        phone: check.phone,
+        paymentType: "cash",
+        cash: parseInt(totalPay),
+        change: totalPay - totalAmount,
+        status: paymentStatus,
+        isParanoic: isParanoicUser,
+        officialEmail: officialProps.email,
+        dateFinished: new Date()
+      })
       const response = await instance.post(
         FINISHPARKING,
         {

@@ -85,8 +85,14 @@ const UserInput = (props) => {
     } else {
       setPrepayDayValue(hq.dailyCarPrice)
     }
+    if (prepayDay) {
+      setModalVisible(true);
+    }else {
+      startPark();
+    }
   }
 
+  
 
   const clearPlateOne = () => {
     setPlateOne('');
@@ -241,8 +247,7 @@ const UserInput = (props) => {
         setPrepayDay(false);
         setPrepayDayValue(0);
         setTotalPay(0);
-
-
+        setModalVisible(true);
       }
 
     } catch (err) {
@@ -398,7 +403,7 @@ const UserInput = (props) => {
               <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '40%', width: '100%', justifyContent: 'center' }}>
                 {!loadingStart &&
                   <Button onPress={() => {
-                    setModalVisible(true);
+                    
                     priceVehicleType();
 
                   }}
