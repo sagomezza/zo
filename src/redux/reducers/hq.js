@@ -14,6 +14,10 @@ const initialState = {
    totalBikes: 0,
    occupiedBikes: 0,
    occupiedCars: 0,
+   dailyBikePrice: 0,
+   dailyCarPrice: 0,
+   monthlyBikePrice: 0,
+   monthlyCarPrice: 0
 } 
 
 const hqReducer = (state=initialState, action ) => {
@@ -27,7 +31,12 @@ const hqReducer = (state=initialState, action ) => {
                 availableCars: action.payload.availableCars,
                 availableBikes: action.payload.availableBikes,
                 totalCars: action.payload.totalCars,
-                totalBikes: action.payload.totalBikes
+                totalBikes: action.payload.totalBikes,
+                dailyBikePrice: action.payload.dailyBikePrice,
+                dailyCarPrice: action.payload.dailyCarPrice,
+                monthlyBikePrice: action.payload.monthlyBikePrice,
+                monthlyCarPrice: action.payload.monthlyCarPrice
+
             };                  
         default: 
             return state
