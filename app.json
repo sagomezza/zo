@@ -22,7 +22,7 @@
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
-      "package": "com.corpaul.zonap",
+      "package": "com.corpaul.zonaptest",
       "useNextNotificationsApi": true,
       "versionCode": 2,
       "adaptiveIcon": {
