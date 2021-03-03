@@ -58,6 +58,7 @@ const MonthlyPayments = (props) => {
     const [userId, setUserId] = useState('');
     const [typeOptions, setTypeOptions] = useState(["personal", "corporate"]);
     const [newMenType, setNewMenType] = useState('');
+    const [newMenNid, setNewMenNid] = useState('');
 
     const [showInputsCashChange, setShowInputsCashChange] = useState(false);
     const [monthPrice, setMonthPrice] = useState(0);
@@ -156,11 +157,13 @@ const MonthlyPayments = (props) => {
         setLastNameNewMen('');
         setPhoneNewMen('');
         setEmailNewMen('');
+        setNewMenNid('');
         setFirstPlateNewMen('');
         setTotalPay(0);
         setMonthPrice(0);
         setShowInputsCashChange(false);
         setModal5Visible(false);
+
     }
     const mensualityRenewedModal = () => {
         setModal2Visible(false);
@@ -238,7 +241,8 @@ const MonthlyPayments = (props) => {
                 capacity: 5,
                 cash: Number(totalPay),
                 change: totalPay - monthPrice,
-                officialEmail: officialProps.email
+                officialEmail: officialProps.email,
+                nid: newMenNid
 
             })
             if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
@@ -254,7 +258,7 @@ const MonthlyPayments = (props) => {
                         phone: '+57' + phoneNewMen,
                         name: nameNewMen,
                         lastName: lastNameNewMen,
-                        expoToken: "",
+                        expoToken: "jelpmi",
                         monthlyUser: true,
                         plate: firstPlateNewMen,
                         hqId: officialHq,
@@ -263,7 +267,8 @@ const MonthlyPayments = (props) => {
                         capacity: 5,
                         cash: Number(totalPay),
                         change: totalPay - monthPrice,
-                        officialEmail: officialProps.email
+                        officialEmail: officialProps.email,
+                        nid: newMenNid
                     },
                     { timeout: TIMEOUT }
                 )
@@ -1207,6 +1212,7 @@ const MonthlyPayments = (props) => {
                                             }}
                                             keyboardType='default'
                                             placeholder=''
+                                            maxLength={6}
                                             textAlign='center'
                                             keyboardType={"default"}
                                             autoCapitalize={"characters"}
@@ -1215,6 +1221,26 @@ const MonthlyPayments = (props) => {
                                             onFocus={() => {
                                                 clearFirstPlateNewMen('')
                                             }}
+                                        />
+                                    </View>
+                                    <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
+                                        <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Cédula:</Text>
+                                        <TextInput
+                                            style={{
+                                                borderWidth: 1,
+                                                borderColor: '#00A9A0',
+                                                fontSize: normalize(20),
+                                                fontFamily: 'Montserrat-Bold',
+                                                width: '60%',
+                                                borderRadius: 10,
+                                                color: '#00A9A0'
+                                            }}
+                                            keyboardType='numeric'
+                                            placeholder=''
+                                            textAlign='center'
+                                            autoCapitalize={"characters"}
+                                            value={newMenNid}
+                                            onChangeText={text => setNewMenNid(text)}
                                         />
                                     </View>
                                     {/* <View style={{ flexDirection: "row", justifyContent: 'space-between', margin: '1%' }}>
