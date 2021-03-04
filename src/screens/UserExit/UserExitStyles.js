@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal: 20,
         alignContent: 'space-between',
-        alignItems: 'flex-start',
+        alignItems: 'center',
         justifyContent: 'space-between'
       },
       timePlateTitle: {
