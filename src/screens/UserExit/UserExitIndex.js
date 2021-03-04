@@ -211,7 +211,8 @@ const UserOut = (props) => {
         status: paymentStatus,
         isParanoic: isParanoicUser,
         officialEmail: officialProps.email,
-        dateFinished: new Date()
+        dateFinished: new Date(),
+        dateStart: dateStart
       })
       const response = await instance.post(
         FINISHPARKING,
@@ -225,7 +226,8 @@ const UserOut = (props) => {
           status: paymentStatus,
           isParanoic: isParanoicUser,
           officialEmail: officialProps.email,
-          dateFinished: new Date()
+          dateFinished: new Date(),
+          dateStart: dateStart
         },
         { timeout: TIMEOUT }
       );
