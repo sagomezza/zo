@@ -238,7 +238,7 @@ const MonthlyPayments = (props) => {
                 hqId: officialHq,
                 mensualityType: 'personal',
                 validity: validityDateNewMen,
-                capacity: 5,
+                capacity: 1,
                 cash: Number(totalPay),
                 change: totalPay - monthPrice,
                 officialEmail: officialProps.email,
@@ -264,7 +264,7 @@ const MonthlyPayments = (props) => {
                         hqId: officialHq,
                         mensualityType: 'personal',
                         validity: validityDateNewMen,
-                        capacity: 5,
+                        capacity: 1,
                         cash: Number(totalPay),
                         change: totalPay - monthPrice,
                         officialEmail: officialProps.email,
@@ -291,7 +291,7 @@ const MonthlyPayments = (props) => {
             console.log(
                 {
                     userId: idUser,
-                    capacity: 5,
+                    capacity: 1,
                     vehicleType: "car",
                     validity: validityDateNewMen,
                     userPhone: phoneNewMen,
@@ -312,7 +312,7 @@ const MonthlyPayments = (props) => {
                     CREATE_MENSUALITY,
                     {
                         userId: idUser,
-                        capacity: 5,
+                        capacity: 1,
                         vehicleType: type,
                         validity: validityDateNewMen,
                         userPhone: '+57' + phoneNewMen,

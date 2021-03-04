@@ -231,17 +231,19 @@ const UserOut = (props) => {
         },
         { timeout: TIMEOUT }
       );
-      readHq()
-      restart();
-      setRecip(response.data.data);
-      getRecips()
       setLoading(false)
-      setIsDisabled(true);
-      console.log(showModal)
       if (showModal) {
         console.log(showModal)
         setModalVisible(true)
       }
+      readHq()
+      restart();
+      setRecip(response.data.data);
+      getRecips()
+
+      setIsDisabled(true);
+      console.log(showModal)
+
     } catch (err) {
       console.log(err?.response)
       console.log(err)
@@ -380,7 +382,7 @@ const UserOut = (props) => {
                   style={{ width: '18%' }}
                   resizeMode={"contain"}
                   source={require('../../../assets/images/Inicio.png')} />
-                <View >
+                <View style={{}} >
                   <Text style={styles.timePlateTitle}>Tiempo de inicio:</Text>
                   <Text style={styles.timePlateInfo}>{dateStartDate()}  {dateStartHour()}</Text>
                 </View>
@@ -390,7 +392,7 @@ const UserOut = (props) => {
                   style={{ width: '17%' }}
                   resizeMode={"contain"}
                   source={require('../../../assets/images/Salida.png')} />
-                <View>
+                <View style={{}}>
                   <Text style={styles.timePlateTitle}>Tiempo de salida:</Text>
                   <Text style={styles.timePlateInfo}>{dateFinishedDate()}  {dateFinishedHour()}</Text>
                 </View>
@@ -404,20 +406,22 @@ const UserOut = (props) => {
               flexDirection: 'row',
               alignItems: 'center',
               alignContent: 'center',
-              height: '20%',
+              height: '25%',
               width: '80%',
               justifyContent: 'space-between'
             }}>
               <Text style={styles.infoUserText}>{"TOTAL A PAGAR"}</Text>
-              <View style={styles.payplate}>
-                <Text style={styles.payText}>{`$${numberWithPoints(totalAmount)}`}</Text>
-                <View style={{ height: '40%', width: '60%', flexDirection: 'row', justifyContent: 'center', marginTop: '2%' }}>
-                  <Text style={{ fontSize: normalize(20), color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{"Saldo pendiente: "}</Text>
-                  <Text style={{ fontSize: normalize(20), color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>$ {pendingValue}</Text>
+              <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
+                <View style={styles.payplate}>
+                  <Text style={styles.payText}>{`$${numberWithPoints(totalAmount)}`}</Text>
+                </View>
+                <View style={{ height: '30%', width: '100%', flexDirection: 'row', justifyContent: 'center', marginTop: '2%' }}>
+                  <Text style={{ fontSize: width * 0.025, color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{"Saldo pendiente: "}</Text>
+                  <Text style={{ fontSize: width * 0.025, color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>$ {pendingValue}</Text>
 
                 </View>
-
               </View>
+
 
             </View>
 
@@ -426,7 +430,7 @@ const UserOut = (props) => {
 
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{
-            height: '47%',
+            height: '45%',
             backgroundColor: '#F8F8F8',
             borderTopLeftRadius: 30,
             borderTopRightRadius: 30,
@@ -439,10 +443,11 @@ const UserOut = (props) => {
               width: '80%',
               justifyContent: 'space-between',
               alignContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
+              height: '20%'
             }}>
               <View style={{ width: '32%' }}>
-                <Text style={{ fontFamily: 'Montserrat-Bold', fontSize: normalize(20), color: '#8F8F8F' }} >{"Valor ingresado"}</Text>
+                <Text style={{ fontFamily: 'Montserrat-Bold', fontSize: width * 0.034, color: '#8F8F8F' }} >{"Valor ingresado"}</Text>
               </View>
               <View style={{ alignContent: 'center', alignItems: 'center', width: '67%', height: '62%' }}>
                 <TextInput
@@ -474,9 +479,9 @@ const UserOut = (props) => {
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row', width: '80%', justifyContent: 'flex-end', alignContent: 'center', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', width: '80%', height: '20%',  justifyContent: 'flex-end', alignContent: 'center', alignItems: 'center' }}>
               <View style={{ width: '33%', paddingRight: '2%' }}>
-                <Text style={{ fontFamily: 'Montserrat-Bold', fontSize: normalize(20), color: '#8F8F8F', textAlign: 'right' }}>{"A devolver"}</Text>
+                <Text style={{ fontFamily: 'Montserrat-Bold', fontSize: width * 0.034, color: '#8F8F8F', textAlign: 'right' }}>{"A devolver"}</Text>
               </View>
               <View style={{ alignContent: 'center', alignItems: 'center', width: '67%', height: '62%' }}>
                 <TextInput
@@ -490,12 +495,12 @@ const UserOut = (props) => {
 
             </View>
 
-            <View style={{ height: '24%', justifyContent: 'flex-end' }}>
+            <View style={{ height: '24%', width: '80%', justifyContent: 'flex-end' }}>
               {err !== "" &&
                 <Text style={{ color: "red", fontFamily: 'Montserrat-Regular', alignSelf: 'center' }}>{err}</Text>
               }
               {!loading &&
-                <View style={{ alignItems: 'center', width: '80%', height: ' 35%', marginTop: '2%' }}>
+                <View style={{ width: '100%', height: ' 35%', marginTop: '2%' }}>
                   <Button
                     title="C O B R A R"
                     color='#00A9A0'
@@ -504,7 +509,7 @@ const UserOut = (props) => {
                     textStyle={{
                       color: '#FFFFFF',
                       fontFamily: 'Montserrat-Bold',
-                      fontSize: normalize(17)
+                      fontSize: width * 0.028
                     }}
                     onPress={() => {
                       finishParking("payed", true);
@@ -513,13 +518,13 @@ const UserOut = (props) => {
               }
               {loading && <ActivityIndicator size={"large"} color={'#00A9A0'} />}
               {!loading &&
-                <View style={{ alignItems: 'center', width: '80%', height: ' 35%', marginTop: '2%' }}>
+                <View style={{ width: '100%', height: ' 35%', marginTop: '2%' }}>
                   <Button
                     title="P A G O   P E N D I E N T E"
                     color='#FFFFFF'
                     disabled={isDisabled}
                     style={[isDisabled ? styles.buttonStylePPDisabled : styles.buttonStylePP]}
-                    textStyle={{ color: '#8F8F8F', fontFamily: 'Montserrat-Bold', fontSize: normalize(16) }}
+                    textStyle={{ color: '#8F8F8F', fontFamily: 'Montserrat-Bold', fontSize: width * 0.028 }}
                     onPress={() => {
                       setModal2Visible(true);
                       setTotalPay(0)
@@ -529,7 +534,7 @@ const UserOut = (props) => {
                 </View>
               }
             </View>
-            <View style={{ height: '24%', width: '100%', justifyContent: 'flex-end' }}>
+            <View style={{ height: '26%', width: '100%', justifyContent: 'flex-end' }}>
               <FooterIndex navigation={navigation} />
 
             </View>

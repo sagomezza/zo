@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         width: '39%',
         height: '70%',
         margin: '1%',
-        fontSize: normalize(38),
+        fontSize: width * 0.065,
         fontFamily: 'Montserrat-Bold',
         backgroundColor: '#FFFFFF',
         borderRadius: 30,
@@ -48,13 +48,14 @@ const styles = StyleSheet.create({
       },
       textPhoneCode: {
         width: '80%',
-        height: normalize(39),
-        fontSize: normalize(27),
+        height: '9%',
+        fontSize: width * 0.05,
         fontFamily: 'Montserrat-Regular',
         color: '#00A9A0',
         backgroundColor: '#05877F',
         borderRadius: 30,
-        margin: '1%'
+        margin: '1%',
+        justifyContent: 'center'
       },
       codeContainer: {
         width: '80%',
@@ -67,29 +68,29 @@ const styles = StyleSheet.create({
         margin: '1%'
       },
       timePlate: {
-        width: '48%',
+        width: '49%',
         height: '77%',
         backgroundColor: 'rgba(22,22,21,0.25)',
         borderRadius: 30,
         flexDirection: 'row',
-        paddingHorizontal: 25,
-        alignContent: 'center',
-        alignItems: 'center',
+        paddingHorizontal: 20,
+        alignContent: 'space-between',
+        alignItems: 'flex-start',
         justifyContent: 'space-between'
       },
       timePlateTitle: {
         fontFamily: 'Montserrat-Bold',
-        fontSize: normalize(17),
+        fontSize: width * 0.026,
         color: '#FFFFFF'
       },
       timePlateInfo: {
         fontFamily: 'Montserrat-Regular',
-        fontSize: normalize(17),
+        fontSize: width * 0.026,
         color: '#FFFFFF'
       },
       payplate: {
-        width: '60%',
-        height: normalize(70),
+        width: '90%',
+        height: '55%',
         fontFamily: 'Montserrat-Regular',
         backgroundColor: '#FFF200',
         borderRadius: 20,
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
   
       },
       payText: {
-        fontSize: normalize(50),
+        fontSize: width * 0.06,
         fontFamily: 'Montserrat-Bold',
         color: '#00A9A0',
         textAlign: 'center'
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
         height: 50,
         marginBottom: '10%',
         fontFamily: 'Montserrat-Bold',
-        fontSize: normalize(33),
+        fontSize: width * 0.06,
         borderRadius: 30,
         textAlign: 'center',
         backgroundColor: '#FFFFFF',
@@ -132,33 +133,33 @@ const styles = StyleSheet.create({
       },
       infoUserText: {
         fontFamily: 'Montserrat-Bold',
-        fontSize: normalize(23),
+        fontSize: width * 0.03,
         color: '#FFFFFF',
         textAlign: 'center'
       },
       codeText: {
         fontFamily: 'Montserrat-Bold',
-        fontSize: normalize(20),
+        fontSize: width * 0.034,
         color: '#00A9A0',
         textAlign: 'center'
       },
       buttonStyle: {
         borderRadius: 30,
         width: '100%',
-        paddingHorizontal: '40%',
+        // paddingHorizontal: '40%',
         height: '90%'
       },
       buttonStyleDisabled: {
         borderRadius: 30,
         width: '100%',
-        paddingHorizontal: '40%',
+        // paddingHorizontal: '40%',
         height: '90%',
         opacity: 0.5
       },
       buttonStylePP: {
         borderRadius: 25,
         width: '100%',
-        paddingHorizontal: '30%',
+        // paddingHorizontal: '30%',
         height: '90%',
         borderColor: '#00A9A0',
         borderWidth: 1
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
       buttonStylePPDisabled: {
         borderRadius: 25,
         width: '100%',
-        paddingHorizontal: '30%',
+        // paddingHorizontal: '30%',
         height: '90%',
         borderColor: '#00A9A0',
         borderWidth: 1,

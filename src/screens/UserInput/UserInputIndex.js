@@ -78,6 +78,7 @@ const UserInput = (props) => {
   const [totalPay, setTotalPay] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
 
+  
 
   function priceVehicleType() {
     if (isCharacterALetter(plateTwo[2])) {
@@ -212,7 +213,12 @@ const UserInput = (props) => {
         } else {
           type = "car"
         }
-
+        let change
+        if ((totalPay - prepayDayValue) < 0 ) {
+          change = 0
+        } else {
+          change = totalPay - prepayDayValue
+        }
         // console.log({
         //   plate: plateOne + plateTwo,
         //   hqId: officialHq,
@@ -235,7 +241,7 @@ const UserInput = (props) => {
             officialEmail: officialEmail,
             type,
             cash: Number(totalPay),
-            change: totalPay - prepayDayValue
+            change: change
           },
           { timeout: TIMEOUT }
         )
