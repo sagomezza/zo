@@ -23,6 +23,7 @@ import { width } from '../../config/constants/screenDimensions';
 
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips } = props;
+  const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const startTime = officialProps.schedule.start
   const HomeStyles = StyleSheet.create({
     plateInput: {
@@ -132,7 +133,8 @@ const LogoutIndex = (props) => {
         id: officialProps.id,
         date: new Date(),
         total: total,
-        input: inputValue
+        input: inputValue,
+        hqId: officialHq
       });
       firebase.auth().signOut().then(function () {
         // Sign-out successful.
