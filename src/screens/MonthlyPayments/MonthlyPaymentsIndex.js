@@ -693,7 +693,7 @@ const MonthlyPayments = (props) => {
                                             borderRadius: 10,
                                             color: '#00A9A0'
                                         }}
-                                        keyboardType='numeric'
+                                        keyboardType='default'
                                         placeholder=''
                                         textAlign='center'
                                         value={firstPlate !== undefined + '' ? firstPlate : ''}
@@ -715,7 +715,7 @@ const MonthlyPayments = (props) => {
                                             borderRadius: 10,
                                             color: '#00A9A0'
                                         }}
-                                        keyboardType='numeric'
+                                        keyboardType='default'
                                         placeholder=''
                                         textAlign='center'
                                         // keyboardType={"numeric"}
@@ -738,7 +738,7 @@ const MonthlyPayments = (props) => {
                                             borderRadius: 10,
                                             color: '#00A9A0'
                                         }}
-                                        keyboardType='numeric'
+                                        keyboardType='default'
                                         placeholder=''
                                         textAlign='center'
                                         // keyboardType={"numeric"}
@@ -761,7 +761,7 @@ const MonthlyPayments = (props) => {
                                             borderRadius: 10,
                                             color: '#00A9A0'
                                         }}
-                                        keyboardType='numeric'
+                                        keyboardType='default'
                                         placeholder=''
                                         textAlign='center'
                                         // keyboardType={"numeric"}
@@ -784,7 +784,7 @@ const MonthlyPayments = (props) => {
                                             borderRadius: 10,
                                             color: '#00A9A0'
                                         }}
-                                        keyboardType='numeric'
+                                        keyboardType='default'
                                         placeholder=''
                                         textAlign='center'
                                         // keyboardType={"numeric"}
