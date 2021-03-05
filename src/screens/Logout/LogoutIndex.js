@@ -95,11 +95,20 @@ const LogoutIndex = (props) => {
   const [hqInfo, setHqInfo] = useState([]);
 
   const hq = props.hq;
+
+  const [inputBaseValue, setInputBaseValue] = useState('');
   const [inputValue, setInputValue] = useState('');
 
 
   useEffect(() => {
     const getShiftRecips = async () => {
+      console.log({
+        email: officialProps.email,
+        hqId: officialProps.hq[0],
+        date: new Date(),
+        id: officialProps.id,
+        dateStart: startTime
+      })
       try {
         const response = await instance.post(GET_SHIFT_RECIPS, {
           email: officialProps.email,
@@ -132,8 +141,9 @@ const LogoutIndex = (props) => {
         email: officialProps.email,
         id: officialProps.id,
         date: new Date(),
-        total: total,
-        input: inputValue,
+        total: Number(total),
+        input: Number(inputValue),
+        base: Number(inputBaseValue),
         hqId: officialHq
       });
       firebase.auth().signOut().then(function () {
@@ -190,10 +200,10 @@ const LogoutIndex = (props) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{ height: '38%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
 
-            <View style={{ flexDirection: 'column', alignItems: 'center', alignContent: 'center', height: '25%', width: '60%', marginTop: '2%' }}>
-              <Text style={{ fontSize: width * 0.045, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>{officialProps.name + ' ' + officialProps.lastName}</Text>
+            <View style={{ flexDirection: 'column', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%'}}>
+              <Text style={{ fontSize: width * 0.04, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>{officialProps.name + ' ' + officialProps.lastName}</Text>
               <View style={{}}>
-                <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: width * 0.035, color: '#FFFFFF' }}>{hq.name}</Text>
+                <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: width * 0.03, color: '#FFFFFF' }}>{hq.name}</Text>
               </View>
             </View>
             <View style={{
@@ -229,9 +239,42 @@ const LogoutIndex = (props) => {
             <View style={{ width: '30%' }}>
               <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.035 }}>{"TOTAL: "}{`$${numberWithPoints(total)}`}</Text>
             </View>
-            <View style={{ flexDirection: 'row', width: '80%', height: '30%', alignItems: 'center', alignContent: 'center', padding: '2%', justifyContent: 'space-between' }}>
+            <View style={{ flexDirection: 'row', width: '80%', height: '22%', alignItems: 'center', alignContent: 'center', padding: '1%', justifyContent: 'center' }}>
+              <View style={{ width: '21%' }}>
+                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>{"BASE: "} </Text>
+              </View>
+              <View style={{
+                justifyContent: "center",
+                alignContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                width: '70%',
+                height: '80%'
+              }}>
+                <TextInput
+                  placeholder='$'
+                  style={
+                    styles.textInput
+                  }
+                  keyboardType='numeric'
+                  textAlign='center'
+                  editable={isDisabled}
+                  onChangeText={text => setInputBaseValue(text) + ''}
+                  value={inputBaseValue == 0 ? '' : inputBaseValue + ''}
+
+                />
+                {/* <TouchableOpacity style={[!inputValue.length === 0 ? styles.buttonTDisabled : styles.buttonT]}
+                  onPress={() => {
+                    setModal2Visible(true)
+                  }}
+                  disabled={inputValue.length === 0}>
+                  <Icon name='save' color='#00A9A0' style={{ marginTop: '4%' }} />
+                </TouchableOpacity> */}
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', width: '80%', height: '22%', alignItems: 'center', alignContent: 'center', padding: '1%', justifyContent: 'space-between' }}>
               <View style={{ width: '30%' }}>
-                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.034 }}>{"DINERO EN EFECTIVO: "} </Text>
+                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>{"DINERO EN EFECTIVO: "} </Text>
               </View>
               <View style={{
                 justifyContent: "center",

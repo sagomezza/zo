@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
         height: '74%',
         marginRight: '5%',
         marginLeft: '0%',
-        fontSize: width * 0.06,
+        fontSize: width * 0.045,
         fontFamily: 'Montserrat-Bold',
         color: '#00A9A0',
         backgroundColor: '#FFF200',
