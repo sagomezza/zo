@@ -79,7 +79,7 @@ const MonthlyPayments = (props) => {
     const fifthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + '' : ''
 
     let plates = [firstPlate, secondPlate, thirdPlate, fourthPlate, fifthPlate]
-    let newPlates = plates.filter(plate => plate != undefined && plate != '')
+    let newPlates = plates.filter(plate => plate != undefined && plate != '' && plate != "undefined")
 
     let platesNewMen = [firstPlateNewMen, secondPlateNewMen, thirdPlateNewMen, fourthPlateNewMen, fifthPlateNewMen]
     let platesNewMensuality = platesNewMen.filter(plate => plate != undefined && plate != '')
@@ -88,6 +88,24 @@ const MonthlyPayments = (props) => {
     const [validityDateNewMen, setValidityDateNewMen] = useState(moment(validityDate).set("date", 5));
 
     const mensualityType = ["corporate", "personal"]
+
+    const createUserInfo = () => {
+        console.log(
+            {
+                hqId: officialHq,
+                plate: "HZK130",
+                phone: "573104206080",
+                total: 185700,
+                officialEmail: officialProps.email,
+                dateStart: new Date(),
+                mensuality: true,
+                dateFinished: validityDateNewMen,
+                hours: "1 month",
+                type: "car",
+                cash: 200000,
+                change: 14300
+            })
+    }
 
     const showModalInfoNewMen = () => {
         setModal3Visible(true);
@@ -213,6 +231,8 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
+                setLoading(false);
+
                 console.log(response.data)
             }
         } catch (err) {
@@ -364,6 +384,8 @@ const MonthlyPayments = (props) => {
     }
 
     async function editMensuality() {
+        setLoading(true);
+
         try {
             if (plateOne.length === 3 && plateTwo.length === 3) {
                 console.log({
@@ -378,13 +400,16 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
+                setLoading(false);
                 setModalVisible(!modalVisible);
-                console.log(response.data.data)
+                
+
             }
         } catch (err) {
             console.log(err)
             console.log(err?.response)
             console.log('dentro')
+            setLoading(false);
         }
     }
 
@@ -645,6 +670,7 @@ const MonthlyPayments = (props) => {
 
                                 <Button onPress={() => {
                                     showModalInfoNewMen();
+
                                 }}
                                     title="C R E A R"
                                     color='gray'
@@ -810,7 +836,7 @@ const MonthlyPayments = (props) => {
                                     justifyContent: 'flex-end',
                                 }}>
                                     <Button onPress={() => {
-                                        user();
+                                        editMensuality();
                                     }}
                                         title="G U A R D A R"
                                         color="#00A9A0"
@@ -821,7 +847,8 @@ const MonthlyPayments = (props) => {
                                             color: "#FFFFFF",
                                             textAlign: "center",
                                             fontFamily: 'Montserrat-Bold'
-                                        }} />
+                                        }}
+                                        activityIndicatorStatus={loading} />
                                 </View>
                                 <View style={{
                                     height: '50%',
