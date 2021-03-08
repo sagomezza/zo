@@ -2,7 +2,7 @@
   "expo": {
     "name": "Zona-p",
     "slug": "Zona-p",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/app-icon.png",
     "splash": {
@@ -24,7 +24,7 @@
       "softwareKeyboardLayoutMode": "pan",
       "package": "com.corpaul.zonap",
       "useNextNotificationsApi": true,
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#00A9A0"
