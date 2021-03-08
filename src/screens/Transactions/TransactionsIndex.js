@@ -14,12 +14,6 @@ import normalize from '../../config/services/normalizeFontSize';
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
-// api
-import instance from "../../config/axios";
-import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL, EDIT_ADMIN } from "../../config/api";
-import { TIMEOUT } from '../../config/constants/constants';
-import store from '../../config/store';
-
 
 const Transactions = (props) => {
     const { navigation, officialProps, recips } = props;

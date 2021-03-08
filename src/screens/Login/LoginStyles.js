@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
 import {Dimensions} from 'react-native'; 
 
-const { height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     container: {
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     },
     loginText: {
       color: 'white',
-      fontSize: normalize (21),
+      fontSize: width * 0.030,
       marginBottom: '20%',
       fontFamily: 'Montserrat-Bold'
     },
@@ -43,11 +43,10 @@ const styles = StyleSheet.create({
       backgroundColor : '#FFE828',
       alignContent: 'center',
       alignItems: 'center'
-      
     },
     restoreText: {
       color: 'white',
-      fontSize: normalize(15),
+      fontSize: width * 0.025,
       fontFamily: 'Montserrat-Regular'
     },
     textInput: {

@@ -18,26 +18,8 @@ import numberWithPoints from '../../config/services/numberWithPoints';
 import normalize from '../../config/services/normalizeFontSize';
 
 const ActiveServices = (props) => {
-    const { navigation, officialProps, reservations, recips, hq } = props;
+    const { navigation, officialProps, reservations } = props;
     const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-
-    useEffect(() => {
-        const readHq = async () => {
-            try {
-                const response = await instance.post(READ_HQ, {
-                    id: officialHq
-                });
-                if (response.data.response) {
-                    store.dispatch(actions.setReservations(response.data.data.reservations));
-                    store.dispatch(actions.setHq(response.data.data));
-                }
-            } catch (error) {
-                console.log("err: ", error);
-            }
-        };
-        readHq();
-
-    }, []);
 
     return (
         <View style={{ flex: 1 }}>

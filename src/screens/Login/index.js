@@ -32,6 +32,8 @@ import instance from '../../config/axios';
 import { ImageBackground } from 'react-native';
 import { Dimensions } from 'react-native';
 
+const { width, height } = Dimensions.get('window')
+
 const LoginIndex = (props) => {
   const { navigation, officialProps } = props;
   const [email, setEmail] = useState("")
@@ -114,7 +116,7 @@ const LoginIndex = (props) => {
     }
   }
 
-  const { height } = Dimensions.get('window');
+  const { width, height } = Dimensions.get('window');
 
   return (
     <View style={{ flex: 1, backgroundColor: '#00A9A0' }} >
@@ -126,9 +128,9 @@ const LoginIndex = (props) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={styles.container}>
             <View style={{ height: '18%', marginBottom: '3%' }}>
-              <Image style={{ width: normalize(200), height: '80%' }} resizeMode={"contain"} source={require('../../../assets/images/icon.png')} />
+              <Image style={{ width: normalize(200), height: '70%' }} resizeMode={"contain"} source={require('../../../assets/images/icon.png')} />
             </View>
-            <View style={{ height: '10%', width: '80%'}}>
+            <View style={{ height: '10%', width: '60%', justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
               <Text style={styles.loginText} >I  N  I  C  I  O     D  E     S  E  S  I  Ó  N</Text>
             </View>
             <View style={{ width: '100%', height: '25%', alignContent: 'center', alignItems: 'center' }}>
@@ -165,7 +167,7 @@ const LoginIndex = (props) => {
                 {error !== "" && <Text style={styles.alertText}>{error}</Text>}
               </View>
             </View>
-            <View style={{ alignContent: 'flex-end', width: '100%', height: '8%', alignItems: 'center', marginTop: '15%' }}>
+            <View style={{ width: '55%', height: '10%', justifyContent: 'center', alignContent: 'center', marginTop: '6%' }}>
               <Button onPress={() => { onLoginPress(); }}
                 title="I N G R E S A R"
                 color='#FFE828'
@@ -173,16 +175,13 @@ const LoginIndex = (props) => {
                   borderWidth: normalize(1),
                   borderColor: "#707070",
                   alignSelf: 'center',
-                  width: '69%',
-                  height: '50%',
-                  margin: '2%',
-                  paddingHorizontal: '15%',
-                  paddingVertical: '1%'
+                  width: '80%',
+                  height: '60%',
                 }}
-                textStyle={{ color: "#00A9A0", fontFamily: 'Montserrat-Bold', fontSize: normalize(20), }}
+                textStyle={{ color: "#00A9A0", fontFamily: 'Montserrat-Bold', fontSize: width * 0.032 }}
                 activityIndicatorStatus={loading}
               />
-              <TouchableOpacity>
+              <TouchableOpacity style={{alignSelf: 'center'}}>
                 <Text style={styles.restoreText}>Olvidé mi contraseña</Text>
               </TouchableOpacity>
             </View>
