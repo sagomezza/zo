@@ -1,27 +1,37 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Modal, TouchableWithoutFeedback, Keyboard, ActivityIndicator, Image, Dimensions } from 'react-native';
+import {
+  View,
+  Modal,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ActivityIndicator,
+  Image,
+  Dimensions
+} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { Text, TouchableOpacity } from 'react-native';
+import { ImageBackground } from 'react-native';
+import styles from '../UserExit/UserExitStyles';
 import moment from 'moment';
 import FooterIndex from '../../components/Footer/index';
-import { connect } from "react-redux";
-import instance from "../../config/axios";
-import * as actions from "../../redux/actions";
-import { FINISHPARKING, READ_HQ, READ_PARANOIC_USER, GET_RECIPS, CHECK_PARKING } from '../../config/api'
-import { TIMEOUT } from '../../config/constants/constants';
-import store from '../../config/store';
 import Button from '../../components/Button';
+import Header from '../../components/Header/HeaderIndex';
 import numberWithPoints from '../../config/services/numberWithPoints';
 import normalize from '../../config/services/normalizeFontSize';
-import { ImageBackground } from 'react-native';
-import Header from '../../components/Header/HeaderIndex';
-import styles from '../UserExit/UserExitStyles';
-
+// redux
+import { connect } from "react-redux";
+import * as actions from "../../redux/actions";
+// api
+import { FINISHPARKING, READ_HQ, READ_PARANOIC_USER, GET_RECIPS, CHECK_PARKING } from '../../config/api'
+import { TIMEOUT } from '../../config/constants/constants';
+import instance from "../../config/axios";
+import store from '../../config/store';
 
 const { width, height } = Dimensions.get('window');
 
 const UserOut = (props) => {
   const { navigation, officialProps, qr } = props;
+  const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
   const [recip, setRecip] = useState({})
@@ -29,6 +39,7 @@ const UserOut = (props) => {
   const [isDisabled, setIsDisabled] = useState(true);
   const [err, setErr] = useState("");
   const [isParanoicUser, setIsParanoicUser] = useState(false);
+
   const [plateOne, setPlateOne] = useState('');
   const [plateTwo, setPlateTwo] = useState('');
   const [plateOneCall, setPlateOneCall] = useState('');
@@ -39,13 +50,14 @@ const UserOut = (props) => {
   const [pendingValue, setPendingValue] = useState(pendingValue === undefined ? '0' : pendingValue + '')
   const [inputVerificationCode, setInputVerificationCode] = useState('');
   const [verificationCodeCall, setVerificationCodeCall] = useState('');
+
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
   const [modal5Visible, setModal5Visible] = useState(false);
+
   const verification = check.verificationCode === undefined ? '' : check.verificationCode + ''
-  const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
 
@@ -128,6 +140,7 @@ const UserOut = (props) => {
       setModal5Visible(true);
     }
   }
+
   async function checkParkingCode() {
     try {
       if (inputVerificationCode.length === 5) {
@@ -201,19 +214,6 @@ const UserOut = (props) => {
   const finishParking = async (paymentStatus, showModal) => {
     setLoading(true)
     try {
-      console.log({
-        plate: check.plate,
-        hqId: check.hqId,
-        phone: check.phone,
-        paymentType: "cash",
-        cash: parseInt(totalPay),
-        change: totalPay - totalAmount,
-        status: paymentStatus,
-        isParanoic: isParanoicUser,
-        officialEmail: officialProps.email,
-        dateFinished: new Date(),
-        dateStart: dateStart
-      })
       const response = await instance.post(
         FINISHPARKING,
         {
@@ -242,7 +242,6 @@ const UserOut = (props) => {
       getRecips()
 
       setIsDisabled(true);
-      console.log(showModal)
 
     } catch (err) {
       console.log(err?.response)
@@ -411,7 +410,7 @@ const UserOut = (props) => {
               justifyContent: 'space-between'
             }}>
               <Text style={styles.infoUserText}>{"TOTAL A PAGAR"}</Text>
-              <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
+              <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                 <View style={styles.payplate}>
                   <Text style={styles.payText}>{`$${numberWithPoints(totalAmount)}`}</Text>
                 </View>
@@ -479,7 +478,7 @@ const UserOut = (props) => {
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row', width: '80%', height: '20%',  justifyContent: 'flex-end', alignContent: 'center', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', width: '80%', height: '20%', justifyContent: 'flex-end', alignContent: 'center', alignItems: 'center' }}>
               <View style={{ width: '33%', paddingRight: '2%' }}>
                 <Text style={{ fontFamily: 'Montserrat-Bold', fontSize: width * 0.034, color: '#8F8F8F', textAlign: 'right' }}>{"A devolver"}</Text>
               </View>
@@ -534,7 +533,7 @@ const UserOut = (props) => {
                 </View>
               }
             </View>
-            <View style={{ height: '26%', width: '100%', justifyContent: 'flex-end' }}>
+            <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end' }}>
               <FooterIndex navigation={navigation} />
 
             </View>

@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { ImageBackground } from 'react-native';
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
-import { connect } from "react-redux";
-import instance from "../../config/axios";
-import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL, EDIT_ADMIN } from "../../config/api";
-import store from '../../config/store';
-import * as actions from "../../redux/actions";
+import { 
+    Text, 
+    View, 
+    FlatList 
+} from 'react-native';
 import Header from '../../components/Header/HeaderIndex';
+import numberWithPoints from '../../config/services/numberWithPoints';
 import TransactionsStyles from '../Transactions/TransactionsStyles';
 import FooterIndex from '../../components/Footer';
 import moment from 'moment';
-import numberWithPoints from '../../config/services/numberWithPoints';
 import normalize from '../../config/services/normalizeFontSize';
+// redux
+import { connect } from "react-redux";
+import * as actions from "../../redux/actions";
+// api
+import instance from "../../config/axios";
+import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL, EDIT_ADMIN } from "../../config/api";
+import store from '../../config/store';
 
 
 const Transactions = (props) => {
@@ -89,7 +95,7 @@ const Transactions = (props) => {
 
                     </View>
                     <View style={{
-                        height: '10%',
+                        height: '14%',
                         width: '100%',
                         justifyContent: 'flex-end'
                     }}>

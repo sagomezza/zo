@@ -1,14 +1,17 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
+
+const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     container: {
-        height: '73%',
+        height: '72%',
         backgroundColor: '#F8F8F8',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         alignContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'space-between'
     },
     listContainer: {
         height: '75%',
@@ -23,7 +26,7 @@ const styles = StyleSheet.create({
         width: '46%',
         height: '100%',
         margin: '2%',
-        fontSize: normalize(38),
+        fontSize: width * 0.06,
         fontFamily: 'Montserrat-Bold',
         backgroundColor: '#FFFFFF',
         borderRadius: 30,
@@ -31,10 +34,8 @@ const styles = StyleSheet.create({
     },
     buttonI: {
         borderRadius: 30,
-        height: normalize(35),
+        height: width * 0.06,
         width: '100%',
-        marginLeft: '0%',
-        paddingHorizontal: '24%',
     },
     buttonRe: {
         borderRadius: 30,
@@ -82,10 +83,8 @@ const styles = StyleSheet.create({
     },
     buttonIDisabled: {
         borderRadius: 30,
-        height: normalize(35),
+        height: width * 0.06,
         width: '100%',
-        marginLeft: '0%',
-        paddingHorizontal: '24%',
         opacity: 0.5
     },
     infoTextTitle: {
@@ -185,7 +184,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Bold'
     },
     textPago: {
-        fontSize: normalize(13),
+        fontSize: width * 0.02,
         color: '#5D5D5D',
         fontFamily: 'Montserrat-Regular'
     },
@@ -195,7 +194,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Regular'
     },
     textListTitle: {
-        fontSize: normalize(15),
+        fontSize: width * 0.025,
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },

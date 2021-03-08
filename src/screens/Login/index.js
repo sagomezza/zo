@@ -1,6 +1,6 @@
 //Import dependencies
 
-//-------- Native dependecies ------------
+// Native dependecies
 import React, { useState } from 'react';
 import {
   View,
@@ -13,21 +13,18 @@ import {
   TouchableWithoutFeedback,
   Keyboard
 } from 'react-native';
-//-------- Library dependecies ------------
+// Library dependecies
 import axios from 'axios';
 import { auth } from '../../config/firebase';
 import * as SecureStore from 'expo-secure-store';
 import { connect } from 'react-redux';
 import { CommonActions } from '@react-navigation/native';
-//-------- Constants dependecies ------------
-import {
-  API,
-  READOFFICIAL
-} from '../../config/constants/api'
+// Constants dependecies
+import { API, READOFFICIAL } from '../../config/constants/api'
 import { START_SHIFT, READ_ADMIN, READ_CORPO } from "../../config/api/index";
 import * as actions from "../../redux/actions";
 import { TIMEOUT } from '../../config/constants/constants';
-//-------- Styling dependecies ------------
+// Styling dependecies
 import styles from './LoginStyles';
 import normalize from '../../config/services/normalizeFontSize';
 import Button from '../../components/Button';
@@ -37,7 +34,6 @@ import { Dimensions } from 'react-native';
 
 const LoginIndex = (props) => {
   const { navigation, officialProps } = props;
-
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")

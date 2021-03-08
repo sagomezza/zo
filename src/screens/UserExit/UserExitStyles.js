@@ -97,7 +97,8 @@ const styles = StyleSheet.create({
         margin: '1%',
         flexDirection: 'column',
         alignContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'center'
   
       },
       payText: {
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
   
       },
       miniButtonMoneyText: {
-        fontSize: 12,
+        fontSize: width * 0.02,
         color: '#8F8F8F',
         textAlign: 'center',
         fontFamily: 'Montserrat-Bold'

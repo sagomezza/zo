@@ -38,17 +38,17 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Bold'
     },
     screenTitle: {
-        fontSize: normalize(20),
+        fontSize: width * 0.034,
         color: 'gray',
         fontFamily: 'Montserrat-Bold'
     },
     textPago: {
-        fontSize: normalize(13),
+        fontSize: width * 0.02,
         color: '#5D5D5D',
         fontFamily: 'Montserrat-Regular'
     },
     textMoney: {
-        fontSize: normalize(19),
+        fontSize: width * 0.035,
         color: '#5D5D5D',
         fontFamily: 'Montserrat-Regular'
     },
@@ -62,7 +62,13 @@ const styles = StyleSheet.create({
         paddingVertical: '1%'
     },
     cashBalanceListItem: {
-        flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%'
+        flexDirection: "row", 
+        borderBottomWidth: 1, 
+        borderColor: "#E9E9E9", 
+        marginBottom: '2%', 
+        marginLeft: '10%', 
+        marginRight: '10%', 
+        marginTop: '0%'
     },
     centeredView: {
         flex: 1,

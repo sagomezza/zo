@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ImageBackground } from 'react-native';
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import { 
+    Text, 
+    View, 
+    FlatList 
+} from 'react-native';
 import { connect } from "react-redux";
 import instance from "../../config/axios";
 import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL, EDIT_ADMIN } from "../../config/api";
@@ -34,8 +38,6 @@ const ActiveServices = (props) => {
         readHq();
 
     }, []);
-
-
 
     return (
         <View style={{ flex: 1 }}>
@@ -85,9 +87,9 @@ const ActiveServices = (props) => {
 
                     </View>
                     <View style={{
-                        height: '17%',
+                        height: '13%',
                         width: '100%',
-                        justifyContent: 'flex-end'
+                        justifyContent: 'center'
                     }}>
                         <FooterIndex navigation={navigation} />
                     </View>

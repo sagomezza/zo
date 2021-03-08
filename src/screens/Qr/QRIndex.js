@@ -1,26 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Modal, TouchableHighlight, Dimensions, Image } from 'react-native';
-import Constants from 'expo-constants';
+import { 
+  Text, 
+  View, 
+  Modal, 
+  Image 
+} from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { TextInput } from 'react-native-gesture-handler';
-import FooterIndex from '../../components/Footer';
 import { Camera } from "expo-camera";
+import FooterIndex from '../../components/Footer';
 import styles from './styles';
-import { READ_HQ, START_PARKING } from '../../config/api';
-import instance from '../../config/axios';
-import { connect } from 'react-redux';
-import * as actions from "../../redux/actions";
 import moment from 'moment';
-import { TIMEOUT } from '../../config/constants/constants';
 import store from '../../config/store';
 import normalize from '../../config/services/normalizeFontSize';
 import Button from '../../components/Button';
 import Header from '../../components/Header/HeaderIndex';
+// redux
+import { connect } from 'react-redux';
+import * as actions from "../../redux/actions";
+// api
+import { TIMEOUT } from '../../config/constants/constants';
+import { READ_HQ, START_PARKING } from '../../config/api';
+import instance from '../../config/axios';
 
-// export default class BarcodeScanner extends React.Component {
 const BarcodeScanner = (props) => {
-
   const { navigation, officialProps, qr } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const errorRef = useRef();
@@ -32,7 +35,6 @@ const BarcodeScanner = (props) => {
   const [startParking, setStartParking] = useState({});
   const [modal2Visible, setModal2Visible] = useState(false);
 
-
   function isCharacterALetter(char) {
     return (/[a-zA-Z]/).test(char)
   }
@@ -43,8 +45,6 @@ const BarcodeScanner = (props) => {
       setHasPermission(status === "granted");
     })();
   }, []);
-
-  useEffect
 
   const handleBarCodeScanned = async ({ data }) => {
     setScanned(true);
@@ -103,28 +103,10 @@ const BarcodeScanner = (props) => {
         store.dispatch(actions.setHq(response.data.data));
       }
     } catch (error) {
-      console.log('qrreadhqcatch-----------')
       console.log("err: ", error);
-      console.log('qrreadhqcatch-----------')
       console.log(err?.response?.data);
-      console.log('qrreadhqcatch-----------')
-
     }
   };
-
-  // const onCloseErrors = () => {
-  //   errorRef.current.close()
-  //   navigation.navigate("Home");
-  // }
-
-  // const toggleFlash = () => {
-  //   try {
-  //     if (flash === "torch") setFlash("off");
-  //     else setFlash("torch");
-  //   } catch (e) {
-  //     //console.log(e);
-  //   }
-  // };
 
   if (hasPermission === null) {
     return <View />;
@@ -135,19 +117,8 @@ const BarcodeScanner = (props) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
-      {/* <View style={{flexDirection: "row", marginTop: '15%', marginBottom: '10%', justifyContent: 'center'}}>
-                <TextInput
-                style={styles.plateInput}
-                textAlign='center'
-                value={plate}
-                editable={false}
-                />
-                
-            </View> */}
       <Header navigation={navigation} />
-
       <View style={styles.container}>
-
         <Camera
           style={styles.camera}
           barCodeScannerSettings={{
@@ -171,47 +142,19 @@ const BarcodeScanner = (props) => {
                 ESCANEAR CÓDIGO QR
                     </Text>
             </View>
-            {/* <View style={{borderWidth: 1, flex: 1, backgroundColor: '#F8F8F8'}}>
-
-            </View> */}
-
             <View style={styles.middleSection}>
               <View style={styles.darkenSection}></View>
               <View style={styles.qrSquare}></View>
               <View style={styles.darkenSection}></View>
             </View>
-
             <View style={styles.darkenSection}>
-
             </View>
           </View>
-          {/*               
-                <CustomModal
-                  ref={errorRef}
-                  custom={true}
-                  onTouchOutside={onCloseErrors}
-                >
-                  <View style={{ alignItems: "center", marginVertical: 20 }}>
-                    <Text style={{ fontSize: 30, fontWeight: "bold" }}>¡Error inesperado!</Text>
-                    <View style={{ marginVertical: 40, alignItems: "center" }}>
-                      <Text style={{ fontSize: 20 }}>Algo salió mal al intentar leer el QR</Text>
-                      
-                      <Text style={{ fontSize: 20 }}>Vuelve a intarlo más tarde</Text>
-                    </View>
-                    <Button
-                      title={"Entendido"}
-                      color={"primary"}
-                      onPress={onCloseErrors}
-                    />
-                  </View>
-                </CustomModal> */}
         </Camera>
       </View>
       <View style={{ height: '11%', width: '100%', justifyContent: 'flex-end' }}>
         <FooterIndex navigation={navigation} />
-
       </View>
-
       <Modal
         animationType="fade"
         transparent={true}
@@ -311,7 +254,6 @@ const BarcodeScanner = (props) => {
           </View>
         </View>
       </Modal>
-
     </View>
   );
 }
@@ -323,12 +265,3 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, actions)(BarcodeScanner);
-
-
-
-  // handleBarCodeScanned = () => {
-  //   this.setState({
-  //     scanned: true,
-  //     modalVisible: true
-  //   });
-  // };

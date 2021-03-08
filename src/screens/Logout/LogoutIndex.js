@@ -1,25 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, FlatList, Modal, TouchableHighlight, Dimensions, Image } from 'react-native';
+import { 
+  StyleSheet, 
+  View, 
+  Text, 
+  FlatList, 
+  Modal, 
+  TouchableHighlight, 
+  Dimensions, 
+  Image 
+} from 'react-native';
+import { ImageBackground } from 'react-native';
+import { Keyboard } from 'react-native';
+import numberWithPoints from '../../config/services/numberWithPoints';
+import normalize from '../../config/services/normalizeFontSize';
+import styles from '../Logout/LogoutStyles';
+import Header from '../../components/Header/HeaderIndex';
+import { width } from '../../config/constants/screenDimensions';
+import { Icon } from 'react-native-elements';
 import { TextInput, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import moment from 'moment';
+import Button from '../../components/Button/index';
 import FooterIndex from '../../../src/components/Footer/index';
+import moment from 'moment';
+// redux
+import { connect } from "react-redux";
+import * as actions from "../../redux/actions";
+import instance from '../../config/axios';
+// api
+import { GET_SHIFT_RECIPS, MARK_END_OF_SHIFT, READ_HQ } from '../../config/api';
 import { firebase } from '@firebase/app';
 import '@firebase/auth';
 import '@firebase/database';
 import "@firebase/firestore";
-import { connect } from "react-redux";
-import * as actions from "../../redux/actions";
-import instance from '../../config/axios';
-import { GET_SHIFT_RECIPS, MARK_END_OF_SHIFT, READ_HQ } from '../../config/api';
-import numberWithPoints from '../../config/services/numberWithPoints';
-import Button from '../../components/Button/index';
-import normalize from '../../config/services/normalizeFontSize';
-import { Icon } from 'react-native-elements';
-import styles from '../Logout/LogoutStyles';
-import { ImageBackground } from 'react-native';
-import Header from '../../components/Header/HeaderIndex';
-import { Keyboard } from 'react-native';
-import { width } from '../../config/constants/screenDimensions';
+
 
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips } = props;
@@ -85,6 +97,7 @@ const LogoutIndex = (props) => {
     },
 
   });
+
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
@@ -120,12 +133,7 @@ const LogoutIndex = (props) => {
           setShiftRecips(response.data.data.recips);
         }
         console.log(response.data.data)
-        console.log("--------------middle----------")
-
         console.log(response.data)
-        console.log("--------------middle2----------")
-
-
       } catch (err) {
         console.log("err: ", err);
         console.log(err?.response)
@@ -316,15 +324,16 @@ const LogoutIndex = (props) => {
             borderTopRightRadius: 30,
             alignContent: 'center',
             alignItems: 'center'
+            
           }}>
-            <View style={{ height: '55%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
+            <View style={{ height: '55%', width: '78%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
               <View style={{ paddingBottom: 10, height: "50%" }}>
                 <FlatList
                   data={shiftRecips}
                   keyExtractor={({ id }) => id}
                   renderItem={({ item }) => {
                     return (
-                      <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: 60, marginRight: 70, marginTop: 20 }} >
+                      <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: '7%', marginRight: '7%', marginTop: 20 }} >
                         <View style={{ marginBottom: 10 }} >
                           <Text style={styles.textPlaca}>{item.plate}</Text>
                           <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>

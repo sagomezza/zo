@@ -3,7 +3,6 @@ import normalize from '../../config/services/normalizeFontSize';
 
 const {width, height} = Dimensions.get('window');
 
-
 const styles = StyleSheet.create({
   container: { 
     flex: 1, 

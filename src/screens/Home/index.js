@@ -1,27 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  Dimensions
+} from 'react-native';
+import { ImageBackground } from 'react-native';
+import Header from '../../components/Header/HeaderIndex';
+import numberWithPoints from '../../config/services/numberWithPoints';
+import normalize from '../../config/services/normalizeFontSize';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import FooterIndex from '../../components/Footer';
 import HomeStyles from '../Home/HomeStyles';
 import Button from '../../components/Button';
 import instance from "../../config/axios";
+import moment from 'moment';
+// api
 import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL, EDIT_ADMIN } from "../../config/api";
+import { TIMEOUT } from '../../config/constants/constants';
+// redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import store from '../../config/store';
-import moment from 'moment';
-import numberWithPoints from '../../config/services/numberWithPoints';
-import normalize from '../../config/services/normalizeFontSize';
-import { ImageBackground } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import Header from '../../components/Header/HeaderIndex';
 
-const { width, height} = Dimensions.get('window');
+
+const { width, height } = Dimensions.get('window');
 
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  const [occupiedBikes, setOccupiedBikes ] = useState(0);
-  const [occupiedCars, setOccupiedCars ] = useState(0);
+  const [occupiedBikes, setOccupiedBikes] = useState(0);
+  const [occupiedCars, setOccupiedCars] = useState(0);
 
 
   useEffect(() => {
@@ -29,7 +39,9 @@ const HomeIndex = (props) => {
       try {
         const response = await instance.post(GET_RECIPS, {
           hqId: officialProps.hq[0]
-        });
+        },
+          { timeout: TIMEOUT }
+        );
         if (response.data.response === 1) {
           store.dispatch(actions.setRecips(response.data.data));
         }
@@ -44,7 +56,9 @@ const HomeIndex = (props) => {
         await instance.post(EDIT_OFFICIAL, {
           id: officialProps.id,
           expoToken: props.expoToken.expoToken
-        });
+        },
+          { timeout: TIMEOUT }
+        );
       } catch (err) {
         try {
           await instance.post(EDIT_ADMIN, {
@@ -62,7 +76,9 @@ const HomeIndex = (props) => {
       try {
         const response = await instance.post(READ_HQ, {
           id: officialHq
-        });
+        },
+          { timeout: TIMEOUT }
+        );
         if (response.data.response) {
           store.dispatch(actions.setReservations(response.data.data.reservations));
           store.dispatch(actions.setHq(response.data.data));
@@ -179,10 +195,10 @@ const HomeIndex = (props) => {
                       <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
                         <View style={{ marginBottom: '2%' }} >
                           <Text style={HomeStyles.textPlaca}>{item.plate}</Text>
-                          <Text style={HomeStyles.textPago}>Pago por 
+                          <Text style={HomeStyles.textPago}>Pago por
                           {
-                          item.hours === '1 month' ? ' mensualidad': `${formatHours(item.hours)} horas`
-                          } 
+                              item.hours === '1 month' ? ' mensualidad' : `${formatHours(item.hours)} horas`
+                            }
                           </Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
@@ -219,11 +235,11 @@ const HomeIndex = (props) => {
                         <View style={{ flex: 1, alignItems: 'flex-end' }} >
                           <Text style={HomeStyles.textMoney}>{moment(item.dateStart).format('L')}  {moment(item.dateStart).format('LT')}</Text>
                           <Text style={HomeStyles.textPago}>
-                            Pago por 
+                            Pago por
                             {item.prepayFullDay === true ? " pase día" : ""}
                             {item.mensuality === true ? " mensualidad" : ""}
                             {item.isParanoic === true ? " horas" : ""}
-                            {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? " horas": "" }
+                            {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? " horas" : ""}
                           </Text>
                         </View>
                       </View>

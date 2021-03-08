@@ -1,25 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { ImageBackground } from 'react-native';
-
 import {
-  SafeAreaView,
   Text,
   TouchableOpacity,
   View,
-  StyleSheet,
-  Image,
-  PermissionsAndroid,
-  Platform,
-  Share,
   FlatList,
   Modal,
   TextInput,
   ActivityIndicator,
   Dimensions
 } from 'react-native';
-
-// Import HTML to PDF
 import instance from "../../config/axios";
 import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT, GET_SHIFTS_OF_BOX, GET_BOX_TOTAL } from "../../config/api";
 import { connect } from 'react-redux';
@@ -113,13 +104,8 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-
-      console.log('--------shifts---------')
-      console.log(response.data.data)
       setShiftsOfBox(response.data.data)
-      console.log('-----------shifts---------')
       gotBoxTotal();
-      
     } catch (err) {
       setLoadingBoxGenerator(false);
       console.log(err)
@@ -135,14 +121,7 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      // if (response.data.response === 1) {
-      //   store.dispatch(actions.setRecips(response.data.data.total));
-      // }
-      console.log('------------sup---------')
-      console.log(response.data.data)
       setListBox(response.data.data)
-      console.log('------------sup222---------')
-
     } catch (err) {
       console.log(err)
       console.log(err?.response)
@@ -166,21 +145,13 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      // if (response.data.response === 1) {
-      //   store.dispatch(actions.setRecips(response.data.data.total));
-      // }
-      // console.log('------------create---------')
-      // console.log(response.data)
-      // console.log('------------createbox---------')
       setBase(0);
       settoTalReported(0);
       listBoxClose();
       setLoadingBoxGenerator(false);
       setModalVisible(!modalVisible);
-
     } catch (err) {
       console.log(err)
-      console.log('------------createbox-ERR--------')
       console.log(err?.response)
       setLoadingBoxGenerator(false);
 
@@ -198,19 +169,13 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      // if (response.data.response === 1) {
-      //   store.dispatch(actions.setRecips(response.data.data.total));
-      // }
       setModal2Visible(true)
       setReadBoxReportInfo(response.data.data)
       setBoxStatus(response.data.data.status)
       setLoadingReadBoxReport(false);
-
     } catch (err) {
       console.log(err)
-      console.log('------------createbox-ERR--------')
       setLoadingReadBoxReport(false);
-
       console.log(err?.response)
     }
   };
@@ -321,7 +286,7 @@ const txtGenerator = (props) => {
                 />
               </View>
             </View>
-            <View style={{ height: '10%' }}>
+            <View style={{ height: '10%',  width: '85%', alignSelf: 'center' }}>
               <Button
                 onPress={() => {
 
@@ -333,11 +298,9 @@ const txtGenerator = (props) => {
                   borderWidth: normalize(1),
                   borderColor: "#707070",
                   alignSelf: 'center',
-                  width: '69%',
-                  height: '53%',
+                  width: '100%',
+                  height: '60%',
                   margin: '2%',
-                  paddingHorizontal: '10%',
-                  paddingVertical: '1%'
                 }}
                 textStyle={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold', fontSize: width * 0.03, }}
                 activityIndicatorStatus={loadingBoxGenerator}
@@ -370,7 +333,7 @@ const txtGenerator = (props) => {
 
                               <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')} {moment(item.dateFinished).format('LT')}</Text>
                             </View>
-                            <View style={{ alignItems: 'flex-end', marginTop: '3%' }} >
+                            <View style={{ alignItems: 'flex-end', marginTop: '3%',  width: '49%' }} >
                               {item.status === 'active' ?
                                 <Button
                                   // onPress={onShare}
@@ -379,12 +342,12 @@ const txtGenerator = (props) => {
                                   style={{
                                     borderColor: "#00A9A0",
                                     borderWidth: 1,
-                                    paddingHorizontal: '15%'
+                                    width: '90%'
                                   }}
                                   textStyle={{
                                     color: "#00A9A0",
                                     fontFamily: 'Montserrat-Bold',
-                                    fontSize: normalize(15)
+                                    fontSize: width * 0.02
                                   }}
                                   disabled={true}
                                 />
@@ -395,12 +358,12 @@ const txtGenerator = (props) => {
                                   color='#00A9A0'
                                   style={{
                                     borderColor: "#707070",
-                                    paddingHorizontal: '15%'
+                                    width: '90%'
                                   }}
                                   textStyle={{
                                     color: "#FFFFFF",
                                     fontFamily: 'Montserrat-Bold',
-                                    fontSize: normalize(15)
+                                    fontSize: width * 0.02
                                   }}
                                   disabled={true}
                                 />
@@ -702,7 +665,7 @@ const txtGenerator = (props) => {
 
           </View>
           <View style={{
-            height: '17%',
+            height: '13%',
             width: '100%',
             justifyContent: 'flex-end'
           }}>

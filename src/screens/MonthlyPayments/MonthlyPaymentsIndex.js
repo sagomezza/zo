@@ -1,27 +1,34 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Text, View, Image, Modal, ImageBackground, Keyboard, Dimensions } from 'react-native';
+import { 
+    StyleSheet, 
+    Text, 
+    View, 
+    Image, 
+    Modal, 
+    ImageBackground, 
+    Keyboard, 
+    Dimensions 
+} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from '../MonthlyPayments/MonthlyPaymentsStyles';
-
-import { FIND_MENSUALITY_PLATE, RENEW_MENSUALITY, EDIT_MENSUALITY, CREATE_USER, CREATE_MENSUALITY, EDIT_USER } from "../../config/api";
-import instance from "../../config/axios";
-import { TIMEOUT } from '../../config/constants/constants';
-import { firestore } from '../../config/firebase'
-
-import { connect } from "react-redux";
-import * as actions from "../../redux/actions";
 import normalize from '../../config/services/normalizeFontSize';
 import moment from 'moment';
-
 import numberWithPoints from '../../config/services/numberWithPoints';
 import Header from '../../components/Header/HeaderIndex';
 import FooterIndex from '../../components/Footer';
 import Button from '../../components/Button';
 import DropDownPicker from 'react-native-dropdown-picker';
+// api
+import { FIND_MENSUALITY_PLATE, RENEW_MENSUALITY, EDIT_MENSUALITY, CREATE_USER, CREATE_MENSUALITY, EDIT_USER } from "../../config/api";
+import instance from "../../config/axios";
+import { TIMEOUT } from '../../config/constants/constants';
+import { firestore } from '../../config/firebase'
+// redux
+import { connect } from "react-redux";
+import * as actions from "../../redux/actions";
 
 const { width, height } = Dimensions.get('window');
-
 
 const MonthlyPayments = (props) => {
     const { navigation, officialProps, reservations, recips, hq } = props;
@@ -42,8 +49,6 @@ const MonthlyPayments = (props) => {
     const [modal3Visible, setModal3Visible] = useState(false);
     const [modal4Visible, setModal4Visible] = useState(false);
     const [modal5Visible, setModal5Visible] = useState(false);
-
-
     // To modify plates asociated to mensuality
     const [firstPlate, setFirstPlate] = useState('')
     const [secondPlate, setSecondPlate] = useState('')
@@ -64,7 +69,6 @@ const MonthlyPayments = (props) => {
     const [monthPrice, setMonthPrice] = useState(0);
     const [totalPay, setTotalPay] = useState(0);
     const [image, setImage] = useState("")
-
 
     const [firstPlateNewMen, setFirstPlateNewMen] = useState('')
     const [secondPlateNewMen, setSecondPlateNewMen] = useState('')
@@ -209,8 +213,6 @@ const MonthlyPayments = (props) => {
                         editUser(doc.id);
                         createMensuality(doc.id);
                     })
-
-
                 }
             })
     };
@@ -232,8 +234,6 @@ const MonthlyPayments = (props) => {
                     { timeout: TIMEOUT }
                 )
                 setLoading(false);
-
-                console.log(response.data)
             }
         } catch (err) {
             console.log(err)
@@ -246,25 +246,6 @@ const MonthlyPayments = (props) => {
     async function createUser() {
         setLoading(true);
         try {
-            console.log({
-                type: "full",
-                email: emailNewMen,
-                phone: '+57' + phoneNewMen,
-                name: nameNewMen,
-                lastName: lastNameNewMen,
-                expoToken: "",
-                monthlyUser: true,
-                plate: firstPlateNewMen,
-                hqId: officialHq,
-                mensualityType: 'personal',
-                validity: validityDateNewMen,
-                capacity: 1,
-                cash: Number(totalPay),
-                change: totalPay - monthPrice,
-                officialEmail: officialProps.email,
-                nid: newMenNid
-
-            })
             if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
                 let type
                 if (isCharacterALetter(firstPlateNewMen[5])) type = "bike"
@@ -402,8 +383,6 @@ const MonthlyPayments = (props) => {
                 )
                 setLoading(false);
                 setModalVisible(!modalVisible);
-                
-
             }
         } catch (err) {
             console.log(err)
@@ -415,13 +394,6 @@ const MonthlyPayments = (props) => {
 
     async function renewMensuality() {
         try {
-            console.log({
-                plate: plateOne + plateTwo,
-                cash: Number(totalPay),
-                change: totalPay - monthPrice,
-                hqId: officialHq
-
-            })
             if (plateOne.length === 3 && plateTwo.length === 3) {
                 const response = await instance.post(
                     RENEW_MENSUALITY,
@@ -434,8 +406,6 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                // setCharge(false);
-                console.log(response.data.data)
                 mensualityRenewedModal();
             }
         } catch (err) {
@@ -509,7 +479,7 @@ const MonthlyPayments = (props) => {
                 source={require('../../../assets/images/Home.png')}>
                 <Header navigation={navigation} />
                 <View style={{ height: '17%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '35%', width: '60%', marginTop: '2%' }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '30%', width: '60%', marginTop: '2%' }}>
                         <TextInput
                             ref={refPlateOne}
                             placeholder={'EVZ'}
@@ -547,7 +517,7 @@ const MonthlyPayments = (props) => {
                             value={plateTwo}
                         />
                     </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '40%', width: '90%', justifyContent: 'center' }}>
+                    <View style={{   height: '40%', width: '57%', justifyContent: 'center' }}>
                         <Button onPress={() => {
                             setLoading(true);
                             findMensualityPlate();
@@ -657,20 +627,18 @@ const MonthlyPayments = (props) => {
                                 </View>
                             </View>
                             :
-                            <View style={{ height: '30%', justifyContent: 'space-between' }}>
+                            <View style={{ height: '30%', justifyContent: 'space-between', width: '80%' }}>
                                 {mensualityExists === false ?
-                                    <Text style={{ fontSize: normalize(20), fontFamily: 'Montserrat-Regular' }}>
+                                    <Text style={styles.notFoundText}>
                                         No se encuentra mensualidad asociada.
                                      </Text>
                                     :
-                                    <Text style={{ fontSize: normalize(20), fontFamily: 'Montserrat-Regular' }}>
+                                    <Text style={styles.notFoundText}>
 
                                     </Text>
                                 }
-
                                 <Button onPress={() => {
                                     showModalInfoNewMen();
-
                                 }}
                                     title="C R E A R"
                                     color='gray'
