@@ -20,21 +20,15 @@ const styles = StyleSheet.create({
     },
     titleInputText: {
       color: 'white',
-      fontSize: normalize(20),
+      fontSize: width * 0.034,
       fontFamily: 'Montserrat-Bold',
       paddingHorizontal: '0%',
       paddingBottom: '1%'
     },
     alertText: {
       color: '#FFE828',
-      fontSize: normalize(14),
+      fontSize: width * 0.02,
       fontFamily: 'Montserrat-Regular'
-    },
-    enterText: {
-      fontSize: normalize (20),
-      fontWeight: 'bold',
-      color: '#FFFFFF',
-      fontFamily: 'Montserrat-Bold'
     },
     button:{
       height: normalize(30),
@@ -50,13 +44,10 @@ const styles = StyleSheet.create({
       fontFamily: 'Montserrat-Regular'
     },
     textInput: {
-      fontSize: normalize(17),
+      fontSize: width * 0.03,
       color: 'black',
       flex: 1,
       fontFamily: 'Montserrat-Regular'
-    },
-    infoContainer:{
-      
     },
     textInputContainer: {
       backgroundColor: "#F0EEEE",
