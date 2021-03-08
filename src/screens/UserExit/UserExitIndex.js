@@ -186,7 +186,9 @@ const UserOut = (props) => {
     try {
       const response = await instance.post(READ_HQ, {
         id: officialHq
-      });
+      },
+        { timeout: TIMEOUT }
+      );
       if (response.data.response) {
         store.dispatch(actions.setReservations(response.data.data.reservations));
         store.dispatch(actions.setHq(response.data.data));
@@ -200,8 +202,11 @@ const UserOut = (props) => {
   const getRecips = async () => {
     try {
       const response = await instance.post(GET_RECIPS, {
-        hqId: officialHq
-      });
+        hqId: officialHq,
+        officialEmail: officialProps.email
+      },
+        { timeout: TIMEOUT }
+      );
       if (response.data.response === 1) {
         store.dispatch(actions.setRecips(response.data.data));
       }

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { ImageBackground } from 'react-native';
-import { 
-    Text, 
-    View, 
-    FlatList 
+import {
+    Text,
+    View,
+    FlatList
 } from 'react-native';
 import Header from '../../components/Header/HeaderIndex';
 import numberWithPoints from '../../config/services/numberWithPoints';
@@ -17,6 +17,7 @@ import * as actions from "../../redux/actions";
 // api
 import instance from "../../config/axios";
 import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL, EDIT_ADMIN } from "../../config/api";
+import { TIMEOUT } from '../../config/constants/constants';
 import store from '../../config/store';
 
 
@@ -28,8 +29,11 @@ const Transactions = (props) => {
         const getRecips = async () => {
             try {
                 const response = await instance.post(GET_RECIPS, {
-                    hqId: officialProps.hq[0]
-                });
+                    hqId: officialProps.hq[0],
+                    officialEmail: officialProps.email
+                },
+                    { timeout: TIMEOUT }
+                );
                 if (response.data.response === 1) {
                     store.dispatch(actions.setRecips(response.data.data));
                 }

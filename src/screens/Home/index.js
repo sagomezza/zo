@@ -38,7 +38,8 @@ const HomeIndex = (props) => {
     const getRecips = async () => {
       try {
         const response = await instance.post(GET_RECIPS, {
-          hqId: officialProps.hq[0]
+          hqId: officialProps.hq[0],
+          officialEmail: officialProps.email
         },
           { timeout: TIMEOUT }
         );
