@@ -22,29 +22,8 @@ import store from '../../config/store';
 
 
 const Transactions = (props) => {
-    const { navigation, officialProps, reservations, recips, hq } = props;
+    const { navigation, officialProps, recips } = props;
     const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-
-    useEffect(() => {
-        const getRecips = async () => {
-            try {
-                const response = await instance.post(GET_RECIPS, {
-                    hqId: officialProps.hq[0],
-                    officialEmail: officialProps.email
-                },
-                    { timeout: TIMEOUT }
-                );
-                if (response.data.response === 1) {
-                    store.dispatch(actions.setRecips(response.data.data));
-                }
-            } catch (err) {
-                console.log(err?.response)
-                console.log("err: ", err);
-            }
-        };
-        getRecips();
-
-    }, []);
 
     const formatHours = (hours) => {
         if (typeof hours === "number" || typeof hours === "double" || typeof hours === "long" || typeof hours === "float") {
