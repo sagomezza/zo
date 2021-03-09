@@ -226,6 +226,7 @@ const UserOut = (props) => {
           hqId: check.hqId,
           phone: check.phone,
           paymentType: "cash",
+          total: totalAmount,
           cash: parseInt(totalPay),
           change: totalPay - totalAmount,
           status: paymentStatus,
