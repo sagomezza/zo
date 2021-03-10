@@ -13,7 +13,7 @@ const FooterIndex = ({ navigation }) => {
           title="I N G R E S O S"
           color="#FFF200"
           style={FooterStyles.buttonI}
-          onPress={() => navigation.navigate('UserInput')}
+          onPress={() => navigation.replace('UserInput')}
           textStyle={FooterStyles.footerTextI} />
       </View>
       <View style={{ width: '50%', height: '80%', justifyContent: 'center'}}>
@@ -21,7 +21,7 @@ const FooterIndex = ({ navigation }) => {
           title="S A L I D A S"
           color="#00A9A0"
           style={FooterStyles.buttonS}
-          onPress={() => navigation.navigate('UserOut')}
+          onPress={() => navigation.replace('UserOut')}
           textStyle={FooterStyles.footerText} />
       </View>
 
