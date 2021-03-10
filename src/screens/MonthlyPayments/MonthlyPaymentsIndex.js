@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { 
-    StyleSheet, 
-    Text, 
-    View, 
-    Image, 
-    Modal, 
-    ImageBackground, 
-    Keyboard, 
-    Dimensions 
+import {
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    Modal,
+    ImageBackground,
+    Keyboard,
+    Dimensions
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { TextInput } from 'react-native-gesture-handler';
@@ -517,7 +517,7 @@ const MonthlyPayments = (props) => {
                             value={plateTwo}
                         />
                     </View>
-                    <View style={{   height: '40%', width: '57%', justifyContent: 'center' }}>
+                    <View style={{ height: '40%', width: '57%', justifyContent: 'center' }}>
                         <Button onPress={() => {
                             setLoading(true);
                             findMensualityPlate();
@@ -669,12 +669,56 @@ const MonthlyPayments = (props) => {
                 }}
             >
                 <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
+                    <View style={{...styles.modalView, height: normalize(550)}}>
                         <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
                             <View style={{ marginBottom: '4%', justifyContent: 'center', height: '10%' }}>
                                 <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}>Placas asociadas a mensualidad </Text>
                             </View>
-                            <View style={{ justifyContent: 'space-between', height: '69%', width: '100%', flexDirection: 'column', paddingBottom: '10%' }}>
+                            <View style={{ justifyContent: 'space-between', height: '69%', width: '100%', flexDirection: 'column', paddingBottom: '10%', borderWidth: 1 }}>
+                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20)}}>Correo:  </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='default'
+                                        placeholder=''
+                                        textAlign='center'
+                                    // value={firstPlate !== undefined + '' ? firstPlate : ''}
+                                    // onChangeText={text => setFirstPlate(text)}
+                                    // onFocus={() => {
+                                    //     clearFirstPlate('')
+                                    // }}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Celular:  </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='default'
+                                        placeholder=''
+                                        textAlign='center'
+                                    // value={firstPlate !== undefined + '' ? firstPlate : ''}
+                                    // onChangeText={text => setFirstPlate(text)}
+                                    // onFocus={() => {
+                                    //     clearFirstPlate('')
+                                    // }}
+                                    />
+                                </View>
                                 <View style={{ flexDirection: "row", justifyContent: 'center' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 1:  </Text>
                                     <TextInput

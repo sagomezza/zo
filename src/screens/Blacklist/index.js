@@ -106,6 +106,7 @@ const Blacklist = (props) => {
                 { timeout: TIMEOUT }
             )
             setListHQDebts(response.data.data)
+            console.log(response.data.data)
         } catch (err) {
             console.log(err)
             console.log(err?.response)
@@ -213,7 +214,7 @@ const Blacklist = (props) => {
                                 <Text style={styles.textListTitle} >LISTA NEGRA</Text>
                             </View>
                             <View style={{ height: "90%" }}>
-                                {recips.recips.length > 0 ?
+                                {listHQDebts.length > 0 ?
                                     <FlatList
                                         style={{ height: "37%" }}
                                         data={listHQDebts}
