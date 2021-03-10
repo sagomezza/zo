@@ -75,7 +75,7 @@ const DrawerContent = (props) => {
                                 source={require('../../../assets/images/MenuMensualidades.png')} />
                         )}
                         label="Mensualidades"
-                        onPress={() => { props.navigation.navigate('MonthlyPayments') }}
+                        onPress={() => { props.navigation.replace('MonthlyPayments') }}
                     />
                     <DrawerItem
                         icon={({ color, size }) => (
