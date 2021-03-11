@@ -675,7 +675,7 @@ const MonthlyPayments = (props) => {
                                 <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}>Placas asociadas a mensualidad </Text>
                             </View>
                             <View style={{ justifyContent: 'space-between', height: '69%', width: '100%', flexDirection: 'column', paddingBottom: '10%', borderWidth: 1 }}>
-                                {/* <View style={{ flexDirection: "row", justifyContent: 'center' }}>
+                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20)}}>Correo:  </Text>
                                     <TextInput
                                         style={{
@@ -718,7 +718,7 @@ const MonthlyPayments = (props) => {
                                     //     clearFirstPlate('')
                                     // }}
                                     />
-                                </View> */}
+                                </View>
                                 <View style={{ flexDirection: "row", justifyContent: 'center' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 1:  </Text>
                                     <TextInput
@@ -1468,7 +1468,7 @@ const MonthlyPayments = (props) => {
                     <View style={styles.modalView}>
                         <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '5%' }}>
                             <View style={{ justifyContent: 'center', height: '30%' }}>
-                                <Text style={{ ...styles.modalText, fontSize: normalize(20), color: 'red' }}> La mensualidad no fue creada, inténtelo más tarde.</Text>
+                                <Text style={{ ...styles.modalText, fontSize: normalize(20), color: 'red' }}>  En este momento no está disponible la red, intentar nuevamente. </Text>
                             </View>
 
                             <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
