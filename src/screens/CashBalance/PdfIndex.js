@@ -122,6 +122,7 @@ const txtGenerator = (props) => {
         { timeout: TIMEOUT }
       );
       setListBox(response.data.data)
+      console.log(response.data.data)
     } catch (err) {
       console.log(err)
       console.log(err?.response)

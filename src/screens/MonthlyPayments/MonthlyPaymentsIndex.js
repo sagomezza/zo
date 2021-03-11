@@ -675,7 +675,7 @@ const MonthlyPayments = (props) => {
                                 <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}>Placas asociadas a mensualidad </Text>
                             </View>
                             <View style={{ justifyContent: 'space-between', height: '69%', width: '100%', flexDirection: 'column', paddingBottom: '10%', borderWidth: 1 }}>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
+                                {/* <View style={{ flexDirection: "row", justifyContent: 'center' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20)}}>Correo:  </Text>
                                     <TextInput
                                         style={{
@@ -718,7 +718,7 @@ const MonthlyPayments = (props) => {
                                     //     clearFirstPlate('')
                                     // }}
                                     />
-                                </View>
+                                </View> */}
                                 <View style={{ flexDirection: "row", justifyContent: 'center' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 1:  </Text>
                                     <TextInput
