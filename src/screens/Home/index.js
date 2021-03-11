@@ -37,6 +37,8 @@ const HomeIndex = (props) => {
   useEffect(() => {
     const getRecips = async () => {
       try {
+        console.log({hqId: officialProps.hq[0],
+          officialEmail: officialProps.email})
         const response = await instance.post(GET_RECIPS, {
           hqId: officialProps.hq[0],
           officialEmail: officialProps.email
@@ -46,6 +48,7 @@ const HomeIndex = (props) => {
         if (response.data.response === 1) {
           store.dispatch(actions.setRecips(response.data.data));
         }
+        console.log(recips.recips)
       } catch (err) {
         console.log(err?.response)
         console.log("err: ", err);
@@ -205,7 +208,8 @@ const HomeIndex = (props) => {
                         <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
                           <Text style={HomeStyles.textMoney}>
                             {item.cash === 0 && item.change < 0 ? '' : ''}
-                            {item.cash > 0 && item.change < 0 ? `$${numberWithPoints(item.total)}`: ''}
+                            {item.cash > 0 && item.change < 0 ? `$${numberWithPoints(item.total)}` : ''}
+                            {item.cash > 0 && item.change > 0 ? `$${numberWithPoints(item.total)}` : ''}
                           </Text>
                         </View>
                       </View>
