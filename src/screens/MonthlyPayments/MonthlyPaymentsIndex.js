@@ -50,6 +50,7 @@ const MonthlyPayments = (props) => {
     const [modal4Visible, setModal4Visible] = useState(false);
     const [modal5Visible, setModal5Visible] = useState(false);
     // To modify plates asociated to mensuality
+    const [userEmail, setUserEmail] = useState('')
     const [firstPlate, setFirstPlate] = useState('')
     const [secondPlate, setSecondPlate] = useState('')
     const [thirdPlate, setThirdPlate] = useState('')
@@ -82,6 +83,7 @@ const MonthlyPayments = (props) => {
     const fourthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + '' : ''
     const fifthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + '' : ''
 
+    
     let plates = [firstPlate, secondPlate, thirdPlate, fourthPlate, fifthPlate]
     let newPlates = plates.filter(plate => plate != undefined && plate != '' && plate != "undefined")
 
@@ -133,7 +135,9 @@ const MonthlyPayments = (props) => {
             setMonthPrice(hq.monthlyCarPrice)
         }
     }
-
+    const clearUserPhone = () => {
+        setUserPhone('');
+    }
     const clearPlateOne = () => {
         setPlateOne('');
     }
@@ -669,14 +673,14 @@ const MonthlyPayments = (props) => {
                 }}
             >
                 <View style={styles.centeredView}>
-                    <View style={{...styles.modalView, height: normalize(550)}}>
+                    <View style={{ ...styles.modalView, height: normalize(550) }}>
                         <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
                             <View style={{ marginBottom: '4%', justifyContent: 'center', height: '10%' }}>
                                 <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}>Placas asociadas a mensualidad </Text>
                             </View>
-                            <View style={{ justifyContent: 'space-between', height: '69%', width: '100%', flexDirection: 'column', paddingBottom: '10%', borderWidth: 1 }}>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20)}}>Correo:  </Text>
+                            <View style={{ justifyContent: 'space-between', height: '69%', width: '100%', flexDirection: 'column', paddingBottom: '10%' }}>
+                                {/* <View style={{ flexDirection: "row", justifyContent: 'center' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Correo:  </Text>
                                     <TextInput
                                         style={{
                                             borderWidth: 1,
@@ -690,14 +694,14 @@ const MonthlyPayments = (props) => {
                                         keyboardType='default'
                                         placeholder=''
                                         textAlign='center'
-                                    // value={firstPlate !== undefined + '' ? firstPlate : ''}
-                                    // onChangeText={text => setFirstPlate(text)}
+                                    // value={userPhone !== undefined + '' ? userPhone : ''}
+                                    // onChangeText={text => setUserPhone(text)}
                                     // onFocus={() => {
-                                    //     clearFirstPlate('')
+                                    //     clearUserPhone()
                                     // }}
                                     />
-                                </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
+                                </View> */}
+                                {/* <View style={{ flexDirection: "row", justifyContent: 'center' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Celular:  </Text>
                                     <TextInput
                                         style={{
@@ -709,16 +713,17 @@ const MonthlyPayments = (props) => {
                                             borderRadius: 10,
                                             color: '#00A9A0'
                                         }}
-                                        keyboardType='default'
+                                        keyboardType='numeric'
                                         placeholder=''
+                                        // maxLength={10}
                                         textAlign='center'
-                                    // value={firstPlate !== undefined + '' ? firstPlate : ''}
-                                    // onChangeText={text => setFirstPlate(text)}
-                                    // onFocus={() => {
-                                    //     clearFirstPlate('')
-                                    // }}
+                                        value={userPhone.length === 13 && userPhone !== undefined  ? userPhone.substring(3,12) : userPhone}
+                                        onChangeText={text => setUserPhone(text)}
+                                        onFocus={() => {
+                                            clearUserPhone()
+                                        }}
                                     />
-                                </View>
+                                </View> */}
                                 <View style={{ flexDirection: "row", justifyContent: 'center' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 1:  </Text>
                                     <TextInput
@@ -733,11 +738,12 @@ const MonthlyPayments = (props) => {
                                         }}
                                         keyboardType='default'
                                         placeholder=''
+                                        maxLength={6}
                                         textAlign='center'
                                         value={firstPlate !== undefined + '' ? firstPlate : ''}
                                         onChangeText={text => setFirstPlate(text)}
                                         onFocus={() => {
-                                            clearFirstPlate('')
+                                            clearFirstPlate()
                                         }}
                                     />
                                 </View>
@@ -755,12 +761,13 @@ const MonthlyPayments = (props) => {
                                         }}
                                         keyboardType='default'
                                         placeholder=''
+                                        maxLength={6}
                                         textAlign='center'
                                         // keyboardType={"numeric"}
                                         value={secondPlate !== undefined + '' ? secondPlate : ''}
                                         onChangeText={text => setSecondPlate(text)}
                                         onFocus={() => {
-                                            clearSecondPlate('')
+                                            clearSecondPlate()
                                         }}
                                     />
                                 </View>
@@ -778,12 +785,13 @@ const MonthlyPayments = (props) => {
                                         }}
                                         keyboardType='default'
                                         placeholder=''
+                                        maxLength={6}
                                         textAlign='center'
                                         // keyboardType={"numeric"}
                                         value={thirdPlate !== undefined + '' ? thirdPlate : ''}
                                         onChangeText={text => setThirdPlate(text)}
                                         onFocus={() => {
-                                            clearThirdPlate('')
+                                            clearThirdPlate()
                                         }}
                                     />
                                 </View>
@@ -801,12 +809,13 @@ const MonthlyPayments = (props) => {
                                         }}
                                         keyboardType='default'
                                         placeholder=''
+                                        maxLength={6}
                                         textAlign='center'
                                         // keyboardType={"numeric"}
                                         value={fourthPlate !== undefined + '' ? fourthPlate : ''}
                                         onChangeText={text => setFourthPlate(text)}
                                         onFocus={() => {
-                                            clearFourthPlate('')
+                                            clearFourthPlate()
                                         }}
                                     />
                                 </View>
@@ -824,12 +833,13 @@ const MonthlyPayments = (props) => {
                                         }}
                                         keyboardType='default'
                                         placeholder=''
+                                        maxLength={6}
                                         textAlign='center'
                                         // keyboardType={"numeric"}
                                         value={fifthPlate !== undefined + '' ? fifthPlate : ''}
                                         onChangeText={text => setFifthPlate(text)}
                                         onFocus={() => {
-                                            clearFifthPlate('')
+                                            clearFifthPlate()
                                         }}
                                     />
                                 </View>

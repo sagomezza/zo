@@ -32,6 +32,10 @@ const { width, height } = Dimensions.get('window');
 const UserOut = (props) => {
   const { navigation, officialProps, qr } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
+  // const qrPlate = qr.plate !== undefined ? qr.plate : '';
+  // const qrPhone = qr.phone !== undefined ? qr.phone : '';
+  // const [qrCodePlate, setQrCodePlate] = useState(qrPlate);
+  // const [qrCodePhone, setQrCodePhone] = useState(qrPhone);
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
   const [recip, setRecip] = useState({})
@@ -61,7 +65,9 @@ const UserOut = (props) => {
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
 
-  function restart() {
+  const restart = () => {
+    store.dispatch(actions.setQr(''));
+    store.dispatch(actions.setPhone(''));
     setModalVisible(false);
     setModal2Visible(false);
     setModal3Visible(false);
@@ -243,7 +249,6 @@ const UserOut = (props) => {
         setModalVisible(true)
       }
       readHq()
-      restart();
       setRecip(response.data.data);
       getRecips()
 
@@ -632,22 +637,7 @@ const UserOut = (props) => {
               </View>
               <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
-                  setModalVisible(false);
-                  setModal2Visible(false);
-                  setModal3Visible(false);
-                  setModal4Visible(false);
-                  setTotalAmount(0);
-                  setTotalPay(0);
-                  setPlateOne("");
-                  setPlateTwo("");
-                  setRecip({})
-                  setLoading(false);
-                  setErr("")
-                  setDateStart('');
-                  setDateFinished('');
-                  setCheck({});
-                  setPendingValue();
-                  setInputVerificationCode('');
+                  restart();
                 }}
                   title="E N T E N D I D O"
                   color="#00A9A0"
