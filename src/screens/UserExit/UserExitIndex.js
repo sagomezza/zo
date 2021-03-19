@@ -51,7 +51,8 @@ const UserOut = (props) => {
   const [dateStart, setDateStart] = useState('');
   const [dateFinished, setDateFinished] = useState('');
   const [check, setCheck] = useState({})
-  const [pendingValue, setPendingValue] = useState(pendingValue === undefined ? '0' : pendingValue + '')
+  const [pendingValue, setPendingValue] = useState(0)
+  let pendingValueNum = pendingValue !== undefined ? `$${numberWithPoints(pendingValue)}` : `$${numberWithPoints(0)}` 
   const [inputVerificationCode, setInputVerificationCode] = useState('');
   const [verificationCodeCall, setVerificationCodeCall] = useState('');
 
@@ -82,7 +83,7 @@ const UserOut = (props) => {
     setDateStart('');
     setDateFinished('');
     setCheck({});
-    setPendingValue();
+    setPendingValue(0);
     setInputVerificationCode('');
   }
 
@@ -135,6 +136,7 @@ const UserOut = (props) => {
         setDateStart(response.data.data.dateStart);
         setTotalAmount(response.data.data.total);
         setIsDisabled(false)
+        console.log(response.data.data.pendingValue)
         setPendingValue(response.data.data.pendingValue)
         setCheck(response.data.data)
         setInputVerificationCode(response.data.data.verificationCode + '')
@@ -427,7 +429,7 @@ const UserOut = (props) => {
                 </View>
                 <View style={{ height: '30%', width: '100%', flexDirection: 'row', justifyContent: 'center', marginTop: '2%' }}>
                   <Text style={{ fontSize: width * 0.035, color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{"Saldo pendiente: "}</Text>
-                  <Text style={{ fontSize: width * 0.035, color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{`$${numberWithPoints(pendingValue)}`}</Text>
+                  <Text style={{ fontSize: width * 0.035, color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{pendingValueNum}</Text>
 
                 </View>
               </View>
