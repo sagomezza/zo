@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
+
+const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     textInput: {
@@ -7,31 +9,31 @@ const styles = StyleSheet.create({
         height: '74%',
         marginRight: '5%',
         marginLeft: '0%',
-        fontSize: normalize(34),
+        fontSize: width * 0.045,
         fontFamily: 'Montserrat-Bold',
         color: '#00A9A0',
         backgroundColor: '#FFF200',
         borderRadius: 20
     },
     timePlate: {
-        width: '48%',
+        width: '49%',
         height: '77%',
         backgroundColor: 'rgba(22,22,21,0.25)',
         borderRadius: 30,
         flexDirection: 'row',
-        paddingHorizontal: 25,
+        paddingHorizontal: 16,
         alignContent: 'center',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'center'
     },
     timePlateTitle: {
         fontFamily: 'Montserrat-Bold',
-        fontSize: normalize(17),
+        fontSize: width * 0.027,
         color: '#FFFFFF'
     },
     timePlateInfo: {
         fontFamily: 'Montserrat-Regular',
-        fontSize: normalize(17),
+        fontSize: width * 0.027,
         color: '#FFFFFF'
     },
     buttonT: {
@@ -56,35 +58,28 @@ const styles = StyleSheet.create({
         opacity: 0.5
     },
     textPlaca: {
-        fontSize: normalize(18),
+        fontSize: width * 0.03,
         color: '#5D5D5D',
         fontFamily: 'Montserrat-Bold'
     },
     textPago: {
-        fontSize: normalize(13),
+        fontSize: width * 0.02,
         color: '#5D5D5D',
         fontFamily: 'Montserrat-Regular'
     },
     textMoney: {
-        fontSize: normalize(20),
+        fontSize: width * 0.034,
         color: '#5D5D5D',
         fontFamily: 'Montserrat-Regular'
     },
     shiftButton: {
-        alignSelf: 'center',
-        width: '86%',
-        height: '43%',
-        marginTop: '5%',
-        paddingHorizontal: '3%',
+        width: '100%',
+        height: '70%',
         borderRadius: 20,
-
     },
     shiftButtonDisabled: {
-        alignSelf: 'center',
-        width: '86%',
-        height: '43%',
-        marginTop: '5%',
-        paddingHorizontal: '3%',
+        width: '100%',
+        height: '70%',
         borderRadius: 20,
         opacity: 0.5
     },
@@ -92,6 +87,12 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontFamily: 'Montserrat-Regular',
         color: '#B7B7B7',
+        fontSize: normalize(20)
+    },
+    modalTextAlert: {
+        textAlign: "center",
+        fontFamily: 'Montserrat-Regular',
+        color: 'red',
         fontSize: normalize(20)
     },
     modal2Button: {

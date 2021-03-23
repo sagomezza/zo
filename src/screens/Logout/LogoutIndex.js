@@ -1,27 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, FlatList, Modal, TouchableHighlight, Dimensions, Image } from 'react-native';
+import { 
+  StyleSheet, 
+  View, 
+  Text, 
+  FlatList, 
+  Modal, 
+  TouchableHighlight, 
+  Dimensions, 
+  Image 
+} from 'react-native';
+import { ImageBackground } from 'react-native';
+import { Keyboard } from 'react-native';
+import numberWithPoints from '../../config/services/numberWithPoints';
+import normalize from '../../config/services/normalizeFontSize';
+import styles from '../Logout/LogoutStyles';
+import Header from '../../components/Header/HeaderIndex';
+import { width } from '../../config/constants/screenDimensions';
+import { Icon } from 'react-native-elements';
 import { TextInput, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import moment from 'moment';
+import Button from '../../components/Button/index';
 import FooterIndex from '../../../src/components/Footer/index';
+import moment from 'moment';
+// redux
+import { connect } from "react-redux";
+import * as actions from "../../redux/actions";
+import instance from '../../config/axios';
+// api
+import { GET_SHIFT_RECIPS, MARK_END_OF_SHIFT, READ_HQ } from '../../config/api';
 import { firebase } from '@firebase/app';
 import '@firebase/auth';
 import '@firebase/database';
 import "@firebase/firestore";
-import { connect } from "react-redux";
-import * as actions from "../../redux/actions";
-import instance from '../../config/axios';
-import { GET_SHIFT_RECIPS, MARK_END_OF_SHIFT, READ_HQ } from '../../config/api';
-import numberWithPoints from '../../config/services/numberWithPoints';
-import Button from '../../components/Button/index';
-import normalize from '../../config/services/normalizeFontSize';
-import { Icon } from 'react-native-elements';
-import styles from '../Logout/LogoutStyles';
-import { ImageBackground } from 'react-native';
-import Header from '../../components/Header/HeaderIndex';
-import { Keyboard } from 'react-native';
+
 
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips } = props;
+  const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const startTime = officialProps.schedule.start
   const HomeStyles = StyleSheet.create({
     plateInput: {
@@ -83,20 +97,31 @@ const LogoutIndex = (props) => {
     },
 
   });
+
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
+  const [modal3Visible, setModal3Visible] = useState(false);
+
   const [total, setTotal] = useState(0);
   const [shiftRecips, setShiftRecips] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
   const [hqInfo, setHqInfo] = useState([]);
 
-
   const hq = props.hq;
+
+  const [inputBaseValue, setInputBaseValue] = useState('');
   const [inputValue, setInputValue] = useState('');
 
 
   useEffect(() => {
     const getShiftRecips = async () => {
+      console.log({
+        email: officialProps.email,
+        hqId: officialProps.hq[0],
+        date: new Date(),
+        id: officialProps.id,
+        dateStart: startTime
+      })
       try {
         const response = await instance.post(GET_SHIFT_RECIPS, {
           email: officialProps.email,
@@ -108,12 +133,7 @@ const LogoutIndex = (props) => {
           setShiftRecips(response.data.data.recips);
         }
         console.log(response.data.data)
-        console.log("--------------middle----------")
-
         console.log(response.data)
-        console.log("--------------middle2----------")
-
-
       } catch (err) {
         console.log("err: ", err);
         console.log(err?.response)
@@ -129,8 +149,10 @@ const LogoutIndex = (props) => {
         email: officialProps.email,
         id: officialProps.id,
         date: new Date(),
-        total: total,
-        input: inputValue
+        total: Number(total),
+        input: Number(inputValue),
+        base: Number(inputBaseValue),
+        hqId: officialHq
       });
       firebase.auth().signOut().then(function () {
         // Sign-out successful.
@@ -140,6 +162,8 @@ const LogoutIndex = (props) => {
     } catch (err) {
       console.log(err)
       console.log(err?.response)
+      setModal3Visible(false);
+
     }
   }
 
@@ -182,12 +206,12 @@ const LogoutIndex = (props) => {
         source={require('../../../assets/images/Stripes.png')}>
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={{ height: '40%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
+          <View style={{ height: '38%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
 
-            <View style={{ flexDirection: 'column', alignItems: 'center', alignContent: 'center', height: '30%', width: '60%', marginTop: '2%' }}>
-              <Text style={{ fontSize: normalize(29), fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>{officialProps.name + ' ' + officialProps.lastName}</Text>
+            <View style={{ flexDirection: 'column', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%'}}>
+              <Text style={{ fontSize: width * 0.04, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>{officialProps.name + ' ' + officialProps.lastName}</Text>
               <View style={{}}>
-                <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: normalize(23), color: '#FFFFFF' }}>{hq.name}</Text>
+                <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: width * 0.03, color: '#FFFFFF' }}>{hq.name}</Text>
               </View>
             </View>
             <View style={{
@@ -203,7 +227,7 @@ const LogoutIndex = (props) => {
                   style={{ width: '18%' }}
                   resizeMode={"contain"}
                   source={require('../../../assets/images/Inicio.png')} />
-                <View >
+                <View style={{}} >
                   <Text style={styles.timePlateTitle}>Tiempo de inicio:</Text>
                   <Text style={styles.timePlateInfo}>{moment(startTime).format('L')} {moment(startTime).format('LT')} </Text>
                 </View>
@@ -213,7 +237,7 @@ const LogoutIndex = (props) => {
                   style={{ width: '17%' }}
                   resizeMode={"contain"}
                   source={require('../../../assets/images/Salida.png')} />
-                <View>
+                <View style={{}} >
                   <Text style={styles.timePlateTitle}>Tiempo de salida:</Text>
                   <Text style={styles.timePlateInfo}>{moment().format('L')} {moment().format('LT')}</Text>
                 </View>
@@ -221,11 +245,44 @@ const LogoutIndex = (props) => {
               </View>
             </View>
             <View style={{ width: '30%' }}>
-              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: normalize(23) }}>{"TOTAL: "}{`$${numberWithPoints(total)}`}</Text>
+              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.035 }}>{"TOTAL: "}{`$${numberWithPoints(total)}`}</Text>
             </View>
-            <View style={{ flexDirection: 'row', width: '80%', height: '30%', alignItems: 'center', alignContent: 'center', padding: '2%', justifyContent: 'space-between' }}>
+            <View style={{ flexDirection: 'row', width: '80%', height: '22%', alignItems: 'center', alignContent: 'center', padding: '1%', justifyContent: 'center' }}>
+              <View style={{ width: '21%' }}>
+                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>{"BASE: "} </Text>
+              </View>
+              <View style={{
+                justifyContent: "center",
+                alignContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                width: '70%',
+                height: '80%'
+              }}>
+                <TextInput
+                  placeholder='$'
+                  style={
+                    styles.textInput
+                  }
+                  keyboardType='numeric'
+                  textAlign='center'
+                  editable={isDisabled}
+                  onChangeText={text => setInputBaseValue(text) + ''}
+                  value={inputBaseValue == 0 ? '' : inputBaseValue + ''}
+
+                />
+                {/* <TouchableOpacity style={[!inputValue.length === 0 ? styles.buttonTDisabled : styles.buttonT]}
+                  onPress={() => {
+                    setModal2Visible(true)
+                  }}
+                  disabled={inputValue.length === 0}>
+                  <Icon name='save' color='#00A9A0' style={{ marginTop: '4%' }} />
+                </TouchableOpacity> */}
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', width: '80%', height: '22%', alignItems: 'center', alignContent: 'center', padding: '1%', justifyContent: 'space-between' }}>
               <View style={{ width: '30%' }}>
-                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: normalize(20) }}>{"DINERO EN EFECTIVO: "} </Text>
+                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>{"DINERO EN EFECTIVO: "} </Text>
               </View>
               <View style={{
                 justifyContent: "center",
@@ -261,21 +318,22 @@ const LogoutIndex = (props) => {
           </View>
 
           <View style={{
-            height: '56%',
+            height: '58%',
             backgroundColor: '#F8F8F8',
             borderTopLeftRadius: 30,
             borderTopRightRadius: 30,
             alignContent: 'center',
             alignItems: 'center'
+            
           }}>
-            <View style={{ height: '57%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
+            <View style={{ height: '55%', width: '78%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
               <View style={{ paddingBottom: 10, height: "50%" }}>
                 <FlatList
                   data={shiftRecips}
                   keyExtractor={({ id }) => id}
                   renderItem={({ item }) => {
                     return (
-                      <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: 60, marginRight: 70, marginTop: 20 }} >
+                      <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: '7%', marginRight: '7%', marginTop: 20 }} >
                         <View style={{ marginBottom: 10 }} >
                           <Text style={styles.textPlaca}>{item.plate}</Text>
                           <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
@@ -292,10 +350,9 @@ const LogoutIndex = (props) => {
 
             </View>
             <View style={{
-              width: '100%',
-              height: '20%',
-              justifyContent: 'center',
-              alignContent: 'center'
+              width: '75%',
+              height: '13%',
+              justifyContent: 'flex-end'
             }}>
               <Button onPress={() => {
                 setModalVisible(true)
@@ -311,7 +368,7 @@ const LogoutIndex = (props) => {
                 }
                 } />
             </View>
-            <View style={{ height: '15%', width: '100%', justifyContent: 'flex-end' }}>
+            <View style={{ height: '22%', width: '100%', justifyContent: 'flex-end' }}>
               <FooterIndex navigation={navigation} />
 
             </View>
@@ -446,6 +503,43 @@ const LogoutIndex = (props) => {
               </View>
             </View>
 
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={modal3Visible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
+              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                <Text style={styles.modalTextAlert}> Algo malo pasó, inténtalo más tarde.  </Text>
+              </View>
+              <View style={{ height: '30%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
+                <View style={{ width: '75%', height: '50%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                  <Button onPress={() => {
+                    setModal3Visible(false);
+                    setIsDisabled(false)
+                  }}
+                    title="E N T E N D I D O"
+                    color="#00A9A0"
+                    style={
+                      styles.modal2Button
+                    }
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }} />
+                </View>
+              </View>
+            </View>
           </View>
         </View>
       </Modal>

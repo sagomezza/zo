@@ -10,26 +10,28 @@ import {
   ActivityIndicator,
   Dimensions
 } from 'react-native';
+import { ImageBackground } from 'react-native';
+
 import CheckBox from '@react-native-community/checkbox';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from '../UserInput/UserInputStyles';
 import FooterIndex from '../../components/Footer/index';
-import { TIMEOUT } from '../../config/constants/constants';
-import { connect } from "react-redux";
-import * as actions from "../../redux/actions";
-import instance from "../../config/axios";
-import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ, GET_RECIPS_BY_PLATE } from "../../config/api";
-import store from '../../config/store';
+import { Table, Row, Rows } from 'react-native-table-component';
+import DropDownPicker from 'react-native-dropdown-picker';
+import Header from '../../components/Header/HeaderIndex';
+import normalize from '../../config/services/normalizeFontSize';
+import { Keyboard } from 'react-native';
 import moment from 'moment';
 import Button from '../../components/Button';
-import { Keyboard } from 'react-native';
-import normalize from '../../config/services/normalizeFontSize';
-import { ImageBackground } from 'react-native';
-import Header from '../../components/Header/HeaderIndex';
-// import Feather from "react-native-feather";
-import DropDownPicker from 'react-native-dropdown-picker';
 import numberWithPoints from '../../config/services/numberWithPoints';
-import { Table, Row, Rows } from 'react-native-table-component';
+// api
+import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ, GET_RECIPS_BY_PLATE } from "../../config/api";
+import { TIMEOUT } from '../../config/constants/constants';
+import instance from "../../config/axios";
+import store from '../../config/store';
+// redux
+import { connect } from "react-redux";
+import * as actions from "../../redux/actions";
 
 const { width, height } = Dimensions.get('window');
 
@@ -39,25 +41,24 @@ const UserInput = (props) => {
   const officialEmail = officialProps.email;
   const [loadingStart, setLoadingStart] = useState(false);
   const [prepayDay, setPrepayDay] = useState(false);
-
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
 
   const [findUserByPlateInfo, setFindUserByPlateInfo] = useState([]);
+
   const userData = findUserByPlateInfo.fullData !== undefined ? findUserByPlateInfo.fullData[0] : "";
   const [blacklist, setBlacklist] = useState([]);
   let blacklistValue = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].value : 0;
   let blacklistDate = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].date : '';
-
-  // let blacklistDate = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].creationDate : 0; 
-
   const [blacklistExists, setBlacklistExists] = useState(false);
+
   const [startParking, setStartParking] = useState({});
   const [existingUser, setExistingUser] = useState(false)
   const [findMensualityPlate, setFindMensualityPlate] = useState([])
   const [debtBlacklist, setDebtBlacklist] = useState(0)
+
   const [showPhoneInput, setShowPhoneInput] = useState(false)
   const [codeError, setErrorText] = useState(false);
   const [plateOne, setPlateOne] = useState('');
@@ -69,15 +70,16 @@ const UserInput = (props) => {
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
   const refPhone = useRef(null);
+
   const [tableHead, setTableHead] = useState(['Vehículos', 'Fecha', 'Últimos pagos']);
   const [tableData, setTableData] = useState();
+
   const [historyInfo, setHistoryInfo] = useState([]);
   const [historyExists, setHistoryExists] = useState(false);
-  const [prepayDayValue, setPrepayDayValue] = useState(0);
 
+  const [prepayDayValue, setPrepayDayValue] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
-
 
   function priceVehicleType() {
     if (isCharacterALetter(plateTwo[2])) {
@@ -87,12 +89,10 @@ const UserInput = (props) => {
     }
     if (prepayDay) {
       setModalVisible(true);
-    }else {
+    } else {
       startPark();
     }
   }
-
-  
 
   const clearPlateOne = () => {
     setPlateOne('');
@@ -212,7 +212,12 @@ const UserInput = (props) => {
         } else {
           type = "car"
         }
-
+        let change
+        if ((totalPay - prepayDayValue) < 0) {
+          change = 0
+        } else {
+          change = totalPay - prepayDayValue
+        }
         // console.log({
         //   plate: plateOne + plateTwo,
         //   hqId: officialHq,
@@ -235,7 +240,7 @@ const UserInput = (props) => {
             officialEmail: officialEmail,
             type,
             cash: Number(totalPay),
-            change: totalPay - prepayDayValue
+            change: change
           },
           { timeout: TIMEOUT }
         )
@@ -258,6 +263,7 @@ const UserInput = (props) => {
 
     }
   };
+
   async function readHq() {
     try {
       const response = await instance.post(READ_HQ, {
@@ -272,7 +278,6 @@ const UserInput = (props) => {
       console.log(err?.response)
     }
   };
-
 
   let textinputMoney = (totalPay === 0 ? '' : '' + totalPay)
   let inputChange = (totalPay - prepayDayValue) <= 0 ? '' : '' + (totalPay - prepayDayValue)
@@ -403,7 +408,7 @@ const UserInput = (props) => {
               <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '40%', width: '100%', justifyContent: 'center' }}>
                 {!loadingStart &&
                   <Button onPress={() => {
-                    
+
                     priceVehicleType();
 
                   }}

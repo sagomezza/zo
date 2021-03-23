@@ -1,28 +1,20 @@
 
 import React, { useState, useEffect } from 'react';
 import { ImageBackground } from 'react-native';
-
 import {
-  SafeAreaView,
   Text,
   TouchableOpacity,
   View,
-  StyleSheet,
-  Image,
-  PermissionsAndroid,
-  Platform,
-  Share,
   FlatList,
   Modal,
   TextInput,
   ActivityIndicator,
   Dimensions
 } from 'react-native';
-
-// Import HTML to PDF
 import instance from "../../config/axios";
-import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT, GET_SHIFTS_OF_BOX } from "../../config/api";
+import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT, GET_SHIFTS_OF_BOX, GET_BOX_TOTAL } from "../../config/api";
 import { connect } from 'react-redux';
+import { TIMEOUT } from '../../config/constants/constants';
 import * as actions from "../../redux/actions";
 import * as Print from "expo-print";
 import * as MediaLibrary from "expo-media-library";
@@ -37,7 +29,7 @@ import FooterIndex from '../../components/Footer';
 import Signature from 'react-native-signature-canvas';
 import * as FileSystem from 'expo-file-system';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const txtGenerator = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
@@ -95,22 +87,27 @@ const txtGenerator = (props) => {
       color: #FFF;
     }`;
 
+  const gotBoxTotal = () => {
+    setLoadingBoxGenerator(false);
+    setModalVisible(true);
+  }
+
   useEffect(() => {
     listBoxClose();
   }, []);
 
-  const getShiftsOfBox = async () => {
+  const getBoxTotal = async () => {
+    setLoadingBoxGenerator(true);
     try {
-      const response = await instance.post(GET_SHIFTS_OF_BOX, {
+      const response = await instance.post(GET_BOX_TOTAL, {
         hqId: officialProps.hq[0]
-      });
-
-      console.log('--------shifts---------')
-      console.log(response.data.data)
+      },
+        { timeout: TIMEOUT }
+      );
       setShiftsOfBox(response.data.data)
-      console.log('-----------shifts---------')
-      setModalVisible(!modalVisible);
+      gotBoxTotal();
     } catch (err) {
+      setLoadingBoxGenerator(false);
       console.log(err)
       console.log(err?.response)
       setModal3Visible(true);
@@ -121,15 +118,11 @@ const txtGenerator = (props) => {
     try {
       const response = await instance.post(LIST_BOX_CLOSE, {
         hqId: officialProps.hq[0]
-      });
-      // if (response.data.response === 1) {
-      //   store.dispatch(actions.setRecips(response.data.data.total));
-      // }
-      console.log('------------sup---------')
-      console.log(response.data.data)
+      },
+        { timeout: TIMEOUT }
+      );
       setListBox(response.data.data)
-      console.log('------------sup222---------')
-
+      console.log(response.data.data)
     } catch (err) {
       console.log(err)
       console.log(err?.response)
@@ -150,22 +143,16 @@ const txtGenerator = (props) => {
         officialEmail: officialProps.email,
         base: Number(base),
         totalReported: Number(totalReported)
-      });
-      // if (response.data.response === 1) {
-      //   store.dispatch(actions.setRecips(response.data.data.total));
-      // }
-      // console.log('------------create---------')
-      // console.log(response.data)
-      // console.log('------------createbox---------')
+      },
+        { timeout: TIMEOUT }
+      );
       setBase(0);
       settoTalReported(0);
       listBoxClose();
       setLoadingBoxGenerator(false);
       setModalVisible(!modalVisible);
-
     } catch (err) {
       console.log(err)
-      console.log('------------createbox-ERR--------')
       console.log(err?.response)
       setLoadingBoxGenerator(false);
 
@@ -180,20 +167,16 @@ const txtGenerator = (props) => {
       setBoxId(id);
       const response = await instance.post(READ_BOX_REPORT, {
         id: id
-      });
-      // if (response.data.response === 1) {
-      //   store.dispatch(actions.setRecips(response.data.data.total));
-      // }
+      },
+        { timeout: TIMEOUT }
+      );
       setModal2Visible(true)
       setReadBoxReportInfo(response.data.data)
       setBoxStatus(response.data.data.status)
       setLoadingReadBoxReport(false);
-
     } catch (err) {
       console.log(err)
-      console.log('------------createbox-ERR--------')
       setLoadingReadBoxReport(false);
-
       console.log(err?.response)
     }
   };
@@ -204,7 +187,9 @@ const txtGenerator = (props) => {
       const response = await instance.post(SAVE_SIGN_REPORT, {
         id: boxId,
         sign: signatureUri
-      });
+      },
+        { timeout: TIMEOUT }
+      );
       // if (response.data.response === 1) {
       //   store.dispatch(actions.setRecips(response.data.data.total));
       // }
@@ -302,11 +287,11 @@ const txtGenerator = (props) => {
                 />
               </View>
             </View>
-            <View style={{ height: '10%' }}>
+            <View style={{ height: '10%',  width: '85%', alignSelf: 'center' }}>
               <Button
                 onPress={() => {
-                  setModalVisible(!modalVisible);
-                  // getShiftsOfBox();
+
+                  getBoxTotal();
                 }}
                 title="Generar cierre de caja"
                 color='#00A9A0'
@@ -314,13 +299,12 @@ const txtGenerator = (props) => {
                   borderWidth: normalize(1),
                   borderColor: "#707070",
                   alignSelf: 'center',
-                  width: '69%',
-                  height: '53%',
+                  width: '100%',
+                  height: '60%',
                   margin: '2%',
-                  paddingHorizontal: '10%',
-                  paddingVertical: '1%'
                 }}
                 textStyle={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold', fontSize: width * 0.03, }}
+                activityIndicatorStatus={loadingBoxGenerator}
               />
             </View>
 
@@ -350,7 +334,7 @@ const txtGenerator = (props) => {
 
                               <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')} {moment(item.dateFinished).format('LT')}</Text>
                             </View>
-                            <View style={{ alignItems: 'flex-end', marginTop: '3%' }} >
+                            <View style={{ alignItems: 'flex-end', marginTop: '3%',  width: '49%' }} >
                               {item.status === 'active' ?
                                 <Button
                                   // onPress={onShare}
@@ -359,12 +343,12 @@ const txtGenerator = (props) => {
                                   style={{
                                     borderColor: "#00A9A0",
                                     borderWidth: 1,
-                                    paddingHorizontal: '15%'
+                                    width: '90%'
                                   }}
                                   textStyle={{
                                     color: "#00A9A0",
                                     fontFamily: 'Montserrat-Bold',
-                                    fontSize: normalize(15)
+                                    fontSize: width * 0.02
                                   }}
                                   disabled={true}
                                 />
@@ -375,12 +359,12 @@ const txtGenerator = (props) => {
                                   color='#00A9A0'
                                   style={{
                                     borderColor: "#707070",
-                                    paddingHorizontal: '15%'
+                                    width: '90%'
                                   }}
                                   textStyle={{
                                     color: "#FFFFFF",
                                     fontFamily: 'Montserrat-Bold',
-                                    fontSize: normalize(15)
+                                    fontSize: width * 0.02
                                   }}
                                   disabled={true}
                                 />
@@ -431,13 +415,13 @@ const txtGenerator = (props) => {
                       }}>
                         Ingrese el valor exacto:
                         </Text>
-                        <Text style={{
+                      <Text style={{
                         ...styles.modalText,
                         fontSize: normalize(20),
                         fontFamily: 'Montserrat-Bold'
                       }}>
                         Total: {`$${numberWithPoints(shiftsOfBox)}`}
-                        </Text>
+                      </Text>
                     </View>
                     <View style={{
                       justifyContent: 'space-around',
@@ -640,49 +624,49 @@ const txtGenerator = (props) => {
               </View>
             </Modal>
             <Modal
-                animationType="fade"
-                transparent={true}
-                backdropOpacity={0.3}
-                visible={modal3Visible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                }}
+              animationType="fade"
+              transparent={true}
+              backdropOpacity={0.3}
+              visible={modal3Visible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+              }}
             >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '5%' }}>
-                            <View style={{ justifyContent: 'center', height: '30%' }}>
-                                <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> No se han realizado cierres de turno. </Text>
-                            </View>
-
-                            <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
-                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end' }}>
-                                    <Button onPress={() => {
-                                        setModal3Visible(false);
-                                    }}
-                                        title="E N T E N D I D O"
-                                        color="#00A9A0"
-                                        style={
-                                            styles.modalButton
-                                        }
-                                        textStyle={{
-                                            color: "#FFFFFF",
-                                            textAlign: "center",
-                                            fontFamily: 'Montserrat-Bold'
-                                        }}
-                                        // activityIndicatorStatus={loading}
-                                    />
-                                </View>
-                            </View>
-
-                        </View>
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '5%' }}>
+                    <View style={{ justifyContent: 'center', height: '30%' }}>
+                      <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> No se han realizado cierres de turno. </Text>
                     </View>
+
+                    <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
+                      <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end' }}>
+                        <Button onPress={() => {
+                          setModal3Visible(false);
+                        }}
+                          title="E N T E N D I D O"
+                          color="#00A9A0"
+                          style={
+                            styles.modalButton
+                          }
+                          textStyle={{
+                            color: "#FFFFFF",
+                            textAlign: "center",
+                            fontFamily: 'Montserrat-Bold'
+                          }}
+                        // activityIndicatorStatus={loading}
+                        />
+                      </View>
+                    </View>
+
+                  </View>
                 </View>
+              </View>
             </Modal>
 
           </View>
           <View style={{
-            height: '17%',
+            height: '13%',
             width: '100%',
             justifyContent: 'flex-end'
           }}>

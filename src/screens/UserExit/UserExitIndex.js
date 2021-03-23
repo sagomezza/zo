@@ -1,27 +1,41 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Modal, TouchableWithoutFeedback, Keyboard, ActivityIndicator, Image, Dimensions } from 'react-native';
+import {
+  View,
+  Modal,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ActivityIndicator,
+  Image,
+  Dimensions
+} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { Text, TouchableOpacity } from 'react-native';
+import { ImageBackground } from 'react-native';
+import styles from '../UserExit/UserExitStyles';
 import moment from 'moment';
 import FooterIndex from '../../components/Footer/index';
-import { connect } from "react-redux";
-import instance from "../../config/axios";
-import * as actions from "../../redux/actions";
-import { FINISHPARKING, READ_HQ, READ_PARANOIC_USER, GET_RECIPS, CHECK_PARKING } from '../../config/api'
-import { TIMEOUT } from '../../config/constants/constants';
-import store from '../../config/store';
 import Button from '../../components/Button';
+import Header from '../../components/Header/HeaderIndex';
 import numberWithPoints from '../../config/services/numberWithPoints';
 import normalize from '../../config/services/normalizeFontSize';
-import { ImageBackground } from 'react-native';
-import Header from '../../components/Header/HeaderIndex';
-import styles from '../UserExit/UserExitStyles';
-
+// redux
+import { connect } from "react-redux";
+import * as actions from "../../redux/actions";
+// api
+import { FINISHPARKING, READ_HQ, READ_PARANOIC_USER, GET_RECIPS, CHECK_PARKING } from '../../config/api'
+import { TIMEOUT } from '../../config/constants/constants';
+import instance from "../../config/axios";
+import store from '../../config/store';
 
 const { width, height } = Dimensions.get('window');
 
 const UserOut = (props) => {
   const { navigation, officialProps, qr } = props;
+  const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
+  // const qrPlate = qr.plate !== undefined ? qr.plate : '';
+  // const qrPhone = qr.phone !== undefined ? qr.phone : '';
+  // const [qrCodePlate, setQrCodePlate] = useState(qrPlate);
+  // const [qrCodePhone, setQrCodePhone] = useState(qrPhone);
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
   const [recip, setRecip] = useState({})
@@ -29,6 +43,7 @@ const UserOut = (props) => {
   const [isDisabled, setIsDisabled] = useState(true);
   const [err, setErr] = useState("");
   const [isParanoicUser, setIsParanoicUser] = useState(false);
+
   const [plateOne, setPlateOne] = useState('');
   const [plateTwo, setPlateTwo] = useState('');
   const [plateOneCall, setPlateOneCall] = useState('');
@@ -36,20 +51,24 @@ const UserOut = (props) => {
   const [dateStart, setDateStart] = useState('');
   const [dateFinished, setDateFinished] = useState('');
   const [check, setCheck] = useState({})
-  const [pendingValue, setPendingValue] = useState(pendingValue === undefined ? '0' : pendingValue + '')
+  const [pendingValue, setPendingValue] = useState(0)
+  let pendingValueNum = pendingValue !== undefined ? `$${numberWithPoints(pendingValue)}` : `$${numberWithPoints(0)}` 
   const [inputVerificationCode, setInputVerificationCode] = useState('');
   const [verificationCodeCall, setVerificationCodeCall] = useState('');
+
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
   const [modal5Visible, setModal5Visible] = useState(false);
+
   const verification = check.verificationCode === undefined ? '' : check.verificationCode + ''
-  const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
 
-  function restart() {
+  const restart = () => {
+    store.dispatch(actions.setQr(''));
+    store.dispatch(actions.setPhone(''));
     setModalVisible(false);
     setModal2Visible(false);
     setModal3Visible(false);
@@ -64,7 +83,7 @@ const UserOut = (props) => {
     setDateStart('');
     setDateFinished('');
     setCheck({});
-    setPendingValue();
+    setPendingValue(0);
     setInputVerificationCode('');
   }
 
@@ -117,6 +136,7 @@ const UserOut = (props) => {
         setDateStart(response.data.data.dateStart);
         setTotalAmount(response.data.data.total);
         setIsDisabled(false)
+        console.log(response.data.data.pendingValue)
         setPendingValue(response.data.data.pendingValue)
         setCheck(response.data.data)
         setInputVerificationCode(response.data.data.verificationCode + '')
@@ -128,6 +148,7 @@ const UserOut = (props) => {
       setModal5Visible(true);
     }
   }
+
   async function checkParkingCode() {
     try {
       if (inputVerificationCode.length === 5) {
@@ -173,7 +194,9 @@ const UserOut = (props) => {
     try {
       const response = await instance.post(READ_HQ, {
         id: officialHq
-      });
+      },
+        { timeout: TIMEOUT }
+      );
       if (response.data.response) {
         store.dispatch(actions.setReservations(response.data.data.reservations));
         store.dispatch(actions.setHq(response.data.data));
@@ -187,8 +210,11 @@ const UserOut = (props) => {
   const getRecips = async () => {
     try {
       const response = await instance.post(GET_RECIPS, {
-        hqId: officialHq
-      });
+        hqId: officialHq,
+        officialEmail: officialProps.email
+      },
+        { timeout: TIMEOUT }
+      );
       if (response.data.response === 1) {
         store.dispatch(actions.setRecips(response.data.data));
       }
@@ -201,18 +227,6 @@ const UserOut = (props) => {
   const finishParking = async (paymentStatus, showModal) => {
     setLoading(true)
     try {
-      console.log({
-        plate: check.plate,
-        hqId: check.hqId,
-        phone: check.phone,
-        paymentType: "cash",
-        cash: parseInt(totalPay),
-        change: totalPay - totalAmount,
-        status: paymentStatus,
-        isParanoic: isParanoicUser,
-        officialEmail: officialProps.email,
-        dateFinished: new Date()
-      })
       const response = await instance.post(
         FINISHPARKING,
         {
@@ -220,26 +234,28 @@ const UserOut = (props) => {
           hqId: check.hqId,
           phone: check.phone,
           paymentType: "cash",
+          total: totalAmount,
           cash: parseInt(totalPay),
           change: totalPay - totalAmount,
           status: paymentStatus,
           isParanoic: isParanoicUser,
           officialEmail: officialProps.email,
-          dateFinished: new Date()
+          dateFinished: new Date(),
+          dateStart: dateStart
         },
         { timeout: TIMEOUT }
       );
-      readHq()
-      restart();
-      setRecip(response.data.data);
-      getRecips()
       setLoading(false)
-      setIsDisabled(true);
-      console.log(showModal)
       if (showModal) {
         console.log(showModal)
         setModalVisible(true)
       }
+      readHq()
+      setRecip(response.data.data);
+      getRecips()
+
+      setIsDisabled(true);
+
     } catch (err) {
       console.log(err?.response)
       console.log(err)
@@ -378,7 +394,7 @@ const UserOut = (props) => {
                   style={{ width: '18%' }}
                   resizeMode={"contain"}
                   source={require('../../../assets/images/Inicio.png')} />
-                <View >
+                <View style={{}} >
                   <Text style={styles.timePlateTitle}>Tiempo de inicio:</Text>
                   <Text style={styles.timePlateInfo}>{dateStartDate()}  {dateStartHour()}</Text>
                 </View>
@@ -388,7 +404,7 @@ const UserOut = (props) => {
                   style={{ width: '17%' }}
                   resizeMode={"contain"}
                   source={require('../../../assets/images/Salida.png')} />
-                <View>
+                <View style={{}}>
                   <Text style={styles.timePlateTitle}>Tiempo de salida:</Text>
                   <Text style={styles.timePlateInfo}>{dateFinishedDate()}  {dateFinishedHour()}</Text>
                 </View>
@@ -402,20 +418,22 @@ const UserOut = (props) => {
               flexDirection: 'row',
               alignItems: 'center',
               alignContent: 'center',
-              height: '20%',
+              height: '25%',
               width: '80%',
               justifyContent: 'space-between'
             }}>
               <Text style={styles.infoUserText}>{"TOTAL A PAGAR"}</Text>
-              <View style={styles.payplate}>
-                <Text style={styles.payText}>{`$${numberWithPoints(totalAmount)}`}</Text>
-                <View style={{ height: '40%', width: '60%', flexDirection: 'row', justifyContent: 'center', marginTop: '2%' }}>
-                  <Text style={{ fontSize: normalize(20), color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{"Saldo pendiente: "}</Text>
-                  <Text style={{ fontSize: normalize(20), color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>$ {pendingValue}</Text>
+              <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                <View style={styles.payplate}>
+                  <Text style={styles.payText}>{`$${numberWithPoints(totalAmount)}`}</Text>
+                </View>
+                <View style={{ height: '30%', width: '100%', flexDirection: 'row', justifyContent: 'center', marginTop: '2%' }}>
+                  <Text style={{ fontSize: width * 0.035, color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{"Saldo pendiente: "}</Text>
+                  <Text style={{ fontSize: width * 0.035, color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{pendingValueNum}</Text>
 
                 </View>
-
               </View>
+
 
             </View>
 
@@ -424,7 +442,7 @@ const UserOut = (props) => {
 
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{
-            height: '47%',
+            height: '45%',
             backgroundColor: '#F8F8F8',
             borderTopLeftRadius: 30,
             borderTopRightRadius: 30,
@@ -437,10 +455,11 @@ const UserOut = (props) => {
               width: '80%',
               justifyContent: 'space-between',
               alignContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
+              height: '20%'
             }}>
               <View style={{ width: '32%' }}>
-                <Text style={{ fontFamily: 'Montserrat-Bold', fontSize: normalize(20), color: '#8F8F8F' }} >{"Valor ingresado"}</Text>
+                <Text style={{ fontFamily: 'Montserrat-Bold', fontSize: width * 0.034, color: '#8F8F8F' }} >{"Valor ingresado"}</Text>
               </View>
               <View style={{ alignContent: 'center', alignItems: 'center', width: '67%', height: '62%' }}>
                 <TextInput
@@ -472,9 +491,9 @@ const UserOut = (props) => {
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row', width: '80%', justifyContent: 'flex-end', alignContent: 'center', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', width: '80%', height: '20%', justifyContent: 'flex-end', alignContent: 'center', alignItems: 'center' }}>
               <View style={{ width: '33%', paddingRight: '2%' }}>
-                <Text style={{ fontFamily: 'Montserrat-Bold', fontSize: normalize(20), color: '#8F8F8F', textAlign: 'right' }}>{"A devolver"}</Text>
+                <Text style={{ fontFamily: 'Montserrat-Bold', fontSize: width * 0.034, color: '#8F8F8F', textAlign: 'right' }}>{"A devolver"}</Text>
               </View>
               <View style={{ alignContent: 'center', alignItems: 'center', width: '67%', height: '62%' }}>
                 <TextInput
@@ -488,12 +507,12 @@ const UserOut = (props) => {
 
             </View>
 
-            <View style={{ height: '24%', justifyContent: 'flex-end' }}>
+            <View style={{ height: '24%', width: '80%', justifyContent: 'flex-end' }}>
               {err !== "" &&
                 <Text style={{ color: "red", fontFamily: 'Montserrat-Regular', alignSelf: 'center' }}>{err}</Text>
               }
               {!loading &&
-                <View style={{ alignItems: 'center', width: '80%', height: ' 35%', marginTop: '2%' }}>
+                <View style={{ width: '100%', height: ' 35%', marginTop: '2%' }}>
                   <Button
                     title="C O B R A R"
                     color='#00A9A0'
@@ -502,7 +521,7 @@ const UserOut = (props) => {
                     textStyle={{
                       color: '#FFFFFF',
                       fontFamily: 'Montserrat-Bold',
-                      fontSize: normalize(17)
+                      fontSize: width * 0.028
                     }}
                     onPress={() => {
                       finishParking("payed", true);
@@ -511,13 +530,13 @@ const UserOut = (props) => {
               }
               {loading && <ActivityIndicator size={"large"} color={'#00A9A0'} />}
               {!loading &&
-                <View style={{ alignItems: 'center', width: '80%', height: ' 35%', marginTop: '2%' }}>
+                <View style={{ width: '100%', height: ' 35%', marginTop: '2%' }}>
                   <Button
                     title="P A G O   P E N D I E N T E"
                     color='#FFFFFF'
                     disabled={isDisabled}
                     style={[isDisabled ? styles.buttonStylePPDisabled : styles.buttonStylePP]}
-                    textStyle={{ color: '#8F8F8F', fontFamily: 'Montserrat-Bold', fontSize: normalize(16) }}
+                    textStyle={{ color: '#8F8F8F', fontFamily: 'Montserrat-Bold', fontSize: width * 0.028 }}
                     onPress={() => {
                       setModal2Visible(true);
                       setTotalPay(0)
@@ -527,7 +546,7 @@ const UserOut = (props) => {
                 </View>
               }
             </View>
-            <View style={{ height: '24%', width: '100%', justifyContent: 'flex-end' }}>
+            <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end' }}>
               <FooterIndex navigation={navigation} />
 
             </View>
@@ -620,22 +639,7 @@ const UserOut = (props) => {
               </View>
               <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
-                  setModalVisible(false);
-                  setModal2Visible(false);
-                  setModal3Visible(false);
-                  setModal4Visible(false);
-                  setTotalAmount(0);
-                  setTotalPay(0);
-                  setPlateOne("");
-                  setPlateTwo("");
-                  setRecip({})
-                  setLoading(false);
-                  setErr("")
-                  setDateStart('');
-                  setDateFinished('');
-                  setCheck({});
-                  setPendingValue();
-                  setInputVerificationCode('');
+                  restart();
                 }}
                   title="E N T E N D I D O"
                   color="#00A9A0"

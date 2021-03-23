@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
+
+const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     container: {
@@ -23,7 +25,7 @@ const styles = StyleSheet.create({
         width: '46%',
         height: '100%',
         margin: '2%',
-        fontSize: normalize(38),
+        fontSize: width * 0.06,
         fontFamily: 'Montserrat-Bold',
         backgroundColor: '#FFFFFF',
         borderRadius: 30,
@@ -72,13 +74,18 @@ const styles = StyleSheet.create({
     },
     buttonTextSearch: {
         color: '#00A9A0',
-        fontSize: normalize(16),
+        fontSize: width * 0.03,
         fontFamily: 'Montserrat-Bold'
     },
     buttonTextRenew: {
         color: '#FFFFFF',
-        fontSize: normalize(15),
+        fontSize: width * 0.025,
         fontFamily: 'Montserrat-Bold',
+    },
+    notFoundText: {
+        fontSize: width * 0.034, 
+        fontFamily: 'Montserrat-Regular',
+        textAlign: 'center'
     },
     buttonIDisabled: {
         borderRadius: 30,

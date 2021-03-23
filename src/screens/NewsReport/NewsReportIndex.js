@@ -1,16 +1,26 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { ImageBackground, Keyboard } from 'react-native';
-import { StyleSheet, Text, View, Image, TextInput, TouchableWithoutFeedback, Modal } from 'react-native';
-import { connect } from "react-redux";
-import instance from "../../config/axios";
-import { CREATE_NEWS_REPORT } from "../../config/api";
-import { TIMEOUT } from '../../config/constants/constants';
-import * as actions from "../../redux/actions";
+import {
+    Text,
+    View,
+    TextInput,
+    TouchableWithoutFeedback,
+    Modal
+} from 'react-native';
 import Header from '../../components/Header/HeaderIndex';
 import styles from '../NewsReport/NewsReportStyles';
 import FooterIndex from '../../components/Footer';
 import Button from '../../components/Button';
 import normalize from '../../config/services/normalizeFontSize';
+// redux
+import { connect } from "react-redux";
+import instance from "../../config/axios";
+import * as actions from "../../redux/actions";
+// api
+import { CREATE_NEWS_REPORT } from "../../config/api";
+import { TIMEOUT } from '../../config/constants/constants';
+import { width } from '../../config/constants/screenDimensions';
+
 
 const NewsReport = (props) => {
     const { navigation, officialProps, reservations, recips, hq } = props;
@@ -59,7 +69,17 @@ const NewsReport = (props) => {
                             </View>
                             <View style={{ height: '50%', alignItems: 'center', padding: '2%' }}>
                                 <TextInput
-                                    style={{ borderWidth: 2, borderColor: '#00A9A0', height: '80%', width: '80%', borderRadius: 20, padding: '5%', justifyContent: 'flex-start', fontSize: normalize(20), fontFamily: 'Montserrat-Regular', }}
+                                    style={{
+                                        borderWidth: 2,
+                                        borderColor: '#00A9A0',
+                                        height: '80%',
+                                        width: '80%',
+                                        borderRadius: 20,
+                                        padding: '5%',
+                                        justifyContent: 'flex-start',
+                                        fontSize: width * 0.034,
+                                        fontFamily: 'Montserrat-Regular'
+                                    }}
                                     numberOfLines={10}
                                     multiline={true}
                                     textAlign='center'
@@ -87,9 +107,9 @@ const NewsReport = (props) => {
                             </View>
                         </View>
                         <View style={{
-                            height: '15%',
+                            height: '14%',
                             width: '100%',
-                            justifyContent: 'flex-end'
+                            justifyContent: 'center'
                         }}>
                             <FooterIndex navigation={navigation} />
                         </View>
@@ -140,8 +160,6 @@ const NewsReport = (props) => {
                     </View>
                 </Modal>
             </ImageBackground>
-
-
         </View>
     )
 };

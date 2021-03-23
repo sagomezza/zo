@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ImageBackground } from 'react-native';
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import { 
+    Text, 
+    View, 
+    FlatList 
+} from 'react-native';
 import { connect } from "react-redux";
 import instance from "../../config/axios";
 import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL, EDIT_ADMIN } from "../../config/api";
@@ -14,28 +18,8 @@ import numberWithPoints from '../../config/services/numberWithPoints';
 import normalize from '../../config/services/normalizeFontSize';
 
 const ActiveServices = (props) => {
-    const { navigation, officialProps, reservations, recips, hq } = props;
+    const { navigation, officialProps, reservations } = props;
     const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-
-    useEffect(() => {
-        const readHq = async () => {
-            try {
-                const response = await instance.post(READ_HQ, {
-                    id: officialHq
-                });
-                if (response.data.response) {
-                    store.dispatch(actions.setReservations(response.data.data.reservations));
-                    store.dispatch(actions.setHq(response.data.data));
-                }
-            } catch (error) {
-                console.log("err: ", error);
-            }
-        };
-        readHq();
-
-    }, []);
-
-
 
     return (
         <View style={{ flex: 1 }}>
@@ -85,9 +69,9 @@ const ActiveServices = (props) => {
 
                     </View>
                     <View style={{
-                        height: '17%',
+                        height: '13%',
                         width: '100%',
-                        justifyContent: 'flex-end'
+                        justifyContent: 'center'
                     }}>
                         <FooterIndex navigation={navigation} />
                     </View>

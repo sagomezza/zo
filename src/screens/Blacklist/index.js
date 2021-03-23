@@ -1,20 +1,29 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Text, View, Image, Modal, ImageBackground, Keyboard, FlatList } from 'react-native';
+import { 
+    StyleSheet, 
+    Text, 
+    View, 
+    Image, 
+    Modal, 
+    ImageBackground, 
+    Keyboard, 
+    FlatList 
+} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from '../Blacklist/styles';
-import { CREATE_USER, PAY_DEBTS, FIND_USER_BY_PLATE, LIST_HQ_DEBTS } from "../../config/api";
-import instance from "../../config/axios";
-import { TIMEOUT } from '../../config/constants/constants';
-
-import { connect } from "react-redux";
-import * as actions from "../../redux/actions";
 import normalize from '../../config/services/normalizeFontSize';
 import moment from 'moment';
-
 import numberWithPoints from '../../config/services/numberWithPoints';
 import Header from '../../components/Header/HeaderIndex';
 import FooterIndex from '../../components/Footer';
 import Button from '../../components/Button';
+// api
+import { CREATE_USER, PAY_DEBTS, FIND_USER_BY_PLATE, LIST_HQ_DEBTS } from "../../config/api";
+import instance from "../../config/axios";
+import { TIMEOUT } from '../../config/constants/constants';
+// redux
+import { connect } from "react-redux";
+import * as actions from "../../redux/actions";
 
 const Blacklist = (props) => {
     const { navigation, officialProps, reservations, recips, hq } = props;
@@ -73,7 +82,6 @@ const Blacklist = (props) => {
                     )
                     setFindUserByPlateInfo(response.data);
                     setBlacklist(response.data.blackList);
-                    console.log(response.data.blackList)
                 }
             } catch (err) {
                 console.log(err)
@@ -120,7 +128,6 @@ const Blacklist = (props) => {
                 )
                 setLoading(false);
                 setModalVisible(true);
-                console.log("------------wiii------")
             }
         } catch (err) {
             console.log(err)
@@ -149,7 +156,7 @@ const Blacklist = (props) => {
                 source={require('../../../assets/images/Home.png')}>
                 <Header navigation={navigation} />
                 <View style={{ height: '15%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '35%', width: '60%', marginTop: '2%' }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '35%', width: '60%', marginTop: '2%'}}>
                         <TextInput
                             ref={refPlateOne}
                             placeholder={'EVZ'}
@@ -187,7 +194,7 @@ const Blacklist = (props) => {
                             value={plateTwo}
                         />
                     </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '40%', width: '90%', justifyContent: 'center' }}>
+                    <View style={{ height: '40%', width: '57%', justifyContent: 'center'}}>
                         <Button onPress={() => {
                             payDebts();
                         }}
@@ -207,7 +214,7 @@ const Blacklist = (props) => {
                                 <Text style={styles.textListTitle} >LISTA NEGRA</Text>
                             </View>
                             <View style={{ height: "90%" }}>
-                                {recips.recips.length > 0 ?
+                                {listHQDebts.length > 0 ?
                                     <FlatList
                                         style={{ height: "37%" }}
                                         data={listHQDebts}
@@ -234,9 +241,9 @@ const Blacklist = (props) => {
                         </View>
                     </View>
                     <View style={{
-                        height: '20%',
+                        height: '17%',
                         width: '100%',
-                        justifyContent: 'flex-end',
+                        justifyContent: 'flex-end'
                     }}>
                         <FooterIndex navigation={navigation} />
                     </View>

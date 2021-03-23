@@ -17,24 +17,12 @@ const styles = StyleSheet.create({
 
   },
   plateInputTextBig: {
-    fontSize: normalize(36),
+    fontSize: width * 0.055,
     color: '#FFFFFF',
     fontFamily: 'Montserrat-Bold'
   },
   plateInputTextSmall: {
-    fontSize: normalize(25),
-    textAlign: 'center',
-    marginTop: '6%',
-    color: '#FFFFFF',
-    fontFamily: 'Montserrat-Regular'
-  },
-  plateInputTextBigC: {
-    fontSize: normalize(36),
-    color: '#FFFFFF',
-    fontFamily: 'Montserrat-Bold'
-  },
-  plateInputTextSmallC: {
-    fontSize: normalize(25),
+    fontSize: width * 0.045,
     textAlign: 'center',
     marginTop: '6%',
     color: '#FFFFFF',

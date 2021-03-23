@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
+
+const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     container: {
@@ -20,7 +22,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     textListTitle: {
-        fontSize: normalize(20),
+        fontSize: width * 0.034,
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },
@@ -31,19 +33,13 @@ const styles = StyleSheet.create({
     },
     buttonEd: {
         borderRadius: 30,
-        height: normalize(30),
+        height: width * 0.06,
         width: '100%',
-        marginLeft: '0%',
-        margin: '1%',
-        paddingHorizontal: '28%',
     },
     buttonEdDisabled: {
         borderRadius: 30,
-        height: normalize(30),
+        height: width * 0.06,
         width: '100%',
-        marginLeft: '0%',
-        margin: '1%',
-        paddingHorizontal: '28%',
         opacity: 0.5
     },
     centeredView: {
@@ -52,7 +48,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         // marginTop: 22,
         backgroundColor: 'rgba(52, 52, 52, 0.8)',
-
     },
     modalView: {
         height: '40%',

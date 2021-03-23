@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
+
+const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     container: {
@@ -21,22 +23,22 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     textPlaca: {
-        fontSize: normalize(18),
+        fontSize: width * 0.03,
         color: '#5D5D5D',
         fontFamily: 'Montserrat-Bold'
     },
     textListTitle: {
-        fontSize: normalize(15),
+        fontSize: width * 0.025,
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },
     textPago: {
-        fontSize: normalize(13),
+        fontSize: width * 0.02,
         color: '#5D5D5D',
         fontFamily: 'Montserrat-Regular'
     },
     textMoney: {
-        fontSize: normalize(19),
+        fontSize: width * 0.03,
         color: '#5D5D5D',
         fontFamily: 'Montserrat-Regular'
     },

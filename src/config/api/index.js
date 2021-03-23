@@ -24,6 +24,7 @@ export const SAVE_SIGN_REPORT = "/saveSignReport";
 export const READ_BOX_REPORT = "/readBoxReport";
 export const LIST_BOX_CLOSE = "/listBoxClose";
 export const GET_SHIFTS_OF_BOX = "/getShiftsOfBox";
+export const GET_BOX_TOTAL = "/getBoxTotal";
 
 //RECIPS
 export const GET_RECIPS = "/getRecips";

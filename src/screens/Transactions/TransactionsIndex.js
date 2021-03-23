@@ -1,40 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { ImageBackground } from 'react-native';
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
-import { connect } from "react-redux";
-import instance from "../../config/axios";
-import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL, EDIT_ADMIN } from "../../config/api";
-import store from '../../config/store';
-import * as actions from "../../redux/actions";
+import {
+    Text,
+    View,
+    FlatList
+} from 'react-native';
 import Header from '../../components/Header/HeaderIndex';
+import numberWithPoints from '../../config/services/numberWithPoints';
 import TransactionsStyles from '../Transactions/TransactionsStyles';
 import FooterIndex from '../../components/Footer';
 import moment from 'moment';
-import numberWithPoints from '../../config/services/numberWithPoints';
 import normalize from '../../config/services/normalizeFontSize';
-
+// redux
+import { connect } from "react-redux";
+import * as actions from "../../redux/actions";
 
 const Transactions = (props) => {
-    const { navigation, officialProps, reservations, recips, hq } = props;
+    const { navigation, officialProps, recips } = props;
     const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-
-    useEffect(() => {
-        const getRecips = async () => {
-            try {
-                const response = await instance.post(GET_RECIPS, {
-                    hqId: officialProps.hq[0]
-                });
-                if (response.data.response === 1) {
-                    store.dispatch(actions.setRecips(response.data.data));
-                }
-            } catch (err) {
-                console.log(err?.response)
-                console.log("err: ", err);
-            }
-        };
-        getRecips();
-
-    }, []);
 
     const formatHours = (hours) => {
         if (typeof hours === "number" || typeof hours === "double" || typeof hours === "long" || typeof hours === "float") {
@@ -89,7 +72,7 @@ const Transactions = (props) => {
 
                     </View>
                     <View style={{
-                        height: '10%',
+                        height: '14%',
                         width: '100%',
                         justifyContent: 'flex-end'
                     }}>
