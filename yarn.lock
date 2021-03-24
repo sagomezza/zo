@@ -1784,6 +1784,18 @@
   dependencies:
     lodash "^4.17.4"
 
+"@expo/vector-icons@^12.0.4":
+  version "12.0.4"
+  resolved "https://registry.yarnpkg.com/@expo/vector-icons/-/vector-icons-12.0.4.tgz#52061fffab83ca74af52288b5f839b090f7dabed"
+  integrity sha512-/EFbXri7jZmqj1jTY6wpauvMN0DY0Epic003d43yWqrScLlVERaxXrOR07BNuCZvVMHBAzXN4VbOzUUUTq6j8g==
+  dependencies:
+    lodash.frompairs "^4.0.1"
+    lodash.isequal "^4.5.0"
+    lodash.isstring "^4.0.1"
+    lodash.omit "^4.5.0"
+    lodash.pick "^4.4.0"
+    lodash.template "^4.5.0"
+
 "@expo/websql@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@expo/websql/-/websql-1.0.1.tgz#fff0cf9c1baa1f70f9e1d658b7c39a420d9b10a9"
@@ -2601,6 +2613,11 @@
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
   integrity sha512-rk4sWFsmtOw8oyx8SD3KSvawwaK7gRBSEIy2TAwURyGt+3TizssXP1r8nx3zY+R7v2vYYHXZ+k2/GULAT/bcaQ==
+
+"@react-native-community/netinfo@5.9.6":
+  version "5.9.6"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-5.9.6.tgz#fab6cd78fe740f9c674b4a93abd77f6bfb90f655"
+  integrity sha512-cEkA1Apg8+VjnDdeDZRHI+2RqouiPKgYnewouRkvF4ettH9ZS4Cmi/nANQKIpIu2L+czboxM3fCZ44nc7IM9VQ==
 
 "@react-navigation/bottom-tabs@^5.9.2":
   version "5.11.2"
@@ -4462,12 +4479,22 @@ expo-linking@~1.0.4:
     qs "^6.5.0"
     url-parse "^1.4.4"
 
+expo-location@~9.0.0:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/expo-location/-/expo-location-9.0.1.tgz#adf93b8adf5e9dcf9570cba1d66c8e3831329156"
+  integrity sha512-yl4V2IelxrjG1h3nshkyILwghysNJvvEuR4Of0U7oYAsBrT0cq8NxFuaDemRvqt9Yb19wVFNMoVtYFNpthcqpQ==
+
 expo-media-library@^11.0.0:
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/expo-media-library/-/expo-media-library-11.0.0.tgz#e37f1ff0c5a19c14a3989ad2b4f8b9f26522c23f"
   integrity sha512-yRCce1tmn0WuVC64E+eS4Ez0w8jO4UVf0wz/rAYxJHquSOOC40HRQhzvmAhvAhfzeNGrVvQW/5j+IX+yzwq2QA==
   dependencies:
     "@expo/config-plugins" "~1.0.13"
+
+expo-network@~2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/expo-network/-/expo-network-2.3.0.tgz#10a21fe10f85a885301fb0f0957d968ba2e925e7"
+  integrity sha512-nfgrP+X5kLA/84rhIH0LTkLh6k7+BlG93+6yWRdg8uguUpnUCtkX7e6vqgtVUMi+xr9c7xOijGB59RynnlyMhw==
 
 expo-notifications@~0.7.2:
   version "0.7.2"
@@ -4553,6 +4580,7 @@ expo@~39.0.2:
     expo-keep-awake "~8.3.0"
     expo-linear-gradient "~8.3.0"
     expo-linking "~1.0.4"
+    expo-location "~9.0.0"
     expo-permissions "~9.3.0"
     expo-splash-screen "~0.6.2"
     expo-sqlite "~8.4.0"

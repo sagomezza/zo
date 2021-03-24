@@ -1,7 +1,7 @@
 //Import dependencies
 
 // Native dependecies
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,8 @@ import {
   Platform,
   Image,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  Modal
 } from 'react-native';
 // Library dependecies
 import axios from 'axios';
@@ -40,6 +41,7 @@ const LoginIndex = (props) => {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState("")
+  
 
   const onLoginPress = async () => {
     try {
@@ -130,7 +132,7 @@ const LoginIndex = (props) => {
             <View style={{ height: '18%', marginBottom: '3%' }}>
               <Image style={{ width: normalize(200), height: '70%' }} resizeMode={"contain"} source={require('../../../assets/images/icon.png')} />
             </View>
-            <View style={{ height: '10%', width: '60%', justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
+            <View style={{ height: '10%', width: '60%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
               <Text style={styles.loginText} >I  N  I  C  I  O     D  E     S  E  S  I  Ó  N</Text>
             </View>
             <View style={{ width: '100%', height: '25%', alignContent: 'center', alignItems: 'center' }}>
@@ -158,7 +160,7 @@ const LoginIndex = (props) => {
                     autoCapitalize={"none"}
                     autoCorrect={false}
                     value={password}
-                    onChangeText={(text) => setPassword(text)}
+                    onChangeText={(text) => setPassword(text.trim())}
                     secureTextEntry={true}
                   />
                 </View>
@@ -181,13 +183,63 @@ const LoginIndex = (props) => {
                 textStyle={{ color: "#00A9A0", fontFamily: 'Montserrat-Bold', fontSize: width * 0.032 }}
                 activityIndicatorStatus={loading}
               />
-              <TouchableOpacity style={{alignSelf: 'center'}}>
+              <TouchableOpacity style={{ alignSelf: 'center' }}>
                 <Text style={styles.restoreText}>Olvidé mi contraseña</Text>
               </TouchableOpacity>
             </View>
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
+      {/* <Modal
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={!modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{
+              height: '100%',
+              width: '100%',
+              justifyContent: 'space-between',
+              padding: '2%'
+
+            }}>
+              <View style={{
+                margin: '4%',
+                justifyContent: 'flex-end',
+                height: ' 40%'
+              }}>
+                <Text style={styles.modalTextAlert}> Señor usuario recuerde: </Text>
+                <Text style={styles.modalTextAlert}> 1. Verificar la conexión al WIFI al iniciar sesión </Text>
+                <Text style={styles.modalTextAlert}> 2. Si no tiene conexión por favor reinicie el dispositivo y espere un momento. </Text>
+                <Text style={styles.modalTextAlert}> 3. Si la conexión está lenta, por favor espere un momento e intente de nuevo. </Text>
+
+
+              </View>
+              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                <Button onPress={() => {
+                  checkInternetReachable();
+
+                }}
+                  title="E N T E N D I D O"
+                  color="#00A9A0"
+                  style={
+                    styles.modalButton
+                  }
+                  textStyle={{
+                    color: "#FFFFFF",
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Bold'
+                  }} />
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal> */}
     </View>
   );
 };

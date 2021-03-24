@@ -136,7 +136,6 @@ const UserOut = (props) => {
         setDateStart(response.data.data.dateStart);
         setTotalAmount(response.data.data.total);
         setIsDisabled(false)
-        console.log(response.data.data.pendingValue)
         setPendingValue(response.data.data.pendingValue)
         setCheck(response.data.data)
         setInputVerificationCode(response.data.data.verificationCode + '')
