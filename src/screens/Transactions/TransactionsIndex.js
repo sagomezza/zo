@@ -52,7 +52,7 @@ const Transactions = (props) => {
                                             return (
                                                 <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
                                                     <View style={{ marginBottom: '2%' }} >
-                                                        <Text style={TransactionsStyles.textPlaca}>{item.plate}</Text>
+                                                        <Text style={TransactionsStyles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0] }</Text>
                                                         <Text style={TransactionsStyles.textPago}>{`Pago por ${formatHours(item.hours)} horas`}</Text>
                                                     </View>
                                                     <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
