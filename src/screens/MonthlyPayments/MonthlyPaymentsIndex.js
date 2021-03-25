@@ -308,7 +308,8 @@ const MonthlyPayments = (props) => {
                     cash: Number(totalPay),
                     change: totalPay - monthPrice,
                     officialEmail: officialProps.email,
-                    generateRecip: true
+                    pending: pendingMensualityPay,
+                    generateRecip: !pendingMensualityPay
                 }
             )
             if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
@@ -329,7 +330,9 @@ const MonthlyPayments = (props) => {
                         monthlyUser: true,
                         cash: Number(totalPay),
                         change: totalPay - monthPrice,
-                        officialEmail: officialProps.email
+                        officialEmail: officialProps.email,
+                        pending: pendingMensualityPay,
+                        generateRecip: !pendingMensualityPay
                     },
                     { timeout: TIMEOUT }
                 )
