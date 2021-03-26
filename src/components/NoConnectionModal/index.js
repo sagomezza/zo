@@ -26,7 +26,7 @@ const NoConnectionModal = (props) => {
               <View style={{
                 margin: '4%',
                 justifyContent: 'space-between',
-                height: ' 40%',
+                height: ' 70%',
                 alignItems: 'center'
               }}>
                   <MaterialIcons
@@ -35,6 +35,8 @@ const NoConnectionModal = (props) => {
                                 size={75}
                             />
                 <Text style={styles.modalTextAlert}> Upss no hay conexión... </Text>
+                <Text style={styles.modalTextAlert}> Verifica tu conexión a internet </Text>
+
 
 
               </View>

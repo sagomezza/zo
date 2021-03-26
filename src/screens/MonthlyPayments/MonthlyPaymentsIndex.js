@@ -190,6 +190,7 @@ const MonthlyPayments = (props) => {
         setMonthPrice(0);
         setShowInputsCashChange(false);
         setModal5Visible(false);
+        setPendingMensualityPay(false);
 
     }
     const mensualityRenewedModal = () => {
@@ -210,6 +211,7 @@ const MonthlyPayments = (props) => {
             .where('phone', '==', '+57' + phoneNewMen)
             .get()
             .then(snapshot => {
+
                 if (snapshot.empty) {
                     createUser();
                 } else {
@@ -269,18 +271,20 @@ const MonthlyPayments = (props) => {
                         plate: firstPlateNewMen,
                         hqId: officialHq,
                         mensualityType: 'personal',
-                        validity: validityDateNewMen,
                         capacity: 1,
                         cash: Number(totalPay),
                         change: totalPay - monthPrice,
                         officialEmail: officialProps.email,
-                        nid: newMenNid
+                        nid: newMenNid,
+                        pending: pendingMensualityPay,
+                        generateRecip: !pendingMensualityPay
                     },
                     { timeout: TIMEOUT }
                 )
                 setModal4Visible(true);
                 setModal3Visible(false);
                 setLoading(false);
+                console.log(response.data)
             }
 
         } catch (err) {
@@ -293,13 +297,13 @@ const MonthlyPayments = (props) => {
 
     async function createMensuality(idUser) {
         setLoading(true);
+
         try {
             console.log(
                 {
                     userId: idUser,
                     capacity: 1,
                     vehicleType: "car",
-                    validity: validityDateNewMen,
                     userPhone: phoneNewMen,
                     plates: platesNewMensuality,
                     hqId: officialHq,
@@ -322,7 +326,6 @@ const MonthlyPayments = (props) => {
                         userId: idUser,
                         capacity: 1,
                         vehicleType: type,
-                        validity: validityDateNewMen,
                         userPhone: '+57' + phoneNewMen,
                         plates: platesNewMensuality,
                         hqId: officialHq,
@@ -579,7 +582,7 @@ const MonthlyPayments = (props) => {
                                     </View>
                                     <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: "#ffffff", marginBottom: '5%' }}>
                                         <Text style={styles.infoTextTitle}>
-                                            Vigencia:
+                                            Vigencia hasta:
                                         </Text>
                                         <Text style={styles.infoText}>
                                             {moment(mensualityInfo.validity).format('L')} {moment(mensualityInfo.validity).format('LT')}
@@ -613,7 +616,7 @@ const MonthlyPayments = (props) => {
                                     <Button onPress={() => {
                                         setModal2Visible(true);
                                     }}
-                                        title="R E N O V A R"
+                                        title="Pagar / Renovar"
                                         color='gray'
                                         style={[plateOne === "" || plateTwo === "" ? styles.buttonReDisabled : styles.buttonRe]}
                                         textStyle={styles.buttonTextRenew}
@@ -627,7 +630,7 @@ const MonthlyPayments = (props) => {
                                         setFourthPlate(fourthPlateData + '')
                                         setFifthPlate(fifthPlateData + '')
                                     }}
-                                        title="E D I T A R"
+                                        title="  E D I T A R  "
                                         color='gray'
                                         style={[plateOne === "" || plateTwo === "" ? styles.buttonEdDisabled : styles.buttonEd]}
                                         textStyle={styles.buttonTextRenew}
@@ -1084,11 +1087,11 @@ const MonthlyPayments = (props) => {
                                 padding: '2%'
 
                             }}>
-                                <View style={{ margin: '4%', justifyContent: 'center', height: ' 30%', borderWidth: 1 }}>
+                                <View style={{ margin: '4%', justifyContent: 'center', height: ' 30%' }}>
                                     <Text style={styles.modalTextAlert}>Cobrar mensualidad </Text>
                                     <Text style={styles.modalTextAlert}>{`$${numberWithPoints(monthPrice)}`}</Text>
                                 </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%', alignSelf: 'center', borderWidth: 1, justifyContent: 'center' }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%', alignSelf: 'center', justifyContent: 'center' }}>
                                     <CheckBox
                                         value={pendingMensualityPay}
                                         onValueChange={() => setPendingMensualityPay(!pendingMensualityPay)}
@@ -1097,7 +1100,7 @@ const MonthlyPayments = (props) => {
                                     />
                                     <Text style={{ color: '#00A9A0', fontFamily: 'Montserrat-Bold', fontSize: width * 0.03, textAlign: 'center' }}>PAGO PENDIENTE</Text>
                                 </View>
-                                <View style={{ justifyContent: 'space-between', height: '30%', flexDirection: 'column', paddingBottom: '6%', borderWidth: 1 }}>
+                                <View style={{ justifyContent: 'space-between', height: '30%', flexDirection: 'column', paddingBottom: '6%' }}>
                                     <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
                                         <Text style={{ ...styles.modalText, fontSize: width * 0.03, fontFamily: 'Montserrat-Bold' }}>Pago:  </Text>
                                         <TextInput
@@ -1143,7 +1146,7 @@ const MonthlyPayments = (props) => {
                                         />
                                     </View>
                                 </View>
-                                <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end', borderWidth: 1 }}>
+                                <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                                     <Button onPress={() => {
                                         user();
                                     }}
@@ -1154,8 +1157,8 @@ const MonthlyPayments = (props) => {
                                             textAlign: "center",
                                             fontFamily: 'Montserrat-Bold'
                                         }}
-                                        style={[totalPay - monthPrice < 0  && !pendingMensualityPay ? styles.modalButtonDisabled : styles.modalButton]}
-                                        disabled={totalPay - monthPrice < 0 && !pendingMensualityPay   }
+                                        style={[totalPay - monthPrice < 0 && !pendingMensualityPay ? styles.modalButtonDisabled : styles.modalButton]}
+                                        disabled={totalPay - monthPrice < 0 && !pendingMensualityPay}
                                         activityIndicatorStatus={loading} />
                                 </View>
 
