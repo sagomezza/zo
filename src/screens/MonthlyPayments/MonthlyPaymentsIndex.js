@@ -68,11 +68,12 @@ const MonthlyPayments = (props) => {
     const [newMenNid, setNewMenNid] = useState('');
     const [pendingMensualityPay, setPendingMensualityPay] = useState(false);
 
+
     const [showInputsCashChange, setShowInputsCashChange] = useState(false);
     const [monthPrice, setMonthPrice] = useState(0);
     const [totalPay, setTotalPay] = useState(0);
     const [image, setImage] = useState("")
-
+    const [alreadyRenewed, setAlreadyRenewed] = useState(false);
     const [firstPlateNewMen, setFirstPlateNewMen] = useState('')
     const [secondPlateNewMen, setSecondPlateNewMen] = useState('')
     const [thirdPlateNewMen, setThirdPlateNewMen] = useState('')
@@ -401,11 +402,21 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                mensualityRenewedModal();
+                if (response.data.response === 2) {
+                    setAlreadyRenewed(true);
+                    setTotalPay(0);
+                    setMonthPrice(0);
+                    setMonthPrice(0);
+
+                } else {
+                    mensualityRenewedModal();
+
+                }
+
             }
         } catch (err) {
             console.log(err)
-            console.log(err?.response)
+            console.log(err?.response.data.response)
             console.log('dentroRENEW')
         }
     }
@@ -568,7 +579,7 @@ const MonthlyPayments = (props) => {
                                             Vigencia hasta:
                                         </Text>
                                         <Text style={styles.infoText}>
-                                             {validityDateMenHours}
+                                            {validityDateMenHours}
                                         </Text>
                                     </View>
                                     <View style={{
@@ -670,51 +681,6 @@ const MonthlyPayments = (props) => {
                                 <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}>Placas asociadas a mensualidad </Text>
                             </View>
                             <View style={{ justifyContent: 'space-between', height: '69%', width: '100%', flexDirection: 'column', paddingBottom: '10%' }}>
-                                {/* <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Correo:  </Text>
-                                    <TextInput
-                                        style={{
-                                            borderWidth: 1,
-                                            borderColor: '#00A9A0',
-                                            fontSize: normalize(20),
-                                            fontFamily: 'Montserrat-Bold',
-                                            width: '60%',
-                                            borderRadius: 10,
-                                            color: '#00A9A0'
-                                        }}
-                                        keyboardType='default'
-                                        placeholder=''
-                                        textAlign='center'
-                                    // value={userPhone !== undefined + '' ? userPhone : ''}
-                                    // onChangeText={text => setUserPhone(text)}
-                                    // onFocus={() => {
-                                    //     clearUserPhone()
-                                    // }}
-                                    />
-                                </View> */}
-                                {/* <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Celular:  </Text>
-                                    <TextInput
-                                        style={{
-                                            borderWidth: 1,
-                                            borderColor: '#00A9A0',
-                                            fontSize: normalize(20),
-                                            fontFamily: 'Montserrat-Bold',
-                                            width: '60%',
-                                            borderRadius: 10,
-                                            color: '#00A9A0'
-                                        }}
-                                        keyboardType='numeric'
-                                        placeholder=''
-                                        // maxLength={10}
-                                        textAlign='center'
-                                        value={userPhone.length === 13 && userPhone !== undefined  ? userPhone.substring(3,12) : userPhone}
-                                        onChangeText={text => setUserPhone(text)}
-                                        onFocus={() => {
-                                            clearUserPhone()
-                                        }}
-                                    />
-                                </View> */}
                                 <View style={{ flexDirection: "row", justifyContent: 'center' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 1:  </Text>
                                     <TextInput
@@ -899,142 +865,151 @@ const MonthlyPayments = (props) => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <View style={{
-                            height: '100%',
-                            width: '100%',
-                            justifyContent: 'space-between',
-                            padding: '3%'
-                        }}>
+                        {alreadyRenewed === false ?
                             <View style={{
-                                marginTop: '8%',
-                                justifyContent: 'center',
-                                height: '20%'
-                            }}>
-                                <Text style={{
-                                    ...styles.modalText,
-                                    fontSize: normalize(30),
-                                    color: '#00A9A0'
-                                }}>
-                                    Reclame {`$${numberWithPoints(monthPrice)}`}
-                                </Text>
-                            </View>
-                            {/* <View style={{
-                                justifyContent: 'space-between',
-                                height: '20%',
+                                height: '100%',
                                 width: '100%',
-                                flexDirection: 'column',
-                                paddingBottom: '6%',
-                                alignItems: 'center',
-                                alignContent: 'center',
-                                borderWidth: 1
-                            }}>
-                                <View style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    alignContent: 'center',
-                                    height: '30%',
-                                    width: '60%',
-                                    justifyContent: 'center',
-                                    paddingTop: '10%'
-                                }}>
-                                    <CheckBox
-                                        value={charge}
-                                        onValueChange={() => setCharge(!charge)}
-                                        style={{ alignSelf: 'center' }}
-                                        tintColors={{
-                                            true: '#00A9A0',
-                                            false: 'gray'
-                                        }}
-                                    />
-                                    <Text style={{
-                                        color: '#00A9A0',
-                                        fontFamily: 'Montserrat-Bold',
-                                        fontSize: normalize(19),
-                                        textAlign: 'center'
-                                    }}>Cobrado</Text>
-                                </View>
-                            </View> */}
-                            <View style={{ justifyContent: 'space-between', height: '30%', flexDirection: 'column', paddingBottom: '6%' }}>
-                                <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Pago:  </Text>
-                                    <TextInput
-                                        style={{
-                                            borderWidth: 1,
-                                            borderColor: '#00A9A0',
-                                            fontSize: normalize(20),
-                                            fontFamily: 'Montserrat-Bold',
-                                            backgroundColor: '#FFFFFF',
-                                            width: '60%',
-                                            borderRadius: 10,
-                                            color: '#00A9A0'
-                                        }}
-                                        keyboardType='numeric'
-                                        placeholder='$ 0'
-                                        textAlign='center'
-
-                                        value={textinputMoney}
-                                        onChangeText={(text) => {
-                                            setTotalPay(text);
-                                        }}
-                                    />
-                                </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}> A devolver:  </Text>
-                                    <TextInput
-                                        style={{
-                                            borderWidth: 1,
-                                            borderColor: '#00A9A0',
-                                            fontSize: normalize(20),
-                                            fontFamily: 'Montserrat-Bold',
-                                            backgroundColor: '#FFFFFF',
-                                            width: '60%',
-                                            borderRadius: 10,
-                                            color: '#00A9A0'
-                                        }}
-                                        keyboardType='numeric'
-                                        placeholder='$'
-                                        textAlign='center'
-
-                                        editable={false}
-                                        value={`$${numberWithPoints(inputChange)}`}
-                                    />
-                                </View>
-                            </View>
-                            <View style={{
-                                height: '25%',
                                 justifyContent: 'space-between',
-                                flexDirection: 'column'
+                                padding: '3%', borderWidth: 1
                             }}>
                                 <View style={{
-                                    height: '50%',
-                                    width: '100%',
-                                    justifyContent: 'flex-end'
+                                    marginTop: '8%',
+                                    justifyContent: 'center',
+                                    height: '20%'
                                 }}>
-                                    <Button onPress={() => {
-                                        renewMensuality()
+                                    <Text style={{
+                                        ...styles.modalText,
+                                        fontSize: normalize(30),
+                                        color: '#00A9A0'
+                                    }}>
+                                        Reclame {`$${numberWithPoints(monthPrice)}`}
+                                    </Text>
+                                </View>
+                                <View style={{ justifyContent: 'space-between', height: '30%', flexDirection: 'column', paddingBottom: '6%' }}>
+                                    <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
+                                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Pago:  </Text>
+                                        <TextInput
+                                            style={{
+                                                borderWidth: 1,
+                                                borderColor: '#00A9A0',
+                                                fontSize: normalize(20),
+                                                fontFamily: 'Montserrat-Bold',
+                                                backgroundColor: '#FFFFFF',
+                                                width: '60%',
+                                                borderRadius: 10,
+                                                color: '#00A9A0'
+                                            }}
+                                            keyboardType='numeric'
+                                            placeholder='$ 0'
+                                            textAlign='center'
 
-                                    }}
-                                        title="R E N O V A R"
-                                        color="#00A9A0"
-                                        style={totalPay - monthPrice < 0 ? styles.modalButtonDisabled : styles.modalButton}
-                                        textStyle={{
-                                            color: "#FFFFFF",
-                                            textAlign: "center",
-                                            fontFamily: 'Montserrat-Bold'
-                                        }}
-                                        disabled={totalPay - monthPrice < 0}
-                                    />
+                                            value={textinputMoney}
+                                            onChangeText={(text) => {
+                                                setTotalPay(text);
+                                            }}
+                                        />
+                                    </View>
+                                    <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
+                                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}> A devolver:  </Text>
+                                        <TextInput
+                                            style={{
+                                                borderWidth: 1,
+                                                borderColor: '#00A9A0',
+                                                fontSize: normalize(20),
+                                                fontFamily: 'Montserrat-Bold',
+                                                backgroundColor: '#FFFFFF',
+                                                width: '60%',
+                                                borderRadius: 10,
+                                                color: '#00A9A0'
+                                            }}
+                                            keyboardType='numeric'
+                                            placeholder='$'
+                                            textAlign='center'
 
+                                            editable={false}
+                                            value={`$${numberWithPoints(inputChange)}`}
+                                        />
+                                    </View>
                                 </View>
                                 <View style={{
-                                    height: '50%',
+                                    height: '25%',
+                                    justifyContent: 'space-between',
+                                    flexDirection: 'column'
+                                }}>
+                                    <View style={{
+                                        height: '50%',
+                                        width: '100%',
+                                        justifyContent: 'flex-end'
+                                    }}>
+                                        <Button onPress={() => {
+                                            renewMensuality()
+
+                                        }}
+                                            title="R E N O V A R"
+                                            color="#00A9A0"
+                                            style={totalPay - monthPrice < 0 ? styles.modalButtonDisabled : styles.modalButton}
+                                            textStyle={{
+                                                color: "#FFFFFF",
+                                                textAlign: "center",
+                                                fontFamily: 'Montserrat-Bold'
+                                            }}
+                                            disabled={totalPay - monthPrice < 0}
+                                        />
+
+                                    </View>
+                                    <View style={{
+                                        height: '50%',
+                                        width: '100%',
+                                        justifyContent: 'flex-end',
+                                    }}>
+                                        <Button onPress={() => {
+                                            setModal2Visible(!modal2Visible);
+                                        }}
+                                            title="V O L V E R"
+                                            color="gray"
+                                            style={
+                                                styles.modalButton
+                                            }
+                                            textStyle={{
+                                                color: "#FFFFFF",
+                                                textAlign: "center",
+                                                fontFamily: 'Montserrat-Bold'
+                                            }} />
+                                    </View>
+                                </View>
+
+
+                            </View>
+                            :
+                            <View style={{
+                                height: '100%',
+                                width: '100%',
+                                justifyContent: 'space-between',
+                                padding: '3%'
+                            }}>
+                                <View style={{
+                                    marginTop: '8%',
+                                    justifyContent: 'center',
+                                    height: '20%'
+                                }}>
+                                    <Text style={{
+                                        ...styles.modalText,
+                                        fontSize: normalize(30),
+                                        color: '#00A9A0'
+                                    }}>
+                                        Esta mensualidad ya fue renovada.
+                                    </Text>
+                                </View>
+                                <View style={{
+                                    height: '20%',
                                     width: '100%',
                                     justifyContent: 'flex-end',
                                 }}>
                                     <Button onPress={() => {
                                         setModal2Visible(!modal2Visible);
+                                        setAlreadyRenewed(false);
                                     }}
-                                        title="V O L V E R"
+                                        title="E N T E N D I D O"
                                         color="gray"
                                         style={
                                             styles.modalButton
@@ -1045,9 +1020,9 @@ const MonthlyPayments = (props) => {
                                             fontFamily: 'Montserrat-Bold'
                                         }} />
                                 </View>
-                            </View>
 
-                        </View>
+                            </View>
+                        }
                     </View>
                 </View>
             </Modal>
