@@ -14,6 +14,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import styles from '../MonthlyPayments/MonthlyPaymentsStyles';
 import normalize from '../../config/services/normalizeFontSize';
 import moment from 'moment';
+import momenttimezone from 'moment-timezone';
 import numberWithPoints from '../../config/services/numberWithPoints';
 import Header from '../../components/Header/HeaderIndex';
 import FooterIndex from '../../components/Footer';
@@ -91,28 +92,10 @@ const MonthlyPayments = (props) => {
     let platesNewMen = [firstPlateNewMen, secondPlateNewMen, thirdPlateNewMen, fourthPlateNewMen, fifthPlateNewMen]
     let platesNewMensuality = platesNewMen.filter(plate => plate != undefined && plate != '')
 
-    const [validityDate, setValidityDate] = useState(new Date(moment(new Date()).add(1, 'months')));
-    const [validityDateNewMen, setValidityDateNewMen] = useState(moment(validityDate).set("date", 5));
+    let validityDateMen = moment(mensualityInfo.validity).tz("America/Bogota")
+    let validityDateMenHours = '' + validityDateMen.format('L') + ' ' + validityDateMen.format('LT')
 
     const mensualityType = ["corporate", "personal"]
-
-    const createUserInfo = () => {
-        console.log(
-            {
-                hqId: officialHq,
-                plate: "HZK130",
-                phone: "573104206080",
-                total: 185700,
-                officialEmail: officialProps.email,
-                dateStart: new Date(),
-                mensuality: true,
-                dateFinished: validityDateNewMen,
-                hours: "1 month",
-                type: "car",
-                cash: 200000,
-                change: 14300
-            })
-    }
 
     const showModalInfoNewMen = () => {
         setModal3Visible(true);
@@ -585,7 +568,7 @@ const MonthlyPayments = (props) => {
                                             Vigencia hasta:
                                         </Text>
                                         <Text style={styles.infoText}>
-                                            {moment(mensualityInfo.validity).format('L')} {moment(mensualityInfo.validity).format('LT')}
+                                             {validityDateMenHours}
                                         </Text>
                                     </View>
                                     <View style={{

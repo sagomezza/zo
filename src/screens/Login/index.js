@@ -41,7 +41,6 @@ const LoginIndex = (props) => {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState("")
-  
 
   const onLoginPress = async () => {
     try {
@@ -61,9 +60,11 @@ const LoginIndex = (props) => {
       let fbToken = response.user.toJSON().stsTokenManager.accessToken
       if (Platform.OS === 'android' && Platform.Version < 23) {
         await AsyncStorage.setItem('firebaseToken', fbToken)
+
       } else {
         await SecureStore.setItemAsync('firebaseToken', fbToken)
       }
+
       let readOff = await axios.post(
         `${API}${READOFFICIAL}`,
         { email: email },
@@ -76,6 +77,7 @@ const LoginIndex = (props) => {
         index: 1,
         routes: [{ name: 'Home' }]
       }));
+
     } catch (err) {
       try {
         let readOff = await axios.post(
@@ -96,6 +98,7 @@ const LoginIndex = (props) => {
           index: 1,
           routes: [{ name: 'Home' }]
         }));
+
       } catch (err) {
         setLoading(false)
         setError("El usuario y/o la contraseña que ingresaste son incorrectos.")

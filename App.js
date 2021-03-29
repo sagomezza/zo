@@ -50,7 +50,13 @@ const App = () => {
 
   const checkInternetReachable = () => {
     console.log("-------Connection Information------")
-
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        console.log('user logged in--------------------------------: ', user)
+      } else {
+        console.log('user logged out--------------------------------');
+      }
+    })
     Network.getNetworkStateAsync().then(state => {
       console.log('Connection type:', state.type);
       console.log('Is connected?:', state.isConnected);
