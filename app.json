@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Zona-p-test",
-    "slug": "Zona-p-test",
+    "name": "Zona-p",
+    "slug": "Zona-p",
     "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/app-icon.png",
@@ -22,7 +22,7 @@
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
-      "package": "com.corpaul.zonaptest",
+      "package": "com.corpaul.zonap",
       "useNextNotificationsApi": true,
       "versionCode": 3,
       "adaptiveIcon": {
