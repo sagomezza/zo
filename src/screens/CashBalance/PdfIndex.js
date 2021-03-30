@@ -12,7 +12,7 @@ import {
   Dimensions
 } from 'react-native';
 import instance from "../../config/axios";
-import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT, GET_SHIFTS_OF_BOX, GET_BOX_TOTAL } from "../../config/api";
+import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT, GET_SHIFTS_OF_BOX, GET_BOX_TOTAL, GET_SHIFT_RECIPS } from "../../config/api";
 import { connect } from 'react-redux';
 import { TIMEOUT } from '../../config/constants/constants';
 import * as actions from "../../redux/actions";
@@ -99,12 +99,16 @@ const txtGenerator = (props) => {
   const getBoxTotal = async () => {
     setLoadingBoxGenerator(true);
     try {
-      const response = await instance.post(GET_BOX_TOTAL, {
-        hqId: officialProps.hq[0]
+      const response = await instance.post(GET_SHIFT_RECIPS, {
+        email: officialProps.email,
+        hqId: officialProps.hq[0],
+        date: new Date()
       },
         { timeout: TIMEOUT }
       );
-      setShiftsOfBox(response.data.data)
+      if (response.data.response === 1) {
+        setShiftsOfBox(response.data.data.total);
+      }
       gotBoxTotal();
     } catch (err) {
       setLoadingBoxGenerator(false);
@@ -116,6 +120,9 @@ const txtGenerator = (props) => {
 
   const listBoxClose = async () => {
     try {
+      console.log({
+        hqId: officialProps.hq[0]
+      })
       const response = await instance.post(LIST_BOX_CLOSE, {
         hqId: officialProps.hq[0]
       },
@@ -275,7 +282,7 @@ const txtGenerator = (props) => {
                         marginTop: '0%'
                       }} >
                         <View style={{ marginBottom: '2%' }} >
-                          <Text style={styles.textPlaca}>{item.plate}</Text>
+                          <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0] }</Text>
                           <Text style={styles.textPago}>Pago por ${formatHours(item.hours)} horas</Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
@@ -287,7 +294,7 @@ const txtGenerator = (props) => {
                 />
               </View>
             </View>
-            <View style={{ height: '10%',  width: '85%', alignSelf: 'center' }}>
+            <View style={{ height: '10%', width: '85%', alignSelf: 'center' }}>
               <Button
                 onPress={() => {
 
@@ -334,7 +341,7 @@ const txtGenerator = (props) => {
 
                               <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')} {moment(item.dateFinished).format('LT')}</Text>
                             </View>
-                            <View style={{ alignItems: 'flex-end', marginTop: '3%',  width: '49%' }} >
+                            <View style={{ alignItems: 'flex-end', marginTop: '3%', width: '49%' }} >
                               {item.status === 'active' ?
                                 <Button
                                   // onPress={onShare}
@@ -535,8 +542,12 @@ const txtGenerator = (props) => {
                     <View style={{ margin: '0%', justifyContent: 'center', height: ' 75%' }}>
                       <View style={{ margin: '2%', justifyContent: 'center', height: ' 30%' }}>
                         <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Cierre de Caja:</Text>
-                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>{moment(readBoxReportInfo.dateFinished).format('L')} {moment(readBoxReportInfo.dateFinished).format('LT')}</Text>
-                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>{`$${numberWithPoints(Number(readBoxReportInfo.totalReported))}`}</Text>
+                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>
+                          {moment(readBoxReportInfo.dateFinished).format('L')} {moment(readBoxReportInfo.dateFinished).format('LT')}
+                        </Text>
+                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>
+                          {`$${numberWithPoints(Number(readBoxReportInfo.totalReported))}`}
+                        </Text>
                       </View>
                       {boxStatus === "active" ?
 

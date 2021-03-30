@@ -1,7 +1,7 @@
 //Import dependencies
 
 // Native dependecies
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,8 @@ import {
   Platform,
   Image,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  Modal
 } from 'react-native';
 // Library dependecies
 import axios from 'axios';
@@ -19,6 +20,8 @@ import { auth } from '../../config/firebase';
 import * as SecureStore from 'expo-secure-store';
 import { connect } from 'react-redux';
 import { CommonActions } from '@react-navigation/native';
+import { MaterialIcons } from "@expo/vector-icons";
+
 // Constants dependecies
 import { API, READOFFICIAL } from '../../config/constants/api'
 import { START_SHIFT, READ_ADMIN, READ_CORPO } from "../../config/api/index";
@@ -36,10 +39,13 @@ const { width, height } = Dimensions.get('window')
 
 const LoginIndex = (props) => {
   const { navigation, officialProps } = props;
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState("");
+
+  const [showInstructions, setShowInstructions] = useState(true);
+
 
   const onLoginPress = async () => {
     try {
@@ -59,9 +65,11 @@ const LoginIndex = (props) => {
       let fbToken = response.user.toJSON().stsTokenManager.accessToken
       if (Platform.OS === 'android' && Platform.Version < 23) {
         await AsyncStorage.setItem('firebaseToken', fbToken)
+
       } else {
         await SecureStore.setItemAsync('firebaseToken', fbToken)
       }
+
       let readOff = await axios.post(
         `${API}${READOFFICIAL}`,
         { email: email },
@@ -74,6 +82,7 @@ const LoginIndex = (props) => {
         index: 1,
         routes: [{ name: 'Home' }]
       }));
+
     } catch (err) {
       try {
         let readOff = await axios.post(
@@ -94,6 +103,7 @@ const LoginIndex = (props) => {
           index: 1,
           routes: [{ name: 'Home' }]
         }));
+
       } catch (err) {
         setLoading(false)
         setError("El usuario y/o la contraseña que ingresaste son incorrectos.")
@@ -130,7 +140,7 @@ const LoginIndex = (props) => {
             <View style={{ height: '18%', marginBottom: '3%' }}>
               <Image style={{ width: normalize(200), height: '70%' }} resizeMode={"contain"} source={require('../../../assets/images/icon.png')} />
             </View>
-            <View style={{ height: '10%', width: '60%', justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
+            <View style={{ height: '10%', width: '60%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
               <Text style={styles.loginText} >I  N  I  C  I  O     D  E     S  E  S  I  Ó  N</Text>
             </View>
             <View style={{ width: '100%', height: '25%', alignContent: 'center', alignItems: 'center' }}>
@@ -158,7 +168,7 @@ const LoginIndex = (props) => {
                     autoCapitalize={"none"}
                     autoCorrect={false}
                     value={password}
-                    onChangeText={(text) => setPassword(text)}
+                    onChangeText={(text) => setPassword(text.trim())}
                     secureTextEntry={true}
                   />
                 </View>
@@ -181,14 +191,74 @@ const LoginIndex = (props) => {
                 textStyle={{ color: "#00A9A0", fontFamily: 'Montserrat-Bold', fontSize: width * 0.032 }}
                 activityIndicatorStatus={loading}
               />
-              <TouchableOpacity style={{alignSelf: 'center'}}>
+              <TouchableOpacity style={{ alignSelf: 'center' }}>
                 <Text style={styles.restoreText}>Olvidé mi contraseña</Text>
               </TouchableOpacity>
             </View>
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={showInstructions}
+
+
+      // onRequestClose={() => {
+      //   Alert.alert("Modal has been closed.");
+      // }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{
+              height: '100%',
+              width: '100%',
+              justifyContent: 'space-between',
+              padding: '2%'
+
+            }}>
+              <View style={{
+                margin: '4%',
+                justifyContent: 'space-between',
+                height: ' 70%',
+                alignItems: 'center'
+              }}>
+                <MaterialIcons
+                  name="warning"
+                  color="#00A9A0"
+                  size={75}
+                />
+                <Text style={styles.modalTextAlert}> Hola, para iniciar: </Text>
+                <Text style={styles.modalTextAlert}> 1. Recuerda revisar la conexión a internet de tu dispositivo </Text>
+                <Text style={styles.modalTextAlert}> 2. Inicia sesión con tu usuario y contraseña. </Text>
+                <Text style={styles.modalTextAlert}> 3. Luego del cierre del día, recuerda cerrar tu sesión </Text>
+
+
+
+
+              </View>
+              <View style={{ height: '12%', width: '100%', justifyContent: 'flex-end' }}>
+                <Button onPress={() => {
+                    setShowInstructions(false);
+                  }}
+                  title="E N T E N D I D O"
+                  color="#00A9A0"
+                  style={
+                    styles.modalButton
+                  }
+                  textStyle={{
+                    color: "#FFFFFF",
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Bold'
+                  }} />
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
+
   );
 };
 
