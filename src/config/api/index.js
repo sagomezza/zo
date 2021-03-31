@@ -35,6 +35,7 @@ export const LIST_HQ_DEBTS = '/listHQDebts'
 
 //HQ's
 export const READ_HQ = "/readHq";
+
 //PARKING PROCESS
 export const START_PARKING = "/startParking";
 export const CHECK_PARKING = "/checkParking";
@@ -44,3 +45,4 @@ export const FINISHPARKING = "/finishParking";
 export const READ_ADMIN = "/readAdmin";
 export const EDIT_ADMIN = "/editAdmin";
 export const READ_CORPO = "/readCorporation";
+export const READOFFICIAL="/readOfficial"

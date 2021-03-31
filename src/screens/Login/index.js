@@ -15,7 +15,6 @@ import {
   Modal
 } from 'react-native';
 // Library dependecies
-import axios from 'axios';
 import { auth } from '../../config/firebase';
 import * as SecureStore from 'expo-secure-store';
 import { connect } from 'react-redux';
@@ -23,15 +22,14 @@ import { CommonActions } from '@react-navigation/native';
 import { MaterialIcons } from "@expo/vector-icons";
 
 // Constants dependecies
-import { API, READOFFICIAL } from '../../config/constants/api'
-import { START_SHIFT, READ_ADMIN, READ_CORPO } from "../../config/api/index";
+import { START_SHIFT, READ_ADMIN, READ_CORPO, READOFFICIAL } from "../../config/api/index";
+import instance from "../../config/axios";
 import * as actions from "../../redux/actions";
 import { TIMEOUT } from '../../config/constants/constants';
 // Styling dependecies
 import styles from './LoginStyles';
 import normalize from '../../config/services/normalizeFontSize';
 import Button from '../../components/Button';
-import instance from '../../config/axios';
 import { ImageBackground } from 'react-native';
 import { Dimensions } from 'react-native';
 
@@ -70,8 +68,8 @@ const LoginIndex = (props) => {
         await SecureStore.setItemAsync('firebaseToken', fbToken)
       }
 
-      let readOff = await axios.post(
-        `${API}${READOFFICIAL}`,
+      let readOff = await instance.post(
+        READOFFICIAL,
         { email: email },
         { timeout: TIMEOUT }
       )
@@ -85,14 +83,14 @@ const LoginIndex = (props) => {
 
     } catch (err) {
       try {
-        let readOff = await axios.post(
-          `${API}${READ_ADMIN}`,
+        let readOff = await instance.post(
+          READ_ADMIN,
           { email: email },
           { timeout: TIMEOUT }
         )
         let data = readOff.data.data
-        readOff = await axios.post(
-          `${API}${READ_CORPO}`,
+        readOff = await instance.post(
+          READ_CORPO,
           { name: data.context },
           { timeout: TIMEOUT }
         )

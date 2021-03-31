@@ -24,7 +24,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { FIND_MENSUALITY_PLATE, RENEW_MENSUALITY, EDIT_MENSUALITY, CREATE_USER, CREATE_MENSUALITY, EDIT_USER } from "../../config/api";
 import instance from "../../config/axios";
 import { TIMEOUT } from '../../config/constants/constants';
-import { firestore } from '../../config/firebase'
+import { firestore } from '../../config/firebase';
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
@@ -121,7 +121,7 @@ const MonthlyPayments = (props) => {
         }
     }
     const clearUserPhone = () => {
-        setUserPhone('');
+        setUserPhone(''); w
     }
     const clearPlateOne = () => {
         setPlateOne('');
@@ -189,24 +189,34 @@ const MonthlyPayments = (props) => {
     }
 
     const user = () => {
-        setLoading(true);
-        firestore.collection("users")
-            .where('plates', "array-contains", firstPlateNewMen)
-            .where('phone', '==', '+57' + phoneNewMen)
-            .get()
-            .then(snapshot => {
 
-                if (snapshot.empty) {
-                    createUser();
-                } else {
-                    snapshot.forEach(doc => {
-                        setUserId(doc.id)
-                        editUser(doc.id);
-                        createMensuality(doc.id);
-                    })
-                }
-            })
+        try {
+            setLoading(true);
+            firestore.collection("users")
+                .where('plates', "array-contains", firstPlateNewMen)
+                .where('phone', '==', '+57' + phoneNewMen)
+                .get()
+                .then(snapshot => {
+
+                    if (snapshot.empty) {
+                        createUser();
+                    } else {
+                        snapshot.forEach(doc => {
+                            setUserId(doc.id)
+                            editUser(doc.id);
+                            createMensuality(doc.id);
+                        })
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+
+        } catch (err) {
+            console.log(err)
+        }
     };
+
 
     async function editUser(idUser) {
         setLoading(true);
@@ -1106,6 +1116,7 @@ const MonthlyPayments = (props) => {
                                 </View>
                                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                                     <Button onPress={() => {
+
                                         user();
                                     }}
                                         title="G U A R D A R"

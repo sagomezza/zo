@@ -110,7 +110,7 @@ const LogoutIndex = (props) => {
   const hq = props.hq;
   const [inputBaseValue, setInputBaseValue] = useState('');
   const [inputValue, setInputValue] = useState('');
-
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getShiftRecips = async () => {
@@ -135,6 +135,7 @@ const LogoutIndex = (props) => {
   }, []);
 
   const markEndOfShift = async () => {
+    setLoading(true);
     try {
       const response = await instance.post(MARK_END_OF_SHIFT, {
         email: officialProps.email,
@@ -145,14 +146,20 @@ const LogoutIndex = (props) => {
         base: Number(inputBaseValue),
         hqId: officialHq
       });
+
       firebase.auth().signOut().then(function () {
         // Sign-out successful.
       }).catch(function (error) {
         // An error happened.
       });
+      setModalVisible(!modalVisible);
+      navigation.navigate('Login');
+      setLoading(false);
+
     } catch (err) {
       console.log(err)
       console.log(err?.response)
+      setLoading(false);
       setModal3Visible(false);
 
     }
@@ -299,7 +306,7 @@ const LogoutIndex = (props) => {
                     return (
                       <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: '7%', marginRight: '7%', marginTop: 20 }} >
                         <View style={{ marginBottom: 10 }} >
-                          <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0] }</Text>
+                          <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
                           <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'flex-end' }} >
@@ -428,15 +435,16 @@ const LogoutIndex = (props) => {
                   alignItems: 'center'
                 }}>
                   <Button onPress={() => {
-                    setModalVisible(!modalVisible);
                     markEndOfShift();
-                    navigation.navigate('Login')
+                    setLoading(true)
                   }}
                     title="S I"
                     color="#00A9A0"
                     style={
                       styles.modal2Button
                     }
+                    activityIndicatorStatus={loading}
+                    isDisabled={loading}
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
