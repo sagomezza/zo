@@ -209,7 +209,7 @@ const App = () => {
           </NavigationContainer>
         </AuthProvider>
       </Provider>) : (
-      <NoConnectionModal onCheck={checkInternetReachable}/>
+      <NoConnectionModal onCheck={checkInternetReachable} />
     )
 
   );
