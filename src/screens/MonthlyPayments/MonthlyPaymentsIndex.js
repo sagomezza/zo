@@ -96,7 +96,6 @@ const MonthlyPayments = (props) => {
     let validityDateMen = moment(mensualityInfo.validity).tz("America/Bogota")
     let validityDateMenHours = '' + validityDateMen.format('L') + ' ' + validityDateMen.format('LT')
 
-    const mensualityType = ["corporate", "personal"]
 
     const showModalInfoNewMen = () => {
         setModal3Visible(true);

@@ -320,8 +320,8 @@ const UserOut = (props) => {
                 maxLength={3}
                 autoCapitalize={'characters'}
                 onChangeText={(text) => {
-                  setPlateOne(text);
-                  setPlateOneCall(text);
+                  setPlateOne(text.trim());
+                  setPlateOneCall(text.trim());
                   if (refPlateTwo && text.length === 3) {
                     refPlateTwo.current.focus();
                   };
@@ -340,8 +340,8 @@ const UserOut = (props) => {
                 autoCapitalize={'characters'}
                 onFocus={() => { setPlateTwo(''); }}
                 onChangeText={text => {
-                  setPlateTwo(text);
-                  setPlateTwoCall(text);
+                  setPlateTwo(text.trim());
+                  setPlateTwoCall(text.trim());
                   if (text.length === 3) {
                     if (plateOne.length === 3) Keyboard.dismiss()
                   };
@@ -372,8 +372,8 @@ const UserOut = (props) => {
                 onFocus={() => { setInputVerificationCode(''); }}
                 onChangeText={text => {
                   if (text.length === 5) { Keyboard.dismiss() }
-                  setInputVerificationCode(text);
-                  setVerificationCodeCall(text);
+                  setInputVerificationCode(text.trim());
+                  setVerificationCodeCall(text.trim());
                 }}
               />
             </View>
