@@ -303,7 +303,7 @@ const UserInput = (props) => {
                 maxLength={3}
                 autoCapitalize={"characters"}
                 onChangeText={(text) => {
-                  setPlateOne(text);
+                  setPlateOne(text.trim());
                   if (refPlateTwo && text.length === 3) {
                     refPlateTwo.current.focus();
                   }
@@ -323,7 +323,7 @@ const UserInput = (props) => {
                 keyboardType='default'
                 onFocus={() => { clearPlateTwo(); }}
                 onChangeText={text => {
-                  setPlateTwo(text);
+                  setPlateTwo(text.trim());
                   if (text.length === 3) {
                     if (plateOne.length === 3) Keyboard.dismiss()
                   };
