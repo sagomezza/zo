@@ -44,6 +44,8 @@ const MonthlyPayments = (props) => {
     const [charge, setCharge] = useState(false);
     const mensualityInfo = mensuality.data !== undefined ? mensuality.data[0] : "";
     const mensualityValue = mensualityInfo.value !== undefined ? mensualityInfo.value : 0;
+    const mensualityUserName = mensualityInfo.userName !== undefined ? mensualityInfo.userName : ' ';
+    const mensualityUserPhone = mensualityInfo.userPhone !== undefined ? mensualityInfo.userPhone : ' ';
     // Modals
     const [modalVisible, setModalVisible] = useState(false);
     const [modal2Visible, setModal2Visible] = useState(false);
@@ -68,7 +70,6 @@ const MonthlyPayments = (props) => {
     const [newMenNid, setNewMenNid] = useState('');
     const [pendingMensualityPay, setPendingMensualityPay] = useState(false);
 
-
     const [showInputsCashChange, setShowInputsCashChange] = useState(false);
     const [monthPrice, setMonthPrice] = useState(0);
     const [totalPay, setTotalPay] = useState(0);
@@ -85,7 +86,6 @@ const MonthlyPayments = (props) => {
     const thirdPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[2] + '' : ''
     const fourthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + '' : ''
     const fifthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + '' : ''
-
 
     let plates = [firstPlate, secondPlate, thirdPlate, fourthPlate, fifthPlate]
     let newPlates = plates.filter(plate => plate != undefined && plate != '' && plate != "undefined")
@@ -485,16 +485,16 @@ const MonthlyPayments = (props) => {
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground
-                style={{
-                    flex: 1,
-                    width: '100%',
-                    height: '40%',
-                    flexDirection: 'column'
-                }}
+                style={styles.imageStyle}
                 source={require('../../../assets/images/Home.png')}>
                 <Header navigation={navigation} />
-                <View style={{ height: '17%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '30%', width: '60%', marginTop: '2%' }}>
+                <View style={{
+                    height: '17%',
+                    alignContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'column'
+                }}>
+                    <View style={styles.plateInputContainer}>
                         <TextInput
                             ref={refPlateOne}
                             placeholder={'EVZ'}
@@ -549,9 +549,56 @@ const MonthlyPayments = (props) => {
                 <View style={styles.container}>
                     <View style={styles.listContainer}>
                         {mensualityExists ?
-                            <View style={{ height: '96%', width: '80%', marginTop: '2%', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <View style={{ height: '60%', width: '100%', justifyContent: 'space-between', alignContent: 'center', alignItems: 'center' }}>
-                                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: "#ffffff", marginBottom: '5%' }}>
+                            <View style={{
+                                height: '96%',
+                                width: '80%',
+                                marginTop: '2%',
+                                alignContent: 'center',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                            }}>
+                                <View style={styles.mensualityInfoContainer}>
+                                    <View style={styles.mensualityInfo}>
+                                        <Text style={styles.infoTextTitle}>
+                                            Nombre de usuario:
+                                        </Text>
+                                        <Text style={styles.infoText}>
+                                            {mensualityUserName}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.mensualityInfo}>
+                                        <Text style={styles.infoTextTitle}>
+                                            Número de celular:
+                                        </Text>
+                                        <Text style={styles.infoText}>
+                                            {mensualityUserPhone}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.mensualityInfo}>
+                                        <Text style={styles.infoTextTitle}>
+                                            Valor:
+                                        </Text>
+                                        <Text style={styles.infoText}>
+                                            {`$${numberWithPoints(monthPrice)}`}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.mensualityInfo}>
+                                        <Text style={styles.infoTextTitle}>
+                                            Vigencia hasta:
+                                        </Text>
+                                        <Text style={styles.infoText}>
+                                            {validityDateMenHours}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.mensualityInfo}>
+                                        <Text style={styles.infoTextTitle}>
+                                            Placas parqueadas:
+                                        </Text>
+                                        <Text style={styles.infoText}>
+                                            {mensualityInfo.parkedPlates}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.mensualityInfo}>
                                         <Text style={styles.infoTextTitle}>
                                             Placas asociadas:
                                         </Text>
@@ -574,48 +621,8 @@ const MonthlyPayments = (props) => {
                                             </Text>
                                         </View>
                                     </View>
-
-                                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: "#ffffff", marginBottom: '5%' }}>
-                                        <Text style={styles.infoTextTitle}>
-                                            Placas parqueadas:
-                                        </Text>
-                                        <Text style={styles.infoText}>
-                                            {mensualityInfo.parkedPlates}
-                                        </Text>
-                                    </View>
-                                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', borderBottomWidth: 1, borderColor: "#ffffff", marginBottom: '5%' }}>
-                                        <Text style={styles.infoTextTitle}>
-                                            Vigencia hasta:
-                                        </Text>
-                                        <Text style={styles.infoText}>
-                                            {validityDateMenHours}
-                                        </Text>
-                                    </View>
-                                    <View style={{
-                                        flexDirection: 'row',
-                                        width: '100%',
-                                        justifyContent: 'space-between',
-                                        borderBottomWidth: 1,
-                                        borderColor: "#ffffff",
-                                        marginBottom: '2%'
-                                    }}>
-                                        <Text style={styles.infoTextTitle}>
-                                            Valor:
-                                        </Text>
-                                        <Text style={styles.infoText}>
-                                            {`$${numberWithPoints(monthPrice)}`}
-                                        </Text>
-                                    </View>
                                 </View>
-                                <View style={{
-                                    height: '18%',
-                                    width: '80%',
-                                    alignContent: 'center',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    flexDirection: 'column',
-                                    marginBottom: '5%'
-                                }}>
+                                <View style={styles.mensualityInfoButtonsContainer}>
                                     <Button onPress={() => {
                                         setModal2Visible(true);
                                     }}
@@ -642,7 +649,11 @@ const MonthlyPayments = (props) => {
                                 </View>
                             </View>
                             :
-                            <View style={{ height: '30%', justifyContent: 'space-between', width: '80%' }}>
+                            <View style={{
+                                height: '30%',
+                                justifyContent: 'space-between',
+                                width: '80%'
+                            }}>
                                 {mensualityExists === false ?
                                     <Text style={styles.notFoundText}>
                                         No se encuentra mensualidad asociada.

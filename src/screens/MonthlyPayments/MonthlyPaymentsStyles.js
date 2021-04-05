@@ -21,6 +21,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+    imageStyle: {
+        flex: 1,
+        width: '100%',
+        height: '40%',
+        flexDirection: 'column'
+    },
+    plateInputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignContent: 'center',
+        height: '30%',
+        width: '60%',
+        marginTop: '2%'
+    },
     plateInput: {
         width: '46%',
         height: '100%',
@@ -83,7 +97,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Bold',
     },
     notFoundText: {
-        fontSize: width * 0.034, 
+        fontSize: width * 0.034,
         fontFamily: 'Montserrat-Regular',
         textAlign: 'center'
     },
@@ -166,7 +180,7 @@ const styles = StyleSheet.create({
         color: 'red',
         fontSize: normalize(22),
         margin: '2%'
-      },
+    },
     modalButton: {
         width: '100%',
         height: '79%',
@@ -176,7 +190,31 @@ const styles = StyleSheet.create({
         height: '75%',
         opacity: 0.5
     },
-   
+    mensualityInfo: {
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
+        borderBottomWidth: 1,
+        borderColor: "#ffffff",
+        marginBottom: '5%'
+    },
+    mensualityInfoContainer: {
+        height: '60%',
+        width: '100%',
+        justifyContent: 'space-between',
+        alignContent: 'center',
+        alignItems: 'center'
+    },
+    mensualityInfoButtonsContainer: {
+        height: '18%',
+        width: '80%',
+        alignContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexDirection: 'column',
+        marginBottom: '5%'
+    }
+
 });
 
 export default styles;
