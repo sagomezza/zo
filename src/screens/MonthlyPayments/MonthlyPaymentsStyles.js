@@ -213,6 +213,27 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'column',
         marginBottom: '5%'
+    },
+    createMensualityContainer: {
+        justifyContent: 'space-between',
+        height: '70%',
+        width: '100%',
+        flexDirection: 'column',
+        paddingBottom: '8%'
+    },
+    createMensualityRowContainer: {
+        flexDirection: "row",
+        justifyContent: 'space-between',
+        margin: '1%'
+    },
+    createMensualityRowInput: {
+        borderWidth: 1,
+        borderColor: '#00A9A0',
+        fontSize: normalize(20),
+        fontFamily: 'Montserrat-Bold',
+        width: '60%',
+        borderRadius: 10,
+        color: '#00A9A0'
     }
 
 });
