@@ -691,9 +691,6 @@ const MonthlyPayments = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                }}
             >
                 <View style={styles.centeredView}>
                     <View style={{ 
@@ -1089,9 +1086,6 @@ const MonthlyPayments = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modal3Visible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                }}
             >
                 {showInputsCashChange ?
                     <View style={styles.centeredView}>
@@ -1389,9 +1383,6 @@ const MonthlyPayments = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modal4Visible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                }}
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -1429,9 +1420,6 @@ const MonthlyPayments = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modal5Visible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                }}
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>

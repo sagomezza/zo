@@ -120,9 +120,7 @@ const NewsReport = (props) => {
                     transparent={true}
                     backdropOpacity={0.3}
                     visible={modalVisible}
-                    onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                    }}
+                    
                 >
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
