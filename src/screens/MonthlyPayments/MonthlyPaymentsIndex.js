@@ -395,11 +395,7 @@ const MonthlyPayments = (props) => {
     }
 
     async function renewMensuality() {
-<<<<<<< HEAD
-        setLoading(true);
-=======
         setLoading(true)
->>>>>>> 85a4d22e2660de58b0897b55888ff88a0bd115a2
         try {
             
             if (plateOne.length === 3 && plateTwo.length === 3) {
@@ -425,23 +421,14 @@ const MonthlyPayments = (props) => {
                     mensualityRenewedModal();
 
                 }
-<<<<<<< HEAD
-                setLoading(false);
-
-=======
                 setLoading(false)
->>>>>>> 85a4d22e2660de58b0897b55888ff88a0bd115a2
 
             }
         } catch (err) {
             console.log(err)
             console.log(err?.response.data.response)
             console.log('dentroRENEW')
-<<<<<<< HEAD
-            setLoading(false);
-=======
             setLoading(true)
->>>>>>> 85a4d22e2660de58b0897b55888ff88a0bd115a2
 
         }
     }
@@ -706,10 +693,6 @@ const MonthlyPayments = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modalVisible}
-<<<<<<< HEAD
-                
-=======
->>>>>>> 85a4d22e2660de58b0897b55888ff88a0bd115a2
             >
                 <View style={styles.centeredView}>
                     <View style={{ 
@@ -917,10 +900,6 @@ const MonthlyPayments = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modal2Visible}
-<<<<<<< HEAD
-                
-=======
->>>>>>> 85a4d22e2660de58b0897b55888ff88a0bd115a2
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -1109,10 +1088,6 @@ const MonthlyPayments = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modal3Visible}
-<<<<<<< HEAD
-                
-=======
->>>>>>> 85a4d22e2660de58b0897b55888ff88a0bd115a2
             >
                 {showInputsCashChange ?
                     <View style={styles.centeredView}>
@@ -1410,10 +1385,6 @@ const MonthlyPayments = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modal4Visible}
-<<<<<<< HEAD
-                
-=======
->>>>>>> 85a4d22e2660de58b0897b55888ff88a0bd115a2
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -1451,10 +1422,6 @@ const MonthlyPayments = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modal5Visible}
-<<<<<<< HEAD
-                
-=======
->>>>>>> 85a4d22e2660de58b0897b55888ff88a0bd115a2
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
