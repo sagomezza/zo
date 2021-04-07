@@ -99,13 +99,14 @@ const txtGenerator = (props) => {
   const getBoxTotal = async () => {
     setLoadingBoxGenerator(true);
     try {
-      const response = await instance.post(GET_SHIFT_RECIPS, {
+      const response = await instance.post(GET_BOX_TOTAL, {
         email: officialProps.email,
         hqId: officialProps.hq[0],
         date: new Date()
       },
         { timeout: TIMEOUT }
       );
+      console.log(response.data.data.total)
       if (response.data.response === 1) {
         setShiftsOfBox(response.data.data.total);
       }
@@ -398,9 +399,6 @@ const txtGenerator = (props) => {
               transparent={true}
               backdropOpacity={0.3}
               visible={modalVisible}
-              onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-              }}
             >
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
@@ -532,9 +530,6 @@ const txtGenerator = (props) => {
               transparent={true}
               backdropOpacity={0.3}
               visible={modal2Visible}
-              onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-              }}
             >
               <View style={styles.centeredView}>
                 <View style={styles.modalViewSign}>
@@ -639,9 +634,6 @@ const txtGenerator = (props) => {
               transparent={true}
               backdropOpacity={0.3}
               visible={modal3Visible}
-              onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-              }}
             >
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>

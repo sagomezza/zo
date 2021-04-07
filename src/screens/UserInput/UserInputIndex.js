@@ -5,7 +5,6 @@ import {
   Text,
   Modal,
   TouchableWithoutFeedback,
-  Alert,
   Image,
   ActivityIndicator,
   Dimensions
@@ -303,7 +302,7 @@ const UserInput = (props) => {
                 maxLength={3}
                 autoCapitalize={"characters"}
                 onChangeText={(text) => {
-                  setPlateOne(text);
+                  setPlateOne(text.trim());
                   if (refPlateTwo && text.length === 3) {
                     refPlateTwo.current.focus();
                   }
@@ -323,7 +322,7 @@ const UserInput = (props) => {
                 keyboardType='default'
                 onFocus={() => { clearPlateTwo(); }}
                 onChangeText={text => {
-                  setPlateTwo(text);
+                  setPlateTwo(text.trim());
                   if (text.length === 3) {
                     if (plateOne.length === 3) Keyboard.dismiss()
                   };
@@ -491,9 +490,6 @@ const UserInput = (props) => {
           transparent={true}
           backdropOpacity={0.3}
           visible={modal2Visible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-          }}
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
@@ -547,9 +543,6 @@ const UserInput = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
       >
         {prepayDay ?
           <View style={styles.centeredView}>
@@ -704,9 +697,6 @@ const UserInput = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modal3Visible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>

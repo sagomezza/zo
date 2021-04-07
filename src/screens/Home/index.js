@@ -3,17 +3,13 @@ import {
   View,
   Text,
   FlatList,
-  Image,
-  Dimensions
+  Image
 } from 'react-native';
 import { ImageBackground } from 'react-native';
 import Header from '../../components/Header/HeaderIndex';
 import numberWithPoints from '../../config/services/numberWithPoints';
-import normalize from '../../config/services/normalizeFontSize';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import FooterIndex from '../../components/Footer';
 import HomeStyles from '../Home/HomeStyles';
-import Button from '../../components/Button';
 import instance from "../../config/axios";
 import moment from 'moment';
 // api
@@ -25,17 +21,14 @@ import * as actions from "../../redux/actions";
 import store from '../../config/store';
 
 
-const { width, height } = Dimensions.get('window');
 
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  const [occupiedBikes, setOccupiedBikes] = useState(0);
-  const [occupiedCars, setOccupiedCars] = useState(0);
-
 
   useEffect(() => {
     const getRecips = async () => {
+      console.log(new Date())
       try {
         const response = await instance.post(GET_RECIPS, {
           hqId: officialProps.hq[0],

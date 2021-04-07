@@ -352,9 +352,6 @@ const LogoutIndex = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modal2Visible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -405,9 +402,6 @@ const LogoutIndex = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
       >
         <View style={HomeStyles.centeredView}>
           <View style={HomeStyles.modalView}>
@@ -483,9 +477,6 @@ const LogoutIndex = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modal3Visible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
