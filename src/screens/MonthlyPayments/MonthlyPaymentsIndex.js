@@ -357,6 +357,7 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
+                console.log(response.data);
                 setMensualityExists(true);
                 setMensuality(response.data)
                 setLoading(false);
@@ -399,6 +400,7 @@ const MonthlyPayments = (props) => {
     }
 
     async function renewMensuality() {
+        setLoading(true);
         try {
             if (plateOne.length === 3 && plateTwo.length === 3) {
                 const response = await instance.post(
@@ -412,6 +414,7 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
+
                 if (response.data.response === 2) {
                     setAlreadyRenewed(true);
                     setTotalPay(0);
@@ -422,12 +425,16 @@ const MonthlyPayments = (props) => {
                     mensualityRenewedModal();
 
                 }
+                setLoading(false);
+
 
             }
         } catch (err) {
             console.log(err)
             console.log(err?.response.data.response)
             console.log('dentroRENEW')
+            setLoading(false);
+
         }
     }
 
@@ -680,9 +687,7 @@ const MonthlyPayments = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                }}
+                
             >
                 <View style={styles.centeredView}>
                     <View style={{ ...styles.modalView, height: normalize(550) }}>
@@ -869,9 +874,7 @@ const MonthlyPayments = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modal2Visible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                }}
+                
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -964,6 +967,7 @@ const MonthlyPayments = (props) => {
                                                 fontFamily: 'Montserrat-Bold'
                                             }}
                                             disabled={totalPay - monthPrice < 0}
+                                            activityIndicatorStatus={loading}
                                         />
 
                                     </View>
@@ -1041,9 +1045,7 @@ const MonthlyPayments = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modal3Visible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                }}
+                
             >
                 {showInputsCashChange ?
                     <View style={styles.centeredView}>
@@ -1416,9 +1418,7 @@ const MonthlyPayments = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modal4Visible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                }}
+                
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -1456,9 +1456,7 @@ const MonthlyPayments = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modal5Visible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                }}
+                
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
