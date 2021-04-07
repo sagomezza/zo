@@ -8,8 +8,7 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-src/config/firebase/service_account.json
-src/config/firebase/service_account_dev.json
 src/config/firebase/service_account_prod.json
+src/config/firebase/service_account_dev.json
 # macOS
 .DS_Store

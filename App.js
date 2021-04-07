@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { View, ActivityIndicator } from 'react-native'
+import { View, ActivityIndicator, StyleSheet, Modal, Text } from 'react-native';
+import normalize from './src/config/services/normalizeFontSize';
+import NoConnectionModal from './src/components/NoConnectionModal';
 import { Provider } from "react-redux";
 import store from './src/config/store'
 import { NavigationContainer } from "@react-navigation/native";
@@ -12,6 +14,8 @@ import instance from "./src/config/axios";
 import { READ_OFFICIAL } from "./src/config/api";
 import { READ_ADMIN, READ_CORPO } from "./src/config/api/index";
 import { setOfficial, setExpoToken } from "./src/redux/actions";
+import * as Network from 'expo-network';
+
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import * as Permissions from "expo-permissions";
@@ -42,6 +46,28 @@ const App = () => {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
+  const [isConnected, setIsConnected] = useState(false);
+
+  const checkInternetReachable = () => {
+    console.log("-------Connection Information------")
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        console.log('user logged in--------------------------------: ', user)
+      } else {
+        console.log('user logged out--------------------------------');
+      }
+    })
+    Network.getNetworkStateAsync().then(state => {
+      console.log('Connection type:', state.type);
+      console.log('Is connected?:', state.isConnected);
+      console.log('Is internet reachable?:', state.isInternetReachable);
+      state.isConnected === false ? setIsConnected(false) : setIsConnected(true);
+    });
+  }
+
+  useEffect(() => {
+    checkInternetReachable();
+  }, [])
 
   Sentry.init({
     dsn: 'https://022b0475f7b147aba62d6d1988bf95df@o479500.ingest.sentry.io/5644578',
@@ -175,13 +201,17 @@ const App = () => {
   }
 
   return (
-    <Provider store={store}>
-      <AuthProvider value={{ currentUser }}>
-        <NavigationContainer >
-          <RootStack initialRouteName={initialRouteName} />
-        </NavigationContainer>
-      </AuthProvider>
-    </Provider>
+    isConnected ? (
+      <Provider store={store}>
+        <AuthProvider value={{ currentUser }}>
+          <NavigationContainer >
+            <RootStack initialRouteName={initialRouteName} />
+          </NavigationContainer>
+        </AuthProvider>
+      </Provider>) : (
+      <NoConnectionModal onCheck={checkInternetReachable} />
+    )
+
   );
 
 

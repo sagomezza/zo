@@ -123,8 +123,6 @@ const UserInput = (props) => {
           setShowPhoneInput(false);
           setShowDropdown(true);
           setBlacklist(response.data.blackList);
-          console.log(hq)
-
           const auxPhones = []
           response.data.data.forEach(phone => {
             auxPhones.push({ label: phone, value: phone })

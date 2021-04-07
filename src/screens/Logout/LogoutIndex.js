@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  StyleSheet, 
-  View, 
-  Text, 
-  FlatList, 
-  Modal, 
-  TouchableHighlight, 
-  Dimensions, 
-  Image 
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  Modal,
+  TouchableHighlight,
+  Dimensions,
+  Image
 } from 'react-native';
 import { ImageBackground } from 'react-native';
 import { Keyboard } from 'react-native';
@@ -31,12 +31,14 @@ import { firebase } from '@firebase/app';
 import '@firebase/auth';
 import '@firebase/database';
 import "@firebase/firestore";
+import { TIMEOUT } from '../../config/constants/constants';
 
 
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const startTime = officialProps.schedule.start
+
   const HomeStyles = StyleSheet.create({
     plateInput: {
       borderColor: 'gray',
@@ -101,49 +103,39 @@ const LogoutIndex = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
-
   const [total, setTotal] = useState(0);
   const [shiftRecips, setShiftRecips] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
   const [hqInfo, setHqInfo] = useState([]);
-
   const hq = props.hq;
-
   const [inputBaseValue, setInputBaseValue] = useState('');
   const [inputValue, setInputValue] = useState('');
-
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getShiftRecips = async () => {
-      console.log({
-        email: officialProps.email,
-        hqId: officialProps.hq[0],
-        date: new Date(),
-        id: officialProps.id,
-        dateStart: startTime
-      })
       try {
         const response = await instance.post(GET_SHIFT_RECIPS, {
           email: officialProps.email,
           hqId: officialProps.hq[0],
           date: new Date()
-        });
+        },
+          { timeout: TIMEOUT }
+        );
         if (response.data.response === 1) {
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
         }
-        console.log(response.data.data)
-        console.log(response.data)
       } catch (err) {
         console.log("err: ", err);
         console.log(err?.response)
       }
     }
-    console.log(officialProps)
     getShiftRecips();
   }, []);
 
   const markEndOfShift = async () => {
+    setLoading(true);
     try {
       const response = await instance.post(MARK_END_OF_SHIFT, {
         email: officialProps.email,
@@ -154,48 +146,27 @@ const LogoutIndex = (props) => {
         base: Number(inputBaseValue),
         hqId: officialHq
       });
+
       firebase.auth().signOut().then(function () {
         // Sign-out successful.
       }).catch(function (error) {
         // An error happened.
       });
+      setModalVisible(!modalVisible);
+      navigation.navigate('Login');
+      setLoading(false);
+
     } catch (err) {
       console.log(err)
       console.log(err?.response)
+      setLoading(false);
       setModal3Visible(false);
 
     }
   }
 
-  // useEffect(() => {
-  //   const readHq = async () => {
-  //     try {
-  //       const response = await instance.post(READ_HQ, {
-  //         id: officialHq
-  //       });
-  //       if(response.data.response){
-  //         props.setReservations(response.data.data.reservations);
-  //       }
-  //     } catch (error) {
-  //       console.log("err: ", error);
-  //     }
-  //   };
-  //   readHq();
-  // }, []);
-
-  // function totalCalculate () {
-  //   let totalValue = 0
-  //   for (let index = 0; index < recips.length; index++) {
-  //     const recip = recips[index];
-  //     totalValue += recip.total  
-  //   }
-
-  // }
-
-
   return (
     <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-
       <ImageBackground
         style={{
           flex: 1,
@@ -208,7 +179,7 @@ const LogoutIndex = (props) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{ height: '38%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
 
-            <View style={{ flexDirection: 'column', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%'}}>
+            <View style={{ flexDirection: 'column', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%' }}>
               <Text style={{ fontSize: width * 0.04, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>{officialProps.name + ' ' + officialProps.lastName}</Text>
               <View style={{}}>
                 <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: width * 0.03, color: '#FFFFFF' }}>{hq.name}</Text>
@@ -245,7 +216,7 @@ const LogoutIndex = (props) => {
               </View>
             </View>
             <View style={{ width: '30%' }}>
-              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.035 }}>{"TOTAL: "}{`$${numberWithPoints(total)}`}</Text>
+              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.032 }}>{"TOTAL: "}{`$${numberWithPoints(total)}`}</Text>
             </View>
             <View style={{ flexDirection: 'row', width: '80%', height: '22%', alignItems: 'center', alignContent: 'center', padding: '1%', justifyContent: 'center' }}>
               <View style={{ width: '21%' }}>
@@ -324,10 +295,10 @@ const LogoutIndex = (props) => {
             borderTopRightRadius: 30,
             alignContent: 'center',
             alignItems: 'center'
-            
+
           }}>
             <View style={{ height: '55%', width: '78%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
-              <View style={{ paddingBottom: 10, height: "50%" }}>
+              <View style={{ paddingBottom: 10, height: "95%" }}>
                 <FlatList
                   data={shiftRecips}
                   keyExtractor={({ id }) => id}
@@ -335,7 +306,7 @@ const LogoutIndex = (props) => {
                     return (
                       <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: '7%', marginRight: '7%', marginTop: 20 }} >
                         <View style={{ marginBottom: 10 }} >
-                          <Text style={styles.textPlaca}>{item.plate}</Text>
+                          <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
                           <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'flex-end' }} >
@@ -464,15 +435,16 @@ const LogoutIndex = (props) => {
                   alignItems: 'center'
                 }}>
                   <Button onPress={() => {
-                    setModalVisible(!modalVisible);
                     markEndOfShift();
-                    navigation.navigate('Login')
+                    setLoading(true)
                   }}
                     title="S I"
                     color="#00A9A0"
                     style={
                       styles.modal2Button
                     }
+                    activityIndicatorStatus={loading}
+                    isDisabled={loading}
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
