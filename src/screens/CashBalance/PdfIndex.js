@@ -99,7 +99,7 @@ const txtGenerator = (props) => {
   const getBoxTotal = async () => {
     setLoadingBoxGenerator(true);
     try {
-      const response = await instance.post(GET_SHIFT_RECIPS, {
+      const response = await instance.post(GET_BOX_TOTAL, {
         email: officialProps.email,
         hqId: officialProps.hq[0],
         date: new Date()
