@@ -65,7 +65,7 @@ const MonthlyPayments = (props) => {
     const [userId, setUserId] = useState('');
     const [newMenNid, setNewMenNid] = useState('');
     const [pendingMensualityPay, setPendingMensualityPay] = useState(false);
-
+    const [generateMenRecip, setGenerateMenRecip] = useState(true);
     const [showInputsCashChange, setShowInputsCashChange] = useState(false);
     const [monthPrice, setMonthPrice] = useState(0);
     const [totalPay, setTotalPay] = useState(0);
@@ -170,6 +170,7 @@ const MonthlyPayments = (props) => {
         setShowInputsCashChange(false);
         setModal5Visible(false);
         setPendingMensualityPay(false);
+        setGenerateMenRecip(true);
 
     }
     const mensualityRenewedModal = () => {
@@ -266,7 +267,7 @@ const MonthlyPayments = (props) => {
                         officialEmail: officialProps.email,
                         nid: newMenNid,
                         pending: pendingMensualityPay,
-                        generateRecip: !pendingMensualityPay
+                        generateRecip: generateMenRecip
                     },
                     { timeout: TIMEOUT }
                 )
@@ -288,23 +289,7 @@ const MonthlyPayments = (props) => {
         setLoading(true);
 
         try {
-            console.log(
-                {
-                    userId: idUser,
-                    capacity: 1,
-                    vehicleType: "car",
-                    userPhone: phoneNewMen,
-                    plates: platesNewMensuality,
-                    hqId: officialHq,
-                    type: 'personal',
-                    monthlyUser: true,
-                    cash: Number(totalPay),
-                    change: totalPay - monthPrice,
-                    officialEmail: officialProps.email,
-                    pending: pendingMensualityPay,
-                    generateRecip: !pendingMensualityPay
-                }
-            )
+            
             if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
                 let type
                 if (isCharacterALetter(firstPlateNewMen[5])) type = "bike"
@@ -324,7 +309,7 @@ const MonthlyPayments = (props) => {
                         change: totalPay - monthPrice,
                         officialEmail: officialProps.email,
                         pending: pendingMensualityPay,
-                        generateRecip: !pendingMensualityPay
+                        generateRecip: generateMenRecip
                     },
                     { timeout: TIMEOUT }
                 )
@@ -352,7 +337,6 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                console.log(response.data);
                 setMensualityExists(true);
                 setMensuality(response.data)
                 setLoading(false);
@@ -371,10 +355,6 @@ const MonthlyPayments = (props) => {
 
         try {
             if (plateOne.length === 3 && plateTwo.length === 3) {
-                console.log({
-                    id: mensualityInfo.id,
-                    plates: newPlates
-                })
                 const response = await instance.post(
                     EDIT_MENSUALITY,
                     {
@@ -1114,7 +1094,14 @@ const MonthlyPayments = (props) => {
                                 }}>
                                     <CheckBox
                                         value={pendingMensualityPay}
-                                        onValueChange={() => setPendingMensualityPay(!pendingMensualityPay)}
+                                        onValueChange={() => {
+                                            setPendingMensualityPay(!pendingMensualityPay);
+                                            setGenerateMenRecip(!generateMenRecip);
+                                            console.log('recip:', generateMenRecip);
+                                            console.log('pending:', pendingMensualityPay);
+
+                                        }
+                                        }
                                         style={{ alignSelf: 'center' }}
                                         tintColors={{ true: '#00A9A0', false: '#00A9A0' }}
                                     />
@@ -1427,7 +1414,12 @@ const MonthlyPayments = (props) => {
                     <View style={styles.modalView}>
                         <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '5%' }}>
                             <View style={{ justifyContent: 'center', height: '30%' }}>
-                                <Text style={{ ...styles.modalText, fontSize: normalize(20), color: 'red' }}>  En este momento no está disponible la red, intentar nuevamente. </Text>
+                                <Text style={{ 
+                                    ...styles.modalText, 
+                                    fontSize: normalize(20), 
+                                    color: 'red' 
+                                    }}
+                                    >  En este momento no está disponible la red, intentar nuevamente. </Text>
                             </View>
 
                             <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>

@@ -107,7 +107,6 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      console.log(response.data.data)
       if (response.data.response === 1) {
         setShiftsOfBox(response.data.data);
       }
