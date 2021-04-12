@@ -191,6 +191,8 @@ const MonthlyPayments = (props) => {
     }
 
     const user = () => {
+        setPendingMensualityPay(false);
+        setGenerateMenRecip(true);
         try {
             setLoading(true);
             firestore.collection("users")
@@ -1134,15 +1136,24 @@ const MonthlyPayments = (props) => {
                                     <CheckBox
                                         value={pendingMensualityPay}
                                         onValueChange={() => {
-                                            setPendingMensualityPay(!pendingMensualityPay);
-                                            setGenerateMenRecip(!generateMenRecip);
+                                            if (pendingMensualityPay === false) {
+                                                setPendingMensualityPay(!pendingMensualityPay);
+                                                setGenerateMenRecip(!generateMenRecip);
+                                                setTotalPay(0);
+                                            } else {
+                                                setPendingMensualityPay(!pendingMensualityPay);
+                                                setGenerateMenRecip(!generateMenRecip);
+                                            }
+                                            
                                             console.log('recip:', generateMenRecip);
                                             console.log('pending:', pendingMensualityPay);
+                                            console.log(totalPay);
+
 
                                         }
                                         }
                                         style={{ alignSelf: 'center' }}
-                                        tintColors={{ true: '#00A9A0', false: '#00A9A0' }}
+                                        tintColors={{ true: '#00A9A0', false: 'gray' }}
                                     />
                                     <Text style={{
                                         color: '#00A9A0',
@@ -1185,6 +1196,7 @@ const MonthlyPayments = (props) => {
                                             onChangeText={(text) => {
                                                 setTotalPay(text);
                                             }}
+                                            editable={pendingMensualityPay === false}
                                         />
                                     </View>
                                     <View style={{
