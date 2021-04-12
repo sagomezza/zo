@@ -51,6 +51,7 @@ const MonthlyPayments = (props) => {
     const [modal3Visible, setModal3Visible] = useState(false);
     const [modal4Visible, setModal4Visible] = useState(false);
     const [modal5Visible, setModal5Visible] = useState(false);
+    const [mdlMenAlreadyExists, setMdlMenAlreadyExists] = useState(false);
     // To modify plates asociated to mensuality
     const [firstPlate, setFirstPlate] = useState('')
     const [secondPlate, setSecondPlate] = useState('')
@@ -169,6 +170,7 @@ const MonthlyPayments = (props) => {
         setModal5Visible(false);
         setPendingMensualityPay(false);
         setGenerateMenRecip(true);
+        setMdlMenAlreadyExists(false);
 
     }
     const mensualityRenewedModal = () => {
@@ -339,11 +341,26 @@ const MonthlyPayments = (props) => {
                 setMensuality(response.data)
                 setLoading(false);
                 mensualityPriceMonthVehType();
+            } 
+            if (firstPlateNewMen.length === 6 ) {
+                const response = await instance.post(
+                    FIND_MENSUALITY_PLATE,
+                    {
+                        plate: firstPlateNewMen,
+                        type: "full"
+                    },
+                    { timeout: TIMEOUT }
+                )
+                setLoading(false);
+                setMdlMenAlreadyExists(true);
             }
         } catch (err) {
             console.log(err)
             console.log(err?.response)
             setLoading(false);
+            if (firstPlateNewMen.length === 6 ) {
+                priceMonthVehicleType();
+            }
             setMensualityExists(false);
         }
     }
@@ -1349,7 +1366,8 @@ const MonthlyPayments = (props) => {
                                         justifyContent: 'flex-end' 
                                         }}>
                                         <Button onPress={() => {
-                                            priceMonthVehicleType();
+                                            setLoading(true);
+                                            findMensualityPlate();
                                         }}
                                             title="G U A R D A R"
                                             color="#00A9A0"
@@ -1389,6 +1407,7 @@ const MonthlyPayments = (props) => {
                     </View>
                 }
             </Modal>
+
             <Modal
                 animationType="fade"
                 transparent={true}
@@ -1400,6 +1419,48 @@ const MonthlyPayments = (props) => {
                         <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '5%' }}>
                             <View style={{ justifyContent: 'center', height: '30%' }}>
                                 <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> La mensualidad fue creada con éxito.</Text>
+                            </View>
+
+                            <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
+                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end' }}>
+                                    <Button onPress={() => {
+                                        mensualityCreatedModal();
+                                    }}
+                                        title="E N T E N D I D O"
+                                        color="#00A9A0"
+                                        style={
+                                            styles.modalButton
+                                        }
+                                        textStyle={{
+                                            color: "#FFFFFF",
+                                            textAlign: "center",
+                                            fontFamily: 'Montserrat-Bold'
+                                        }}
+                                        activityIndicatorStatus={loading}
+                                    />
+                                </View>
+                            </View>
+
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                backdropOpacity={0.3}
+                visible={mdlMenAlreadyExists}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '5%' }}>
+                            <View style={{ justifyContent: 'center', height: '30%' }}>
+                                <Text style={{ 
+                                    ...styles.modalText, 
+                                    fontSize: normalize(25), 
+                                    color: 'gray' 
+                                    }}
+                                    >  La mensualidad ya existe </Text>
                             </View>
 
                             <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
