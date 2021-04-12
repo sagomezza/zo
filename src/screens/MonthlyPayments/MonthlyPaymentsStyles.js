@@ -47,10 +47,8 @@ const styles = StyleSheet.create({
     },
     buttonI: {
         borderRadius: 30,
-        height: normalize(35),
-        width: '100%',
-        marginLeft: '0%',
-        paddingHorizontal: '24%',
+        height: '80%',
+        width: '100%'
     },
     buttonRe: {
         borderRadius: 30,
@@ -91,6 +89,11 @@ const styles = StyleSheet.create({
         fontSize: width * 0.03,
         fontFamily: 'Montserrat-Bold'
     },
+    buttonTextClear: {
+        color: '#FFFFFF',
+        fontSize: width * 0.03,
+        fontFamily: 'Montserrat-Bold'
+    },
     buttonTextRenew: {
         color: '#FFFFFF',
         fontSize: width * 0.025,
@@ -103,10 +106,8 @@ const styles = StyleSheet.create({
     },
     buttonIDisabled: {
         borderRadius: 30,
-        height: normalize(35),
+        height: '80%',
         width: '100%',
-        marginLeft: '0%',
-        paddingHorizontal: '24%',
         opacity: 0.5
     },
     infoTextTitle: {
@@ -196,14 +197,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         borderBottomWidth: 1,
         borderColor: "#ffffff",
-        marginBottom: '5%'
+        marginBottom: '4%'
     },
     mensualityInfoContainer: {
-        height: '60%',
+        height: '78%',
         width: '100%',
         justifyContent: 'space-between',
         alignContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center' 
     },
     mensualityInfoButtonsContainer: {
         height: '18%',

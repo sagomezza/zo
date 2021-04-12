@@ -85,10 +85,8 @@ const MonthlyPayments = (props) => {
 
     let plates = [firstPlate, secondPlate, thirdPlate, fourthPlate, fifthPlate]
     let newPlates = plates.filter(plate => plate != undefined && plate != '' && plate != "undefined")
-
     let platesNewMen = [firstPlateNewMen, secondPlateNewMen, thirdPlateNewMen, fourthPlateNewMen, fifthPlateNewMen]
     let platesNewMensuality = platesNewMen.filter(plate => plate != undefined && plate != '')
-
     let validityDateMen = moment(mensualityInfo.validity).tz("America/Bogota")
     let validityDateMenHours = '' + validityDateMen.format('L') + ' ' + validityDateMen.format('LT')
 
@@ -180,12 +178,17 @@ const MonthlyPayments = (props) => {
         setMonthPrice(0);
     }
 
+    const clearPageInfo = () => {
+        clearPlateOne();
+        clearPlateTwo();
+        setMensualityExists(false);
+    }
+
     function isCharacterALetter(char) {
         return (/[a-zA-Z]/).test(char)
     }
 
     const user = () => {
-
         try {
             setLoading(true);
             firestore.collection("users")
@@ -193,7 +196,6 @@ const MonthlyPayments = (props) => {
                 .where('phone', '==', '+57' + phoneNewMen)
                 .get()
                 .then(snapshot => {
-
                     if (snapshot.empty) {
                         createUser();
                     } else {
@@ -207,7 +209,6 @@ const MonthlyPayments = (props) => {
                 .catch(error => {
                     console.log(error)
                 })
-
         } catch (err) {
             console.log(err)
         }
@@ -276,7 +277,6 @@ const MonthlyPayments = (props) => {
                 setLoading(false);
                 console.log(response.data)
             }
-
         } catch (err) {
             console.log(err)
             console.log(err?.response)
@@ -287,9 +287,7 @@ const MonthlyPayments = (props) => {
 
     async function createMensuality(idUser) {
         setLoading(true);
-
         try {
-            
             if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
                 let type
                 if (isCharacterALetter(firstPlateNewMen[5])) type = "bike"
@@ -515,7 +513,11 @@ const MonthlyPayments = (props) => {
                             value={plateTwo}
                         />
                     </View>
-                    <View style={{ height: '40%', width: '57%', justifyContent: 'center' }}>
+                    <View style={{ 
+                        height: '30%', 
+                        width: '57%', 
+                        justifyContent: 'flex-end'
+                        }}>
                         <Button onPress={() => {
                             setLoading(true);
                             findMensualityPlate();
@@ -526,6 +528,21 @@ const MonthlyPayments = (props) => {
                             textStyle={styles.buttonTextSearch}
                             disabled={plateOne === "" || plateTwo === ""}
                             activityIndicatorStatus={loading}
+                        />
+                    </View>
+                    <View style={{ 
+                        height: '30%', 
+                        width: '57%', 
+                        justifyContent: 'flex-end'
+                        }}>
+                        <Button onPress={() => {
+                            clearPageInfo();
+                        }}
+                            title=" L I M P I A R"
+                            color='gray'
+                            style={styles.buttonI}
+                            textStyle={styles.buttonTextClear}
+                            // activityIndicatorStatus={loading}
                         />
                     </View>
                 </View>
@@ -545,6 +562,8 @@ const MonthlyPayments = (props) => {
                                         <Text style={styles.infoTextTitle}>
                                             Nombre de usuario:
                                         </Text>
+                                    </View>
+                                    <View style={{...styles.mensualityInfo, justifyContent: 'center'} }>
                                         <Text style={styles.infoText}>
                                             {mensualityUserName}
                                         </Text>
@@ -567,20 +586,23 @@ const MonthlyPayments = (props) => {
                                     </View>
                                     <View style={styles.mensualityInfo}>
                                         <Text style={styles.infoTextTitle}>
+                                            Estado:
+                                        </Text>
+                                        <Text style={styles.infoText}>
+                                            {mensualityInfo.status === 'active' ? 'Activa': ''}
+                                            {mensualityInfo.status === 'due' ? 'Vencida': ''}
+                                            {mensualityInfo.status === 'pending' ? 'Pendiente': ''}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.mensualityInfo}>
+                                        <Text style={styles.infoTextTitle}>
                                             Vigencia hasta:
                                         </Text>
                                         <Text style={styles.infoText}>
                                             {validityDateMenHours}
                                         </Text>
                                     </View>
-                                    <View style={styles.mensualityInfo}>
-                                        <Text style={styles.infoTextTitle}>
-                                            Placas parqueadas:
-                                        </Text>
-                                        <Text style={styles.infoText}>
-                                            {mensualityInfo.parkedPlates}
-                                        </Text>
-                                    </View>
+                                    
                                     <View style={styles.mensualityInfo}>
                                         <Text style={styles.infoTextTitle}>
                                             Placas asociadas:

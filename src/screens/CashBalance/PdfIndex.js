@@ -12,7 +12,7 @@ import {
   Dimensions
 } from 'react-native';
 import instance from "../../config/axios";
-import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT, GET_SHIFTS_OF_BOX, GET_BOX_TOTAL, GET_SHIFT_RECIPS } from "../../config/api";
+import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT, GET_BOX_TOTAL } from "../../config/api";
 import { connect } from 'react-redux';
 import { TIMEOUT } from '../../config/constants/constants';
 import * as actions from "../../redux/actions";
