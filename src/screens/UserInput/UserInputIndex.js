@@ -341,7 +341,7 @@ const UserInput = (props) => {
                   disabled={!showDropdown}
                   placeholder={"Selecciona un numero"}
                   placeholderStyle={{ color: '#8F8F8F', fontSize: width * 0.04, textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
-                  selectedLabelStyle={{ color: '#8F8F8F', fontSize: normalize(25), textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
+                  selectedLabelStyle={{ color: '#8F8F8F', fontSize: normalize(30), textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
                   containerStyle={{
                     height: '23%', width: '100%'
                   }}
@@ -357,7 +357,7 @@ const UserInput = (props) => {
                     justifyContent: 'center',
                     fontFamily: 'Montserrat-Bold',
                     color: '#D9D9D9',
-                    fontSize: width * 0.02
+                    fontSize: width * 0.035
                   }}
                   dropDownMaxHeight={100}
                   dropDownStyle={{
