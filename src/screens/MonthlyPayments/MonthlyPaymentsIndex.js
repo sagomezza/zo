@@ -58,6 +58,13 @@ const MonthlyPayments = (props) => {
     const [thirdPlate, setThirdPlate] = useState('')
     const [fourthPlate, setFourthPlate] = useState('')
     const [fifthPlate, setFifthPlate] = useState('')
+    const [userName, setUserName] = useState('');
+    const [userLastName, setUserLastName] = useState('');
+    const [userEmail, setUserEmail] = useState('');
+    const [userPhone, setUserPhone] = useState('');
+
+
+
     // Info for new mensuality
     const [phoneNewMen, setPhoneNewMen] = useState('');
     const [emailNewMen, setEmailNewMen] = useState('');
@@ -72,17 +79,23 @@ const MonthlyPayments = (props) => {
     const [totalPay, setTotalPay] = useState(0);
     const [image, setImage] = useState("")
     const [alreadyRenewed, setAlreadyRenewed] = useState(false);
-    const [firstPlateNewMen, setFirstPlateNewMen] = useState('')
-    const [secondPlateNewMen, setSecondPlateNewMen] = useState('')
-    const [thirdPlateNewMen, setThirdPlateNewMen] = useState('')
-    const [fourthPlateNewMen, setFourthPlateNewMen] = useState('')
-    const [fifthPlateNewMen, setFifthPlateNewMen] = useState('')
+    const [firstPlateNewMen, setFirstPlateNewMen] = useState('');
+    const [secondPlateNewMen, setSecondPlateNewMen] = useState('');
+    const [thirdPlateNewMen, setThirdPlateNewMen] = useState('');
+    const [fourthPlateNewMen, setFourthPlateNewMen] = useState('');
+    const [fifthPlateNewMen, setFifthPlateNewMen] = useState('');
+    // Editing mensuality
+    const firstPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[0] + '' : '';
+    const secondPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[1] + '' : '';
+    const thirdPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[2] + '' : '';
+    const fourthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + '' : '';
+    const fifthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + '' : '';
+    const userNameData = mensualityInfo.userName !== undefined ? mensualityInfo.userName + '' : '';
+    const userLastNameData = mensualityInfo.lastName !== undefined ? mensualityInfo.lastName + '' : '';
+    const userEmailData = mensualityInfo.email !== undefined ? mensualityInfo.email + '' : '';
+    const userPhoneData = mensualityInfo.userPhone !== undefined ? mensualityInfo.userPhone + '' : '';
 
-    const firstPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[0] + '' : ''
-    const secondPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[1] + '' : ''
-    const thirdPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[2] + '' : ''
-    const fourthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + '' : ''
-    const fifthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + '' : ''
+
 
     let plates = [firstPlate, secondPlate, thirdPlate, fourthPlate, fifthPlate]
     let newPlates = plates.filter(plate => plate != undefined && plate != '' && plate != "undefined")
@@ -91,12 +104,7 @@ const MonthlyPayments = (props) => {
     let validityDateMen = moment(mensualityInfo.validity).tz("America/Bogota")
     let validityDateMenHours = '' + validityDateMen.format('L') + ' ' + validityDateMen.format('LT')
 
-
-    const showModalInfoNewMen = () => {
-        setModal3Visible(true);
-    }
-
-    function priceMonthVehicleType() {
+    const priceMonthVehicleType = ()  => {
         if (isCharacterALetter(firstPlateNewMen[5])) {
             setMonthPrice(hq.monthlyBikePrice)
             setShowInputsCashChange(true);
@@ -107,52 +115,12 @@ const MonthlyPayments = (props) => {
 
     }
 
-    function mensualityPriceMonthVehType() {
+    const mensualityPriceMonthVehType = ()  => {
         if (isCharacterALetter(plateTwo[2])) {
             setMonthPrice(hq.monthlyBikePrice)
         } else {
             setMonthPrice(hq.monthlyCarPrice)
         }
-    }
-    const clearUserPhone = () => {
-        setUserPhone(''); w
-    }
-    const clearPlateOne = () => {
-        setPlateOne('');
-    }
-    const clearPlateTwo = () => {
-        setPlateTwo('');
-    }
-    const clearFirstPlate = () => {
-        setFirstPlate('');
-    }
-    const clearSecondPlate = () => {
-        setSecondPlate('');
-    }
-    const clearThirdPlate = () => {
-        setThirdPlate('');
-    }
-    const clearFourthPlate = () => {
-        setFourthPlate('');
-    }
-    const clearFifthPlate = () => {
-        setFifthPlate('');
-    }
-
-    const clearNameNewMen = () => {
-        setNameNewMen('');
-    }
-    const clearLastNameNewMen = () => {
-        setLastNameNewMen('');
-    }
-    const clearPhoneNewMen = () => {
-        setPhoneNewMen('');
-    }
-    const clearEmailNewMen = () => {
-        setEmailNewMen('');
-    }
-    const clearFirstPlateNewMen = () => {
-        setFirstPlateNewMen('');
     }
 
     const mensualityCreatedModal = () => {
@@ -181,12 +149,12 @@ const MonthlyPayments = (props) => {
     }
 
     const clearPageInfo = () => {
-        clearPlateOne();
-        clearPlateTwo();
+        setPlateOne('');
+        setPlateTwo('');
         setMensualityExists(false);
     }
 
-    function isCharacterALetter(char) {
+    const isCharacterALetter = (char) => {
         return (/[a-zA-Z]/).test(char)
     }
 
@@ -511,7 +479,7 @@ const MonthlyPayments = (props) => {
                                 ;
                             }}
                             value={plateOne}
-                            onFocus={() => { clearPlateOne(); clearPlateTwo(); }}
+                            onFocus={() => { setPlateOne(''); setPlateTwo(''); }}
                         />
                         <TextInput
                             ref={refPlateTwo}
@@ -522,7 +490,7 @@ const MonthlyPayments = (props) => {
                             maxLength={3}
                             autoCapitalize={"characters"}
                             keyboardType='default'
-                            onFocus={() => { clearPlateTwo(); }}
+                            onFocus={() => { setPlateTwo(''); }}
                             onChangeText={text => {
                                 setPlateTwo(text);
                                 if (text.length === 3) {
@@ -657,12 +625,17 @@ const MonthlyPayments = (props) => {
                                         disabled={plateOne === "" || plateTwo === ""}
                                     />
                                     <Button onPress={() => {
-                                        setModalVisible(true)
-                                        setFirstPlate(firstPlateData + '')
-                                        setSecondPlate(secondPlateData + '')
-                                        setThirdPlate(thirdPlateData + '')
-                                        setFourthPlate(fourthPlateData + '')
-                                        setFifthPlate(fifthPlateData + '')
+                                        setModalVisible(true);
+                                        setFirstPlate(firstPlateData + '');
+                                        setSecondPlate(secondPlateData + '');
+                                        setThirdPlate(thirdPlateData + '');
+                                        setFourthPlate(fourthPlateData + '');
+                                        setFifthPlate(fifthPlateData + '');
+                                        setUserName(userNameData);
+                                        setUserLastName(userLastNameData);
+                                        setUserEmail(userEmailData);
+                                        setUserPhone(userPhoneData);
+
                                     }}
                                         title="  E D I T A R  "
                                         color='gray'
@@ -688,7 +661,7 @@ const MonthlyPayments = (props) => {
                                     </Text>
                                 }
                                 <Button onPress={() => {
-                                    showModalInfoNewMen();
+                                    setModal3Visible(true);
                                 }}
                                     title="C R E A R"
                                     color='gray'
@@ -744,6 +717,94 @@ const MonthlyPayments = (props) => {
                                 paddingBottom: '10%' 
                             }}>
                                 <View style={{ flexDirection: "row", justifyContent: 'center' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Nombre:  </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='default'
+                                        placeholder=''
+                                        textAlign='center'
+                                        value={userName !== undefined + '' ? userName : ''}
+                                        onChangeText={text => setUserName(text)}
+                                        onFocus={() => {
+                                            setUserName('')
+                                        }}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Apellido:  </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='default'
+                                        placeholder=''
+                                        textAlign='center'
+                                        value={userLastName !== undefined + '' ? userLastName : ''}
+                                        onChangeText={text => setUserLastName(text)}
+                                        onFocus={() => {
+                                            setUserLastName('')
+                                        }}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Correo:  </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='default'
+                                        placeholder=''
+                                        textAlign='center'
+                                        value={userEmail !== undefined + '' ? userEmail : ''}
+                                        onChangeText={text => setUserEmail(text)}
+                                        onFocus={() => {
+                                            setUserEmail('')
+                                        }}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Celular:  </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='default'
+                                        placeholder=''
+                                        textAlign='center'
+                                        value={userPhone !== undefined + '' ? userPhone : ''}
+                                        onChangeText={text => setUserPhone(text)}
+                                        onFocus={() => {
+                                            setUserPhone('')
+                                        }}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
                                     <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 1:  </Text>
                                     <TextInput
                                         style={{
@@ -762,7 +823,7 @@ const MonthlyPayments = (props) => {
                                         value={firstPlate !== undefined + '' ? firstPlate : ''}
                                         onChangeText={text => setFirstPlate(text)}
                                         onFocus={() => {
-                                            clearFirstPlate()
+                                            setFirstPlate('')
                                         }}
                                     />
                                 </View>
@@ -786,7 +847,7 @@ const MonthlyPayments = (props) => {
                                         value={secondPlate !== undefined + '' ? secondPlate : ''}
                                         onChangeText={text => setSecondPlate(text)}
                                         onFocus={() => {
-                                            clearSecondPlate()
+                                            setSecondPlate('')
                                         }}
                                     />
                                 </View>
@@ -810,7 +871,8 @@ const MonthlyPayments = (props) => {
                                         value={thirdPlate !== undefined + '' ? thirdPlate : ''}
                                         onChangeText={text => setThirdPlate(text)}
                                         onFocus={() => {
-                                            clearThirdPlate()
+                                            setThirdPlate('')
+
                                         }}
                                     />
                                 </View>
@@ -834,7 +896,8 @@ const MonthlyPayments = (props) => {
                                         value={fourthPlate !== undefined + '' ? fourthPlate : ''}
                                         onChangeText={text => setFourthPlate(text)}
                                         onFocus={() => {
-                                            clearFourthPlate()
+                                            setFourthPlate('')
+
                                         }}
                                     />
                                 </View>
@@ -858,7 +921,8 @@ const MonthlyPayments = (props) => {
                                         value={fifthPlate !== undefined + '' ? fifthPlate : ''}
                                         onChangeText={text => setFifthPlate(text)}
                                         onFocus={() => {
-                                            clearFifthPlate()
+                                            setFifthPlate('')
+
                                         }}
                                     />
                                 </View>
@@ -1289,7 +1353,7 @@ const MonthlyPayments = (props) => {
                                             value={nameNewMen}
                                             onChangeText={text => setNameNewMen(text)}
                                             onFocus={() => {
-                                                clearNameNewMen('')
+                                                setNameNewMen('')
                                             }}
                                         />
                                     </View>
@@ -1303,7 +1367,7 @@ const MonthlyPayments = (props) => {
                                             value={lastNameNewMen}
                                             onChangeText={text => setLastNameNewMen(text)}
                                             onFocus={() => {
-                                                clearLastNameNewMen('')
+                                                setLastNameNewMen('')
                                             }}
                                         />
                                     </View>
@@ -1330,7 +1394,7 @@ const MonthlyPayments = (props) => {
                                             value={phoneNewMen}
                                             onChangeText={text => setPhoneNewMen(text)}
                                             onFocus={() => {
-                                                clearPhoneNewMen('')
+                                                setPhoneNewMen('')
                                             }}
                                         />
                                     </View>
@@ -1345,7 +1409,7 @@ const MonthlyPayments = (props) => {
                                             value={emailNewMen}
                                             onChangeText={text => setEmailNewMen(text)}
                                             onFocus={() => {
-                                                clearEmailNewMen('')
+                                                setEmailNewMen('')
                                             }}
                                         />
                                     </View>
@@ -1362,7 +1426,7 @@ const MonthlyPayments = (props) => {
                                             value={firstPlateNewMen}
                                             onChangeText={text => setFirstPlateNewMen(text)}
                                             onFocus={() => {
-                                                clearFirstPlateNewMen('')
+                                                setFirstPlateNewMen('')
                                             }}
                                         />
                                     </View>

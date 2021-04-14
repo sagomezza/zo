@@ -9,7 +9,8 @@ import {
   SUBTRACT_CAR,
   ADD_CAR,
   ADD_BIKE,
-  SET_PUSH_TOKEN
+  SET_PUSH_TOKEN,
+  SET_UID
 } from './type'
 
 export const setOfficial = (official) => {
@@ -58,6 +59,13 @@ export const setPhone = (phone) => {
 export const setExpoToken = (token) => {
   return {
     type: SET_PUSH_TOKEN,
+    payload: token,
+  };
+};
+
+export const setUid = (token) => {
+  return {
+    type: SET_UID,
     payload: token,
   };
 };

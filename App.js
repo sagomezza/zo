@@ -48,15 +48,9 @@ const App = () => {
   const responseListener = useRef();
   const [isConnected, setIsConnected] = useState(false);
 
+
   const checkInternetReachable = () => {
     console.log("-------Connection Information------")
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        console.log('user logged in--------------------------------: ', user)
-      } else {
-        console.log('user logged out--------------------------------');
-      }
-    })
     Network.getNetworkStateAsync().then(state => {
       console.log('Connection type:', state.type);
       console.log('Is connected?:', state.isConnected);
@@ -114,7 +108,7 @@ const App = () => {
   }
 
   const updateUserState = useCallback((user) => {
-    // console.log("[App/updateUserState] ", user);
+    console.log("[App/updateUserState] ", user);
     if (user) {
       // console.log("[metadata] ", auth.currentUser.metadata);
       // console.log(user)
