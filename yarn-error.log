@@ -3183,7 +3183,6 @@ Lockfile:
       expo-constants "~9.2.0"
       qs "^6.5.0"
       url-parse "^1.4.4"
-
   expo-notifications@~0.7.2:
     version "0.7.2"
     resolved "https://registry.yarnpkg.com/expo-notifications/-/expo-notifications-0.7.2.tgz#2e275036c4f8cc6223a4de263117828bf253a95f"

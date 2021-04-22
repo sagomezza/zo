@@ -24,7 +24,7 @@ import moment from 'moment';
 import Button from '../../components/Button';
 import numberWithPoints from '../../config/services/numberWithPoints';
 // api
-import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ, GET_RECIPS_BY_PLATE } from "../../config/api";
+import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ, GET_RECIPS_BY_PLATE, FIND_MENSUALITY_PLATE } from "../../config/api";
 import { TIMEOUT } from '../../config/constants/constants';
 import instance from "../../config/axios";
 import store from '../../config/store';
@@ -44,6 +44,11 @@ const UserInput = (props) => {
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [maxCapMensuality, setMaxCapMensuality] = useState(false);
+
+
+
 
   const [findUserByPlateInfo, setFindUserByPlateInfo] = useState([]);
 
@@ -80,7 +85,15 @@ const UserInput = (props) => {
   const [totalPay, setTotalPay] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
 
-  function priceVehicleType() {
+  const [mensuality, setMensuality] = useState({});
+  const mensualityInfo = mensuality.data !== undefined ? mensuality.data[0] : "";
+  const mensualityUserName = mensualityInfo.userName !== undefined ? mensualityInfo.userName : ' ';
+  const mensualityUserPhone = mensualityInfo.userPhone !== undefined ? mensualityInfo.userPhone : ' ';
+  const mensualityCapacity = mensualityInfo.capacity !== undefined ? mensualityInfo.capacity : ' ';
+  const mensualityParkedPlates = mensualityInfo.parkedPlates !== undefined ? mensualityInfo.parkedPlates : ' ';
+
+
+  const priceVehicleType = () => {
     if (isCharacterALetter(plateTwo[2])) {
       setPrepayDayValue(hq.dailyBikePrice)
     } else {
@@ -100,7 +113,7 @@ const UserInput = (props) => {
     setPlateTwo('');
   }
 
-  function isCharacterALetter(char) {
+  const isCharacterALetter = (char) => {
     return (/[a-zA-Z]/).test(char)
   }
 
@@ -142,6 +155,33 @@ const UserInput = (props) => {
       }
     }
 
+    async function findMensualityPlate() {
+      try {
+        if (plateOne.length === 3 && plateTwo.length === 3) {
+          const response = await instance.post(
+            FIND_MENSUALITY_PLATE,
+            {
+              plate: plateOne + plateTwo,
+              type: "full"
+            },
+            { timeout: TIMEOUT }
+          )
+          console.log(response.data)
+          setMensuality(response.data)
+          if (response.data.capacity == response.data.parkedPlates) {
+            console.log('ta lleno')
+            setMaxCapMensuality(true);
+
+          }
+
+        }
+      } catch (err) {
+        console.log(err)
+        console.log(err?.response)
+        setErrorModalVisible(true);
+      }
+    }
+
     async function getRecipsByPlate() {
       try {
         if (plateOne.length === 3 && plateTwo.length === 3) {
@@ -168,12 +208,12 @@ const UserInput = (props) => {
       } catch (err) {
         console.log(err)
         console.log(err?.response)
-        console.log('dentro')
         setHistoryExists(false)
       }
     }
-    getRecipsByPlate()
-    findUserByPlate()
+    getRecipsByPlate();
+    findUserByPlate();
+    findMensualityPlate();
   }, [plateOne, plateTwo]);
 
   useEffect(() => {
@@ -254,7 +294,11 @@ const UserInput = (props) => {
 
     } catch (err) {
       setLoadingStart(false)
-      if (err?.response.data.response === -2) setModal2Visible(true)
+      if (err?.response.data.response === -2) {
+        setModal2Visible(true)
+      } else {
+        setErrorModalVisible(true)
+      }
       console.log(err)
       console.log(err?.response)
 
@@ -341,7 +385,7 @@ const UserInput = (props) => {
                   disabled={!showDropdown}
                   placeholder={"Selecciona un numero"}
                   placeholderStyle={{ color: '#8F8F8F', fontSize: width * 0.04, textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
-                  selectedLabelStyle={{ color: '#8F8F8F', fontSize: normalize(25), textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
+                  selectedLabelStyle={{ color: '#8F8F8F', fontSize: normalize(30), textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
                   containerStyle={{
                     height: '23%', width: '100%'
                   }}
@@ -357,7 +401,7 @@ const UserInput = (props) => {
                     justifyContent: 'center',
                     fontFamily: 'Montserrat-Bold',
                     color: '#D9D9D9',
-                    fontSize: width * 0.02
+                    fontSize: width * 0.035
                   }}
                   dropDownMaxHeight={100}
                   dropDownStyle={{
@@ -454,6 +498,22 @@ const UserInput = (props) => {
             <View style={{ height: '70%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
 
               <View style={{ height: "90%", width: '90%' }}>
+                <View style={{ width: '100%', alignItems: 'center' }}>
+                  <Text style={{ fontFamily: 'Montserrat-Bold', color: '#00A9A0', fontSize: width * 0.027, textAlign: 'center' }}>{mensualityUserName}</Text>
+
+                  <Text style={{ fontFamily: 'Montserrat-Bold', color: '#00A9A0', fontSize: width * 0.027 }}>Capacidad:   {mensualityCapacity}</Text>
+                  <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
+                    <Text style={{ fontFamily: 'Montserrat-Bold', color: '#00A9A0', fontSize: width * 0.027 }}>Placas parqueadas:   </Text>
+
+                    <Text style={{ fontFamily: 'Montserrat-Bold', color: '#00A9A0', fontSize: width * 0.027 }}>
+                      {mensualityParkedPlates}
+                    </Text>
+
+
+                  </View>
+                </View>
+
+
                 {historyExists ?
                   <Table borderStyle={{ borderColor: '#00A9A0' }}>
                     <Row
@@ -733,6 +793,120 @@ const UserInput = (props) => {
           </View>
         </View>
       </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={errorModalVisible}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
+              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                <Text style={styles.modalTextAlert}> Algo malo pasó, inténtalo más tarde.  </Text>
+              </View>
+              <View style={{ height: '30%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
+                <View style={{ width: '75%', height: '50%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                  <Button onPress={() => {
+                    setErrorModalVisible(false);
+                    setPlateOne("");
+                    setPlateTwo("");
+                    setNewPhone("");
+                    setPrepayDay(false);
+                    setLoadingStart(false);
+                    setPhone(1);
+                    setShowDropdown(false);
+                    setShowPhoneInput(false);
+                    setPhones([{ label: 'Selecciona un número', value: 1 }]);
+                    setHistoryExists(false)
+                  }}
+                    title="E N T E N D I D O"
+                    color="#00A9A0"
+                    style={
+                      {
+                        width: normalize(250),
+                        height: '85%'
+                      }
+                    }
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }} />
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={maxCapMensuality}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
+              <View style={{ margin: '4%', justifyContent: 'space-between', height: ' 65%'}}>
+              <Text style={{...styles.modalTextAlert, fontFamily: 'Montserrat-Bold'}}> Alerta </Text>
+
+                <Text style={{...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#8F8F8F'}}> Las celdas disponibles para esta mensualidad ya están ocupadas. Al hacer el ingreso del vehículo se hará el cobro por horas. </Text>
+                <Text style={{...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#8F8F8F'}}> ¿ Desea continuar ? </Text>
+
+              </View>
+              <View style={{ height: '25%', width: '100%', justifyContent: 'flex-start', flexDirection: 'column' }}>
+                  <Button onPress={() => {
+                    setMaxCapMensuality(false);
+
+                  }}
+                    title="S I"
+                    color="#00A9A0"
+                    style={
+                      {
+                        width: '100%',
+                        height: '60%'
+                      }
+                    }
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }} />
+                  
+                  <Button onPress={() => {
+                    setMaxCapMensuality(false);
+                    setPlateOne("");
+                    setPlateTwo("");
+                    setNewPhone("");
+                    setPrepayDay(false);
+                    setLoadingStart(false);
+                    setPhone(1);
+                    setShowDropdown(false);
+                    setShowPhoneInput(false);
+                    setPhones([{ label: 'Selecciona un número', value: 1 }]);
+                    setHistoryExists(false)
+                    setMensuality({});
+                  }}
+                    title="N O"
+                    color="gray"
+                    style={
+                      {
+                        width: '100%',
+                        height: '60%'
+                      }
+                    }
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }} />
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
     </View >
   );
 

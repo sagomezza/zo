@@ -12,7 +12,7 @@ import {
   Dimensions
 } from 'react-native';
 import instance from "../../config/axios";
-import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT, GET_SHIFTS_OF_BOX, GET_BOX_TOTAL, GET_SHIFT_RECIPS } from "../../config/api";
+import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT, GET_BOX_TOTAL } from "../../config/api";
 import { connect } from 'react-redux';
 import { TIMEOUT } from '../../config/constants/constants';
 import * as actions from "../../redux/actions";
@@ -48,6 +48,7 @@ const txtGenerator = (props) => {
   const [totalReported, settoTalReported] = useState(0);
   const [listBox, setListBox] = useState([]);
   const [shiftsOfBox, setShiftsOfBox] = useState(0);
+  const shiftsOfBoxNum = shiftsOfBox !== undefined ? `$${numberWithPoints(shiftsOfBox)}` : "$ 0";
   const [readBoxReportInfo, setReadBoxReportInfo] = useState({});
   const [boxStatus, setBoxStatus] = useState("");
   const [boxId, setBoxId] = useState("");
@@ -100,15 +101,12 @@ const txtGenerator = (props) => {
     setLoadingBoxGenerator(true);
     try {
       const response = await instance.post(GET_BOX_TOTAL, {
-        email: officialProps.email,
-        hqId: officialProps.hq[0],
-        date: new Date()
+        hqId: officialProps.hq[0]
       },
         { timeout: TIMEOUT }
       );
-      console.log(response.data.data.total)
       if (response.data.response === 1) {
-        setShiftsOfBox(response.data.data.total);
+        setShiftsOfBox(response.data.data);
       }
       gotBoxTotal();
     } catch (err) {
@@ -121,16 +119,12 @@ const txtGenerator = (props) => {
 
   const listBoxClose = async () => {
     try {
-      console.log({
-        hqId: officialProps.hq[0]
-      })
       const response = await instance.post(LIST_BOX_CLOSE, {
         hqId: officialProps.hq[0]
       },
         { timeout: TIMEOUT }
       );
       setListBox(response.data.data)
-      console.log(response.data.data)
     } catch (err) {
       console.log(err)
       console.log(err?.response)
@@ -140,12 +134,6 @@ const txtGenerator = (props) => {
   const createBoxReport = async () => {
     try {
       setLoadingBoxGenerator(true);
-      console.log({
-        hqId: officialProps.hq[0],
-        officialEmail: officialProps.email,
-        base: Number(base),
-        totalReported: Number(totalReported)
-      })
       const response = await instance.post(CREATE_BOX_REPORT, {
         hqId: officialProps.hq[0],
         officialEmail: officialProps.email,
@@ -171,7 +159,6 @@ const txtGenerator = (props) => {
     setLoadingReadBoxReport(true);
     setSign(false);
     try {
-      console.log(id)
       setBoxId(id);
       const response = await instance.post(READ_BOX_REPORT, {
         id: id
@@ -201,9 +188,6 @@ const txtGenerator = (props) => {
       // if (response.data.response === 1) {
       //   store.dispatch(actions.setRecips(response.data.data.total));
       // }
-      console.log('------------read---------')
-      console.log(response)
-      console.log('------------read---------')
       setModal2Visible(false);
       listBoxClose();
       setSign(false);
@@ -220,7 +204,6 @@ const txtGenerator = (props) => {
   };
 
   useEffect(() => {
-
     try {
       const todayRecips = totalRecips.filter(recip => moment(recip.dateFinished).isBetween(date1, date2))
       // console.log(todayRecips)
@@ -425,7 +408,7 @@ const txtGenerator = (props) => {
                         fontSize: normalize(20),
                         fontFamily: 'Montserrat-Bold'
                       }}>
-                        Total: {`$${numberWithPoints(shiftsOfBox)}`}
+                        Total: {shiftsOfBoxNum}
                       </Text>
                     </View>
                     <View style={{
