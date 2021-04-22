@@ -5,12 +5,9 @@ import {
   SET_HQ,
   SET_QR,
   SET_QR_PHONE,
-  SUBTRACT_BIKE,
-  SUBTRACT_CAR,
-  ADD_CAR,
-  ADD_BIKE,
   SET_PUSH_TOKEN,
-  SET_UID
+  SET_UID,
+  SET_LAST_LOGIN_AT
 } from './type'
 
 export const setOfficial = (official) => {
@@ -66,6 +63,13 @@ export const setExpoToken = (token) => {
 export const setUid = (token) => {
   return {
     type: SET_UID,
+    payload: token,
+  };
+};
+
+export const setLastLoginAt = (token) => {
+  return {
+    type: SET_LAST_LOGIN_AT,
     payload: token,
   };
 };

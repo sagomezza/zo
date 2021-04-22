@@ -59,12 +59,8 @@ const MonthlyPayments = (props) => {
     const [fourthPlate, setFourthPlate] = useState('')
     const [fifthPlate, setFifthPlate] = useState('')
     const [userName, setUserName] = useState('');
-    const [userLastName, setUserLastName] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [userPhone, setUserPhone] = useState('');
-
-
-
     // Info for new mensuality
     const [phoneNewMen, setPhoneNewMen] = useState('');
     const [emailNewMen, setEmailNewMen] = useState('');
@@ -91,11 +87,9 @@ const MonthlyPayments = (props) => {
     const fourthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + '' : '';
     const fifthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + '' : '';
     const userNameData = mensualityInfo.userName !== undefined ? mensualityInfo.userName + '' : '';
-    const userLastNameData = mensualityInfo.lastName !== undefined ? mensualityInfo.lastName + '' : '';
     const userEmailData = mensualityInfo.email !== undefined ? mensualityInfo.email + '' : '';
-    const userPhoneData = mensualityInfo.userPhone !== undefined ? mensualityInfo.userPhone + '' : '';
-
-
+    const userPhoneData = mensualityInfo.userPhone !== undefined ? mensualityInfo.userPhone.substring(3, 14) + '' : '';
+    const userIdToEdit = mensualityInfo.userId !== undefined ? mensualityInfo.userId : '';
 
     let plates = [firstPlate, secondPlate, thirdPlate, fourthPlate, fifthPlate]
     let newPlates = plates.filter(plate => plate != undefined && plate != '' && plate != "undefined")
@@ -103,6 +97,11 @@ const MonthlyPayments = (props) => {
     let platesNewMensuality = platesNewMen.filter(plate => plate != undefined && plate != '')
     let validityDateMen = moment(mensualityInfo.validity).tz("America/Bogota")
     let validityDateMenHours = '' + validityDateMen.format('L') + ' ' + validityDateMen.format('LT')
+    var userEditInfo = [ {name: userName}, {id: userIdToEdit}, {phone: '+57' + userPhone}, {email: userEmail}, {plate: firstPlate} ]
+    var newUserEditInfo = userEditInfo.filter(el => 
+        el.name || el.id || el.phone || el.email || el.plate != undefined 
+        )
+    var newObjUserEdit = newUserEditInfo.reduce((a, b) => Object.assign(a, b), {})
 
     const priceMonthVehicleType = ()  => {
         if (isCharacterALetter(firstPlateNewMen[5])) {
@@ -112,7 +111,6 @@ const MonthlyPayments = (props) => {
             setMonthPrice(hq.monthlyCarPrice)
             setShowInputsCashChange(true);
         }
-
     }
 
     const mensualityPriceMonthVehType = ()  => {
@@ -190,6 +188,18 @@ const MonthlyPayments = (props) => {
     async function editUser(idUser) {
         setLoading(true);
         try {
+            console.log(
+                newObjUserEdit
+            )
+            if ( userIdToEdit !== '' ) {
+                const response = await instance.post(
+                    EDIT_USER,
+                    newObjUserEdit,
+                    { timeout: TIMEOUT }
+                )
+                console.log('edituser')
+                setLoading(false);
+            }
             if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10 && userId) {
                 const response = await instance.post(
                     EDIT_USER,
@@ -309,6 +319,7 @@ const MonthlyPayments = (props) => {
                 )
                 setMensualityExists(true);
                 setMensuality(response.data)
+                console.log(response.data)
                 setLoading(false);
                 mensualityPriceMonthVehType();
             } 
@@ -632,7 +643,6 @@ const MonthlyPayments = (props) => {
                                         setFourthPlate(fourthPlateData + '');
                                         setFifthPlate(fifthPlateData + '');
                                         setUserName(userNameData);
-                                        setUserLastName(userLastNameData);
                                         setUserEmail(userEmailData);
                                         setUserPhone(userPhoneData);
 
@@ -691,7 +701,7 @@ const MonthlyPayments = (props) => {
                 <View style={styles.centeredView}>
                     <View style={{ 
                         ...styles.modalView, 
-                        height: normalize(550) }}>
+                        height: normalize(800), width: '80%' }}>
                         <View style={{ 
                             height: '100%',
                             width: '100%', 
@@ -711,13 +721,13 @@ const MonthlyPayments = (props) => {
                             </View>
                             <View style={{ 
                                 justifyContent: 'space-between', 
-                                height: '69%', 
+                                height: '70%', 
                                 width: '100%', 
                                 flexDirection: 'column', 
-                                paddingBottom: '10%' 
+                                paddingBottom: '10%'
                             }}>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Nombre:  </Text>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Nombre:  </Text>
                                     <TextInput
                                         style={{
                                             borderWidth: 1,
@@ -738,30 +748,8 @@ const MonthlyPayments = (props) => {
                                         }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Apellido:  </Text>
-                                    <TextInput
-                                        style={{
-                                            borderWidth: 1,
-                                            borderColor: '#00A9A0',
-                                            fontSize: normalize(20),
-                                            fontFamily: 'Montserrat-Bold',
-                                            width: '60%',
-                                            borderRadius: 10,
-                                            color: '#00A9A0'
-                                        }}
-                                        keyboardType='default'
-                                        placeholder=''
-                                        textAlign='center'
-                                        value={userLastName !== undefined + '' ? userLastName : ''}
-                                        onChangeText={text => setUserLastName(text)}
-                                        onFocus={() => {
-                                            setUserLastName('')
-                                        }}
-                                    />
-                                </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Correo:  </Text>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Correo:  </Text>
                                     <TextInput
                                         style={{
                                             borderWidth: 1,
@@ -782,8 +770,8 @@ const MonthlyPayments = (props) => {
                                         }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Celular:  </Text>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Celular:  </Text>
                                     <TextInput
                                         style={{
                                             borderWidth: 1,
@@ -796,6 +784,7 @@ const MonthlyPayments = (props) => {
                                         }}
                                         keyboardType='default'
                                         placeholder=''
+                                        maxLength={10}
                                         textAlign='center'
                                         value={userPhone !== undefined + '' ? userPhone : ''}
                                         onChangeText={text => setUserPhone(text)}
@@ -804,8 +793,8 @@ const MonthlyPayments = (props) => {
                                         }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 1:  </Text>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Placa 1:  </Text>
                                     <TextInput
                                         style={{
                                             borderWidth: 1,
@@ -827,8 +816,8 @@ const MonthlyPayments = (props) => {
                                         }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 2:  </Text>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Placa 2:  </Text>
                                     <TextInput
                                         style={{
                                             borderWidth: 1,
@@ -851,8 +840,8 @@ const MonthlyPayments = (props) => {
                                         }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 3:  </Text>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Placa 3:  </Text>
                                     <TextInput
                                         style={{
                                             borderWidth: 1,
@@ -876,8 +865,8 @@ const MonthlyPayments = (props) => {
                                         }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 4:  </Text>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Placa 4:  </Text>
                                     <TextInput
                                         style={{
                                             borderWidth: 1,
@@ -901,8 +890,8 @@ const MonthlyPayments = (props) => {
                                         }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 5:  </Text>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Placa 5:  </Text>
                                     <TextInput
                                         style={{
                                             borderWidth: 1,
@@ -936,12 +925,13 @@ const MonthlyPayments = (props) => {
                                 marginTop: '0%'
                             }}>
                                 <View style={{
-                                    height: '50%',
+                                    height: '40%',
                                     width: '100%',
                                     justifyContent: 'flex-end',
                                 }}>
                                     <Button onPress={() => {
                                         editMensuality();
+                                        editUser(userIdToEdit);
                                     }}
                                         title="G U A R D A R"
                                         color="#00A9A0"
@@ -956,7 +946,7 @@ const MonthlyPayments = (props) => {
                                         activityIndicatorStatus={loading} />
                                 </View>
                                 <View style={{
-                                    height: '50%',
+                                    height: '40%',
                                     width: '100%',
                                     justifyContent: 'flex-end'
                                 }}>

@@ -6,6 +6,7 @@ import hq from './hq';
 import qr from './qr';
 import expoToken from './pushToken'
 import uid from './uid';
+import lastLoginAt from './lastLoginAt';
 
 
 const rootReducer = combineReducers({
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   hq,
   qr,
   expoToken,
-  uid
+  uid,
+  lastLoginAt
 });
 
 export default rootReducer;

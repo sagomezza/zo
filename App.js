@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { View, ActivityIndicator, StyleSheet, Modal, Text } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, Modal, Text, AsyncStorage } from 'react-native';
 import normalize from './src/config/services/normalizeFontSize';
 import NoConnectionModal from './src/components/NoConnectionModal';
 import { Provider } from "react-redux";
@@ -12,7 +12,7 @@ import * as Font from 'expo-font';
 import { AppLoading } from "expo";
 import instance from "./src/config/axios";
 import { READ_OFFICIAL } from "./src/config/api";
-import { READ_ADMIN, READ_CORPO } from "./src/config/api/index";
+import { READ_ADMIN, READ_CORPO, STORAGE_KEY } from "./src/config/api/index";
 import { setOfficial, setExpoToken } from "./src/redux/actions";
 import * as Network from 'expo-network';
 
@@ -47,14 +47,22 @@ const App = () => {
   const notificationListener = useRef();
   const responseListener = useRef();
   const [isConnected, setIsConnected] = useState(false);
+  const [lastLoginAt, setLastLoginAt] = useState('');
 
+  // const saveLastLoginAt = async (lastLoginAt) => {
+  //   try {
+  //     await AsyncStorage.setItem(STORAGE_KEY, lastLoginAt)
+  //   } catch {
+
+  //   }
+  // }
 
   const checkInternetReachable = () => {
-    console.log("-------Connection Information------")
+    // console.log("-------Connection Information------")
     Network.getNetworkStateAsync().then(state => {
-      console.log('Connection type:', state.type);
-      console.log('Is connected?:', state.isConnected);
-      console.log('Is internet reachable?:', state.isInternetReachable);
+      // console.log('Connection type:', state.type);
+      // console.log('Is connected?:', state.isConnected);
+      // console.log('Is internet reachable?:', state.isInternetReachable);
       state.isConnected === false ? setIsConnected(false) : setIsConnected(true);
     });
   }
@@ -109,9 +117,10 @@ const App = () => {
 
   const updateUserState = useCallback((user) => {
     console.log("[App/updateUserState] ", user);
+    // if (user.lastLoginAt !== null ) saveLastLoginAt(user.lastLoginAt);
     if (user) {
       // console.log("[metadata] ", auth.currentUser.metadata);
-      // console.log(user)
+      console.log(user.lastLoginAt)
       setUser(user);
       setInitialRouteName("Home");
       readUser(user.email);
@@ -125,6 +134,8 @@ const App = () => {
 
   useEffect(() => {
     setLoginState(true);
+    // const userLastLoginAt =  AsyncStorage.getItem(STORAGE_KEY)
+    // if (userLastLoginAt !== null) setLastLoginAt(userLastLoginAt)
     // listen for auth state changes
     const unsubscribe = auth.onAuthStateChanged(updateUserState);
     // unsubscribe to the listener when unmounting
