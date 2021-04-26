@@ -79,7 +79,12 @@ const App = () => {
     console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
 
     console.log(diffOfficialScheduleStart)
-    if (Number(diffOfficialScheduleStart) === 7.25 || Number(diffOfficialScheduleStart) === 7.5 || Number(diffOfficialScheduleStart) === 7.75 ) {
+    if (
+      Number(diffOfficialScheduleStart) === 7.25 ||
+      Number(diffOfficialScheduleStart) === 7.5 ||
+      Number(diffOfficialScheduleStart) === 7.75 ||
+      Number(diffOfficialScheduleStart) === 8 
+    ) {
       setLogoutSnackbar(true);
 
     }
