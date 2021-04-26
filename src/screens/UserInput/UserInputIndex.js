@@ -47,9 +47,6 @@ const UserInput = (props) => {
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [maxCapMensuality, setMaxCapMensuality] = useState(false);
 
-
-
-
   const [findUserByPlateInfo, setFindUserByPlateInfo] = useState([]);
 
   const userData = findUserByPlateInfo.fullData !== undefined ? findUserByPlateInfo.fullData[0] : "";
@@ -166,18 +163,15 @@ const UserInput = (props) => {
             },
             { timeout: TIMEOUT }
           )
-          console.log(response.data)
           setMensuality(response.data)
           if (response.data.capacity == response.data.parkedPlates) {
-            console.log('ta lleno')
             setMaxCapMensuality(true);
-
           }
 
         }
       } catch (err) {
-        console.log(err)
-        console.log(err?.response)
+        // console.log(err)
+        // console.log(err?.response)
         setErrorModalVisible(true);
       }
     }
@@ -206,8 +200,8 @@ const UserInput = (props) => {
           setTableData(auxTable);
         }
       } catch (err) {
-        console.log(err)
-        console.log(err?.response)
+        // console.log(err)
+        // console.log(err?.response)
         setHistoryExists(false)
       }
     }

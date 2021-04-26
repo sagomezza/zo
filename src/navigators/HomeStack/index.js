@@ -16,6 +16,7 @@ import ActiveServices from "../../screens/ActiveServices/ActiveServicesIndex";
 import NewsReport from "../../screens/NewsReport/NewsReportIndex";
 import MonthlyPayments from "../../screens/MonthlyPayments/MonthlyPaymentsIndex";
 import Blacklist from '../../screens/Blacklist/index';
+import FAQs from '../../screens/FAQs';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -122,6 +123,14 @@ const HomeStack = ({ navigation }) => {
       <Stack.Screen
         name="Blacklist"
         component={Blacklist}
+        options={{
+          headerShown: false,
+          headerLeft: null,
+        }}
+      />
+      <Stack.Screen
+        name="FAQs"
+        component={FAQs}
         options={{
           headerShown: false,
           headerLeft: null,

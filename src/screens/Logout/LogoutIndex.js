@@ -127,8 +127,8 @@ const LogoutIndex = (props) => {
           setShiftRecips(response.data.data.recips);
         }
       } catch (err) {
-        console.log("err: ", err);
-        console.log(err?.response)
+        // console.log("err: ", err);
+        // console.log(err?.response)
       }
     }
     getShiftRecips();

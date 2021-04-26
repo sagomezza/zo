@@ -54,6 +54,7 @@
     "react-native-signature-canvas": "^3.4.0",
     "react-native-signature-capture": "^0.4.11",
     "react-native-sketch": "^1.1.0",
+    "react-native-snackbar-component": "^1.1.11",
     "react-native-svg": "^12.1.0",
     "react-native-table-component": "^1.2.1",
     "react-native-web": "~0.13.12",

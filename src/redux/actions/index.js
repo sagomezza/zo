@@ -67,6 +67,7 @@ export const setUid = (token) => {
   };
 };
 
+
 export const setLastLoginAt = (token) => {
   return {
     type: SET_LAST_LOGIN_AT,

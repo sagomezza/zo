@@ -29,7 +29,7 @@ const HomeIndex = (props) => {
     const getRecips = async () => {
       try {
         const response = await instance.post(GET_RECIPS, {
-          hqId: officialProps.hq[0],
+          hqId: officialHq,
           officialEmail: officialProps.email
         },
           { timeout: TIMEOUT }
@@ -64,30 +64,30 @@ const HomeIndex = (props) => {
       }
     }
 
-    const parked = (hqId) => {
+    // const parked = (hqId) => {
 
-      try {
-        firestore.collection("headquarters")
-          .get()
-          .then(snapshot => {
-            if (snapshot.empty) {
-              console.log('---------------nope')
-            } else {
-              snapshot.forEach(doc => {
-                console.log(doc)
-                console.log('---------------yep')
+    //   try {
+    //     firestore.collection("headquarters")
+    //       .get()
+    //       .then(snapshot => {
+    //         if (snapshot.empty) {
+    //           console.log('---------------nope')
+    //         } else {
+    //           snapshot.forEach(doc => {
+    //             console.log(doc)
+    //             console.log('---------------yep')
 
-              })
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
+    //           })
+    //         }
+    //       })
+    //       .catch(error => {
+    //         console.log(error)
+    //       })
 
-      } catch (err) {
-        console.log(err)
-      }
-    }
+    //   } catch (err) {
+    //     console.log(err)
+    //   }
+    // }
 
     const readHq = async () => {
       try {
@@ -108,7 +108,7 @@ const HomeIndex = (props) => {
     getRecips();
     readHq();
     updateExpoToken();
-    parked('GwPIopvdwylEq5JtiY35');
+    // parked(officialHq);
   }, []);
 
   const formatHours = (hours) => {
