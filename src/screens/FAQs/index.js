@@ -33,21 +33,19 @@ const FAQs = (props) => {
                 <Header navigation={navigation} />
                 <View style={styles.container}>
                     <View style={styles.listContainer}>
-                        <Text style={styles.textListTitle} >FAQs</Text>
+                        <Text style={styles.textListTitle} >PREGUNTAS FRECUENTES</Text>
 
                         <View style={{
                             height: '95%',
                             width: '95%',
-                            backgroundColor: '#FFFFFF',
+                            backgroundColor: '#F8F8F8',
                             marginTop: '0%',
-                            borderRadius: 10
+                            borderRadius: 10,
+                            borderWidth: 1
                         }}>
 
-                            <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
-                            </View>
-                            <View style={{ height: "90%", borderWidth: 1 }}>
-
-                            </View>
+                            
+                           
                         </View>
 
                     </View>

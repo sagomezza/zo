@@ -15,15 +15,16 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         height: '78%',
-        width: '73%',
-        backgroundColor: '#FFFFFF',
+        width: '90%',
+        backgroundColor: '#F8F8F8',
         marginTop: '8%',
         borderRadius: 10,
-        justifyContent: 'center',
-        alignItems: 'center'
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderWidth: 1
     },
     textListTitle: {
-        fontSize: normalize(15),
+        fontSize: normalize(20),
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },
