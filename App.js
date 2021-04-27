@@ -76,9 +76,8 @@ const App = () => {
   }
 
   const checkOfficialHours = () => {
-    console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
 
-    console.log(diffOfficialScheduleStart)
+    // console.log(diffOfficialScheduleStart)
     if (
       Number(diffOfficialScheduleStart) === 7.25 ||
       Number(diffOfficialScheduleStart) === 7.5 ||
@@ -94,7 +93,6 @@ const App = () => {
   useEffect(() => {
     checkInternetReachable();
     checkOfficialHours();
-    console.log("oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo")
   }, [diffOfficialScheduleStart])
 
   Sentry.init({
@@ -247,9 +245,9 @@ const App = () => {
             textMessage="Recuerda realizar el cierre de caja y posterior cierre de sesión antes de terminar tu turno."
             actionHandler={() => { setLogoutSnackbar(false) }}
             actionText="Entendido"
-            backgroundColor="#00A9A0"
-            accentColor="#FFF200"
-            messageColor="#FFFFFF"
+            backgroundColor="#FFF200"
+            accentColor="#00A9A0"
+            messageColor="#00A9A0"
             messageStyle={{ fontSize: 60 }}
             containerStyle={{ height: 90 }}
           />
