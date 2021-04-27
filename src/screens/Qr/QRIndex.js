@@ -50,6 +50,7 @@ const BarcodeScanner = (props) => {
     setScanned(true);
     try {
       const _data = JSON.parse(data);
+      console.log(_data)
       if ((qr.plate).length === 0) {
         await store.dispatch(actions.setPhone(_data.id))
         navigation.navigate("UserOut")
@@ -76,10 +77,7 @@ const BarcodeScanner = (props) => {
           setModalVisible(true);
 
         }
-        // setStartParking(response.data.data);
-        // readHq();
-        // setPlate(qr.plate);
-        // setModalVisible(true);
+
       }
     }
     catch (err) {
