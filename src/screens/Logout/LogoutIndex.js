@@ -175,8 +175,8 @@ const LogoutIndex = (props) => {
       setLoading(false);
 
     } catch (err) {
-      // console.log(err)
-      // console.log(err?.response)
+      console.log(err)
+      console.log(err?.response)
       setLoading(false);
       setModal3Visible(false);
 
