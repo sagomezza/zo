@@ -51,12 +51,16 @@ const MonthlyPayments = (props) => {
     const [modal3Visible, setModal3Visible] = useState(false);
     const [modal4Visible, setModal4Visible] = useState(false);
     const [modal5Visible, setModal5Visible] = useState(false);
+    const [mdlMenAlreadyExists, setMdlMenAlreadyExists] = useState(false);
     // To modify plates asociated to mensuality
     const [firstPlate, setFirstPlate] = useState('')
     const [secondPlate, setSecondPlate] = useState('')
     const [thirdPlate, setThirdPlate] = useState('')
     const [fourthPlate, setFourthPlate] = useState('')
     const [fifthPlate, setFifthPlate] = useState('')
+    const [userName, setUserName] = useState('');
+    const [userEmail, setUserEmail] = useState('');
+    const [userPhone, setUserPhone] = useState('');
     // Info for new mensuality
     const [phoneNewMen, setPhoneNewMen] = useState('');
     const [emailNewMen, setEmailNewMen] = useState('');
@@ -65,39 +69,41 @@ const MonthlyPayments = (props) => {
     const [userId, setUserId] = useState('');
     const [newMenNid, setNewMenNid] = useState('');
     const [pendingMensualityPay, setPendingMensualityPay] = useState(false);
-
+    const [generateMenRecip, setGenerateMenRecip] = useState(true);
     const [showInputsCashChange, setShowInputsCashChange] = useState(false);
     const [monthPrice, setMonthPrice] = useState(0);
     const [totalPay, setTotalPay] = useState(0);
     const [image, setImage] = useState("")
     const [alreadyRenewed, setAlreadyRenewed] = useState(false);
-    const [firstPlateNewMen, setFirstPlateNewMen] = useState('')
-    const [secondPlateNewMen, setSecondPlateNewMen] = useState('')
-    const [thirdPlateNewMen, setThirdPlateNewMen] = useState('')
-    const [fourthPlateNewMen, setFourthPlateNewMen] = useState('')
-    const [fifthPlateNewMen, setFifthPlateNewMen] = useState('')
-
-    const firstPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[0] + '' : ''
-    const secondPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[1] + '' : ''
-    const thirdPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[2] + '' : ''
-    const fourthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + '' : ''
-    const fifthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + '' : ''
+    const [firstPlateNewMen, setFirstPlateNewMen] = useState('');
+    const [secondPlateNewMen, setSecondPlateNewMen] = useState('');
+    const [thirdPlateNewMen, setThirdPlateNewMen] = useState('');
+    const [fourthPlateNewMen, setFourthPlateNewMen] = useState('');
+    const [fifthPlateNewMen, setFifthPlateNewMen] = useState('');
+    // Editing mensuality
+    const firstPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[0] + '' : '';
+    const secondPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[1] + '' : '';
+    const thirdPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[2] + '' : '';
+    const fourthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + '' : '';
+    const fifthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + '' : '';
+    const userNameData = mensualityInfo.userName !== undefined ? mensualityInfo.userName + '' : '';
+    const userEmailData = mensualityInfo.email !== undefined ? mensualityInfo.email + '' : '';
+    const userPhoneData = mensualityInfo.userPhone !== undefined ? mensualityInfo.userPhone.substring(3, 14) + '' : '';
+    const userIdToEdit = mensualityInfo.userId !== undefined ? mensualityInfo.userId : '';
 
     let plates = [firstPlate, secondPlate, thirdPlate, fourthPlate, fifthPlate]
     let newPlates = plates.filter(plate => plate != undefined && plate != '' && plate != "undefined")
-
     let platesNewMen = [firstPlateNewMen, secondPlateNewMen, thirdPlateNewMen, fourthPlateNewMen, fifthPlateNewMen]
     let platesNewMensuality = platesNewMen.filter(plate => plate != undefined && plate != '')
-
     let validityDateMen = moment(mensualityInfo.validity).tz("America/Bogota")
     let validityDateMenHours = '' + validityDateMen.format('L') + ' ' + validityDateMen.format('LT')
+    var userEditInfo = [ {name: userName}, {id: userIdToEdit}, {phone: '+57' + userPhone}, {email: userEmail}, {plate: firstPlate} ]
+    var newUserEditInfo = userEditInfo.filter(el => 
+        el.name || el.id || el.phone || el.email || el.plate != undefined 
+        )
+    var newObjUserEdit = newUserEditInfo.reduce((a, b) => Object.assign(a, b), {})
 
-
-    const showModalInfoNewMen = () => {
-        setModal3Visible(true);
-    }
-
-    function priceMonthVehicleType() {
+    const priceMonthVehicleType = ()  => {
         if (isCharacterALetter(firstPlateNewMen[5])) {
             setMonthPrice(hq.monthlyBikePrice)
             setShowInputsCashChange(true);
@@ -105,55 +111,14 @@ const MonthlyPayments = (props) => {
             setMonthPrice(hq.monthlyCarPrice)
             setShowInputsCashChange(true);
         }
-
     }
 
-    function mensualityPriceMonthVehType() {
+    const mensualityPriceMonthVehType = ()  => {
         if (isCharacterALetter(plateTwo[2])) {
             setMonthPrice(hq.monthlyBikePrice)
         } else {
             setMonthPrice(hq.monthlyCarPrice)
         }
-    }
-    const clearUserPhone = () => {
-        setUserPhone(''); w
-    }
-    const clearPlateOne = () => {
-        setPlateOne('');
-    }
-    const clearPlateTwo = () => {
-        setPlateTwo('');
-    }
-    const clearFirstPlate = () => {
-        setFirstPlate('');
-    }
-    const clearSecondPlate = () => {
-        setSecondPlate('');
-    }
-    const clearThirdPlate = () => {
-        setThirdPlate('');
-    }
-    const clearFourthPlate = () => {
-        setFourthPlate('');
-    }
-    const clearFifthPlate = () => {
-        setFifthPlate('');
-    }
-
-    const clearNameNewMen = () => {
-        setNameNewMen('');
-    }
-    const clearLastNameNewMen = () => {
-        setLastNameNewMen('');
-    }
-    const clearPhoneNewMen = () => {
-        setPhoneNewMen('');
-    }
-    const clearEmailNewMen = () => {
-        setEmailNewMen('');
-    }
-    const clearFirstPlateNewMen = () => {
-        setFirstPlateNewMen('');
     }
 
     const mensualityCreatedModal = () => {
@@ -170,6 +135,8 @@ const MonthlyPayments = (props) => {
         setShowInputsCashChange(false);
         setModal5Visible(false);
         setPendingMensualityPay(false);
+        setGenerateMenRecip(true);
+        setMdlMenAlreadyExists(false);
 
     }
     const mensualityRenewedModal = () => {
@@ -179,12 +146,19 @@ const MonthlyPayments = (props) => {
         setMonthPrice(0);
     }
 
-    function isCharacterALetter(char) {
+    const clearPageInfo = () => {
+        setPlateOne('');
+        setPlateTwo('');
+        setMensualityExists(false);
+    }
+
+    const isCharacterALetter = (char) => {
         return (/[a-zA-Z]/).test(char)
     }
 
     const user = () => {
-
+        setPendingMensualityPay(false);
+        setGenerateMenRecip(true);
         try {
             setLoading(true);
             firestore.collection("users")
@@ -192,7 +166,6 @@ const MonthlyPayments = (props) => {
                 .where('phone', '==', '+57' + phoneNewMen)
                 .get()
                 .then(snapshot => {
-
                     if (snapshot.empty) {
                         createUser();
                     } else {
@@ -206,7 +179,6 @@ const MonthlyPayments = (props) => {
                 .catch(error => {
                     console.log(error)
                 })
-
         } catch (err) {
             console.log(err)
         }
@@ -216,6 +188,18 @@ const MonthlyPayments = (props) => {
     async function editUser(idUser) {
         setLoading(true);
         try {
+            console.log(
+                newObjUserEdit
+            )
+            if ( userIdToEdit !== '' ) {
+                const response = await instance.post(
+                    EDIT_USER,
+                    newObjUserEdit,
+                    { timeout: TIMEOUT }
+                )
+                console.log('edituser')
+                setLoading(false);
+            }
             if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10 && userId) {
                 const response = await instance.post(
                     EDIT_USER,
@@ -266,7 +250,7 @@ const MonthlyPayments = (props) => {
                         officialEmail: officialProps.email,
                         nid: newMenNid,
                         pending: pendingMensualityPay,
-                        generateRecip: !pendingMensualityPay
+                        generateRecip: generateMenRecip
                     },
                     { timeout: TIMEOUT }
                 )
@@ -275,7 +259,6 @@ const MonthlyPayments = (props) => {
                 setLoading(false);
                 console.log(response.data)
             }
-
         } catch (err) {
             console.log(err)
             console.log(err?.response)
@@ -286,25 +269,7 @@ const MonthlyPayments = (props) => {
 
     async function createMensuality(idUser) {
         setLoading(true);
-
         try {
-            console.log(
-                {
-                    userId: idUser,
-                    capacity: 1,
-                    vehicleType: "car",
-                    userPhone: phoneNewMen,
-                    plates: platesNewMensuality,
-                    hqId: officialHq,
-                    type: 'personal',
-                    monthlyUser: true,
-                    cash: Number(totalPay),
-                    change: totalPay - monthPrice,
-                    officialEmail: officialProps.email,
-                    pending: pendingMensualityPay,
-                    generateRecip: !pendingMensualityPay
-                }
-            )
             if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
                 let type
                 if (isCharacterALetter(firstPlateNewMen[5])) type = "bike"
@@ -324,7 +289,7 @@ const MonthlyPayments = (props) => {
                         change: totalPay - monthPrice,
                         officialEmail: officialProps.email,
                         pending: pendingMensualityPay,
-                        generateRecip: !pendingMensualityPay
+                        generateRecip: generateMenRecip
                     },
                     { timeout: TIMEOUT }
                 )
@@ -354,13 +319,29 @@ const MonthlyPayments = (props) => {
                 )
                 setMensualityExists(true);
                 setMensuality(response.data)
+                console.log(response.data)
                 setLoading(false);
                 mensualityPriceMonthVehType();
+            } 
+            if (firstPlateNewMen.length === 6 ) {
+                const response = await instance.post(
+                    FIND_MENSUALITY_PLATE,
+                    {
+                        plate: firstPlateNewMen,
+                        type: "full"
+                    },
+                    { timeout: TIMEOUT }
+                )
+                setLoading(false);
+                setMdlMenAlreadyExists(true);
             }
         } catch (err) {
             console.log(err)
             console.log(err?.response)
             setLoading(false);
+            if (firstPlateNewMen.length === 6 ) {
+                priceMonthVehicleType();
+            }
             setMensualityExists(false);
         }
     }
@@ -370,10 +351,6 @@ const MonthlyPayments = (props) => {
 
         try {
             if (plateOne.length === 3 && plateTwo.length === 3) {
-                console.log({
-                    id: mensualityInfo.id,
-                    plates: newPlates
-                })
                 const response = await instance.post(
                     EDIT_MENSUALITY,
                     {
@@ -409,6 +386,7 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
+
                 if (response.data.response === 2) {
                     setAlreadyRenewed(true);
                     setTotalPay(0);
@@ -512,7 +490,7 @@ const MonthlyPayments = (props) => {
                                 ;
                             }}
                             value={plateOne}
-                            onFocus={() => { clearPlateOne(); clearPlateTwo(); }}
+                            onFocus={() => { setPlateOne(''); setPlateTwo(''); }}
                         />
                         <TextInput
                             ref={refPlateTwo}
@@ -523,7 +501,7 @@ const MonthlyPayments = (props) => {
                             maxLength={3}
                             autoCapitalize={"characters"}
                             keyboardType='default'
-                            onFocus={() => { clearPlateTwo(); }}
+                            onFocus={() => { setPlateTwo(''); }}
                             onChangeText={text => {
                                 setPlateTwo(text);
                                 if (text.length === 3) {
@@ -533,7 +511,11 @@ const MonthlyPayments = (props) => {
                             value={plateTwo}
                         />
                     </View>
-                    <View style={{ height: '40%', width: '57%', justifyContent: 'center' }}>
+                    <View style={{ 
+                        height: '30%', 
+                        width: '57%', 
+                        justifyContent: 'flex-end'
+                        }}>
                         <Button onPress={() => {
                             setLoading(true);
                             findMensualityPlate();
@@ -544,6 +526,21 @@ const MonthlyPayments = (props) => {
                             textStyle={styles.buttonTextSearch}
                             disabled={plateOne === "" || plateTwo === ""}
                             activityIndicatorStatus={loading}
+                        />
+                    </View>
+                    <View style={{ 
+                        height: '30%', 
+                        width: '57%', 
+                        justifyContent: 'flex-end'
+                        }}>
+                        <Button onPress={() => {
+                            clearPageInfo();
+                        }}
+                            title=" L I M P I A R"
+                            color='gray'
+                            style={styles.buttonI}
+                            textStyle={styles.buttonTextClear}
+                            // activityIndicatorStatus={loading}
                         />
                     </View>
                 </View>
@@ -563,6 +560,8 @@ const MonthlyPayments = (props) => {
                                         <Text style={styles.infoTextTitle}>
                                             Nombre de usuario:
                                         </Text>
+                                    </View>
+                                    <View style={{...styles.mensualityInfo, justifyContent: 'center'} }>
                                         <Text style={styles.infoText}>
                                             {mensualityUserName}
                                         </Text>
@@ -585,20 +584,23 @@ const MonthlyPayments = (props) => {
                                     </View>
                                     <View style={styles.mensualityInfo}>
                                         <Text style={styles.infoTextTitle}>
+                                            Estado:
+                                        </Text>
+                                        <Text style={styles.infoText}>
+                                            {mensualityInfo.status === 'active' ? 'Activa': ''}
+                                            {mensualityInfo.status === 'due' ? 'Vencida': ''}
+                                            {mensualityInfo.status === 'pending' ? 'Pendiente': ''}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.mensualityInfo}>
+                                        <Text style={styles.infoTextTitle}>
                                             Vigencia hasta:
                                         </Text>
                                         <Text style={styles.infoText}>
                                             {validityDateMenHours}
                                         </Text>
                                     </View>
-                                    <View style={styles.mensualityInfo}>
-                                        <Text style={styles.infoTextTitle}>
-                                            Placas parqueadas:
-                                        </Text>
-                                        <Text style={styles.infoText}>
-                                            {mensualityInfo.parkedPlates}
-                                        </Text>
-                                    </View>
+                                    
                                     <View style={styles.mensualityInfo}>
                                         <Text style={styles.infoTextTitle}>
                                             Placas asociadas:
@@ -634,12 +636,16 @@ const MonthlyPayments = (props) => {
                                         disabled={plateOne === "" || plateTwo === ""}
                                     />
                                     <Button onPress={() => {
-                                        setModalVisible(true)
-                                        setFirstPlate(firstPlateData + '')
-                                        setSecondPlate(secondPlateData + '')
-                                        setThirdPlate(thirdPlateData + '')
-                                        setFourthPlate(fourthPlateData + '')
-                                        setFifthPlate(fifthPlateData + '')
+                                        setModalVisible(true);
+                                        setFirstPlate(firstPlateData + '');
+                                        setSecondPlate(secondPlateData + '');
+                                        setThirdPlate(thirdPlateData + '');
+                                        setFourthPlate(fourthPlateData + '');
+                                        setFifthPlate(fifthPlateData + '');
+                                        setUserName(userNameData);
+                                        setUserEmail(userEmailData);
+                                        setUserPhone(userPhoneData);
+
                                     }}
                                         title="  E D I T A R  "
                                         color='gray'
@@ -665,7 +671,7 @@ const MonthlyPayments = (props) => {
                                     </Text>
                                 }
                                 <Button onPress={() => {
-                                    showModalInfoNewMen();
+                                    setModal3Visible(true);
                                 }}
                                     title="C R E A R"
                                     color='gray'
@@ -695,7 +701,7 @@ const MonthlyPayments = (props) => {
                 <View style={styles.centeredView}>
                     <View style={{ 
                         ...styles.modalView, 
-                        height: normalize(550) }}>
+                        height: normalize(800), width: '80%' }}>
                         <View style={{ 
                             height: '100%',
                             width: '100%', 
@@ -715,13 +721,80 @@ const MonthlyPayments = (props) => {
                             </View>
                             <View style={{ 
                                 justifyContent: 'space-between', 
-                                height: '69%', 
+                                height: '70%', 
                                 width: '100%', 
                                 flexDirection: 'column', 
-                                paddingBottom: '10%' 
+                                paddingBottom: '10%'
                             }}>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 1:  </Text>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Nombre:  </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='default'
+                                        placeholder=''
+                                        textAlign='center'
+                                        value={userName !== undefined + '' ? userName : ''}
+                                        onChangeText={text => setUserName(text)}
+                                        onFocus={() => {
+                                            setUserName('')
+                                        }}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Correo:  </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='default'
+                                        placeholder=''
+                                        textAlign='center'
+                                        value={userEmail !== undefined + '' ? userEmail : ''}
+                                        onChangeText={text => setUserEmail(text)}
+                                        onFocus={() => {
+                                            setUserEmail('')
+                                        }}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Celular:  </Text>
+                                    <TextInput
+                                        style={{
+                                            borderWidth: 1,
+                                            borderColor: '#00A9A0',
+                                            fontSize: normalize(20),
+                                            fontFamily: 'Montserrat-Bold',
+                                            width: '60%',
+                                            borderRadius: 10,
+                                            color: '#00A9A0'
+                                        }}
+                                        keyboardType='default'
+                                        placeholder=''
+                                        maxLength={10}
+                                        textAlign='center'
+                                        value={userPhone !== undefined + '' ? userPhone : ''}
+                                        onChangeText={text => setUserPhone(text)}
+                                        onFocus={() => {
+                                            setUserPhone('')
+                                        }}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Placa 1:  </Text>
                                     <TextInput
                                         style={{
                                             borderWidth: 1,
@@ -739,12 +812,12 @@ const MonthlyPayments = (props) => {
                                         value={firstPlate !== undefined + '' ? firstPlate : ''}
                                         onChangeText={text => setFirstPlate(text)}
                                         onFocus={() => {
-                                            clearFirstPlate()
+                                            setFirstPlate('')
                                         }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 2:  </Text>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Placa 2:  </Text>
                                     <TextInput
                                         style={{
                                             borderWidth: 1,
@@ -763,12 +836,12 @@ const MonthlyPayments = (props) => {
                                         value={secondPlate !== undefined + '' ? secondPlate : ''}
                                         onChangeText={text => setSecondPlate(text)}
                                         onFocus={() => {
-                                            clearSecondPlate()
+                                            setSecondPlate('')
                                         }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 3:  </Text>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Placa 3:  </Text>
                                     <TextInput
                                         style={{
                                             borderWidth: 1,
@@ -787,12 +860,13 @@ const MonthlyPayments = (props) => {
                                         value={thirdPlate !== undefined + '' ? thirdPlate : ''}
                                         onChangeText={text => setThirdPlate(text)}
                                         onFocus={() => {
-                                            clearThirdPlate()
+                                            setThirdPlate('')
+
                                         }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 4:  </Text>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Placa 4:  </Text>
                                     <TextInput
                                         style={{
                                             borderWidth: 1,
@@ -811,12 +885,13 @@ const MonthlyPayments = (props) => {
                                         value={fourthPlate !== undefined + '' ? fourthPlate : ''}
                                         onChangeText={text => setFourthPlate(text)}
                                         onFocus={() => {
-                                            clearFourthPlate()
+                                            setFourthPlate('')
+
                                         }}
                                     />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Placa 5:  </Text>
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Placa 5:  </Text>
                                     <TextInput
                                         style={{
                                             borderWidth: 1,
@@ -835,7 +910,8 @@ const MonthlyPayments = (props) => {
                                         value={fifthPlate !== undefined + '' ? fifthPlate : ''}
                                         onChangeText={text => setFifthPlate(text)}
                                         onFocus={() => {
-                                            clearFifthPlate()
+                                            setFifthPlate('')
+
                                         }}
                                     />
                                 </View>
@@ -849,12 +925,13 @@ const MonthlyPayments = (props) => {
                                 marginTop: '0%'
                             }}>
                                 <View style={{
-                                    height: '50%',
+                                    height: '40%',
                                     width: '100%',
                                     justifyContent: 'flex-end',
                                 }}>
                                     <Button onPress={() => {
                                         editMensuality();
+                                        editUser(userIdToEdit);
                                     }}
                                         title="G U A R D A R"
                                         color="#00A9A0"
@@ -869,7 +946,7 @@ const MonthlyPayments = (props) => {
                                         activityIndicatorStatus={loading} />
                                 </View>
                                 <View style={{
-                                    height: '50%',
+                                    height: '40%',
                                     width: '100%',
                                     justifyContent: 'flex-end'
                                 }}>
@@ -1112,9 +1189,25 @@ const MonthlyPayments = (props) => {
                                 }}>
                                     <CheckBox
                                         value={pendingMensualityPay}
-                                        onValueChange={() => setPendingMensualityPay(!pendingMensualityPay)}
+                                        onValueChange={() => {
+                                            if (pendingMensualityPay === false) {
+                                                setPendingMensualityPay(!pendingMensualityPay);
+                                                setGenerateMenRecip(!generateMenRecip);
+                                                setTotalPay(0);
+                                            } else {
+                                                setPendingMensualityPay(!pendingMensualityPay);
+                                                setGenerateMenRecip(!generateMenRecip);
+                                            }
+                                            
+                                            console.log('recip:', generateMenRecip);
+                                            console.log('pending:', pendingMensualityPay);
+                                            console.log(totalPay);
+
+
+                                        }
+                                        }
                                         style={{ alignSelf: 'center' }}
-                                        tintColors={{ true: '#00A9A0', false: '#00A9A0' }}
+                                        tintColors={{ true: '#00A9A0', false: 'gray' }}
                                     />
                                     <Text style={{
                                         color: '#00A9A0',
@@ -1157,6 +1250,7 @@ const MonthlyPayments = (props) => {
                                             onChangeText={(text) => {
                                                 setTotalPay(text);
                                             }}
+                                            editable={pendingMensualityPay === false}
                                         />
                                     </View>
                                     <View style={{
@@ -1249,7 +1343,7 @@ const MonthlyPayments = (props) => {
                                             value={nameNewMen}
                                             onChangeText={text => setNameNewMen(text)}
                                             onFocus={() => {
-                                                clearNameNewMen('')
+                                                setNameNewMen('')
                                             }}
                                         />
                                     </View>
@@ -1263,7 +1357,7 @@ const MonthlyPayments = (props) => {
                                             value={lastNameNewMen}
                                             onChangeText={text => setLastNameNewMen(text)}
                                             onFocus={() => {
-                                                clearLastNameNewMen('')
+                                                setLastNameNewMen('')
                                             }}
                                         />
                                     </View>
@@ -1290,7 +1384,7 @@ const MonthlyPayments = (props) => {
                                             value={phoneNewMen}
                                             onChangeText={text => setPhoneNewMen(text)}
                                             onFocus={() => {
-                                                clearPhoneNewMen('')
+                                                setPhoneNewMen('')
                                             }}
                                         />
                                     </View>
@@ -1305,7 +1399,7 @@ const MonthlyPayments = (props) => {
                                             value={emailNewMen}
                                             onChangeText={text => setEmailNewMen(text)}
                                             onFocus={() => {
-                                                clearEmailNewMen('')
+                                                setEmailNewMen('')
                                             }}
                                         />
                                     </View>
@@ -1322,7 +1416,7 @@ const MonthlyPayments = (props) => {
                                             value={firstPlateNewMen}
                                             onChangeText={text => setFirstPlateNewMen(text)}
                                             onFocus={() => {
-                                                clearFirstPlateNewMen('')
+                                                setFirstPlateNewMen('')
                                             }}
                                         />
                                     </View>
@@ -1338,7 +1432,8 @@ const MonthlyPayments = (props) => {
                                         justifyContent: 'flex-end' 
                                         }}>
                                         <Button onPress={() => {
-                                            priceMonthVehicleType();
+                                            setLoading(true);
+                                            findMensualityPlate();
                                         }}
                                             title="G U A R D A R"
                                             color="#00A9A0"
@@ -1378,6 +1473,7 @@ const MonthlyPayments = (props) => {
                     </View>
                 }
             </Modal>
+
             <Modal
                 animationType="fade"
                 transparent={true}
@@ -1419,13 +1515,60 @@ const MonthlyPayments = (props) => {
                 animationType="fade"
                 transparent={true}
                 backdropOpacity={0.3}
+                visible={mdlMenAlreadyExists}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '5%' }}>
+                            <View style={{ justifyContent: 'center', height: '30%' }}>
+                                <Text style={{ 
+                                    ...styles.modalText, 
+                                    fontSize: normalize(25), 
+                                    color: 'gray' 
+                                    }}
+                                    >  La mensualidad ya existe </Text>
+                            </View>
+
+                            <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
+                                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end' }}>
+                                    <Button onPress={() => {
+                                        mensualityCreatedModal();
+                                    }}
+                                        title="E N T E N D I D O"
+                                        color="#00A9A0"
+                                        style={
+                                            styles.modalButton
+                                        }
+                                        textStyle={{
+                                            color: "#FFFFFF",
+                                            textAlign: "center",
+                                            fontFamily: 'Montserrat-Bold'
+                                        }}
+                                        activityIndicatorStatus={loading}
+                                    />
+                                </View>
+                            </View>
+
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                backdropOpacity={0.3}
                 visible={modal5Visible}
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '5%' }}>
                             <View style={{ justifyContent: 'center', height: '30%' }}>
-                                <Text style={{ ...styles.modalText, fontSize: normalize(20), color: 'red' }}>  En este momento no está disponible la red, intentar nuevamente. </Text>
+                                <Text style={{ 
+                                    ...styles.modalText, 
+                                    fontSize: normalize(20), 
+                                    color: 'red' 
+                                    }}
+                                    >  En este momento no está disponible la red, intentar nuevamente. </Text>
                             </View>
 
                             <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>

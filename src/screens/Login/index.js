@@ -41,9 +41,7 @@ const LoginIndex = (props) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState("");
-
   const [showInstructions, setShowInstructions] = useState(true);
-
 
   const onLoginPress = async () => {
     try {
@@ -59,6 +57,8 @@ const LoginIndex = (props) => {
        * In case everything is correct call the sign in function and then navigate to Home
        */
       let response = await auth.signInWithEmailAndPassword(email.toString(), password.toString())
+
+      console.log(response.user.uid)
       // console.log(response.user.toJSON().stsTokenManager.accessToken)
       let fbToken = response.user.toJSON().stsTokenManager.accessToken
       if (Platform.OS === 'android' && Platform.Version < 23) {
@@ -68,9 +68,13 @@ const LoginIndex = (props) => {
         await SecureStore.setItemAsync('firebaseToken', fbToken)
       }
 
+
       let readOff = await instance.post(
         READOFFICIAL,
-        { email: email },
+        { 
+          email: email,
+          uid:  response.user.uid
+        },
         { timeout: TIMEOUT }
       )
       await startShift();
@@ -257,7 +261,7 @@ const LoginIndex = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    officialProps: state.official,
+    officialProps: state.official
   }
 }
 

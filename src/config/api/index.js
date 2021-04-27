@@ -46,3 +46,6 @@ export const READ_ADMIN = "/readAdmin";
 export const EDIT_ADMIN = "/editAdmin";
 export const READ_CORPO = "/readCorporation";
 export const READOFFICIAL="/readOfficial"
+
+// STORAGE
+export const STORAGE_KEY = '@save_lastLoginAt';

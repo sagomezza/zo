@@ -19,8 +19,7 @@ import { TIMEOUT } from '../../config/constants/constants';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import store from '../../config/store';
-
-
+import { firestore } from '../../config/firebase';
 
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
@@ -65,6 +64,31 @@ const HomeIndex = (props) => {
       }
     }
 
+    const parked = (hqId) => {
+
+      try {
+        firestore.collection("headquarters")
+          .get()
+          .then(snapshot => {
+            if (snapshot.empty) {
+              console.log('---------------nope')
+            } else {
+              snapshot.forEach(doc => {
+                console.log(doc)
+                console.log('---------------yep')
+
+              })
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
     const readHq = async () => {
       try {
         const response = await instance.post(READ_HQ, {
@@ -81,10 +105,10 @@ const HomeIndex = (props) => {
         console.log(err?.response)
       }
     };
-
     getRecips();
     readHq();
     updateExpoToken();
+    parked('GwPIopvdwylEq5JtiY35');
   }, []);
 
   const formatHours = (hours) => {
@@ -187,7 +211,7 @@ const HomeIndex = (props) => {
                     return (
                       <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
                         <View style={{ marginBottom: '2%' }} >
-                          <Text style={HomeStyles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0] }</Text>
+                          <Text style={HomeStyles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
                           <Text style={HomeStyles.textPago}>Pago por
                           {
                               item.hours === '1 month' ? ' mensualidad' : `${formatHours(item.hours)} horas`
