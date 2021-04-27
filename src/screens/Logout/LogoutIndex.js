@@ -32,6 +32,9 @@ import '@firebase/auth';
 import '@firebase/database';
 import "@firebase/firestore";
 import { TIMEOUT } from '../../config/constants/constants';
+import * as Network from 'expo-network';
+import store from '../../config/store';
+
 
 
 const LogoutIndex = (props) => {
@@ -111,8 +114,21 @@ const LogoutIndex = (props) => {
   const [inputBaseValue, setInputBaseValue] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
+  const [macAddress, setMacAddress ] = useState('');
 
   useEffect(() => {
+    const macAdd = () => {
+      Network.getMacAddressAsync().then(state => {
+        // console.log('----------------------------------------------------------')
+        setMacAddress(state)
+        // console.log(macAddress);
+
+        // console.log('----------------------------------------------------------')
+
+      }
+      )
+    }
+
     const getShiftRecips = async () => {
       try {
         const response = await instance.post(GET_SHIFT_RECIPS, {
@@ -132,6 +148,7 @@ const LogoutIndex = (props) => {
       }
     }
     getShiftRecips();
+    macAdd();
   }, []);
 
   const markEndOfShift = async () => {
@@ -144,7 +161,8 @@ const LogoutIndex = (props) => {
         total: Number(total),
         input: Number(inputValue),
         base: Number(inputBaseValue),
-        hqId: officialHq
+        hqId: officialHq,
+        macAddress: macAddress
       });
 
       firebase.auth().signOut().then(function () {
@@ -429,8 +447,8 @@ const LogoutIndex = (props) => {
                   alignItems: 'center'
                 }}>
                   <Button onPress={() => {
-                    markEndOfShift();
                     setLoading(true)
+                    markEndOfShift();
                   }}
                     title="S I"
                     color="#00A9A0"

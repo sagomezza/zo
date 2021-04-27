@@ -73,6 +73,8 @@ const App = () => {
       // console.log('Is internet reachable?:', state.isInternetReachable);
       state.isConnected === false ? setIsConnected(false) : setIsConnected(true);
     });
+
+    
   }
 
   const checkOfficialHours = () => {
@@ -147,7 +149,7 @@ const App = () => {
     // if (user.lastLoginAt !== null ) saveLastLoginAt(user.lastLoginAt);
     if (user) {
       // console.log("[metadata] ", auth.currentUser.metadata);
-      console.log(user.lastLoginAt)
+      // console.log(user.lastLoginAt)
       setUser(user);
       setInitialRouteName("Home");
       readUser(user.email);

@@ -164,7 +164,7 @@ const UserInput = (props) => {
             { timeout: TIMEOUT }
           )
           setMensuality(response.data)
-          if (response.data.capacity == response.data.parkedPlates) {
+          if (response.data.data[0].capacity === response.data.data[0].parkedPlates) {
             setMaxCapMensuality(true);
           }
 
