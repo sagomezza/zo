@@ -38,8 +38,8 @@ const HomeIndex = (props) => {
           store.dispatch(actions.setRecips(response.data.data));
         }
       } catch (err) {
-        console.log(err?.response)
-        console.log("err: ", err);
+        // console.log(err?.response)
+        // console.log("err: ", err);
       }
     };
 
@@ -64,30 +64,30 @@ const HomeIndex = (props) => {
       }
     }
 
-    const parked = (hqId) => {
+    // const parked = (hqId) => {
 
-      try {
-        firestore.collection("headquarters")
-          .get()
-          .then(snapshot => {
-            if (snapshot.empty) {
-              console.log('---------------nope')
-            } else {
-              snapshot.forEach(doc => {
-                console.log(doc)
-                console.log('---------------yep')
+    //   try {
+    //     firestore.collection("headquarters")
+    //       .get()
+    //       .then(snapshot => {
+    //         if (snapshot.empty) {
+    //           console.log('---------------nope')
+    //         } else {
+    //           snapshot.forEach(doc => {
+    //             console.log(doc)
+    //             console.log('---------------yep')
 
-              })
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
+    //           })
+    //         }
+    //       })
+    //       .catch(error => {
+    //         console.log(error)
+    //       })
 
-      } catch (err) {
-        console.log(err)
-      }
-    }
+    //   } catch (err) {
+    //     console.log(err)
+    //   }
+    // }
 
     const readHq = async () => {
       try {
@@ -108,7 +108,7 @@ const HomeIndex = (props) => {
     getRecips();
     readHq();
     updateExpoToken();
-    parked('GwPIopvdwylEq5JtiY35');
+    // parked('GwPIopvdwylEq5JtiY35');
   }, []);
 
   const formatHours = (hours) => {
