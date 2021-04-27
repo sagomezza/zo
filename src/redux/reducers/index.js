@@ -4,7 +4,7 @@ import recips from './recips';
 import reservations from './reservations';
 import hq from './hq';
 import qr from './qr';
-import expoToken from './pushToken'
+import expoToken from './pushToken';
 
 
 const rootReducer = combineReducers({

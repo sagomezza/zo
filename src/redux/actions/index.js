@@ -5,11 +5,7 @@ import {
   SET_HQ,
   SET_QR,
   SET_QR_PHONE,
-  SUBTRACT_BIKE,
-  SUBTRACT_CAR,
-  ADD_CAR,
-  ADD_BIKE,
-  SET_PUSH_TOKEN
+  SET_PUSH_TOKEN,
 } from './type'
 
 export const setOfficial = (official) => {
@@ -61,3 +57,4 @@ export const setExpoToken = (token) => {
     payload: token,
   };
 };
+

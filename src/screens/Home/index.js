@@ -28,7 +28,6 @@ const HomeIndex = (props) => {
 
   useEffect(() => {
     const getRecips = async () => {
-      console.log(new Date())
       try {
         const response = await instance.post(GET_RECIPS, {
           hqId: officialProps.hq[0],

@@ -63,6 +63,8 @@ const App = () => {
       console.log('Is internet reachable?:', state.isInternetReachable);
       state.isConnected === false ? setIsConnected(false) : setIsConnected(true);
     });
+
+    
   }
 
   useEffect(() => {
