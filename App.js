@@ -92,7 +92,7 @@ const App = () => {
         });
         if (response.data.response) {
           store.dispatch(setOfficial(response.data.data));
-          console.log(response)
+          // console.log(response)
         }
       } catch (error) {
         try {
@@ -118,11 +118,11 @@ const App = () => {
   }
 
   const updateUserState = useCallback((user) => {
-    console.log("[App/updateUserState] ", user);
+    // console.log("[App/updateUserState] ", user);
     // if (user.lastLoginAt !== null ) saveLastLoginAt(user.lastLoginAt);
     if (user) {
       // console.log("[metadata] ", auth.currentUser.metadata);
-      console.log(user.lastLoginAt)
+      // console.log(user.lastLoginAt)
       setUser(user);
       setInitialRouteName("Home");
       readUser(user.email);

@@ -447,8 +447,8 @@ const LogoutIndex = (props) => {
                   alignItems: 'center'
                 }}>
                   <Button onPress={() => {
-                    markEndOfShift();
                     setLoading(true)
+                    markEndOfShift();
                   }}
                     title="S I"
                     color="#00A9A0"

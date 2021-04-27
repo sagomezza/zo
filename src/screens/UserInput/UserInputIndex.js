@@ -168,7 +168,6 @@ const UserInput = (props) => {
           )
           setMensuality(response.data)
           if (response.data.data[0].capacity === response.data.data[0].parkedPlates) {
-            console.log('ta lleno')
             setMaxCapMensuality(true);
 
           }
