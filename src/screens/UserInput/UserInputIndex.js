@@ -164,11 +164,7 @@ const UserInput = (props) => {
             { timeout: TIMEOUT }
           )
           setMensuality(response.data)
-<<<<<<< HEAD
           if (response.data.data[0].capacity === response.data.data[0].parkedPlates) {
-=======
-          if (response.data.capacity == response.data.parkedPlates) {
->>>>>>> master
             setMaxCapMensuality(true);
           }
 
@@ -176,11 +172,7 @@ const UserInput = (props) => {
       } catch (err) {
         // console.log(err)
         // console.log(err?.response)
-<<<<<<< HEAD
-        // setErrorModalVisible(true);
-=======
         setErrorModalVisible(true);
->>>>>>> master
       }
     }
 

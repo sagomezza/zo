@@ -108,11 +108,7 @@ const HomeIndex = (props) => {
     getRecips();
     readHq();
     updateExpoToken();
-<<<<<<< HEAD
-    // parked('GwPIopvdwylEq5JtiY35');
-=======
     // parked(officialHq);
->>>>>>> master
   }, []);
 
   const formatHours = (hours) => {
