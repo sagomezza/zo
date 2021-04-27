@@ -8,7 +8,6 @@ import expoToken from './pushToken'
 import uid from './uid';
 import lastLoginAt from './lastLoginAt';
 
-
 const rootReducer = combineReducers({
   official,
   recips,
@@ -18,6 +17,7 @@ const rootReducer = combineReducers({
   expoToken,
   uid,
   lastLoginAt
+
 });
 
 export default rootReducer;

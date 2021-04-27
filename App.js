@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { View, ActivityIndicator, StyleSheet, Modal, Text, AsyncStorage } from 'react-native';
+import SnackBar from 'react-native-snackbar-component'
 import normalize from './src/config/services/normalizeFontSize';
 import NoConnectionModal from './src/components/NoConnectionModal';
 import { Provider } from "react-redux";
@@ -15,7 +16,7 @@ import { READ_OFFICIAL } from "./src/config/api";
 import { READ_ADMIN, READ_CORPO, STORAGE_KEY } from "./src/config/api/index";
 import { setOfficial, setExpoToken } from "./src/redux/actions";
 import * as Network from 'expo-network';
-
+import moment from 'moment';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import * as Permissions from "expo-permissions";
@@ -48,6 +49,13 @@ const App = () => {
   const responseListener = useRef();
   const [isConnected, setIsConnected] = useState(false);
   const [lastLoginAt, setLastLoginAt] = useState('');
+  const [logoutSnackbar, setLogoutSnackbar] = useState(false)
+  const [officialData, setOfficialData] = useState({});
+  const officialScheduleStart = officialData.schedule !== undefined ? officialData.schedule.start : "NONE";
+  const dateNow = new Date()
+  let diffOfficialScheduleStart = moment(dateNow).diff(officialScheduleStart, 'hours', true);
+
+
 
   // const saveLastLoginAt = async (lastLoginAt) => {
   //   try {
@@ -69,9 +77,25 @@ const App = () => {
     
   }
 
+  const checkOfficialHours = () => {
+
+    // console.log(diffOfficialScheduleStart)
+    if (
+      Number(diffOfficialScheduleStart) === 7.25 ||
+      Number(diffOfficialScheduleStart) === 7.5 ||
+      Number(diffOfficialScheduleStart) === 7.75 ||
+      Number(diffOfficialScheduleStart) === 8 
+    ) {
+      setLogoutSnackbar(true);
+
+    }
+
+  }
+
   useEffect(() => {
     checkInternetReachable();
-  }, [])
+    checkOfficialHours();
+  }, [diffOfficialScheduleStart])
 
   Sentry.init({
     dsn: 'https://022b0475f7b147aba62d6d1988bf95df@o479500.ingest.sentry.io/5644578',
@@ -92,7 +116,8 @@ const App = () => {
         });
         if (response.data.response) {
           store.dispatch(setOfficial(response.data.data));
-          // console.log(response)
+          console.log(response)
+          setOfficialData(response.data.data)
         }
       } catch (error) {
         try {
@@ -106,6 +131,8 @@ const App = () => {
           )
           data.hq = readOff.data.data.hqs
           store.dispatch(setOfficial(data));
+          setOfficialData(data)
+
         } catch (err) {
           console.log(err)
           console.log(err?.response)
@@ -213,7 +240,19 @@ const App = () => {
         <AuthProvider value={{ currentUser }}>
           <NavigationContainer >
             <RootStack initialRouteName={initialRouteName} />
+
           </NavigationContainer>
+          <SnackBar
+            visible={logoutSnackbar}
+            textMessage="Recuerda realizar el cierre de caja y posterior cierre de sesión antes de terminar tu turno."
+            actionHandler={() => { setLogoutSnackbar(false) }}
+            actionText="Entendido"
+            backgroundColor="#FFF200"
+            accentColor="#00A9A0"
+            messageColor="#00A9A0"
+            messageStyle={{ fontSize: 60 }}
+            containerStyle={{ height: 90 }}
+          />
         </AuthProvider>
       </Provider>) : (
       <NoConnectionModal onCheck={checkInternetReachable} />

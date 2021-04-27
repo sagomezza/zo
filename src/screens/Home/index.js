@@ -29,7 +29,7 @@ const HomeIndex = (props) => {
     const getRecips = async () => {
       try {
         const response = await instance.post(GET_RECIPS, {
-          hqId: officialProps.hq[0],
+          hqId: officialHq,
           officialEmail: officialProps.email
         },
           { timeout: TIMEOUT }
@@ -108,7 +108,11 @@ const HomeIndex = (props) => {
     getRecips();
     readHq();
     updateExpoToken();
+<<<<<<< HEAD
     // parked('GwPIopvdwylEq5JtiY35');
+=======
+    // parked(officialHq);
+>>>>>>> master
   }, []);
 
   const formatHours = (hours) => {

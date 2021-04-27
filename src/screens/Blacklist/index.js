@@ -106,7 +106,6 @@ const Blacklist = (props) => {
                 { timeout: TIMEOUT }
             )
             setListHQDebts(response.data.data)
-            console.log(response.data.data)
         } catch (err) {
             console.log(err)
             console.log(err?.response)
