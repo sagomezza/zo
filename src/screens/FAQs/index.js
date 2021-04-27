@@ -43,9 +43,11 @@ const FAQs = (props) => {
                             borderRadius: 10,
                             borderWidth: 1
                         }}>
-
-                            
                            
+                          
+                           
+
+
                         </View>
 
                     </View>
