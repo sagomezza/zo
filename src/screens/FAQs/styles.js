@@ -14,19 +14,30 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     listContainer: {
-        height: '78%',
+        height: '80%',
         width: '90%',
-        backgroundColor: '#FFFFFF',
-        marginTop: '8%',
+        backgroundColor: '#F8F8F8',
+        marginTop: '4%',
         borderRadius: 10,
         justifyContent: 'space-between',
         alignItems: 'center'
     },
     textListTitle: {
-        fontSize: normalize(20),
+        fontSize: normalize(25),
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },
+    collapseContainer: {
+        padding: 4,
+        margin: 2
+    },
+    title: {
+        fontSize: 20,
+        fontFamily: 'Montserrat-Bold'
+    },
+    bodyText: {
+        fontSize: 15
+    }
 });
 
 export default styles;
