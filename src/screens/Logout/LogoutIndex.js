@@ -117,7 +117,7 @@ const LogoutIndex = (props) => {
   const [macAddress, setMacAddress ] = useState('');
 
   useEffect(() => {
-    // console.log(uid)
+    // console.log(uid.uid)
     // console.log('-----------------uid-OUT------------')
 
     const macAdd = () => {
@@ -166,7 +166,7 @@ const LogoutIndex = (props) => {
         base: Number(inputBaseValue),
         hqId: officialHq,
         macAddress: macAddress,
-        uid: uid
+        uid: uid.uid
       });
 
       firebase.auth().signOut().then(function () {
