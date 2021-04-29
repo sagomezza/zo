@@ -22,7 +22,7 @@ import { CommonActions } from '@react-navigation/native';
 import { MaterialIcons } from "@expo/vector-icons";
 
 // Constants dependecies
-import { START_SHIFT, READ_ADMIN, READ_CORPO, READOFFICIAL } from "../../config/api/index";
+import { START_SHIFT, READ_ADMIN, READ_CORPO, READOFFICIAL, REVOKE_CURRENT_SESSIONS } from "../../config/api/index";
 import instance from "../../config/axios";
 import * as actions from "../../redux/actions";
 import { TIMEOUT } from '../../config/constants/constants';
@@ -32,6 +32,7 @@ import normalize from '../../config/services/normalizeFontSize';
 import Button from '../../components/Button';
 import { ImageBackground } from 'react-native';
 import { Dimensions } from 'react-native';
+import store from '../../config/store';
 
 const { width, height } = Dimensions.get('window')
 
@@ -42,6 +43,23 @@ const LoginIndex = (props) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState("");
   const [showInstructions, setShowInstructions] = useState(true);
+
+  const firstLogin = async () => {
+    if (email === "" || password === "") {
+      setError("Por favor ingresa todos los datos: correo y contraseña")
+      return;
+    }
+    setLoading(true)
+    /**
+     * TO DO:
+     * Implement validate.js here, check if email is an email, and password is alphanumeric
+     * If they aren't update  error message and DO NOT CALL THE SIGN IN FUNCTION
+     * In case everything is correct call the sign in function and then navigate to Home
+     */
+    let response = await auth.signInWithEmailAndPassword(email.toString(), password.toString())
+    props.setUid(response.user.uid)
+    await revokeCurrentSessions(response.user.uid);
+  }
 
   const onLoginPress = async () => {
     try {
@@ -57,8 +75,10 @@ const LoginIndex = (props) => {
        * In case everything is correct call the sign in function and then navigate to Home
        */
       let response = await auth.signInWithEmailAndPassword(email.toString(), password.toString())
+      // console.log('-----------------uid-LOGIN------------')
+      // console.log(response.user.uid)
+      // console.log('-----------------uid-LOGIN------------')
 
-      console.log(response.user.uid)
       // console.log(response.user.toJSON().stsTokenManager.accessToken)
       let fbToken = response.user.toJSON().stsTokenManager.accessToken
       if (Platform.OS === 'android' && Platform.Version < 23) {
@@ -72,8 +92,7 @@ const LoginIndex = (props) => {
       let readOff = await instance.post(
         READOFFICIAL,
         { 
-          email: email,
-          uid:  response.user.uid
+          email: email
         },
         { timeout: TIMEOUT }
       )
@@ -111,6 +130,21 @@ const LoginIndex = (props) => {
         setError("El usuario y/o la contraseña que ingresaste son incorrectos.")
         console.log(err?.response)
       }
+    }
+  }
+
+  const revokeCurrentSessions = async (uid) => {
+    try {
+      console.log(uid)
+      const response = await instance.post(REVOKE_CURRENT_SESSIONS, {
+        uid:  uid
+      });
+      onLoginPress();
+
+    } catch (err) {
+      console.log(err)
+      console.log(err?.response)
+
     }
   }
 
@@ -180,7 +214,7 @@ const LoginIndex = (props) => {
               </View>
             </View>
             <View style={{ width: '55%', height: '10%', justifyContent: 'center', alignContent: 'center', marginTop: '6%' }}>
-              <Button onPress={() => { onLoginPress(); }}
+              <Button onPress={() => { firstLogin(); }}
                 title="I N G R E S A R"
                 color='#FFE828'
                 style={{

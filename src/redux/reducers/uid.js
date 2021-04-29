@@ -3,8 +3,7 @@ import {
 } from '../actions/type'
 
 const initialState = {
-    plate: '',
-    phone: ''
+    uid: ''
 } 
 
 const uidReducer = (state=initialState, action ) => {
@@ -12,7 +11,7 @@ const uidReducer = (state=initialState, action ) => {
         case SET_UID:
             return {
                 ...state,
-                uid:action.payload.uid
+                uid:action.payload
             };
 
         default:

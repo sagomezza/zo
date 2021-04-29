@@ -38,7 +38,7 @@ import store from '../../config/store';
 
 
 const LogoutIndex = (props) => {
-  const { navigation, officialProps, recips } = props;
+  const { navigation, officialProps, recips, uid } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const startTime = officialProps.schedule.start
 
@@ -117,6 +117,9 @@ const LogoutIndex = (props) => {
   const [macAddress, setMacAddress ] = useState('');
 
   useEffect(() => {
+    // console.log(uid.uid)
+    // console.log('-----------------uid-OUT------------')
+
     const macAdd = () => {
       Network.getMacAddressAsync().then(state => {
         // console.log('----------------------------------------------------------')
@@ -162,7 +165,8 @@ const LogoutIndex = (props) => {
         input: Number(inputValue),
         base: Number(inputBaseValue),
         hqId: officialHq,
-        macAddress: macAddress
+        macAddress: macAddress,
+        uid: uid.uid
       });
 
       firebase.auth().signOut().then(function () {
@@ -532,7 +536,8 @@ const mapStateToProps = (state) => ({
   officialProps: state.official,
   reservations: state.reservations,
   recips: state.recips,
-  hq: state.hq
+  hq: state.hq,
+  uid: state.uid
 });
 
 export default connect(mapStateToProps, actions)(LogoutIndex);
