@@ -35,8 +35,6 @@ import { TIMEOUT } from '../../config/constants/constants';
 import * as Network from 'expo-network';
 import store from '../../config/store';
 
-
-
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips, uid } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
@@ -114,13 +112,25 @@ const LogoutIndex = (props) => {
   const [inputBaseValue, setInputBaseValue] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
-  const [macAddress, setMacAddress ] = useState('');
+  const [macAddress, setMacAddress] = useState('');
+  const [uidLogout, setUidLogout] = useState('');
+  const uidDefini = uid.uid !== '' ? uid.uid : uidLogout;
+
 
   useEffect(() => {
-    // console.log(uid.uid)
-    // console.log('-----------------uid-OUT------------')
 
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        setUidLogout(user.uid)
+        // console.log(uidLogout)
+
+        // User is signed in.
+      } else {
+        // No user is signed in.
+      }
+    })
     const macAdd = () => {
+
       Network.getMacAddressAsync().then(state => {
         // console.log('----------------------------------------------------------')
         setMacAddress(state)
@@ -157,6 +167,7 @@ const LogoutIndex = (props) => {
   const markEndOfShift = async () => {
     setLoading(true);
     try {
+  
       const response = await instance.post(MARK_END_OF_SHIFT, {
         email: officialProps.email,
         id: officialProps.id,
@@ -166,7 +177,7 @@ const LogoutIndex = (props) => {
         base: Number(inputBaseValue),
         hqId: officialHq,
         macAddress: macAddress,
-        uid: uid.uid
+        uid: uidDefini
       });
 
       firebase.auth().signOut().then(function () {
