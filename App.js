@@ -22,6 +22,8 @@ import Constants from 'expo-constants';
 import * as Permissions from "expo-permissions";
 import * as Sentry from 'sentry-expo';
 
+
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -64,6 +66,7 @@ const App = () => {
 
   //   }
   // }
+  
 
   const checkInternetReachable = () => {
     // console.log("-------Connection Information------")
