@@ -57,6 +57,7 @@ const LoginIndex = (props) => {
      * In case everything is correct call the sign in function and then navigate to Home
      */
     let response = await auth.signInWithEmailAndPassword(email.toString(), password.toString())
+    props.setUid(response.user.uid)
     await revokeCurrentSessions(response.user.uid);
   }
 
@@ -74,7 +75,6 @@ const LoginIndex = (props) => {
        * In case everything is correct call the sign in function and then navigate to Home
        */
       let response = await auth.signInWithEmailAndPassword(email.toString(), password.toString())
-      props.setUid(response.user.uid)
       // console.log('-----------------uid-LOGIN------------')
       // console.log(response.user.uid)
       // console.log('-----------------uid-LOGIN------------')
@@ -135,6 +135,7 @@ const LoginIndex = (props) => {
 
   const revokeCurrentSessions = async (uid) => {
     try {
+      console.log(uid)
       const response = await instance.post(REVOKE_CURRENT_SESSIONS, {
         uid:  uid
       });
