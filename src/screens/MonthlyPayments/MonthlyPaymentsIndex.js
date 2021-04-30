@@ -28,11 +28,12 @@ import { firestore } from '../../config/firebase';
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
+import { createIdempotency } from '../../utils/idempotency'
 
 const { width, height } = Dimensions.get('window');
 
 const MonthlyPayments = (props) => {
-    const { navigation, officialProps, reservations, recips, hq } = props;
+    const { navigation, officialProps, hq, uid } = props;
     const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
     const [plateOne, setPlateOne] = useState('');
     const [plateTwo, setPlateTwo] = useState('');
@@ -230,6 +231,8 @@ const MonthlyPayments = (props) => {
                 let type
                 if (isCharacterALetter(firstPlateNewMen[5])) type = "bike"
                 else type = "car"
+                let idempotencyKey = createIdempotency(uid.uid)
+
                 const response = await instance.post(
                     CREATE_USER,
                     {
@@ -252,7 +255,12 @@ const MonthlyPayments = (props) => {
                         pending: pendingMensualityPay,
                         generateRecip: generateMenRecip
                     },
-                    { timeout: TIMEOUT }
+                    {  
+                        headers: {
+                            "x-idempotence-key": idempotencyKey
+                        }, 
+                        timeout: TIMEOUT 
+                    }
                 )
                 setModal4Visible(true);
                 setModal3Visible(false);
@@ -271,6 +279,7 @@ const MonthlyPayments = (props) => {
         setLoading(true);
         try {
             if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
+                let idempotencyKey = createIdempotency(uid.uid)
                 let type
                 if (isCharacterALetter(firstPlateNewMen[5])) type = "bike"
                 else type = "car"
@@ -291,7 +300,12 @@ const MonthlyPayments = (props) => {
                         pending: pendingMensualityPay,
                         generateRecip: generateMenRecip
                     },
-                    { timeout: TIMEOUT }
+                    {  
+                        headers: {
+                            "x-idempotence-key": idempotencyKey
+                        }, 
+                        timeout: TIMEOUT 
+                    }
                 )
                 setModal4Visible(true);
                 setModal3Visible(false);
@@ -375,6 +389,7 @@ const MonthlyPayments = (props) => {
         try {
             
             if (plateOne.length === 3 && plateTwo.length === 3) {
+                let idempotencyKey = createIdempotency(uid.uid)
                 const response = await instance.post(
                     RENEW_MENSUALITY,
                     {
@@ -384,7 +399,12 @@ const MonthlyPayments = (props) => {
                         hqId: officialHq
 
                     },
-                    { timeout: TIMEOUT }
+                    {  
+                        headers: {
+                            "x-idempotence-key": idempotencyKey
+                        }, 
+                        timeout: TIMEOUT 
+                    }
                 )
 
                 if (response.data.response === 2) {
@@ -1604,7 +1624,8 @@ const mapStateToProps = (state) => ({
     reservations: state.reservations,
     recips: state.recips,
     hq: state.hq,
-    expoToken: state.expoToken
+    expoToken: state.expoToken,
+    uid: state.uid
 });
 
 export default connect(mapStateToProps, actions)(MonthlyPayments);
