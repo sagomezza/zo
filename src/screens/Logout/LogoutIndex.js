@@ -34,6 +34,7 @@ import "@firebase/firestore";
 import { TIMEOUT } from '../../config/constants/constants';
 import * as Network from 'expo-network';
 import store from '../../config/store';
+import { createIdempotency } from '../../utils/idempotency'
 
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips, uid } = props;
@@ -167,7 +168,7 @@ const LogoutIndex = (props) => {
   const markEndOfShift = async () => {
     setLoading(true);
     try {
-  
+      let idempotencyKey = createIdempotency(uid.uid)
       const response = await instance.post(MARK_END_OF_SHIFT, {
         email: officialProps.email,
         id: officialProps.id,
@@ -178,7 +179,10 @@ const LogoutIndex = (props) => {
         hqId: officialHq,
         macAddress: macAddress,
         uid: uidDefini
-      });
+      }, {  headers: {
+        "x-idempotence-key": idempotencyKey
+      }, timeout: TIMEOUT 
+    });
 
       firebase.auth().signOut().then(function () {
         // Sign-out successful.

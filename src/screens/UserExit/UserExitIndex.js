@@ -18,6 +18,7 @@ import Button from '../../components/Button';
 import Header from '../../components/Header/HeaderIndex';
 import numberWithPoints from '../../config/services/numberWithPoints';
 import normalize from '../../config/services/normalizeFontSize';
+import { createIdempotency } from '../../utils/idempotency'
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
@@ -30,7 +31,7 @@ import store from '../../config/store';
 const { width, height } = Dimensions.get('window');
 
 const UserOut = (props) => {
-  const { navigation, officialProps, qr } = props;
+  const { navigation, officialProps, qr, uid } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   // const qrPlate = qr.plate !== undefined ? qr.plate : '';
   // const qrPhone = qr.phone !== undefined ? qr.phone : '';
@@ -118,6 +119,7 @@ const UserOut = (props) => {
   async function checkParkingPlate() {
     try {
       if ((plateOne + plateTwo).length === 6) {
+        let idempotencyKey = createIdempotency(uid.uid)
         let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
         const response = await instance.post(
           CHECK_PARKING,
@@ -130,7 +132,10 @@ const UserOut = (props) => {
             prepaidDay: true,
             verificationCode: inputVerificationCode
           },
-          { timeout: TIMEOUT }
+          {  headers: {
+            "x-idempotence-key": idempotencyKey
+          }, timeout: TIMEOUT 
+        }
         )
         setDateFinished(new Date());
         setDateStart(response.data.data.dateStart);
@@ -226,6 +231,7 @@ const UserOut = (props) => {
   const finishParking = async (paymentStatus, showModal) => {
     setLoading(true)
     try {
+      let idempotencyKey = createIdempotency(uid.uid)
       const response = await instance.post(
         FINISHPARKING,
         {
@@ -242,7 +248,10 @@ const UserOut = (props) => {
           dateFinished: new Date(),
           dateStart: dateStart
         },
-        { timeout: TIMEOUT }
+        {  headers: {
+          "x-idempotence-key": idempotencyKey
+        }, timeout: TIMEOUT 
+      }
       );
       setLoading(false)
       if (showModal) {
@@ -830,7 +839,8 @@ const UserOut = (props) => {
 const mapStateToProps = (state) => ({
   officialProps: state.official,
   reservations: state.reservations,
-  qr: state.qr
+  qr: state.qr,
+  uid: state.uid
 });
 
 export default connect(mapStateToProps, actions)(UserOut);
