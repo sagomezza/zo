@@ -118,6 +118,7 @@ const LogoutIndex = (props) => {
 
 
   useEffect(() => {
+    console.log(officialProps)
 
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {

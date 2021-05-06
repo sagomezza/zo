@@ -37,14 +37,42 @@ const FAQs = (props) => {
         },
         {
             title: '¿Qué debo hacer después de realizado el cierre de caja?',
-            body: 'RECUERDE, realizar el cierre de turno, para ello , compruebe estar en su sesión, comprobar tiempo de inicio y tiempo de salida, base y dinero en efectivo entregado. Cuando verifique esta información por favor haga clic en el botón de cierre de turno.  es muy importante hacer este cierre de turno para que el funcionario posterior pueda ingresar su información.'
+            body: 'El cierre de caja solo se hace una vez en el día. Si estás en el turno de la mañana debes realizarlo luego de iniciar sesión con tu usuario.'+
+            'En la parte superior izquierda de la aplicación encontraras 3 líneas horizontales, al presionar allí se despliegan varias opciones; vamos a ir a la que dice Cierre de caja. Una vez ahí, vas a presionar el botón “generar cierre de caja” Nos mostrará el valor que debemos tener en efectivo, debemos ingresar la base y el valor producido durante todo el día (los tres turnos) presionamos el botón guardar.'+
+            'Nos van a aparecer todos los cierres de caja y al lado un aviso de abierto o cerrado. Cuando llegue el mensajero por el dinero vamos a ingresar al cierre de la fecha actual presionando sobre el, nos aparece un campo para que el personal que recoge el dinero firme, clic en save y luego en guardar. Después de hacer este proceso de firma el cierre nos debe aparecer como: cerrado'
         },
         {
             title: '¿Cómo creo una mensualidad nueva?',
-            body: 'Para crear una mensualidad por favor ingrese en el menú lateral izquierdo a la sección mensualidades, posteriormente de clic en el botón crear mensualidades, ingrese todos los datos al formulario y dele clic al botón Guardar.  RECUERDE: usted podrá crear mensualidades en  cualquier día del mes pero debe notificar al usuario que al hacerlo posterior al día 5, se realizará el cobro completo de la mensualidad y debe renovarla entre el 1 y 5 del siguiente mes.'
+            body: 'En la parte superior izquierda de la aplicación encontraras 3 líneas horizontales, al presionar allí se despliegan varias opciones; vamos a ir a la que dice Mensualidades.' +
+            ' 1) Digitamos la placa de la cual deseamos crear la mensualidad '+
+            ' 2) Clic en Buscar '+
+            ' 3) Clic en Crear '+
+            ' 4) Vamos a diligenciar todos los campos: Nombre, apellidos, cédula, celular, correo y placa(s) '+
+            ' 5) Guardar ' +
+            ' El correo electrónico no es un campo obligatorio pero es importante que la mayor parte de nuestros clientes nos lo brinden. De esta manera ya quedó creada la mensualidad, puedes verificarlo buscando la placa en la pestaña de mensualidades y que te registre toda la información.'
         },
         {
             title: '¿Cómo renuevo una mensualidad?',
+            body: 'En la parte superior izquierda de la aplicación encontraras 3 líneas horizontales, al presionar allí se despliegan varias opciones; vamos a ir a la que dice Mensualidades'+
+            ' 1) Digitamos la placa de la cual deseamos renovar la mensualidad '+
+            ' 2) Clic en Pagar/renovar '+
+            ' 3) En el campo “pago” vamos a escribir el valor que nos entrega el cliente '+
+            ' 4)  Renovar ' +
+            'De esta manera ya quedó renovada la mensualidad, puedes verificarlo buscando la placa en la pestaña de mensualidades y que te registre la vigencia actualizada hasta el día 5 del mes siguiente'
+        },
+        {
+            title: '¿Cómo edito los datos de una mensualidad existente?',
+            body: 'En la parte superior izquierda de la aplicación encontraras 3 líneas horizontales, al presionar allí se despliegan varias opciones; vamos a ir a la que dice Mensualidades.' +
+            'Digitamos la placa de la cual deseamos editar la mensualidad, Clic en editar. En esta pantalla podremos editar datos como: correo, número de celular y agregar o quitar placas' +
+            'Debemos tener en cuenta que solo podemos editar desde la aplicación las mensualidades de persona natural. Cualquier novedad con las mensualidades corporativas deben ser reportadas al supervisor.'
+        },
+
+        {
+            title: '¿Cómo cambio un vehículo parqueado por horas a pase día?',
+            body: 'Para cambiar un vehículo parqueado ocasional a pase día, vamos a ir a la pestaña ingresos, digitamos la placa del vehículo y el número de celular, luego vamos a poner un check en el cuadro que dice PASE DÍA y le damos clic en el botón Iniciar.'
+        },
+        {
+            title: '¿Cómo edito los datos de una mensualidad existente?',
             body: '...'
         },
         {
@@ -92,7 +120,7 @@ const FAQs = (props) => {
                                             <CollapseBody>
                                                 <Text style={styles.bodyText}>
                                                     {item.body}
-                                    </Text>
+                                                </Text>
                                             </CollapseBody>
                                         </Collapse>
                                     )

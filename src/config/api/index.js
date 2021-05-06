@@ -45,7 +45,6 @@ export const FINISHPARKING = "/finishParking";
 export const READ_ADMIN = "/readAdmin";
 export const EDIT_ADMIN = "/editAdmin";
 export const READ_CORPO = "/readCorporation";
-export const READOFFICIAL="/readOfficial"
 export const REVOKE_CURRENT_SESSIONS = "/revoke_current_sessions";
 
 // STORAGE
