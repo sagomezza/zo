@@ -13,7 +13,7 @@ import { ImageBackground } from 'react-native';
 
 import CheckBox from '@react-native-community/checkbox';
 import { TextInput } from 'react-native-gesture-handler';
-import styles from '../UserInput/UserInputStyles';
+import styles from './UserInputStyles';
 import FooterIndex from '../../components/Footer/index';
 import { Table, Row, Rows } from 'react-native-table-component';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -32,10 +32,12 @@ import store from '../../config/store';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 
+import { createIdempotency } from '../../utils/idempotency'
+
 const { width, height } = Dimensions.get('window');
 
 const UserInput = (props) => {
-  const { navigation, officialProps, hq } = props;
+  const { navigation, officialProps, hq, uid } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const officialEmail = officialProps.email;
   const [loadingStart, setLoadingStart] = useState(false);
@@ -237,6 +239,7 @@ const UserInput = (props) => {
     setLoadingStart(true);
     try {
       if ((plateOne + plateTwo).length === 6) {
+        let idempotencyKey = createIdempotency(uid.uid)
         let type
         if (isCharacterALetter(plateTwo[2])) {
           type = "bike"
@@ -260,6 +263,7 @@ const UserInput = (props) => {
         //   cash: Number(totalPay),
         //   change: totalPay - prepayDayValue
         // })
+        
         const response = await instance.post(
           START_PARKING,
           {
@@ -273,9 +277,12 @@ const UserInput = (props) => {
             cash: Number(totalPay),
             change: change
           },
-          { timeout: TIMEOUT }
+          {  headers: {
+              "x-idempotence-key": idempotencyKey
+            }, timeout: TIMEOUT 
+          }
         )
-        setStartParking(response.data.data);
+        setStartParking(response?.data?.data);
         setPhones([{ label: 'Selecciona un número', value: 1 }]);
         setBlacklistExists(false);
         readHq();
@@ -908,7 +915,8 @@ const UserInput = (props) => {
 const mapStateToProps = (state) => ({
   officialProps: state.official,
   reservations: state.reservations,
-  hq: state.hq
+  hq: state.hq,
+  uid: state.uid
 });
 
 export default connect(mapStateToProps, actions)(UserInput);
