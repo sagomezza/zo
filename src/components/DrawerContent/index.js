@@ -113,7 +113,7 @@ const DrawerContent = (props) => {
                         // )}
                         icon={({ color, size }) => (
                             <MaterialIcons
-                                // name="question"
+                                name="contact-support"
                                 color="#00A9A0"
                                 size={27}
                             />
@@ -126,10 +126,15 @@ const DrawerContent = (props) => {
                     <DrawerItem
 
                         icon={({ color, size }) => (
-                            <Image
-                                style={{ width: normalize(25), height: normalize(25) }}
-                                resizeMode={"contain"}
-                                source={require('../../../assets/images/MenuLogout.png')} />
+                            <MaterialIcons
+                                name="logout"
+                                color="#00A9A0"
+                                size={27}
+                            />
+                            // <Image
+                            //     style={{ width: normalize(25), height: normalize(25) }}
+                            //     resizeMode={"contain"}
+                            //     source={require('../../../assets/images/MenuLogout.png')} />
                         )}
                         label="Cierre de turno"
 
