@@ -22,8 +22,6 @@ import Constants from 'expo-constants';
 import * as Permissions from "expo-permissions";
 import * as Sentry from 'sentry-expo';
 
-
-
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -57,8 +55,6 @@ const App = () => {
   const dateNow = new Date()
   let diffOfficialScheduleStart = moment(dateNow).diff(officialScheduleStart, 'hours', true);
 
-
-
   // const saveLastLoginAt = async (lastLoginAt) => {
   //   try {
   //     await AsyncStorage.setItem(STORAGE_KEY, lastLoginAt)
@@ -66,7 +62,6 @@ const App = () => {
 
   //   }
   // }
-  
 
   const checkInternetReachable = () => {
     // console.log("-------Connection Information------")
@@ -113,7 +108,7 @@ const App = () => {
         });
         if (response.data.response) {
           store.dispatch(setOfficial(response.data.data));
-          console.log(response)
+          // console.log(response)
           setOfficialData(response.data.data)
         }
       } catch (error) {
@@ -134,13 +129,11 @@ const App = () => {
           console.log(err)
           console.log(err?.response)
         }
-
         //console.log("err: ", error);
       }
     }
     setLoginState(false);
   }
-  const changeMe = 'heyyou'
 
   const updateUserState = useCallback((user) => {
     // console.log("[App/updateUserState] ", user);
@@ -151,13 +144,15 @@ const App = () => {
       setUser(user);
       setInitialRouteName("Home");
       readUser(user.email);
+      // user.updateProfile({deviceId: "dd96dec43fb81c97"})
+      // console.log(auth.currentUser)
     } else {
       setUser(null);
       setInitialRouteName("Login");
       setLoginState(false);
     }
 
-  }, [changeMe]);
+  }, []);
 
 
   useEffect(() => {
@@ -182,7 +177,7 @@ const App = () => {
       Notifications.removeNotificationSubscription(notificationListener);
       Notifications.removeNotificationSubscription(responseListener);
     };
-  }, [changeMe]);
+  }, []);
 
   async function registerForPushNotificationsAsync() {
     let token;

@@ -20,7 +20,6 @@ import * as SecureStore from 'expo-secure-store';
 import { connect } from 'react-redux';
 import { CommonActions } from '@react-navigation/native';
 import { MaterialIcons } from "@expo/vector-icons";
-
 // Constants dependecies
 import { START_SHIFT, READ_ADMIN, READ_CORPO, READ_OFFICIAL, REVOKE_CURRENT_SESSIONS } from "../../config/api/index";
 import instance from "../../config/axios";
@@ -33,8 +32,6 @@ import Button from '../../components/Button';
 import { ImageBackground } from 'react-native';
 import { Dimensions } from 'react-native';
 import store from '../../config/store';
-
-const { width, height } = Dimensions.get('window')
 
 const LoginIndex = (props) => {
   const { navigation, officialProps } = props;
@@ -50,12 +47,6 @@ const LoginIndex = (props) => {
       return;
     }
     setLoading(true)
-    /**
-     * TO DO:
-     * Implement validate.js here, check if email is an email, and password is alphanumeric
-     * If they aren't update  error message and DO NOT CALL THE SIGN IN FUNCTION
-     * In case everything is correct call the sign in function and then navigate to Home
-     */
     let response = await auth.signInWithEmailAndPassword(email.toString(), password.toString())
     props.setUid(response.user.uid)
     await revokeCurrentSessions(response.user.uid);
@@ -78,7 +69,6 @@ const LoginIndex = (props) => {
       // console.log('-----------------uid-LOGIN------------')
       // console.log(response.user.uid)
       // console.log('-----------------uid-LOGIN------------')
-
       // console.log(response.user.toJSON().stsTokenManager.accessToken)
       let fbToken = response.user.toJSON().stsTokenManager.accessToken
       if (Platform.OS === 'android' && Platform.Version < 23) {
@@ -88,7 +78,6 @@ const LoginIndex = (props) => {
         await SecureStore.setItemAsync('firebaseToken', fbToken)
       }
 
-
       let readOff = await instance.post(
         READ_OFFICIAL,
         {
@@ -97,8 +86,6 @@ const LoginIndex = (props) => {
         { timeout: TIMEOUT }
       )
       await startShift();
-      console.log(' READOFFICIAL-----------------------------------------')
-      console.log(readOff)
       props.setOfficial(readOff.data.data)
       setLoading(false)
       navigation.dispatch(CommonActions.reset({
@@ -120,9 +107,6 @@ const LoginIndex = (props) => {
           { timeout: TIMEOUT }
         )
         data.hqs = readOff.data.data.hqs
-        console.log('READADMIN READCORPO-----------------------------------------')
-
-        console.log(data)
         props.setOfficial(data)
         setLoading(false)
         navigation.dispatch(CommonActions.reset({
@@ -133,7 +117,7 @@ const LoginIndex = (props) => {
       } catch (err) {
         setLoading(false)
         setError("El usuario y/o la contraseña que ingresaste son incorrectos.")
-        console.log(err?.response)
+        // console.log(err?.response)
       }
     }
   }
@@ -149,7 +133,6 @@ const LoginIndex = (props) => {
     } catch (err) {
       console.log(err)
       console.log(err?.response)
-
     }
   }
 
@@ -159,7 +142,6 @@ const LoginIndex = (props) => {
         email: email,
         date: new Date(),
       });
-
     } catch (err) {
       console.log(err)
       console.log(err?.response)
