@@ -54,7 +54,26 @@ const FAQs = (props) => {
     // }
 
     const FAQs = [
-        
+        {
+            title: '¿ Cómo inicio sesión ?',
+            dir: require('../../../assets/videos/IniciarSesion.mp4')
+        },
+        {
+            title: '¿ Cómo cierro mi turno ?',
+            dir: require('../../../assets/videos/CerrarTurno.mp4')
+        },
+        {
+            title: '¿ Cómo dejo un saldo pendiente ?',
+            dir: require('../../../assets/videos/DejarSaldoPendiente.mp4')
+        },
+        {
+            title: '¿ Cómo pago un saldo pendiente ?',
+            dir: require('../../../assets/videos/PagarSaldoPendiente.mp4')
+        },
+        {
+            title: '¿ Cómo vendo un pase día ?',
+            dir: require('../../../assets/videos/VentaPaseDia.mp4')
+        },
         {
             title: '¿ Cómo creo una mensualidad nueva ?',
             dir: require('../../../assets/videos/CrearMensualidad.mp4')
