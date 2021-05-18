@@ -34,7 +34,7 @@ import "@firebase/firestore";
 import { TIMEOUT } from '../../config/constants/constants';
 import * as Network from 'expo-network';
 import store from '../../config/store';
-import { createIdempotency } from '../../utils/idempotency'
+import { createIdempotency } from '../../utils/idempotency';
 
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips, uid } = props;

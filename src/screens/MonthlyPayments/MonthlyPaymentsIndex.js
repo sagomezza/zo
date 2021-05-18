@@ -198,7 +198,6 @@ const MonthlyPayments = (props) => {
                     newObjUserEdit,
                     { timeout: TIMEOUT }
                 )
-                console.log('edituser')
                 setLoading(false);
             }
             if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10 && userId) {
@@ -333,7 +332,7 @@ const MonthlyPayments = (props) => {
                 )
                 setMensualityExists(true);
                 setMensuality(response.data)
-                console.log(response.data)
+                // console.log(response.data)
                 setLoading(false);
                 mensualityPriceMonthVehType();
             } 
@@ -387,7 +386,6 @@ const MonthlyPayments = (props) => {
     async function renewMensuality() {
         setLoading(true)
         try {
-            
             if (plateOne.length === 3 && plateTwo.length === 3) {
                 let idempotencyKey = createIdempotency(uid.uid)
                 const response = await instance.post(
@@ -396,8 +394,8 @@ const MonthlyPayments = (props) => {
                         plate: plateOne + plateTwo,
                         cash: Number(totalPay),
                         change: totalPay - monthPrice,
-                        hqId: officialHq
-
+                        hqId: officialHq,
+                        officialEmail: officialProps.email
                     },
                     {  
                         headers: {
@@ -406,25 +404,20 @@ const MonthlyPayments = (props) => {
                         timeout: TIMEOUT 
                     }
                 )
-
                 if (response.data.response === 2) {
                     setAlreadyRenewed(true);
                     setTotalPay(0);
                     setMonthPrice(0);
                     setMonthPrice(0);
-
                 } else {
                     mensualityRenewedModal();
-
                 }
                 setLoading(false)
-
             }
         } catch (err) {
             console.log(err)
-            console.log(err?.response.data.response)
-            console.log('dentroRENEW')
-            setLoading(true)
+            console.log(err?.response.data)
+            setLoading(false)
 
         }
     }
@@ -569,7 +562,7 @@ const MonthlyPayments = (props) => {
                         {mensualityExists ?
                             <View style={{
                                 height: '96%',
-                                width: '80%',
+                                width: '87%',
                                 marginTop: '2%',
                                 alignContent: 'center',
                                 alignItems: 'center',
@@ -721,7 +714,7 @@ const MonthlyPayments = (props) => {
                 <View style={styles.centeredView}>
                     <View style={{ 
                         ...styles.modalView, 
-                        height: normalize(800), width: '80%' }}>
+                        height: normalize(600), width: '80%' }}>
                         <View style={{ 
                             height: '100%',
                             width: '100%', 
@@ -1003,16 +996,15 @@ const MonthlyPayments = (props) => {
                                 height: '100%',
                                 width: '100%',
                                 justifyContent: 'space-between',
-                                padding: '3%'
+                                padding: '4%'
                             }}>
                                 <View style={{
-                                    marginTop: '8%',
                                     justifyContent: 'center',
                                     height: '20%'
                                 }}>
                                     <Text style={{
                                         ...styles.modalText,
-                                        fontSize: normalize(30),
+                                        fontSize: width * 0.05 ,
                                         color: '#00A9A0'
                                     }}>
                                         Reclame {`$${numberWithPoints(monthPrice)}`}
@@ -1030,14 +1022,14 @@ const MonthlyPayments = (props) => {
                                     }}>
                                         <Text style={{
                                             ...styles.modalText,
-                                            fontSize: normalize(20),
+                                            fontSize: width * 0.04,
                                             fontFamily: 'Montserrat-Bold'
                                         }}>Pago:  </Text>
                                         <TextInput
                                             style={{
                                                 borderWidth: 1,
                                                 borderColor: '#00A9A0',
-                                                fontSize: normalize(20),
+                                                fontSize: width * 0.04,
                                                 fontFamily: 'Montserrat-Bold',
                                                 backgroundColor: '#FFFFFF',
                                                 width: '60%',
@@ -1060,14 +1052,14 @@ const MonthlyPayments = (props) => {
                                     }}>
                                         <Text style={{
                                             ...styles.modalText,
-                                            fontSize: normalize(20),
+                                            fontSize: width * 0.04,
                                             fontFamily: 'Montserrat-Bold'
                                         }}> A devolver:  </Text>
                                         <TextInput
                                             style={{
                                                 borderWidth: 1,
                                                 borderColor: '#00A9A0',
-                                                fontSize: normalize(20),
+                                                fontSize: width * 0.04,
                                                 fontFamily: 'Montserrat-Bold',
                                                 backgroundColor: '#FFFFFF',
                                                 width: '60%',
