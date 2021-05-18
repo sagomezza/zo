@@ -76,8 +76,6 @@ const App = () => {
       // console.log('Is internet reachable?:', state.isInternetReachable);
       state.isConnected === false ? setIsConnected(false) : setIsConnected(true);
     });
-
-    
   }
 
   const checkOfficialHours = () => {
@@ -105,10 +103,6 @@ const App = () => {
     enableInExpoDevelopment: true,
     debug: false, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
   });
-
-  // useEffect(() => {
-  //   throw new Error("Zonap first Sentry error")
-  // }, [])
 
   const readUser = async (userEmail) => {
     //console.log("USER. ", userEmail);
@@ -146,6 +140,7 @@ const App = () => {
     }
     setLoginState(false);
   }
+  const changeMe = 'heyyou'
 
   const updateUserState = useCallback((user) => {
     // console.log("[App/updateUserState] ", user);
@@ -162,7 +157,8 @@ const App = () => {
       setLoginState(false);
     }
 
-  }, []);
+  }, [changeMe]);
+
 
   useEffect(() => {
     setLoginState(true);
@@ -186,7 +182,7 @@ const App = () => {
       Notifications.removeNotificationSubscription(notificationListener);
       Notifications.removeNotificationSubscription(responseListener);
     };
-  }, []);
+  }, [changeMe]);
 
   async function registerForPushNotificationsAsync() {
     let token;

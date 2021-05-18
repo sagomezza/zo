@@ -119,30 +119,21 @@ const LogoutIndex = (props) => {
 
 
   useEffect(() => {
-
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         setUidLogout(user.uid)
-        // console.log(uidLogout)
 
-        // User is signed in.
       } else {
-        // No user is signed in.
       }
     })
     const macAdd = () => {
 
       Network.getMacAddressAsync().then(state => {
-        // console.log('----------------------------------------------------------')
         setMacAddress(state)
-        // console.log(macAddress);
-
-        // console.log('----------------------------------------------------------')
 
       }
       )
     }
-
     const getShiftRecips = async () => {
       try {
         const response = await instance.post(GET_SHIFT_RECIPS, {
@@ -157,8 +148,7 @@ const LogoutIndex = (props) => {
           setShiftRecips(response.data.data.recips);
         }
       } catch (err) {
-        // console.log("err: ", err);
-        // console.log(err?.response)
+
       }
     }
     getShiftRecips();
@@ -189,8 +179,9 @@ const LogoutIndex = (props) => {
       }).catch(function (error) {
         // An error happened.
       });
-      setModalVisible(!modalVisible);
       navigation.navigate('Login');
+      setModalVisible(!modalVisible);
+
       setLoading(false);
 
     } catch (err) {

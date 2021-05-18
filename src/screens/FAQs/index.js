@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { ImageBackground } from 'react-native';
 import {
     Text,
     View,
-    FlatList
+    FlatList,
+    ScrollView
 } from 'react-native';
+import Button from '../../components/Button';
 import {
     Collapse,
     CollapseHeader,
     CollapseBody,
     AccordionList
 } from 'accordion-collapse-react-native';
+import { Video, AVPlaybackStatus } from 'expo-av';
 import Header from '../../components/Header/HeaderIndex';
 import numberWithPoints from '../../config/services/numberWithPoints';
 import styles from './styles';
@@ -20,37 +23,50 @@ import normalize from '../../config/services/normalizeFontSize';
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
+// import { storage } from "../../config/firebase/index";
 
 const FAQs = (props) => {
     const { navigation, officialProps, recips } = props;
-
     const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
+    const videoRef = React.useRef(null);
+    const [status, setStatus] = React.useState({});
+    const [videoUrl, setVideoUrl] = useState();
+
+    // const getVideo = async (source) => {
+    //     console.log('getVideo fn', source)
+    //     try {
+    //         console.log(`faqVideos/${source}`)
+
+    //         let snapshot = await storage
+    //             .ref(`faqVideos/${source}`)
+    //             .listAll();
+    //         console.log(snapshot.items)
+
+    //         snapshot.items.forEach((doc) => {
+    //             doc.getDownloadURL().then((url) => {
+    //                 console.log('URL VIDEO', url)
+    //                 setVideoUrl(url);
+    //             });
+    //         });
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    // }
 
     const FAQs = [
+        
         {
-            title: '¿Cómo inicio sesión?',
-            body: 'Para iniciar sesión debe realizarse al inicio del turno, revise por favor que la sesión anterior esté cerrada en el dispositivo y posteriormente inicie con el usuario y contraseña que le ha sido asignado.'
+            title: '¿ Cómo creo una mensualidad nueva ?',
+            dir: require('../../../assets/videos/CrearMensualidad.mp4')
         },
         {
-            title: '¿Cómo y en qué momento debo hacer el cierre de caja?',
-            body: 'ingrese en el menú lateral izquierdo a la función de cierre de caja, revise las transacciones del día y haga clic en el botón Generar cierre de caja.  RECUERDE:  NO realizar esta acción diariamente puede traer inconvenientes en el sistema contable del parqueadero.'
+            title: '¿ Cómo edito los datos de una mensualidad ?',
+            dir: require('../../../assets/videos/EditarMensualidad.mp4')
         },
         {
-            title: '¿Qué debo hacer después de realizado el cierre de caja?',
-            body: 'RECUERDE, realizar el cierre de turno, para ello , compruebe estar en su sesión, comprobar tiempo de inicio y tiempo de salida, base y dinero en efectivo entregado. Cuando verifique esta información por favor haga clic en el botón de cierre de turno.  es muy importante hacer este cierre de turno para que el funcionario posterior pueda ingresar su información.'
-        },
-        {
-            title: '¿Cómo creo una mensualidad nueva?',
-            body: 'Para crear una mensualidad por favor ingrese en el menú lateral izquierdo a la sección mensualidades, posteriormente de clic en el botón crear mensualidades, ingrese todos los datos al formulario y dele clic al botón Guardar.  RECUERDE: usted podrá crear mensualidades en  cualquier día del mes pero debe notificar al usuario que al hacerlo posterior al día 5, se realizará el cobro completo de la mensualidad y debe renovarla entre el 1 y 5 del siguiente mes.'
-        },
-        {
-            title: '¿Cómo renuevo una mensualidad?',
-            body: '...'
-        },
-        {
-            title: '¿Cómo edito los datos de una mensualidad existente?',
-            body: '...'
-        },
+            title: '¿ Cómo renuevo una mensualidad ?',
+            dir: require('../../../assets/videos/RenovarMensualidad.mp4')
+        }
     ]
 
     return (
@@ -69,35 +85,55 @@ const FAQs = (props) => {
                         <Text style={styles.textListTitle} >PREGUNTAS FRECUENTES</Text>
 
                         <View style={{
-                            height: '90%',
+                            flex: 1,
                             width: '98%',
-                            backgroundColor: '#F8F8F8',
-                            marginTop: '0%',
-                            borderRadius: 10,
+                            marginTop: '1%',
+                            borderRadius: 10
                         }}>
                             <FlatList
-                                style={{ height: "37%" }}
+                                // style={{ borderWidth: 2 }}
                                 data={FAQs}
                                 keyExtractor={(item, index) => String(index)}
                                 renderItem={({ item }) => {
                                     return (
                                         <Collapse style={styles.collapseContainer}>
-                                            <CollapseHeader>
+                                            <CollapseHeader >
                                                 <View>
                                                     <Text style={styles.title}>
                                                         {item.title}
                                                     </Text>
                                                 </View>
                                             </CollapseHeader>
-                                            <CollapseBody>
-                                                <Text style={styles.bodyText}>
-                                                    {item.body}
-                                    </Text>
+                                            <CollapseBody style={{ justifyContent: 'center' }}>
+                                                {/* {renderVideo(item.uri)} */}
+                                                <View
+                                                    style={{
+                                                        flex: 1,
+                                                        justifyContent: 'center',
+                                                       
+                                                    }}
+                                                >
+                                                    <Video
+                                                        ref={videoRef}
+                                                        style={{
+                                                            alignSelf: 'center',
+                                                            width: 350,
+                                                            height: 300,
+                                                        }}
+                                                        source={item.dir}
+                                                        useNativeControls
+                                                        resizeMode="contain"
+                                                        isLooping
+                                                        onPlaybackStatusUpdate={status => setStatus(() => status)}
+                                                    />
+
+                                                </View>
                                             </CollapseBody>
                                         </Collapse>
                                     )
                                 }}
                             />
+
 
 
 

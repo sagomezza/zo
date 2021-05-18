@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         alignItems: 'center',
         justifyContent: 'space-between'
+        
     },
     listContainer: {
         height: '80%',
@@ -28,8 +29,11 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Bold'
     },
     collapseContainer: {
-        padding: 4,
-        margin: 2
+        marginTop: 10,
+        marginBottom: 10,
+        padding: 10,
+        borderRadius: 15,
+        backgroundColor: '#F0F0F0'
     },
     title: {
         fontSize: 20,

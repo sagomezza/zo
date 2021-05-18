@@ -242,7 +242,7 @@ const MonthlyPayments = (props) => {
                         phone: '+57' + phoneNewMen,
                         name: nameNewMen,
                         lastName: lastNameNewMen,
-                        expoToken: "jelpmi",
+                        expoToken: "expoToken",
                         monthlyUser: true,
                         plate: firstPlateNewMen,
                         hqId: officialHq,

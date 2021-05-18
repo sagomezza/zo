@@ -22,7 +22,7 @@ import { CommonActions } from '@react-navigation/native';
 import { MaterialIcons } from "@expo/vector-icons";
 
 // Constants dependecies
-import { START_SHIFT, READ_ADMIN, READ_CORPO, READOFFICIAL, REVOKE_CURRENT_SESSIONS } from "../../config/api/index";
+import { START_SHIFT, READ_ADMIN, READ_CORPO, READ_OFFICIAL, REVOKE_CURRENT_SESSIONS } from "../../config/api/index";
 import instance from "../../config/axios";
 import * as actions from "../../redux/actions";
 import { TIMEOUT } from '../../config/constants/constants';
@@ -90,13 +90,15 @@ const LoginIndex = (props) => {
 
 
       let readOff = await instance.post(
-        READOFFICIAL,
-        { 
+        READ_OFFICIAL,
+        {
           email: email
         },
         { timeout: TIMEOUT }
       )
       await startShift();
+      console.log(' READOFFICIAL-----------------------------------------')
+      console.log(readOff)
       props.setOfficial(readOff.data.data)
       setLoading(false)
       navigation.dispatch(CommonActions.reset({
@@ -118,6 +120,9 @@ const LoginIndex = (props) => {
           { timeout: TIMEOUT }
         )
         data.hqs = readOff.data.data.hqs
+        console.log('READADMIN READCORPO-----------------------------------------')
+
+        console.log(data)
         props.setOfficial(data)
         setLoading(false)
         navigation.dispatch(CommonActions.reset({
@@ -137,7 +142,7 @@ const LoginIndex = (props) => {
     try {
       console.log(uid)
       const response = await instance.post(REVOKE_CURRENT_SESSIONS, {
-        uid:  uid
+        uid: uid
       });
       onLoginPress();
 
@@ -271,8 +276,8 @@ const LoginIndex = (props) => {
               </View>
               <View style={{ height: '12%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
-                    setShowInstructions(false);
-                  }}
+                  setShowInstructions(false);
+                }}
                   title="E N T E N D I D O"
                   color="#00A9A0"
                   style={
