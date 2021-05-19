@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     color: 'white',
-    fontSize: width * 0.030,
+    fontSize: width * 0.029,
     marginBottom: '20%',
     fontFamily: 'Montserrat-Bold'
   },
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
 
   },
   modalView: {
-    height: normalize(500),
+    height: normalize(400),
     width: '75%',
     padding: '5%',
     borderRadius: 50,
@@ -95,11 +95,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: 'Montserrat-Bold',
     color: 'red',
-    fontSize: normalize(23),
+    fontSize: width * 0.034,
   },
   modalButton: {
     width: '100%',
-    height: '90%',
+    height: '80%',
   },
 
 });

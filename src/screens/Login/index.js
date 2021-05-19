@@ -245,7 +245,7 @@ const LoginIndex = (props) => {
                 <MaterialIcons
                   name="warning"
                   color="#00A9A0"
-                  size={75}
+                  size={60}
                 />
                 <Text style={styles.modalTextAlert}> Hola, para iniciar: </Text>
                 <Text style={styles.modalTextAlert}> 1. Recuerda revisar la conexión a internet de tu dispositivo </Text>
@@ -256,7 +256,7 @@ const LoginIndex = (props) => {
 
 
               </View>
-              <View style={{ height: '12%', width: '100%', justifyContent: 'flex-end' }}>
+              <View style={{ height: '10%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
                   setShowInstructions(false);
                 }}

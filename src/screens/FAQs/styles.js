@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     textListTitle: {
-        fontSize: normalize(25),
+        fontSize: width * 0.034,
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F0F0F0'
     },
     title: {
-        fontSize: 20,
+        fontSize: width * 0.035,
         fontFamily: 'Montserrat-Bold'
     },
     bodyText: {
