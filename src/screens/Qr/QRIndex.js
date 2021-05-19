@@ -66,7 +66,8 @@ const BarcodeScanner = (props) => {
             dateStart: new Date(),
             phone: _data.id,
             type,
-            isParanoic: true
+            isParanoic: true,
+            officialEmail: officialProps.email
           },
           { timeout: TIMEOUT }
         )
@@ -81,11 +82,13 @@ const BarcodeScanner = (props) => {
       }
     }
     catch (err) {
-      console.log('startparkinghqcatch-----------')
+      console.log('startparkinghqcatch 1-----------')
       console.log(err);
       console.log('startparkinghqcatch-----------')
 
       console.log(err?.response?.data);
+      console.log('start-----------')
+
       if (err?.response.data.response === -2) setModal2Visible(true)
     }
     store.dispatch(actions.setQr(''))

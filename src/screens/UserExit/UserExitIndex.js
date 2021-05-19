@@ -613,12 +613,13 @@ const UserOut = (props) => {
               flexDirection: 'column',
               height: '100%',
               width: '100%',
+              justifyContent: 'space-between',
               alignContent: 'center',
               alignItems: 'center',
               padding: '3%'
             }}>
               <Text style={{
-                fontSize: normalize(51),
+                fontSize: width * 0.05,
                 textAlign: 'center',
                 color: '#00A9A0',
                 fontFamily: 'Montserrat-Bold'
@@ -639,7 +640,7 @@ const UserOut = (props) => {
                 <Text style={styles.modalText}>¡Cobro exitoso! </Text>
                 <Text style={styles.modalText}> Hora: {moment().format('LT')}</Text>
               </View>
-              <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end' }}>
+              <View style={{ height: '15%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
                   restart();
                 }}

@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontFamily: 'Montserrat-Bold',
         color: '#00A9A0',
-        fontSize: normalize(25)
+        fontSize: width * 0.04
       },
       modalButton: {
         width: '100%',
@@ -251,13 +251,13 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontFamily: 'Montserrat-Regular',
         color: '#B7B7B7',
-        fontSize: normalize(20)
+        fontSize: width * 0.034
       },
       modalTextAlert: {
         textAlign: "center",
         fontFamily: 'Montserrat-Regular',
         color: 'red',
-        fontSize: normalize(20)
+        fontSize: width * 0.034
       },
       modal2Button: {
         height: '75%'
