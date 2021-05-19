@@ -2,6 +2,7 @@ import { firebase } from '@firebase/app';
 import '@firebase/auth';
 import '@firebase/database';
 import "@firebase/firestore"
+import '@firebase/storage'
 import service_account from "./service_account_prod.json";
 
 // const database = firebase.database();
