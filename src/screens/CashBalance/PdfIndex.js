@@ -59,9 +59,25 @@ const txtGenerator = (props) => {
   const [signature, setSign] = useState(false);
   const [signatureUri, setSignatureUri] = useState("")
 
+  useEffect(() => {
+    try {
+      const todayRecips = totalRecips.filter(recip => moment(recip.dateFinished).isBetween(date1, date2))
+      // console.log(todayRecips)
+
+      setDataToday(todayRecips)
+    } catch (err) {
+      console.log(err)
+
+    }
+  }, [date1, date2]);
+
+  useEffect(() => {
+    listBoxClose();
+  }, []);
+
   const handleEmpty = () => {
     console.log('Empty');
-  }
+  };
 
   const handleSignature = signature => {
     const path = FileSystem.cacheDirectory + 'sign.png';
@@ -88,14 +104,16 @@ const txtGenerator = (props) => {
       color: #FFF;
     }`;
 
+  const formatHours = (hours) => {
+    if (typeof hours === "number" || typeof hours === "double" || typeof hours === "long" || typeof hours === "float") {
+      return Math.round(hours)
+    } else return hours
+  };
+  
   const gotBoxTotal = () => {
     setLoadingBoxGenerator(false);
     setModalVisible(true);
-  }
-
-  useEffect(() => {
-    listBoxClose();
-  }, []);
+  };
 
   const getBoxTotal = async () => {
     setLoadingBoxGenerator(true);
@@ -203,24 +221,7 @@ const txtGenerator = (props) => {
     }
   };
 
-  useEffect(() => {
-    try {
-      const todayRecips = totalRecips.filter(recip => moment(recip.dateFinished).isBetween(date1, date2))
-      // console.log(todayRecips)
 
-      setDataToday(todayRecips)
-    } catch (err) {
-      console.log(err)
-
-    }
-  }, [date1, date2]);
-
-
-  const formatHours = (hours) => {
-    if (typeof hours === "number" || typeof hours === "double" || typeof hours === "long" || typeof hours === "float") {
-      return Math.round(hours)
-    } else return hours
-  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -266,7 +267,7 @@ const txtGenerator = (props) => {
                         marginTop: '0%'
                       }} >
                         <View style={{ marginBottom: '2%' }} >
-                          <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0] }</Text>
+                          <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
                           <Text style={styles.textPago}>Pago por ${formatHours(item.hours)} horas</Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
