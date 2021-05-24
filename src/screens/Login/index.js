@@ -42,14 +42,20 @@ const LoginIndex = (props) => {
   const [showInstructions, setShowInstructions] = useState(true);
 
   const firstLogin = async () => {
-    if (email === "" || password === "") {
-      setError("Por favor ingresa todos los datos: correo y contraseña")
-      return;
+    try {
+      if (email === "" || password === "") {
+        setError("Por favor ingresa todos los datos: correo y contraseña")
+        return;
+      }
+      setLoading(true)
+      let response = await auth.signInWithEmailAndPassword(email.toString(), password.toString())
+      props.setUid(response.user.uid)
+      await revokeCurrentSessions(response.user.uid);
+    } catch (err) {
+      setLoading(false)
+      setError("El usuario y/o la contraseña que ingresaste son incorrectos.")
     }
-    setLoading(true)
-    let response = await auth.signInWithEmailAndPassword(email.toString(), password.toString())
-    props.setUid(response.user.uid)
-    await revokeCurrentSessions(response.user.uid);
+
   }
 
   const onLoginPress = async () => {
