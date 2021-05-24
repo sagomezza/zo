@@ -89,7 +89,7 @@ const UserInput = (props) => {
   const mensualityUserName = mensualityInfo.userName !== undefined ? mensualityInfo.userName : ' ';
   const mensualityUserPhone = mensualityInfo.userPhone !== undefined ? mensualityInfo.userPhone : ' ';
   const mensualityCapacity = mensualityInfo.capacity !== undefined ? mensualityInfo.capacity : ' ';
-  const mensualityParkedPlates = mensualityInfo.parkedPlates !== undefined ? mensualityInfo.parkedPlates : ' ';
+  const mensualityParkedPlates = mensualityInfo.parkedPlatesList !== undefined ? mensualityInfo.parkedPlatesList.length : ' ';
 
 
   const priceVehicleType = () => {
@@ -166,9 +166,10 @@ const UserInput = (props) => {
             { timeout: TIMEOUT }
           )
           setMensuality(response.data)
-          if (response.data.data[0].capacity === response.data.data[0].parkedPlates) {
+          if (response.data.data[0].capacity === response.data.data[0].parkedPlatesList.length) {
             setMaxCapMensuality(true);
           }
+
 
         }
       } catch (err) {
