@@ -775,6 +775,7 @@ const MonthlyPayments = (props) => {
                                         }}
                                         keyboardType='default'
                                         placeholder=''
+                                        autoCapitalize={"none"}
                                         textAlign='center'
                                         value={userEmail !== undefined + '' ? userEmail : ''}
                                         onChangeText={text => setUserEmail(text)}
@@ -1407,6 +1408,7 @@ const MonthlyPayments = (props) => {
                                             style={styles.createMensualityRowInput}
                                             keyboardType='default'
                                             placeholder=''
+                                            autoCapitalize={"none"}
                                             textAlign='center'
                                             value={emailNewMen}
                                             onChangeText={text => setEmailNewMen(text)}
