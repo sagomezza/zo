@@ -12,6 +12,7 @@ import {
   Dimensions
 } from 'react-native';
 import instance from "../../config/axios";
+import firebase from "../../config/firebase";
 import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT, GET_BOX_TOTAL } from "../../config/api";
 import { connect } from 'react-redux';
 import { TIMEOUT } from '../../config/constants/constants';
@@ -109,7 +110,7 @@ const txtGenerator = (props) => {
       return Math.round(hours)
     } else return hours
   };
-  
+
   const gotBoxTotal = () => {
     setLoadingBoxGenerator(false);
     setModalVisible(true);
@@ -194,12 +195,28 @@ const txtGenerator = (props) => {
     }
   };
 
-  const saveSignReport = async () => {
-    setLoadingBoxGenerator(true);
+  const uploadImageToFirebase = async () => {
+      console.log(boxId)
     try {
-      const response = await instance.post(SAVE_SIGN_REPORT, {
+      setLoadingBoxGenerator(true);
+      const sourceURI = { uri: signatureUri }
+      const id = (Date.now().toString(36).substr(2, 5)).toUpperCase();
+      const fileName = "Signature_" + id + ".jpeg";
+      const response = await fetch(sourceURI.uri);
+      const blob = await response.blob();
+      const result = await firebase
+        .storage()
+        .ref()
+        .child("/" + fileName)
+        .put(blob);
+
+      const downloadUri = await result.ref.getDownloadURL();
+      console.log(downloadUri)
+      console.log(boxId)
+
+      const response2 = await instance.post(SAVE_SIGN_REPORT, {
         id: boxId,
-        sign: signatureUri
+        sign: downloadUri
       },
         { timeout: TIMEOUT }
       );
@@ -211,15 +228,16 @@ const txtGenerator = (props) => {
       setSign(false);
       setLoadingBoxGenerator(false);
 
-
     } catch (err) {
       setLoadingBoxGenerator(false);
-
-      console.log(err)
-      console.log('------------createbox-ERR--------')
+      console.log("in error")
+      console.log(err);
       console.log(err?.response)
+      Sentry.Native.captureEvent(new Error(err))
+      if (err.response) Sentry.Native.captureEvent(new Error(err.response))
+      setLoading(false)
     }
-  };
+  }
 
 
 
@@ -560,10 +578,7 @@ const txtGenerator = (props) => {
                       <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginTop: '5%' }}>
 
                         <Button
-                          onPress={() => {
-                            saveSignReport();
-
-                          }}
+                          onPress={uploadImageToFirebase}
                           title="G U A R D A R"
                           color="#00A9A0"
                           style={
