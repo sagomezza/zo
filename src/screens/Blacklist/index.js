@@ -71,7 +71,7 @@ const Blacklist = (props) => {
     useEffect(() => {
         async function findUserByPlate() {
             try {
-                if (plateOne.length === 3 && plateTwo.length >= 2) {
+                if (plateOne.length === 3 && plateTwo.length === 3) {
                     const response = await instance.post(
                         FIND_USER_BY_PLATE,
                         {
@@ -115,7 +115,7 @@ const Blacklist = (props) => {
     async function payDebts() {
         setLoading(true);
         try {
-            if (plateOne.length === 3 && plateTwo.length >= 2) {
+            if (plateOne.length === 3 && plateTwo.length === 3) {
                 const response = await instance.post(
                     PAY_DEBTS,
                     {

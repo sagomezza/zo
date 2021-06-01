@@ -123,7 +123,7 @@ const UserInput = (props) => {
   useEffect(() => {
     async function findUserByPlate() {
       try {
-        if (plateOne.length === 3 && plateTwo.length >= 2) {
+        if (plateOne.length === 3 && plateTwo.length === 3) {
           const response = await instance.post(
             FIND_USER_BY_PLATE,
             {
@@ -161,7 +161,7 @@ const UserInput = (props) => {
 
     async function findMensualityPlate() {
       try {
-        if (plateOne.length === 3 && plateTwo.length >= 2) {
+        if (plateOne.length === 3 && plateTwo.length === 3) {
           const response = await instance.post(
             FIND_MENSUALITY_PLATE,
             {
@@ -186,7 +186,7 @@ const UserInput = (props) => {
 
     async function getRecipsByPlate() {
       try {
-        if (plateOne.length === 3 && plateTwo.length >= 2) {
+        if (plateOne.length === 3 && plateTwo.length === 3) {
           const response = await instance.post(
             GET_RECIPS_BY_PLATE,
             {
@@ -221,7 +221,7 @@ const UserInput = (props) => {
   useEffect(() => {
     async function createUser() {
       try {
-        if ((plateOne + plateTwo).length >= 5 && newPhone.length === 10) {
+        if ((plateOne + plateTwo).length === 6 && newPhone.length === 10) {
           const response = await instance.post(
             CREATE_USER,
             {
@@ -244,7 +244,7 @@ const UserInput = (props) => {
   async function startPark() {
     setLoadingStart(true);
     try {
-      if ((plateOne + plateTwo).length >= 5) {
+      if ((plateOne + plateTwo).length === 6) {
         let idempotencyKey = createIdempotency(uid.uid)
         let type
         if (isCharacterALetter(plateTwo[2]) || plateTwo.length === 2) {
@@ -436,7 +436,7 @@ const UserInput = (props) => {
                   onChangeText={text => {
                     setNewPhone(text);
                     if (text.length === 10) {
-                      if (plateOne.length === 3 && plateTwo.length >= 2) Keyboard.dismiss()
+                      if (plateOne.length === 3 && plateTwo.length === 3) Keyboard.dismiss()
                     }
                   }}
                   value={newPhone}
