@@ -35,6 +35,7 @@ import { TIMEOUT } from '../../config/constants/constants';
 import * as Network from 'expo-network';
 import store from '../../config/store';
 import { createIdempotency } from '../../utils/idempotency';
+import * as Sentry from "@sentry/browser";
 
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips, uid } = props;
@@ -117,7 +118,6 @@ const LogoutIndex = (props) => {
   const [uidLogout, setUidLogout] = useState('');
   const uidDefini = uid.uid !== '' ? uid.uid : uidLogout;
 
-
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
@@ -157,8 +157,20 @@ const LogoutIndex = (props) => {
 
   const markEndOfShift = async () => {
     setLoading(true);
+    console.log({
+      email: officialProps.email,
+      id: officialProps.id,
+      date: new Date(),
+      total: Number(total),
+      input: Number(inputValue),
+      base: Number(inputBaseValue),
+      hqId: officialHq,
+      macAddress: macAddress,
+      uid: uidDefini
+    })
     try {
       let idempotencyKey = createIdempotency(uid.uid)
+
       const response = await instance.post(MARK_END_OF_SHIFT, {
         email: officialProps.email,
         id: officialProps.id,
@@ -169,29 +181,42 @@ const LogoutIndex = (props) => {
         hqId: officialHq,
         macAddress: macAddress,
         uid: uidDefini
-      }, {  headers: {
-        "x-idempotence-key": idempotencyKey
-      }, timeout: TIMEOUT 
-    });
-
-      firebase.auth().signOut().then(function () {
-        // Sign-out successful.
-      }).catch(function (error) {
-        // An error happened.
+      }, {
+        headers: {
+          "x-idempotence-key": idempotencyKey
+        }, timeout: TIMEOUT
       });
-      navigation.navigate('Login');
-      setModalVisible(!modalVisible);
-
-      setLoading(false);
-
+      logoutFromFirebase();
     } catch (err) {
-      console.log(err)
+      // console.log(err)
       console.log(err?.response)
       setLoading(false);
-      setModal3Visible(false);
+      setModalVisible(!modalVisible);
+      setModal3Visible(true);
+      Sentry.captureException('Error in end of shift', err?.response)
+      // asociar a un evento de sentry, si pasa error intentar de nuevo descartar
 
     }
   }
+
+  const logoutFromFirebase = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(function () {
+        // Sign-out successful.
+        navigation.navigate('Login');
+        setModalVisible(!modalVisible);
+        setLoading(false);
+      }).catch(function (error) {
+        // An error happened.
+        Sentry.captureException('Error in logout', error)
+        setLoading(false);
+        setModalVisible(!modalVisible);
+        setModal3Visible(true);
+      });
+  }
+
 
   return (
     <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>

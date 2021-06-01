@@ -7,7 +7,8 @@ import {
     Modal,
     ImageBackground,
     Keyboard,
-    Dimensions
+    Dimensions,
+    FlatList
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { TextInput } from 'react-native-gesture-handler';
@@ -42,6 +43,7 @@ const MonthlyPayments = (props) => {
     const [loading, setLoading] = useState(false);
     const [mensualityExists, setMensualityExists] = useState();
     const [mensuality, setMensuality] = useState({});
+    const [newMensualityPlates, setNewMensualityPlates] = useState([]);
     const mensualityInfo = mensuality.data !== undefined ? mensuality.data[0] : "";
     const mensualityValue = mensualityInfo.value !== undefined ? mensualityInfo.value : 0;
     const mensualityUserName = mensualityInfo.userName !== undefined ? mensualityInfo.userName : ' ';
@@ -200,7 +202,7 @@ const MonthlyPayments = (props) => {
                 )
                 setLoading(false);
             }
-            if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10 && userId) {
+            if (firstPlateNewMen.length >= 5 && phoneNewMen.length === 10 && userId) {
                 const response = await instance.post(
                     EDIT_USER,
                     {
@@ -226,7 +228,7 @@ const MonthlyPayments = (props) => {
     async function createUser() {
         setLoading(true);
         try {
-            if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
+            if (firstPlateNewMen.length >= 5 && phoneNewMen.length === 10) {
                 let type
                 if (isCharacterALetter(firstPlateNewMen[5])) type = "bike"
                 else type = "car"
@@ -277,7 +279,7 @@ const MonthlyPayments = (props) => {
     async function createMensuality(idUser) {
         setLoading(true);
         try {
-            if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
+            if (firstPlateNewMen.length >= 5 && phoneNewMen.length === 10) {
                 let idempotencyKey = createIdempotency(uid.uid)
                 let type
                 if (isCharacterALetter(firstPlateNewMen[5])) type = "bike"
@@ -321,7 +323,7 @@ const MonthlyPayments = (props) => {
 
     async function findMensualityPlate() {
         try {
-            if (plateOne.length === 3 && plateTwo.length === 3) {
+            if (plateOne.length === 3 && plateTwo.length >= 2) {
                 const response = await instance.post(
                     FIND_MENSUALITY_PLATE,
                     {
@@ -332,11 +334,24 @@ const MonthlyPayments = (props) => {
                 )
                 setMensualityExists(true);
                 setMensuality(response.data)
-                // console.log(response.data)
+                // setMensualityPlates(response.data.data[0].plates)
+                if (response.data.data[0].plates !== undefined ){
+                    let menPlates = response.data.data[0].plates
+                    let plates = []
+                    menPlates.forEach(function(value){
+                    plates.push({plate: value})
+                    });
+                    setNewMensualityPlates(plates)
+
+                }
+
+                // console.log(response.data.data[0].plates)
                 setLoading(false);
                 mensualityPriceMonthVehType();
+
+                
             } 
-            if (firstPlateNewMen.length === 6 ) {
+            if (firstPlateNewMen.length >= 5 ) {
                 const response = await instance.post(
                     FIND_MENSUALITY_PLATE,
                     {
@@ -352,7 +367,7 @@ const MonthlyPayments = (props) => {
             console.log(err)
             console.log(err?.response)
             setLoading(false);
-            if (firstPlateNewMen.length === 6 ) {
+            if (firstPlateNewMen.length >= 5 ) {
                 priceMonthVehicleType();
             }
             setMensualityExists(false);
@@ -363,7 +378,7 @@ const MonthlyPayments = (props) => {
         setLoading(true);
 
         try {
-            if (plateOne.length === 3 && plateTwo.length === 3) {
+            if (plateOne.length === 3 && plateTwo.length >= 2) {
                 const response = await instance.post(
                     EDIT_MENSUALITY,
                     {
@@ -386,7 +401,7 @@ const MonthlyPayments = (props) => {
     async function renewMensuality() {
         setLoading(true)
         try {
-            if (plateOne.length === 3 && plateTwo.length === 3) {
+            if (plateOne.length === 3 && plateTwo.length >= 2) {
                 let idempotencyKey = createIdempotency(uid.uid)
                 const response = await instance.post(
                     RENEW_MENSUALITY,
@@ -561,12 +576,12 @@ const MonthlyPayments = (props) => {
                     <View style={styles.listContainer}>
                         {mensualityExists ?
                             <View style={{
-                                height: '96%',
+                                height: '97%',
                                 width: '87%',
                                 marginTop: '2%',
                                 alignContent: 'center',
                                 alignItems: 'center',
-                                justifyContent: 'space-between'
+                                justifyContent: 'space-between',
                             }}>
                                 <View style={styles.mensualityInfoContainer}>
                                     <View style={styles.mensualityInfo}>
@@ -616,25 +631,34 @@ const MonthlyPayments = (props) => {
                                     
                                     <View style={styles.mensualityInfo}>
                                         <Text style={styles.infoTextTitle}>
-                                            Placas asociadas:
+                                            Placas asociadas: 
                                         </Text>
-                                        <View style={{ flexDirection: 'column', width: '40%', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                                        <View style={{ 
+                                            flexDirection: 'column', 
+                                            width: '60%',
+                                            justifyContent: 'flex-end', 
+                                            alignItems: 'flex-end',
+                                         }}
+                                            >
+                                                <FlatList 
+                                                style={{height: '30%'}}
+                                                data={newMensualityPlates}
+                                                keExtractor={(item,index) => String(index)}
+                                                renderItem={({item}) => {
+                                                    return(
+                                                        <View style={{ flexDirection: "row", marginBottom: '2%', marginLeft: '10%', marginRight: '10%' }} >
+                                                            <Text style={styles.infoText}>
+                                                               {item.plate}
+                                                            </Text>
+                                                        </View>
 
-                                            <Text style={styles.infoText}>
-                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[0] !== undefined ? mensualityInfo.plates[0] + ' ' : ' '}
-                                            </Text>
-                                            <Text style={styles.infoText}>
-                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[1] !== undefined ? mensualityInfo.plates[1] + ' ' : ' '}
-                                            </Text>
-                                            <Text style={styles.infoText}>
-                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[2] !== undefined ? mensualityInfo.plates[2] + ' ' : ' '}
-                                            </Text>
-                                            <Text style={styles.infoText}>
-                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[3] !== undefined ? mensualityInfo.plates[3] + ' ' : ' '}
-                                            </Text>
-                                            <Text style={styles.infoText}>
-                                                {mensualityInfo.plates !== undefined && mensualityInfo.plates[4] !== undefined ? mensualityInfo.plates[4] + ' ' : ' '}
-                                            </Text>
+                                                    )
+                                                }}
+                                                
+                                                />
+                                                
+
+                                            
                                         </View>
                                     </View>
                                 </View>
@@ -697,9 +721,9 @@ const MonthlyPayments = (props) => {
 
                     </View>
                     <View style={{
-                        height: '20%',
+                        height: '18%',
                         width: '100%',
-                        justifyContent: 'flex-end',
+                        justifyContent: 'flex-end'
                     }}>
                         <FooterIndex navigation={navigation} />
                     </View>
@@ -997,7 +1021,7 @@ const MonthlyPayments = (props) => {
                                 height: '100%',
                                 width: '100%',
                                 justifyContent: 'space-between',
-                                padding: '4%'
+                                padding: '2%'
                             }}>
                                 <View style={{
                                     justifyContent: 'center',
@@ -1023,7 +1047,7 @@ const MonthlyPayments = (props) => {
                                     }}>
                                         <Text style={{
                                             ...styles.modalText,
-                                            fontSize: width * 0.04,
+                                            fontSize: width * 0.033,
                                             fontFamily: 'Montserrat-Bold'
                                         }}>Pago:  </Text>
                                         <TextInput
@@ -1053,7 +1077,7 @@ const MonthlyPayments = (props) => {
                                     }}>
                                         <Text style={{
                                             ...styles.modalText,
-                                            fontSize: width * 0.04,
+                                            fontSize: width * 0.033,
                                             fontFamily: 'Montserrat-Bold'
                                         }}> A devolver:  </Text>
                                         <TextInput
@@ -1079,7 +1103,7 @@ const MonthlyPayments = (props) => {
                                 <View style={{
                                     height: '25%',
                                     justifyContent: 'space-between',
-                                    flexDirection: 'column'
+                                    flexDirection: 'column',
                                 }}>
                                     <View style={{
                                         height: '50%',

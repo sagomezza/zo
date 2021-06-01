@@ -55,13 +55,9 @@ const App = () => {
   const dateNow = new Date()
   let diffOfficialScheduleStart = moment(dateNow).diff(officialScheduleStart, 'hours', true);
 
-  // const saveLastLoginAt = async (lastLoginAt) => {
-  //   try {
-  //     await AsyncStorage.setItem(STORAGE_KEY, lastLoginAt)
-  //   } catch {
-
-  //   }
-  // }
+  // useEffect(() => {
+  //   throw new Error("Zona P first Sentry error")
+  // }, [])
 
   const checkInternetReachable = () => {
     // console.log("-------Connection Information------")
@@ -80,7 +76,7 @@ const App = () => {
       Number(diffOfficialScheduleStart) === 7.25 ||
       Number(diffOfficialScheduleStart) === 7.5 ||
       Number(diffOfficialScheduleStart) === 7.75 ||
-      Number(diffOfficialScheduleStart) === 8 
+      Number(diffOfficialScheduleStart) === 8
     ) {
       setLogoutSnackbar(true);
 

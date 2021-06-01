@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     listContainer: {
-        height: '75%',
+        height: '76%',
         width: '80%',
         backgroundColor: '#FFFFFF',
         marginTop: '5%',
@@ -112,12 +112,12 @@ const styles = StyleSheet.create({
     },
     infoTextTitle: {
         fontFamily: 'Montserrat-Bold',
-        fontSize: width * 0.030,
+        fontSize: width * 0.027,
         color: '#00A9A0'
     },
     infoText: {
         fontFamily: 'Montserrat-Regular',
-        fontSize: width * 0.030,
+        fontSize: width * 0.025,
         color: '#00A9A0'
     },
     centeredView: {
@@ -182,20 +182,18 @@ const styles = StyleSheet.create({
     },
     modalButton: {
         width: '100%',
-        height: '70%',
+        height: '80%',
     },
     modalButtonDisabled: {
         width: '100%',
-        height: '70%',
+        height: '80%',
         opacity: 0.5
     },
     mensualityInfo: {
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
-        borderBottomWidth: 1,
-        borderColor: "#ffffff",
-        marginBottom: '4%'
+        marginBottom: '4%',
     },
     mensualityInfoContainer: {
         height: '78%',
@@ -205,7 +203,7 @@ const styles = StyleSheet.create({
         alignItems: 'center' 
     },
     mensualityInfoButtonsContainer: {
-        height: '18%',
+        height: '16%',
         width: '80%',
         alignContent: 'center',
         alignItems: 'center',

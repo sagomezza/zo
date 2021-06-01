@@ -56,7 +56,7 @@ const BarcodeScanner = (props) => {
         navigation.navigate("UserOut")
       } else {
         let type
-        if (isCharacterALetter(qr.plate[5])) type = "bike"
+        if (isCharacterALetter(qr.plate[5]) || plate.length === 5 ) type = "bike"
         else type = "car"
         const response = await instance.post(
           START_PARKING,

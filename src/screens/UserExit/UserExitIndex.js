@@ -100,10 +100,11 @@ const UserOut = (props) => {
             { timeout: TIMEOUT }
           )
           const splitPlate = (response.data.data.plate)
+          const splitPlateFive = splitPlate[5] !== undefined ? splitPlate[5] : '';
           setPlateOne(splitPlate[0] + splitPlate[1] + splitPlate[2])
-          setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlate[5])
+          setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlateFive)
           setPlateOneCall(splitPlate[0] + splitPlate[1] + splitPlate[2])
-          setPlateTwoCall(splitPlate[3] + splitPlate[4] + splitPlate[5])
+          setPlateTwoCall(splitPlate[3] + splitPlate[4] + splitPlateFive)
           checkParkingPlate();
           setIsParanoicUser(true)
         }

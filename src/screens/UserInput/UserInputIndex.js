@@ -41,6 +41,12 @@ const UserInput = (props) => {
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const officialEmail = officialProps.email;
   const [loadingStart, setLoadingStart] = useState(false);
+  // plates
+  const [plateOne, setPlateOne] = useState('');
+  const [plateTwo, setPlateTwo] = useState('');
+  const refPlateOne = useRef(null);
+  const refPlateTwo = useRef(null);
+
   const [prepayDay, setPrepayDay] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
@@ -64,14 +70,12 @@ const UserInput = (props) => {
 
   const [showPhoneInput, setShowPhoneInput] = useState(false)
   const [codeError, setErrorText] = useState(false);
-  const [plateOne, setPlateOne] = useState('');
-  const [plateTwo, setPlateTwo] = useState('');
+
   const [phone, setPhone] = useState(1);
   const [phones, setPhones] = useState([{ label: 'Selecciona un número', value: 1 }]);
   const [showDropdown, setShowDropdown] = useState(false)
   const [newPhone, setNewPhone] = useState('');
-  const refPlateOne = useRef(null);
-  const refPlateTwo = useRef(null);
+
   const refPhone = useRef(null);
 
   const [tableHead, setTableHead] = useState(['Vehículos', 'Fecha', 'Últimos pagos']);
@@ -93,7 +97,7 @@ const UserInput = (props) => {
 
 
   const priceVehicleType = () => {
-    if (isCharacterALetter(plateTwo[2])) {
+    if (isCharacterALetter(plateTwo[2]) || plateTwo.length === 2 ) {
       setPrepayDayValue(hq.dailyBikePrice)
     } else {
       setPrepayDayValue(hq.dailyCarPrice)
@@ -119,7 +123,7 @@ const UserInput = (props) => {
   useEffect(() => {
     async function findUserByPlate() {
       try {
-        if (plateOne.length === 3 && plateTwo.length === 3) {
+        if (plateOne.length === 3 && plateTwo.length >= 2) {
           const response = await instance.post(
             FIND_USER_BY_PLATE,
             {
@@ -128,6 +132,7 @@ const UserInput = (props) => {
             },
             { timeout: TIMEOUT }
           )
+          console.log('searching 1')
           setFindUserByPlateInfo(response.data);
           setExistingUser(true)
           setPhone(1);
@@ -156,7 +161,7 @@ const UserInput = (props) => {
 
     async function findMensualityPlate() {
       try {
-        if (plateOne.length === 3 && plateTwo.length === 3) {
+        if (plateOne.length === 3 && plateTwo.length >= 2) {
           const response = await instance.post(
             FIND_MENSUALITY_PLATE,
             {
@@ -181,7 +186,7 @@ const UserInput = (props) => {
 
     async function getRecipsByPlate() {
       try {
-        if (plateOne.length === 3 && plateTwo.length === 3) {
+        if (plateOne.length === 3 && plateTwo.length >= 2) {
           const response = await instance.post(
             GET_RECIPS_BY_PLATE,
             {
@@ -216,7 +221,7 @@ const UserInput = (props) => {
   useEffect(() => {
     async function createUser() {
       try {
-        if ((plateOne + plateTwo).length === 6 && newPhone.length === 10) {
+        if ((plateOne + plateTwo).length >= 5 && newPhone.length === 10) {
           const response = await instance.post(
             CREATE_USER,
             {
@@ -239,10 +244,10 @@ const UserInput = (props) => {
   async function startPark() {
     setLoadingStart(true);
     try {
-      if ((plateOne + plateTwo).length === 6) {
+      if ((plateOne + plateTwo).length >= 5) {
         let idempotencyKey = createIdempotency(uid.uid)
         let type
-        if (isCharacterALetter(plateTwo[2])) {
+        if (isCharacterALetter(plateTwo[2]) || plateTwo.length === 2) {
           type = "bike"
         } else {
           type = "car"
@@ -264,7 +269,7 @@ const UserInput = (props) => {
         //   cash: Number(totalPay),
         //   change: totalPay - prepayDayValue
         // })
-        
+
         const response = await instance.post(
           START_PARKING,
           {
@@ -278,9 +283,10 @@ const UserInput = (props) => {
             cash: Number(totalPay),
             change: change
           },
-          {  headers: {
+          {
+            headers: {
               "x-idempotence-key": idempotencyKey
-            }, timeout: TIMEOUT 
+            }, timeout: TIMEOUT
           }
         )
         setStartParking(response?.data?.data);
@@ -351,8 +357,7 @@ const UserInput = (props) => {
                   setPlateOne(text.trim());
                   if (refPlateTwo && text.length === 3) {
                     refPlateTwo.current.focus();
-                  }
-                  ;
+                  };
                 }}
                 value={plateOne}
                 onFocus={() => { clearPlateOne(); clearPlateTwo(); }}
@@ -431,7 +436,7 @@ const UserInput = (props) => {
                   onChangeText={text => {
                     setNewPhone(text);
                     if (text.length === 10) {
-                      if (plateOne.length === 3 && plateTwo.length === 3) Keyboard.dismiss()
+                      if (plateOne.length === 3 && plateTwo.length >= 2) Keyboard.dismiss()
                     }
                   }}
                   value={newPhone}
@@ -466,7 +471,7 @@ const UserInput = (props) => {
                 {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
                 {!loadingStart &&
                   <TouchableOpacity
-                    style={[styles.buttonT, (plateOne + plateTwo).length < 6 ? styles.buttonTDisabled : styles.buttonT]}
+                    style={[styles.buttonT, (plateOne + plateTwo).length < 5 ? styles.buttonTDisabled : styles.buttonT]}
                     onPress={() => {
                       setLoadingStart(true);
                       setPlateOne("");
@@ -478,7 +483,7 @@ const UserInput = (props) => {
                       navigation.navigate('QRscanner');
 
                     }}
-                    disabled={(plateOne + plateTwo).length < 6}
+                    disabled={(plateOne + plateTwo).length < 5}
                   >
                     <Image style={styles.qrImage} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
                   </TouchableOpacity>
@@ -850,59 +855,59 @@ const UserInput = (props) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-              <View style={{ margin: '4%', justifyContent: 'space-between', height: ' 65%'}}>
-              <Text style={{...styles.modalTextAlert, fontFamily: 'Montserrat-Bold'}}> Alerta </Text>
+              <View style={{ margin: '4%', justifyContent: 'space-between', height: ' 65%' }}>
+                <Text style={{ ...styles.modalTextAlert, fontFamily: 'Montserrat-Bold' }}> Alerta </Text>
 
-                <Text style={{...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#8F8F8F'}}> Las celdas disponibles para esta mensualidad ya están ocupadas. Al hacer el ingreso del vehículo se hará el cobro por horas. </Text>
-                <Text style={{...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#8F8F8F'}}> ¿ Desea continuar ? </Text>
+                <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#8F8F8F' }}> Las celdas disponibles para esta mensualidad ya están ocupadas. Al hacer el ingreso del vehículo se hará el cobro por horas. </Text>
+                <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#8F8F8F' }}> ¿ Desea continuar ? </Text>
 
               </View>
               <View style={{ height: '25%', width: '100%', justifyContent: 'flex-start', flexDirection: 'column' }}>
-                  <Button onPress={() => {
-                    setMaxCapMensuality(false);
+                <Button onPress={() => {
+                  setMaxCapMensuality(false);
 
-                  }}
-                    title="S I"
-                    color="#00A9A0"
-                    style={
-                      {
-                        width: '100%',
-                        height: '60%'
-                      }
+                }}
+                  title="S I"
+                  color="#00A9A0"
+                  style={
+                    {
+                      width: '100%',
+                      height: '60%'
                     }
-                    textStyle={{
-                      color: "#FFFFFF",
-                      textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
-                    }} />
-                  
-                  <Button onPress={() => {
-                    setMaxCapMensuality(false);
-                    setPlateOne("");
-                    setPlateTwo("");
-                    setNewPhone("");
-                    setPrepayDay(false);
-                    setLoadingStart(false);
-                    setPhone(1);
-                    setShowDropdown(false);
-                    setShowPhoneInput(false);
-                    setPhones([{ label: 'Selecciona un número', value: 1 }]);
-                    setHistoryExists(false)
-                    setMensuality({});
-                  }}
-                    title="N O"
-                    color="gray"
-                    style={
-                      {
-                        width: '100%',
-                        height: '60%'
-                      }
+                  }
+                  textStyle={{
+                    color: "#FFFFFF",
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Bold'
+                  }} />
+
+                <Button onPress={() => {
+                  setMaxCapMensuality(false);
+                  setPlateOne("");
+                  setPlateTwo("");
+                  setNewPhone("");
+                  setPrepayDay(false);
+                  setLoadingStart(false);
+                  setPhone(1);
+                  setShowDropdown(false);
+                  setShowPhoneInput(false);
+                  setPhones([{ label: 'Selecciona un número', value: 1 }]);
+                  setHistoryExists(false)
+                  setMensuality({});
+                }}
+                  title="N O"
+                  color="gray"
+                  style={
+                    {
+                      width: '100%',
+                      height: '60%'
                     }
-                    textStyle={{
-                      color: "#FFFFFF",
-                      textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
-                    }} />
+                  }
+                  textStyle={{
+                    color: "#FFFFFF",
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Bold'
+                  }} />
               </View>
             </View>
           </View>

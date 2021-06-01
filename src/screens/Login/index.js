@@ -257,10 +257,6 @@ const LoginIndex = (props) => {
                 <Text style={styles.modalTextAlert}> 1. Recuerda revisar la conexión a internet de tu dispositivo </Text>
                 <Text style={styles.modalTextAlert}> 2. Inicia sesión con tu usuario y contraseña. </Text>
                 <Text style={styles.modalTextAlert}> 3. Luego del cierre del día, recuerda cerrar tu sesión </Text>
-
-
-
-
               </View>
               <View style={{ height: '10%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
@@ -268,9 +264,7 @@ const LoginIndex = (props) => {
                 }}
                   title="E N T E N D I D O"
                   color="#00A9A0"
-                  style={
-                    styles.modalButton
-                  }
+                  style={styles.modalButton}
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
