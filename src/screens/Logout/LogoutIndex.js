@@ -36,6 +36,8 @@ import * as Network from 'expo-network';
 import store from '../../config/store';
 import { createIdempotency } from '../../utils/idempotency';
 import * as Sentry from "@sentry/browser";
+import * as Device from "expo-device";
+
 
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips, uid } = props;
@@ -166,7 +168,9 @@ const LogoutIndex = (props) => {
       base: Number(inputBaseValue),
       hqId: officialHq,
       macAddress: macAddress,
-      uid: uidDefini
+      uid: uidDefini,
+      deviceId: `${Device.brand}-${Device.modelName}-${Device.deviceName}-${Device.deviceYearClass}`
+
     })
     try {
       let idempotencyKey = createIdempotency(uid.uid)
@@ -180,7 +184,8 @@ const LogoutIndex = (props) => {
         base: Number(inputBaseValue),
         hqId: officialHq,
         macAddress: macAddress,
-        uid: uidDefini
+        uid: uidDefini,
+        deviceId: `${Device.brand}-${Device.modelName}-${Device.deviceName}-${Device.deviceYearClass}`
       }, {
         headers: {
           "x-idempotence-key": idempotencyKey
