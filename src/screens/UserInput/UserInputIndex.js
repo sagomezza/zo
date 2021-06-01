@@ -65,7 +65,6 @@ const UserInput = (props) => {
 
   const [startParking, setStartParking] = useState({});
   const [existingUser, setExistingUser] = useState(false)
-  const [findMensualityPlate, setFindMensualityPlate] = useState([])
   const [debtBlacklist, setDebtBlacklist] = useState(0)
 
   const [showPhoneInput, setShowPhoneInput] = useState(false)
@@ -97,7 +96,7 @@ const UserInput = (props) => {
 
 
   const priceVehicleType = () => {
-    if (isCharacterALetter(plateTwo[2]) || plateTwo.length === 2 ) {
+    if (isCharacterALetter(plateTwo[2]) || plateTwo.length === 2) {
       setPrepayDayValue(hq.dailyBikePrice)
     } else {
       setPrepayDayValue(hq.dailyCarPrice)
@@ -120,108 +119,104 @@ const UserInput = (props) => {
     return (/[a-zA-Z]/).test(char)
   }
 
-  useEffect(() => {
-    async function findUserByPlate() {
-      try {
-        if (plateOne.length === 3 && plateTwo.length === 3) {
-          const response = await instance.post(
-            FIND_USER_BY_PLATE,
-            {
-              plate: plateOne + plateTwo,
-              type: "full"
-            },
-            { timeout: TIMEOUT }
-          )
-          console.log('searching 1')
-          setFindUserByPlateInfo(response.data);
-          setExistingUser(true)
-          setPhone(1);
-          setShowPhoneInput(false);
-          setShowDropdown(true);
-          setBlacklist(response.data.blackList);
-          const auxPhones = []
-          response.data.data.forEach(phone => {
-            auxPhones.push({ label: phone, value: phone })
-          });
-          auxPhones.push({ label: '+ agregar', value: 0 })
-          setPhones(auxPhones);
-          if (response.data.blackList && response.data.blackList.length > 0) {
-            setModal3Visible()
-          }
+  async function findUserByPlate() {
+    try {
+      if (plateOne.length === 3 && plateTwo.length >= 2) {
+        const response = await instance.post(
+          FIND_USER_BY_PLATE,
+          {
+            plate: plateOne + plateTwo,
+            type: "full"
+          },
+          { timeout: TIMEOUT }
+        )
+        console.log('searching 1')
+        setFindUserByPlateInfo(response.data);
+        setExistingUser(true)
+        setPhone(1);
+        setShowPhoneInput(false);
+        setShowDropdown(true);
+        setBlacklist(response.data.blackList);
+        const auxPhones = []
+        response.data.data.forEach(phone => {
+          auxPhones.push({ label: phone, value: phone })
+        });
+        auxPhones.push({ label: '+ agregar', value: 0 })
+        setPhones(auxPhones);
+        if (response.data.blackList && response.data.blackList.length > 0) {
+          setModal3Visible()
         }
-      } catch (err) {
-        console.log(err)
-        console.log(err?.response)
-        setFindUserByPlateInfo([]);
-        setExistingUser(false);
-        setShowDropdown(false);
-        setShowPhoneInput(true);
       }
+    } catch (err) {
+      console.log(err)
+      console.log(err?.response)
+      setFindUserByPlateInfo([]);
+      setExistingUser(false);
+      setShowDropdown(false);
+      setShowPhoneInput(true);
     }
+  }
 
-    async function findMensualityPlate() {
-      try {
-        if (plateOne.length === 3 && plateTwo.length === 3) {
-          const response = await instance.post(
-            FIND_MENSUALITY_PLATE,
-            {
-              plate: plateOne + plateTwo,
-              type: "full"
-            },
-            { timeout: TIMEOUT }
-          )
-          setMensuality(response.data)
-          if (response.data.data[0].capacity === response.data.data[0].parkedPlatesList.length) {
-            setMaxCapMensuality(true);
-          }
-
-
+  async function findMensualityPlate() {
+    try {
+      if (plateOne.length === 3 && plateTwo.length >= 2) {
+        const response = await instance.post(
+          FIND_MENSUALITY_PLATE,
+          {
+            plate: plateOne + plateTwo,
+            type: "full"
+          },
+          { timeout: TIMEOUT }
+        )
+        setMensuality(response.data)
+        if (response.data.data[0].capacity === response.data.data[0].parkedPlatesList.length) {
+          setMaxCapMensuality(true);
         }
-      } catch (err) {
-        // console.log(err)
-        // console.log(err?.response)
-        // setErrorModalVisible(true);
-      }
-    }
 
-    async function getRecipsByPlate() {
-      try {
-        if (plateOne.length === 3 && plateTwo.length === 3) {
-          const response = await instance.post(
-            GET_RECIPS_BY_PLATE,
-            {
-              plate: plateOne + plateTwo,
-              limit: 5
-            },
-            { timeout: TIMEOUT }
-          )
-          setHistoryExists(true)
-          setHistoryInfo(response.data.data)
-          const auxTable = []
-          response.data.data.forEach(element => {
-            const auxElement = []
-            auxElement.push(element.plate)
-            auxElement.push(moment(element.dateFinished).format('L'))
-            auxElement.push(`$${numberWithPoints(element.total)}`)
-            auxTable.push(auxElement)
-          });
-          setTableData(auxTable);
-        }
-      } catch (err) {
-        // console.log(err)
-        // console.log(err?.response)
-        setHistoryExists(false)
+
       }
+    } catch (err) {
+      // console.log(err)
+      // console.log(err?.response)
+      // setErrorModalVisible(true);
     }
-    getRecipsByPlate();
-    findUserByPlate();
-    findMensualityPlate();
-  }, [plateOne, plateTwo]);
+  }
+
+  async function getRecipsByPlate() {
+    try {
+      if (plateOne.length === 3 && plateTwo.length >= 2) {
+        const response = await instance.post(
+          GET_RECIPS_BY_PLATE,
+          {
+            plate: plateOne + plateTwo,
+            limit: 5
+          },
+          { timeout: TIMEOUT }
+        )
+        setHistoryExists(true)
+        setHistoryInfo(response.data.data)
+        const auxTable = []
+        response.data.data.forEach(element => {
+          const auxElement = []
+          auxElement.push(element.plate)
+          auxElement.push(moment(element.dateFinished).format('L'))
+          auxElement.push(`$${numberWithPoints(element.total)}`)
+          auxTable.push(auxElement)
+        });
+        setTableData(auxTable);
+      }
+    } catch (err) {
+      // console.log(err)
+      // console.log(err?.response)
+      setHistoryExists(false)
+    }
+  }
+
 
   useEffect(() => {
     async function createUser() {
       try {
-        if ((plateOne + plateTwo).length === 6 && newPhone.length === 10) {
+        if ((plateOne + plateTwo).length >= 5 && newPhone.length === 10) {
           const response = await instance.post(
             CREATE_USER,
             {
@@ -244,7 +239,7 @@ const UserInput = (props) => {
   async function startPark() {
     setLoadingStart(true);
     try {
-      if ((plateOne + plateTwo).length === 6) {
+      if ((plateOne + plateTwo).length >= 5) {
         let idempotencyKey = createIdempotency(uid.uid)
         let type
         if (isCharacterALetter(plateTwo[2]) || plateTwo.length === 2) {
@@ -379,6 +374,11 @@ const UserInput = (props) => {
                   };
                 }}
                 value={plateTwo}
+                onEndEditing={() => {
+                  getRecipsByPlate();
+                  findUserByPlate();
+                  findMensualityPlate();
+                }}
               />
             </View>
             <View style={{ alignItems: 'center', alignContent: 'center', height: '10%', width: '100%' }}>

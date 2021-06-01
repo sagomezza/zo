@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { 
-    StyleSheet, 
-    Text, 
-    View, 
-    Image, 
-    Modal, 
-    ImageBackground, 
-    Keyboard, 
-    FlatList 
+import {
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    Modal,
+    ImageBackground,
+    Keyboard,
+    FlatList
 } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from '../Blacklist/styles';
@@ -49,7 +49,7 @@ const Blacklist = (props) => {
         setPlateTwo('');
     }
 
-    const debtPayedSuccess =  () => {
+    const debtPayedSuccess = () => {
         clearPlateOne();
         clearPlateTwo();
         listHQDebtsCall();
@@ -68,29 +68,26 @@ const Blacklist = (props) => {
     }
 
 
-    useEffect(() => {
-        async function findUserByPlate() {
-            try {
-                if (plateOne.length === 3 && plateTwo.length === 3) {
-                    const response = await instance.post(
-                        FIND_USER_BY_PLATE,
-                        {
-                            plate: plateOne + plateTwo,
-                            type: "full"
-                        },
-                        { timeout: TIMEOUT }
-                    )
-                    setFindUserByPlateInfo(response.data);
-                    setBlacklist(response.data.blackList);
-                }
-            } catch (err) {
-                console.log(err)
-                console.log(err?.response)
-                if (err?.response.data.response === -1) setModal2Visible(true);
+    async function findUserByPlate() {
+        try {
+            if (plateOne.length === 3 && plateTwo.length >= 2) {
+                const response = await instance.post(
+                    FIND_USER_BY_PLATE,
+                    {
+                        plate: plateOne + plateTwo,
+                        type: "full"
+                    },
+                    { timeout: TIMEOUT }
+                )
+                setFindUserByPlateInfo(response.data);
+                setBlacklist(response.data.blackList);
             }
+        } catch (err) {
+            console.log(err)
+            console.log(err?.response)
+            if (err?.response.data.response === -1) setModal2Visible(true);
         }
-        findUserByPlate()
-    }, [plateOne, plateTwo]);
+    }
 
     useEffect(() => {
         listHQDebtsCall();
@@ -115,7 +112,7 @@ const Blacklist = (props) => {
     async function payDebts() {
         setLoading(true);
         try {
-            if (plateOne.length === 3 && plateTwo.length === 3) {
+            if (plateOne.length === 3 && plateTwo.length >= 2) {
                 const response = await instance.post(
                     PAY_DEBTS,
                     {
@@ -155,7 +152,7 @@ const Blacklist = (props) => {
                 source={require('../../../assets/images/Home.png')}>
                 <Header navigation={navigation} />
                 <View style={{ height: '15%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '35%', width: '60%', marginTop: '2%'}}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '35%', width: '60%', marginTop: '2%' }}>
                         <TextInput
                             ref={refPlateOne}
                             placeholder={'EVZ'}
@@ -191,9 +188,12 @@ const Blacklist = (props) => {
                                 };
                             }}
                             value={plateTwo}
+                            onEndEditing={() => {
+                                findUserByPlate();
+                            }}
                         />
                     </View>
-                    <View style={{ height: '40%', width: '57%', justifyContent: 'center'}}>
+                    <View style={{ height: '40%', width: '57%', justifyContent: 'center' }}>
                         <Button onPress={() => {
                             payDebts();
                         }}

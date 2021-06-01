@@ -53,7 +53,7 @@ const UserOut = (props) => {
   const [dateFinished, setDateFinished] = useState('');
   const [check, setCheck] = useState({})
   const [pendingValue, setPendingValue] = useState(0)
-  let pendingValueNum = pendingValue !== undefined ? `$${numberWithPoints(pendingValue)}` : `$${numberWithPoints(0)}` 
+  let pendingValueNum = pendingValue !== undefined ? `$${numberWithPoints(pendingValue)}` : `$${numberWithPoints(0)}`
   const [inputVerificationCode, setInputVerificationCode] = useState('');
   const [verificationCodeCall, setVerificationCodeCall] = useState('');
 
@@ -119,7 +119,7 @@ const UserOut = (props) => {
 
   async function checkParkingPlate() {
     try {
-      if ((plateOne + plateTwo).length === 6) {
+      if ((plateOne + plateTwo).length >= 5) {
         let idempotencyKey = createIdempotency(uid.uid)
         let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
         const response = await instance.post(
@@ -133,10 +133,11 @@ const UserOut = (props) => {
             prepaidDay: true,
             verificationCode: inputVerificationCode
           },
-          {  headers: {
-            "x-idempotence-key": idempotencyKey
-          }, timeout: TIMEOUT 
-        }
+          {
+            headers: {
+              "x-idempotence-key": idempotencyKey
+            }, timeout: TIMEOUT
+          }
         )
         setDateFinished(new Date());
         setDateStart(response.data.data.dateStart);
@@ -187,9 +188,7 @@ const UserOut = (props) => {
     }
   }
 
-  useEffect(() => {
-    checkParkingPlate()
-  }, [plateOneCall, plateTwoCall]);
+
 
   useEffect(() => {
     checkParkingCode()
@@ -213,6 +212,10 @@ const UserOut = (props) => {
   };
 
   const getRecips = async () => {
+    console.log({
+      hqId: officialHq,
+      officialEmail: officialProps.email
+    })
     try {
       const response = await instance.post(GET_RECIPS, {
         hqId: officialHq,
@@ -249,10 +252,11 @@ const UserOut = (props) => {
           dateFinished: new Date(),
           dateStart: dateStart
         },
-        {  headers: {
-          "x-idempotence-key": idempotencyKey
-        }, timeout: TIMEOUT 
-      }
+        {
+          headers: {
+            "x-idempotence-key": idempotencyKey
+          }, timeout: TIMEOUT
+        }
       );
       setLoading(false)
       if (showModal) {
@@ -355,6 +359,9 @@ const UserOut = (props) => {
                   if (text.length === 3) {
                     if (plateOne.length === 3) Keyboard.dismiss()
                   };
+                }}
+                onEndEditing={() => {
+                  checkParkingPlate();
                 }}
               />
               <TouchableOpacity
@@ -533,6 +540,7 @@ const UserOut = (props) => {
                       fontSize: width * 0.028
                     }}
                     onPress={() => {
+                      setLoading(true);
                       finishParking("payed", true);
                     }} />
                 </View>

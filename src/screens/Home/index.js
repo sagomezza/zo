@@ -38,7 +38,7 @@ const HomeIndex = (props) => {
           store.dispatch(actions.setRecips(response.data.data));
         }
       } catch (err) {
-        // console.log(err?.response)
+        console.log(err?.response)
         // console.log("err: ", err);
       }
     };

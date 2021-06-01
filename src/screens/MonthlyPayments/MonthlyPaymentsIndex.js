@@ -202,7 +202,7 @@ const MonthlyPayments = (props) => {
                 )
                 setLoading(false);
             }
-            if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10 && userId) {
+            if (firstPlateNewMen.length >= 5 && phoneNewMen.length === 10 && userId) {
                 const response = await instance.post(
                     EDIT_USER,
                     {
@@ -228,7 +228,7 @@ const MonthlyPayments = (props) => {
     async function createUser() {
         setLoading(true);
         try {
-            if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
+            if (firstPlateNewMen.length >= 5 && phoneNewMen.length === 10) {
                 let type
                 if (isCharacterALetter(firstPlateNewMen[5])) type = "bike"
                 else type = "car"
@@ -279,7 +279,7 @@ const MonthlyPayments = (props) => {
     async function createMensuality(idUser) {
         setLoading(true);
         try {
-            if (firstPlateNewMen.length === 6 && phoneNewMen.length === 10) {
+            if (firstPlateNewMen.length >= 5 && phoneNewMen.length === 10) {
                 let idempotencyKey = createIdempotency(uid.uid)
                 let type
                 if (isCharacterALetter(firstPlateNewMen[5])) type = "bike"
@@ -323,7 +323,7 @@ const MonthlyPayments = (props) => {
 
     async function findMensualityPlate() {
         try {
-            if (plateOne.length === 3 && plateTwo.length === 3) {
+            if (plateOne.length === 3 && plateTwo.length >= 2) {
                 const response = await instance.post(
                     FIND_MENSUALITY_PLATE,
                     {
@@ -351,7 +351,7 @@ const MonthlyPayments = (props) => {
 
                 
             } 
-            if (firstPlateNewMen.length === 6 ) {
+            if (firstPlateNewMen.length >= 5 ) {
                 const response = await instance.post(
                     FIND_MENSUALITY_PLATE,
                     {
@@ -367,7 +367,7 @@ const MonthlyPayments = (props) => {
             console.log(err)
             console.log(err?.response)
             setLoading(false);
-            if (firstPlateNewMen.length === 6 ) {
+            if (firstPlateNewMen.length >= 5 ) {
                 priceMonthVehicleType();
             }
             setMensualityExists(false);
@@ -378,7 +378,7 @@ const MonthlyPayments = (props) => {
         setLoading(true);
 
         try {
-            if (plateOne.length === 3 && plateTwo.length === 3) {
+            if (plateOne.length === 3 && plateTwo.length >= 2) {
                 const response = await instance.post(
                     EDIT_MENSUALITY,
                     {
@@ -401,7 +401,7 @@ const MonthlyPayments = (props) => {
     async function renewMensuality() {
         setLoading(true)
         try {
-            if (plateOne.length === 3 && plateTwo.length === 3) {
+            if (plateOne.length === 3 && plateTwo.length >= 2) {
                 let idempotencyKey = createIdempotency(uid.uid)
                 const response = await instance.post(
                     RENEW_MENSUALITY,
