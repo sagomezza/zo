@@ -148,11 +148,13 @@ const LogoutIndex = (props) => {
         },
           { timeout: TIMEOUT }
         );
+        console.log(response.data)
         if (response.data.response === 1) {
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
         }
       } catch (err) {
+        console.log(err?.response)
 
       }
     }

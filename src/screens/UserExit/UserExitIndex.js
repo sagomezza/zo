@@ -78,6 +78,8 @@ const UserOut = (props) => {
     setTotalPay(0);
     setPlateOne("");
     setPlateTwo("");
+    setPlateOneCall("");
+    setPlateTwoCall("");
     setRecip({})
     setLoading(false);
     setErr("")
@@ -117,9 +119,13 @@ const UserOut = (props) => {
     readParanoicUser()
   }, [qr.phone]);
 
+  useEffect (() => {
+    checkParkingPlate();
+  }, [plateOneCall, plateTwoCall])
+
   async function checkParkingPlate() {
     try {
-      if ((plateOne + plateTwo).length >= 5) {
+      if ((plateOne + plateTwo).length >= 5 || (plateOneCall + plateTwoCall).length >= 5 ) {
         let idempotencyKey = createIdempotency(uid.uid)
         let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
         const response = await instance.post(
@@ -187,8 +193,6 @@ const UserOut = (props) => {
       setModal5Visible(true);
     }
   }
-
-
 
   useEffect(() => {
     checkParkingCode()
@@ -263,12 +267,13 @@ const UserOut = (props) => {
         console.log(showModal)
         setModalVisible(true)
       }
+      store.dispatch(actions.setPhone(''))
+      store.dispatch(actions.setQr(''))
+
       readHq()
       setRecip(response.data.data);
       getRecips()
-
       setIsDisabled(true);
-
     } catch (err) {
       console.log(err?.response)
       console.log(err)
@@ -335,7 +340,7 @@ const UserOut = (props) => {
                 autoCapitalize={'characters'}
                 onChangeText={(text) => {
                   setPlateOne(text.trim());
-                  setPlateOneCall(text.trim());
+                  // setPlateOneCall(text.trim());
                   if (refPlateTwo && text.length === 3) {
                     refPlateTwo.current.focus();
                   };
@@ -355,7 +360,7 @@ const UserOut = (props) => {
                 onFocus={() => { setPlateTwo(''); }}
                 onChangeText={text => {
                   setPlateTwo(text.trim());
-                  setPlateTwoCall(text.trim());
+                  // setPlateTwoCall(text.trim());
                   if (text.length === 3) {
                     if (plateOne.length === 3) Keyboard.dismiss()
                   };
@@ -591,7 +596,7 @@ const UserOut = (props) => {
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
-                  setModal5Visible(!modal5Visible);
+                  setModal5Visible(false);
                   restart();
                 }}
                   title="E N T E N D I D O"
