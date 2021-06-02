@@ -144,9 +144,12 @@ const MonthlyPayments = (props) => {
     }
     const mensualityRenewedModal = () => {
         setModal2Visible(false);
+        setLoading(true);
+        findMensualityPlate();
         setTotalPay(0);
         setMonthPrice(0);
         setMonthPrice(0);
+
     }
 
     const clearPageInfo = () => {

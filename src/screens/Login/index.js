@@ -202,7 +202,7 @@ const LoginIndex = (props) => {
                 alignItems: "center",
               }}
             >
-              <Text style={styles.loginText}>I N I C I O D E S E S I Ó N</Text>
+              <Text style={styles.loginText}>I N I C I O   D E   S E S I Ó N</Text>
             </View>
             <View
               style={{

@@ -269,7 +269,6 @@ const UserOut = (props) => {
       }
       store.dispatch(actions.setPhone(''))
       store.dispatch(actions.setQr(''))
-
       readHq()
       setRecip(response.data.data);
       getRecips()
