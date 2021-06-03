@@ -403,6 +403,13 @@ const MonthlyPayments = (props) => {
 
     async function renewMensuality() {
         setLoading(true)
+        console.log({
+            plate: plateOne + plateTwo,
+            cash: Number(totalPay),
+            change: totalPay - monthPrice,
+            hqId: officialHq,
+            officialEmail: officialProps.email
+        })
         try {
             if (plateOne.length === 3 && plateTwo.length >= 2) {
                 let idempotencyKey = createIdempotency(uid.uid)
@@ -422,6 +429,7 @@ const MonthlyPayments = (props) => {
                         timeout: TIMEOUT 
                     }
                 )
+                console.log('OMG-------------------', response.data.response)
                 if (response.data.response === 2) {
                     setAlreadyRenewed(true);
                     setTotalPay(0);
