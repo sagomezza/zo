@@ -53,7 +53,7 @@ const UserOut = (props) => {
   const [dateFinished, setDateFinished] = useState('');
   const [check, setCheck] = useState({})
   const [pendingValue, setPendingValue] = useState(0)
-  let pendingValueNum = pendingValue !== undefined ? `$${numberWithPoints(pendingValue)}` : `$${numberWithPoints(0)}` 
+  let pendingValueNum = pendingValue !== undefined ? `$${numberWithPoints(pendingValue)}` : `$${numberWithPoints(0)}`
   const [inputVerificationCode, setInputVerificationCode] = useState('');
   const [verificationCodeCall, setVerificationCodeCall] = useState('');
 
@@ -78,6 +78,8 @@ const UserOut = (props) => {
     setTotalPay(0);
     setPlateOne("");
     setPlateTwo("");
+    setPlateOneCall("");
+    setPlateTwoCall("");
     setRecip({})
     setLoading(false);
     setErr("")
@@ -100,10 +102,11 @@ const UserOut = (props) => {
             { timeout: TIMEOUT }
           )
           const splitPlate = (response.data.data.plate)
+          const splitPlateFive = splitPlate[5] !== undefined ? splitPlate[5] : '';
           setPlateOne(splitPlate[0] + splitPlate[1] + splitPlate[2])
-          setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlate[5])
+          setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlateFive)
           setPlateOneCall(splitPlate[0] + splitPlate[1] + splitPlate[2])
-          setPlateTwoCall(splitPlate[3] + splitPlate[4] + splitPlate[5])
+          setPlateTwoCall(splitPlate[3] + splitPlate[4] + splitPlateFive)
           checkParkingPlate();
           setIsParanoicUser(true)
         }
@@ -116,9 +119,13 @@ const UserOut = (props) => {
     readParanoicUser()
   }, [qr.phone]);
 
+  useEffect (() => {
+    checkParkingPlate();
+  }, [plateOneCall, plateTwoCall])
+
   async function checkParkingPlate() {
     try {
-      if ((plateOne + plateTwo).length === 6) {
+      if ((plateOne + plateTwo).length >= 5 || (plateOneCall + plateTwoCall).length >= 5 ) {
         let idempotencyKey = createIdempotency(uid.uid)
         let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
         const response = await instance.post(
@@ -132,10 +139,11 @@ const UserOut = (props) => {
             prepaidDay: true,
             verificationCode: inputVerificationCode
           },
-          {  headers: {
-            "x-idempotence-key": idempotencyKey
-          }, timeout: TIMEOUT 
-        }
+          {
+            headers: {
+              "x-idempotence-key": idempotencyKey
+            }, timeout: TIMEOUT
+          }
         )
         setDateFinished(new Date());
         setDateStart(response.data.data.dateStart);
@@ -187,10 +195,6 @@ const UserOut = (props) => {
   }
 
   useEffect(() => {
-    checkParkingPlate()
-  }, [plateOneCall, plateTwoCall]);
-
-  useEffect(() => {
     checkParkingCode()
   }, [verificationCodeCall]);
 
@@ -212,6 +216,10 @@ const UserOut = (props) => {
   };
 
   const getRecips = async () => {
+    console.log({
+      hqId: officialHq,
+      officialEmail: officialProps.email
+    })
     try {
       const response = await instance.post(GET_RECIPS, {
         hqId: officialHq,
@@ -248,22 +256,23 @@ const UserOut = (props) => {
           dateFinished: new Date(),
           dateStart: dateStart
         },
-        {  headers: {
-          "x-idempotence-key": idempotencyKey
-        }, timeout: TIMEOUT 
-      }
+        {
+          headers: {
+            "x-idempotence-key": idempotencyKey
+          }, timeout: TIMEOUT
+        }
       );
       setLoading(false)
       if (showModal) {
         console.log(showModal)
         setModalVisible(true)
       }
+      store.dispatch(actions.setPhone(''))
+      store.dispatch(actions.setQr(''))
       readHq()
       setRecip(response.data.data);
       getRecips()
-
       setIsDisabled(true);
-
     } catch (err) {
       console.log(err?.response)
       console.log(err)
@@ -330,7 +339,7 @@ const UserOut = (props) => {
                 autoCapitalize={'characters'}
                 onChangeText={(text) => {
                   setPlateOne(text.trim());
-                  setPlateOneCall(text.trim());
+                  // setPlateOneCall(text.trim());
                   if (refPlateTwo && text.length === 3) {
                     refPlateTwo.current.focus();
                   };
@@ -350,10 +359,13 @@ const UserOut = (props) => {
                 onFocus={() => { setPlateTwo(''); }}
                 onChangeText={text => {
                   setPlateTwo(text.trim());
-                  setPlateTwoCall(text.trim());
+                  // setPlateTwoCall(text.trim());
                   if (text.length === 3) {
                     if (plateOne.length === 3) Keyboard.dismiss()
                   };
+                }}
+                onEndEditing={() => {
+                  checkParkingPlate();
                 }}
               />
               <TouchableOpacity
@@ -532,6 +544,7 @@ const UserOut = (props) => {
                       fontSize: width * 0.028
                     }}
                     onPress={() => {
+                      setLoading(true);
                       finishParking("payed", true);
                     }} />
                 </View>
@@ -582,7 +595,7 @@ const UserOut = (props) => {
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
-                  setModal5Visible(!modal5Visible);
+                  setModal5Visible(false);
                   restart();
                 }}
                   title="E N T E N D I D O"

@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   },
   modalButton: {
     width: '100%',
-    height: '80%',
+    height: '90%',
   },
 
 });

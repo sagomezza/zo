@@ -1,6 +1,6 @@
 import {
     SET_QR,
-    SET_QR_PHONE
+    SET_QR_PHONE,
 } from '../actions/type'
 
 const initialState = {
@@ -19,7 +19,7 @@ const qrReducer = (state=initialState, action ) => {
             return {
                 ...state,
                 phone: action.payload
-            }    
+            };
         default:
             return state
     }

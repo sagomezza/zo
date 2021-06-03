@@ -56,7 +56,7 @@ const BarcodeScanner = (props) => {
         navigation.navigate("UserOut")
       } else {
         let type
-        if (isCharacterALetter(qr.plate[5])) type = "bike"
+        if (isCharacterALetter(qr.plate[5]) || qr.plate.length === 5 ) type = "bike"
         else type = "car"
         const response = await instance.post(
           START_PARKING,
@@ -86,7 +86,7 @@ const BarcodeScanner = (props) => {
       console.log(err);
       console.log('startparkinghqcatch-----------')
 
-      console.log(err?.response?.data);
+      console.log(err?.response);
       console.log('start-----------')
 
       if (err?.response.data.response === -2) setModal2Visible(true)

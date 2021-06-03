@@ -35,6 +35,9 @@ import { TIMEOUT } from '../../config/constants/constants';
 import * as Network from 'expo-network';
 import store from '../../config/store';
 import { createIdempotency } from '../../utils/idempotency';
+import * as Sentry from "@sentry/browser";
+import * as Device from "expo-device";
+
 
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips, uid } = props;
@@ -105,6 +108,9 @@ const LogoutIndex = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
+  const [modal4Visible, setModal4Visible] = useState(false);
+  const [logoutError, setLogoutError] = useState(false);
+
   const [total, setTotal] = useState(0);
   const [shiftRecips, setShiftRecips] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
@@ -116,7 +122,6 @@ const LogoutIndex = (props) => {
   const [macAddress, setMacAddress] = useState('');
   const [uidLogout, setUidLogout] = useState('');
   const uidDefini = uid.uid !== '' ? uid.uid : uidLogout;
-
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -143,11 +148,13 @@ const LogoutIndex = (props) => {
         },
           { timeout: TIMEOUT }
         );
+        console.log(response.data)
         if (response.data.response === 1) {
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
         }
       } catch (err) {
+        console.log(err?.response)
 
       }
     }
@@ -157,8 +164,22 @@ const LogoutIndex = (props) => {
 
   const markEndOfShift = async () => {
     setLoading(true);
+    console.log({
+      email: officialProps.email,
+      id: officialProps.id,
+      date: new Date(),
+      total: Number(total),
+      input: Number(inputValue),
+      base: Number(inputBaseValue),
+      hqId: officialHq,
+      macAddress: macAddress,
+      uid: uidDefini,
+      deviceId: `${Device.brand}-${Device.modelName}-${Device.deviceName}-${Device.deviceYearClass}`
+
+    })
     try {
       let idempotencyKey = createIdempotency(uid.uid)
+
       const response = await instance.post(MARK_END_OF_SHIFT, {
         email: officialProps.email,
         id: officialProps.id,
@@ -168,30 +189,47 @@ const LogoutIndex = (props) => {
         base: Number(inputBaseValue),
         hqId: officialHq,
         macAddress: macAddress,
-        uid: uidDefini
-      }, {  headers: {
-        "x-idempotence-key": idempotencyKey
-      }, timeout: TIMEOUT 
-    });
-
-      firebase.auth().signOut().then(function () {
-        // Sign-out successful.
-      }).catch(function (error) {
-        // An error happened.
+        uid: uidDefini,
+        deviceId: `${Device.brand}-${Device.modelName}-${Device.deviceName}-${Device.deviceYearClass}`
+      }, {
+        headers: {
+          "x-idempotence-key": idempotencyKey
+        }, timeout: TIMEOUT
       });
-      navigation.navigate('Login');
-      setModalVisible(!modalVisible);
-
       setLoading(false);
+      setModal4Visible(true);
 
     } catch (err) {
-      console.log(err)
+      // console.log(err)
       console.log(err?.response)
       setLoading(false);
-      setModal3Visible(false);
+      setModalVisible(!modalVisible);
+      setModal3Visible(true);
+      Sentry.captureException('Error in end of shift', err?.response)
+      // asociar a un evento de sentry, si pasa error intentar de nuevo descartar
 
     }
   }
+
+  const logoutFromFirebase = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(function () {
+        // Sign-out successful.
+        setModalVisible(false);
+        setModal4Visible(false);
+        setLoading(false);
+        navigation.navigate('Login');
+        
+      }).catch(function (error) {
+        // An error happened.
+        Sentry.captureException('Error in logout', error)
+        setLoading(false);
+        setLogoutError(true);
+      });
+  }
+
 
   return (
     <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
@@ -354,6 +392,7 @@ const LogoutIndex = (props) => {
               justifyContent: 'flex-end'
             }}>
               <Button onPress={() => {
+
                 setModalVisible(true)
               }}
                 title="C E R R A R  T U R N O"
@@ -441,7 +480,7 @@ const LogoutIndex = (props) => {
             }}
             >
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalText}> ¿Quieres continuar con el cierre de sesión? </Text>
+                <Text style={styles.modalText}> ¿Quieres continuar con el cierre de turno? </Text>
               </View>
               <View style={{
                 height: '30%',
@@ -531,6 +570,74 @@ const LogoutIndex = (props) => {
                 </View>
               </View>
             </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={modal4Visible}
+      >
+        <View style={HomeStyles.centeredView}>
+          <View style={HomeStyles.modalView}>
+            <View style={{
+              height: '100%',
+              width: '100%',
+              justifyContent: 'space-between',
+              padding: '2%'
+            }}
+            >
+              {logoutError ?
+                <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                  <Text style={styles.modalText}> ¡ Algo malo pasó ! </Text>
+
+                  <Text style={styles.modalText}> Espera un momento y dale en el botón para intentar de nuevo. </Text>
+                </View>
+                :
+                <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                  <Text style={styles.modalText}> ¡ Se cerró el turno con éxito ! </Text>
+
+                  <Text style={styles.modalText}> Dale en el botón para realizar el cierre de sesión </Text>
+                </View>
+
+              }
+
+              <View style={{
+                height: '30%',
+                width: '100%',
+                justifyContent: 'space-between',
+                flexDirection: 'column',
+                alignItems: 'center'
+              }}>
+                <View style={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  height: '50%',
+                  alignItems: 'center'
+                }}>
+                  <Button onPress={() => {
+                    setLoading(true);
+                    logoutFromFirebase();
+                  }}
+                    title=" C E R R A R  S E S I Ó N "
+                    color="#00A9A0"
+                    style={
+                      styles.modal2Button
+                    }
+                    activityIndicatorStatus={loading}
+                    isDisabled={loading}
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }}
+                  />
+                </View>
+
+              </View>
+            </View>
+
           </View>
         </View>
       </Modal>
