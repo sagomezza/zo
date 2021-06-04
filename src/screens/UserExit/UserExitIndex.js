@@ -31,7 +31,7 @@ import store from '../../config/store';
 const { width, height } = Dimensions.get('window');
 
 const UserOut = (props) => {
-  const { navigation, officialProps, qr, uid } = props;
+  const { navigation, officialProps, qr, uid, reservations } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   // const qrPlate = qr.plate !== undefined ? qr.plate : '';
   // const qrPhone = qr.phone !== undefined ? qr.phone : '';
@@ -74,12 +74,14 @@ const UserOut = (props) => {
     setModal2Visible(false);
     setModal3Visible(false);
     setModal4Visible(false);
+    setModal5Visible(false);
     setTotalAmount(0);
     setTotalPay(0);
-    setPlateOne("");
-    setPlateTwo("");
-    setPlateOneCall("");
-    setPlateTwoCall("");
+    setPlateOne('');
+    setPlateTwo('');
+    setPlateOneCall('');
+    setPlateTwoCall('');
+    setIsParanoicUser(false);
     setRecip({})
     setLoading(false);
     setErr("")
@@ -88,12 +90,14 @@ const UserOut = (props) => {
     setCheck({});
     setPendingValue(0);
     setInputVerificationCode('');
+    setVerificationCodeCall('');
   }
 
   useEffect(() => {
     async function readParanoicUser() {
       try {
         if ((qr.plate).length === 0 && (qr.phone).length > 0) {
+          console.log(qr.phone)
           const response = await instance.post(
             READ_PARANOIC_USER,
             {
@@ -119,15 +123,30 @@ const UserOut = (props) => {
     readParanoicUser()
   }, [qr.phone]);
 
-  useEffect (() => {
-    checkParkingPlate();
+  useEffect(() => {
+    if ((plateOneCall + plateTwoCall).length > 5) {
+      console.log('plateCall useEffect--------------------')
+      checkParkingPlate();
+    }
+
   }, [plateOneCall, plateTwoCall])
 
   async function checkParkingPlate() {
     try {
-      if ((plateOne + plateTwo).length >= 5 || (plateOneCall + plateTwoCall).length >= 5 ) {
+      if ((plateOne + plateTwo).length >= 5 || (plateOneCall + plateTwoCall).length >= 5) {
+        console.log('inside CHEKPARK-----------------')
         let idempotencyKey = createIdempotency(uid.uid)
-        let reserve = props.reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
+        let reserve = reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
+        console.log('OMG', reserve)
+        console.log({
+          plate: plateOne + plateTwo,
+          hqId: reserve[0].hqId,
+          phone: reserve[0].phone,
+          officialEmail: officialProps.email,
+          dateFinished: new Date(),
+          prepaidDay: true,
+          verificationCode: inputVerificationCode
+        })
         const response = await instance.post(
           CHECK_PARKING,
           {
@@ -139,6 +158,7 @@ const UserOut = (props) => {
             prepaidDay: true,
             verificationCode: inputVerificationCode
           },
+          { timeout: TIMEOUT },
           {
             headers: {
               "x-idempotence-key": idempotencyKey
@@ -153,8 +173,13 @@ const UserOut = (props) => {
         setCheck(response.data.data)
         setInputVerificationCode(response.data.data.verificationCode + '')
 
+      } else if ((plateOneCall + plateTwoCall).length === 0) {
+        console.log('no plate')
       }
+
     } catch (err) {
+      console.log('outside CHEKPARK-----------------')
+
       console.log(err)
       console.log(err?.response)
       setModal5Visible(true);
@@ -164,6 +189,8 @@ const UserOut = (props) => {
   async function checkParkingCode() {
     try {
       if (inputVerificationCode.length === 5) {
+        console.log('inside CHEKPARK-CODE---------------')
+
         let reserve = props.reservations.reservations.filter(reserve => reserve.verificationCode === Number(inputVerificationCode));
         const response = await instance.post(
           CHECK_PARKING,
@@ -188,6 +215,8 @@ const UserOut = (props) => {
 
       }
     } catch (err) {
+      console.log('outside CHEKPARK-CODE---------------')
+
       console.log(err)
       console.log(err?.response)
       setModal5Visible(true);
