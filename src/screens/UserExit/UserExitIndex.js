@@ -223,9 +223,7 @@ const UserOut = (props) => {
     }
   }
 
-  useEffect(() => {
-    checkParkingCode()
-  }, [verificationCodeCall]);
+  
 
   async function readHq() {
     try {
@@ -424,6 +422,9 @@ const UserOut = (props) => {
                   if (text.length === 5) { Keyboard.dismiss() }
                   setInputVerificationCode(text.trim());
                   setVerificationCodeCall(text.trim());
+                }}
+                onEndEditing={() => {
+                  checkParkingCode();
                 }}
               />
             </View>
