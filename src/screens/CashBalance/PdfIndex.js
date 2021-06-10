@@ -12,7 +12,7 @@ import {
   Dimensions
 } from 'react-native';
 import instance from "../../config/axios";
-import firebase from "../../config/firebase";
+import firebase, { firestore } from "../../config/firebase";
 import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT, GET_BOX_TOTAL } from "../../config/api";
 import { connect } from 'react-redux';
 import { TIMEOUT } from '../../config/constants/constants';
@@ -21,7 +21,7 @@ import * as Print from "expo-print";
 import * as MediaLibrary from "expo-media-library";
 import * as Sharing from "expo-sharing";
 import Button from "../../components/Button"
-import moment from 'moment';
+import moment from 'moment-timezone';
 import Header from '../../components/Header/HeaderIndex';
 import styles from '../CashBalance/PdfStyles'
 import normalize from '../../config/services/normalizeFontSize';
@@ -53,6 +53,7 @@ const txtGenerator = (props) => {
   const [readBoxReportInfo, setReadBoxReportInfo] = useState({});
   const [boxStatus, setBoxStatus] = useState("");
   const [boxId, setBoxId] = useState("");
+  const [reports, setReports] = useState([]);
 
   const [date1, setDate1] = useState(new Date(moment().subtract(1, 'days')));
   const [date2, setDate2] = useState(new Date());
@@ -118,25 +119,96 @@ const txtGenerator = (props) => {
 
   const getBoxTotal = async () => {
     setLoadingBoxGenerator(true);
-    try {
-      const response = await instance.post(GET_BOX_TOTAL, {
-        hqId: officialProps.hq[0]
-      },
-        { timeout: TIMEOUT }
-      );
-      if (response.data.response === 1) {
-        setShiftsOfBox(response.data.data);
-      }
-      gotBoxTotal();
-    } catch (err) {
-      setLoadingBoxGenerator(false);
-      console.log(err)
-      console.log(err?.response)
-      setModal3Visible(true);
-    }
+    firestore
+      .collection("shiftReports")
+      .where("hqId", "==", officialProps.hq[0])
+      .orderBy("date", "desc")
+      .get()
+      .then(snapshot => {
+        try {
+          if (snapshot.empty) {
+            // setLoadingBoxGenerator(true);
+            setModal3Visible(true);
+            // return
+          }
+
+          let reports = []
+          snapshot.forEach(doc => {
+            let data = doc.data()
+            data.id = doc.id
+            data.date = moment(data.date.toDate()).add(-5, "hours")
+            data.dateStart = moment(data.dateStart.toDate()).add(-5, "hours")
+            reports.push(data)
+          })
+
+
+
+          let dateStart = moment()
+            .add(-1, "days")
+            .set("hours", -5)
+            .set("minutes", 0)
+            .set("seconds", 0)
+            .set("milliseconds", 0)
+
+          let dateEnd = moment()
+            .add(-1, "days")
+            .set("hours", 18)
+            .set("minutes", 59)
+            .set("seconds", 59)
+            .set("milliseconds", 59)
+
+          const dailyReports = reports.filter((report) => {
+            return report.dateStart >= dateStart
+          })
+          if (dailyReports.length === 0 || dailyReports.length < 3) {
+            setModal3Visible(true);
+          }else if (reports.length > 2) {
+            let boxTotal = 0
+            dailyReports.forEach(report => {
+              boxTotal += report.total
+            })
+            // console.log(dateStart)
+            // console.log(dateEnd)
+            console.log(dailyReports)
+            setReports(dailyReports);
+            setShiftsOfBox(boxTotal);
+            gotBoxTotal();
+
+          }
+
+          // console.log(boxTotal)
+          setLoadingBoxGenerator(false);
+        } catch (err) {
+          console.log(err)
+        }
+
+      })
+      .catch(err => {
+        console.log(err)
+        setLoadingBoxGenerator(false);
+      })
+
+
+    // try {
+    //   const response = await instance.post(GET_BOX_TOTAL, {
+    //     hqId: officialProps.hq[0]
+    //   },
+    //     { timeout: TIMEOUT }
+    //   );
+    //   if (response.data.response === 1) {
+    //     setShiftsOfBox(response.data.data);
+    //   }
+    //   gotBoxTotal();
+    // } catch (err) {
+    //   setLoadingBoxGenerator(false);
+    //   console.log(err)
+    //   console.log(err?.response)
+    //   setModal3Visible(true);
+    // }
   };
 
   const listBoxClose = async () => {
+    setLoadingReadBoxReport(true);
     try {
       const response = await instance.post(LIST_BOX_CLOSE, {
         hqId: officialProps.hq[0]
@@ -144,9 +216,13 @@ const txtGenerator = (props) => {
         { timeout: TIMEOUT }
       );
       setListBox(response.data.data)
+    setLoadingReadBoxReport(false);
+
     } catch (err) {
-      console.log(err)
-      console.log(err?.response)
+    setLoadingReadBoxReport(false);
+
+      // console.log(err)
+      // console.log(err?.response)
     }
   };
 
@@ -196,7 +272,7 @@ const txtGenerator = (props) => {
   };
 
   const uploadImageToFirebase = async () => {
-      console.log(boxId)
+    console.log(boxId)
     try {
       setLoadingBoxGenerator(true);
       const sourceURI = { uri: signatureUri }
@@ -493,8 +569,6 @@ const txtGenerator = (props) => {
                       <Button
                         onPress={() => {
                           createBoxReport();
-
-
                         }}
                         title="G U A R D A R"
                         color="#00A9A0"
@@ -510,7 +584,7 @@ const txtGenerator = (props) => {
                       />
                       <Button
                         onPress={() => {
-                          setModalVisible(!modalVisible);
+                          setModalVisible(false);
                         }}
                         title="V O L V E R"
                         color="gray"

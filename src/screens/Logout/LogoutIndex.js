@@ -132,10 +132,8 @@ const LogoutIndex = (props) => {
       }
     })
     const macAdd = () => {
-
       Network.getMacAddressAsync().then(state => {
         setMacAddress(state)
-
       }
       )
     }
@@ -148,14 +146,12 @@ const LogoutIndex = (props) => {
         },
           { timeout: TIMEOUT }
         );
-        console.log(response.data)
         if (response.data.response === 1) {
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
         }
       } catch (err) {
         console.log(err?.response)
-
       }
     }
     getShiftRecips();
@@ -164,19 +160,6 @@ const LogoutIndex = (props) => {
 
   const markEndOfShift = async () => {
     setLoading(true);
-    console.log({
-      email: officialProps.email,
-      id: officialProps.id,
-      date: new Date(),
-      total: Number(total),
-      input: Number(inputValue),
-      base: Number(inputBaseValue),
-      hqId: officialHq,
-      macAddress: macAddress,
-      uid: uidDefini,
-      deviceId: `${Device.brand}-${Device.modelName}-${Device.deviceName}-${Device.deviceYearClass}`
-
-    })
     try {
       let idempotencyKey = createIdempotency(uid.uid)
 
@@ -221,7 +204,6 @@ const LogoutIndex = (props) => {
         setModal4Visible(false);
         setLoading(false);
         navigation.navigate('Login');
-        
       }).catch(function (error) {
         // An error happened.
         Sentry.captureException('Error in logout', error)
@@ -229,7 +211,6 @@ const LogoutIndex = (props) => {
         setLogoutError(true);
       });
   }
-
 
   return (
     <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
