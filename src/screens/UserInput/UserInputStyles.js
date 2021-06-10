@@ -1,32 +1,80 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    padding: 16, 
-    paddingTop: 30, 
-    backgroundColor: '#fff',
-    borderWidth: 1 
+  container: {
+    flex: 1,
+    padding: 16,
+    paddingTop: 30,
+    backgroundColor: '#fff'
   },
-  head: { 
-    height: 40, 
+  head: {
+    height: 40,
     alignContent: 'center',
   },
-  text: { 
+  containerOne: {
+    height: '30%',
+    alignContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column'
+  },
+  plateContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignContent: 'center',
+    height: '20%',
+    width: '60%',
+    marginTop: '2%'
+  },
+  phoneDropdown: {
+    backgroundColor: '#fafafa',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20
+  },
+  dropdownLabel: {
+    justifyContent: 'center',
+    fontFamily: 'Montserrat-Bold',
+    color: '#D9D9D9',
+    fontSize: width * 0.035
+  },
+  containerTwo: {
+    height: '57%',
+    backgroundColor: '#F8F8F8',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  infoContainer: {
+    height: '70%',
+    width: '73%',
+    backgroundColor: '#FFFFFF',
+    marginTop: '6%',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  infoText: {
+    fontFamily: 'Montserrat-Bold',
+    color: '#00A9A0',
+    fontSize: width * 0.027
+  },
+  text: {
     margin: 6,
     color: '#8F8F8F',
     alignSelf: 'center',
-    fontFamily: 'Montserrat-Regular' 
+    fontFamily: 'Montserrat-Regular'
   },
-  headText: { 
+  headText: {
     margin: 6,
     color: '#00A9A0',
     alignSelf: 'center',
-    fontFamily: 'Montserrat-Regular' 
-
+    fontFamily: 'Montserrat-Regular'
   },
   plateInput: {
     width: '46%',
@@ -39,8 +87,6 @@ const styles = StyleSheet.create({
     color: '#00A9A0',
     alignContent: 'center',
     justifyContent: 'center'
-
-
   },
   textInput: {
     width: '100%',

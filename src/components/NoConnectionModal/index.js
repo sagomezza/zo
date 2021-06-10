@@ -33,9 +33,6 @@ const NoConnectionModal = (props) => {
                             />
                 <Text style={styles.modalTextAlert}> Upss no hay conexión... </Text>
                 <Text style={styles.modalTextAlert}> Verifica tu conexión a internet </Text>
-
-
-
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end'}}>
                 <Button onPress={props.onCheck}

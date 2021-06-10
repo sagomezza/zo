@@ -70,7 +70,6 @@ const App = () => {
   }
 
   const checkOfficialHours = () => {
-
     // console.log(diffOfficialScheduleStart)
     if (
       Number(diffOfficialScheduleStart) === 7.25 ||

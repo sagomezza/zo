@@ -81,13 +81,15 @@ const UserInput = (props) => {
   const [tableData, setTableData] = useState();
 
   const [historyInfo, setHistoryInfo] = useState([]);
+  const [prepayDayDateFinished, setPrepayDayDateFinished] = useState('');
+  const [prepayDayRecip, setPrepayDayRecip] = useState(false);
   const [historyExists, setHistoryExists] = useState(false);
 
   const [prepayDayValue, setPrepayDayValue] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
-
   const [mensuality, setMensuality] = useState({});
+  const [mensualityExists, setMensualityExists] = useState(false);
   const mensualityInfo = mensuality.data !== undefined ? mensuality.data[0] : "";
   const mensualityUserName = mensualityInfo.userName !== undefined ? mensualityInfo.userName : ' ';
   const mensualityUserPhone = mensualityInfo.userPhone !== undefined ? mensualityInfo.userPhone : ' ';
@@ -107,6 +109,25 @@ const UserInput = (props) => {
       startPark();
     }
   }
+  const restart =  () => {
+    setModalVisible(!modalVisible);
+    setPlateOne("");
+    setPlateTwo("");
+    setNewPhone("");
+    setPrepayDay(false);
+    setPhones([{ label: '', value: 1 }]);
+    setPhone(1);
+    setShowPhoneInput(false);
+    setPrepayDay(false);
+    setShowPhoneInput(false);
+    setHistoryExists(false);
+    setMensualityExists(false);
+    setPrepayDayRecip(false);
+    setShowDropdown(false);
+  }
+  
+
+
 
   const clearPlateOne = () => {
     setPlateOne('');
@@ -130,7 +151,6 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        console.log('searching 1')
         setFindUserByPlateInfo(response.data);
         setExistingUser(true)
         setPhone(1);
@@ -168,14 +188,14 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
+        setMensualityExists(true);
         setMensuality(response.data)
         if (response.data.data[0].capacity === response.data.data[0].parkedPlatesList.length) {
           setMaxCapMensuality(true);
         }
-
-
       }
     } catch (err) {
+      setMensualityExists(false);
       // console.log(err)
       // console.log(err?.response)
       // setErrorModalVisible(true);
@@ -195,6 +215,16 @@ const UserInput = (props) => {
         )
         setHistoryExists(true)
         setHistoryInfo(response.data.data)
+        if (response.data.data[0].prepayFullDay) {
+          setPrepayDayDateFinished(response.data.data[0].dateFinished)
+          setPrepayDayRecip(true);
+
+        } else {
+          setPrepayDayDateFinished('');
+          setPrepayDayRecip(false);
+
+
+        }
         const auxTable = []
         response.data.data.forEach(element => {
           const auxElement = []
@@ -208,7 +238,8 @@ const UserInput = (props) => {
     } catch (err) {
       // console.log(err)
       // console.log(err?.response)
-      setHistoryExists(false)
+      setHistoryExists(false);
+      setPrepayDayRecip(false);
     }
   }
 
@@ -338,8 +369,8 @@ const UserInput = (props) => {
         source={require('../../../assets/images/Stripes.png')}>
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={{ height: '30%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%', marginTop: '2%' }}>
+          <View style={styles.containerOne}>
+            <View style={styles.plateContainer}>
               <TextInput
                 ref={refPlateOne}
                 placeholder={'EVZ'}
@@ -381,42 +412,61 @@ const UserInput = (props) => {
                 }}
               />
             </View>
-            <View style={{ alignItems: 'center', alignContent: 'center', height: '10%', width: '100%' }}>
-              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.03 }}>I  N  G  R  E  S  E     C  E  L  U  L  A  R</Text>
+            <View style={{
+              alignItems: 'center',
+              alignContent: 'center',
+              height: '10%',
+              width: '100%'
+            }}>
+              <Text style={{
+                fontFamily: 'Montserrat-Bold',
+                color: '#FFFFFF',
+                fontSize: width * 0.03
+              }}>
+                I  N  G  R  E  S  E     C  E  L  U  L  A  R
+                   </Text>
             </View>
-            <View style={{ flexDirection: 'column', alignItems: 'center', alignContent: 'center', zIndex: 10, height: '62%', width: '60%' }}>
+            <View style={{
+              flexDirection: 'column',
+              alignItems: 'center',
+              alignContent: 'center',
+              zIndex: 10, height: '62%',
+              width: '60%',
+              borderWith: 1
+            }}>
               {!showPhoneInput ?
                 <DropDownPicker
                   items={phones}
                   zIndex={30}
                   disabled={!showDropdown}
                   placeholder={"Selecciona un numero"}
-                  placeholderStyle={{ color: '#8F8F8F', fontSize: width * 0.04, textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
-                  selectedLabelStyle={{ color: '#8F8F8F', fontSize: normalize(30), textAlign: 'center', fontFamily: 'Montserrat-Bold' }}
-                  containerStyle={{
-                    height: '23%', width: '100%'
+                  placeholderStyle={{
+                    color: '#8F8F8F',
+                    fontSize: width * 0.04,
+                    textAlign: 'center',
+                    fontFamily: 'Montserrat-Bold'
                   }}
-                  style={{
-                    backgroundColor: '#fafafa',
-                    borderTopLeftRadius: 20,
-                    borderTopRightRadius: 20,
-                    borderBottomLeftRadius: 20,
-                    borderBottomRightRadius: 20
-
+                  selectedLabelStyle={{
+                    color: '#8F8F8F',
+                    fontSize: normalize(30),
+                    textAlign: 'center',
+                    fontFamily: 'Montserrat-Bold'
                   }}
-                  labelStyle={{
-                    justifyContent: 'center',
-                    fontFamily: 'Montserrat-Bold',
-                    color: '#D9D9D9',
-                    fontSize: width * 0.035
-                  }}
+                  containerStyle={{ height: '23%', width: '100%' }}
+                  style={styles.phoneDropdown}
+                  labelStyle={styles.dropdownLabel}
                   dropDownMaxHeight={100}
                   dropDownStyle={{
-                    backgroundColor: '#fafafa', borderBottomLeftRadius: 15,
+                    backgroundColor: '#fafafa',
+                    borderBottomLeftRadius: 15,
                     borderBottomRightRadius: 15
                   }}
                   arrowColor={'#00A9A0'}
-                  arrowStyle={{ alignItems: 'flex-start', alignContent: 'flex-start', justifyContent: 'flex-start' }}
+                  arrowStyle={{
+                    alignItems: 'flex-start',
+                    alignContent: 'flex-start',
+                    justifyContent: 'flex-start'
+                  }}
                   arrowSize={24}
                   onChangeItem={item => {
                     if (item.value === 0) {
@@ -424,6 +474,7 @@ const UserInput = (props) => {
                     } else {
                       setPhone(item.value)
                     }
+
                   }
                   }
                 /> :
@@ -436,24 +487,50 @@ const UserInput = (props) => {
                   onChangeText={text => {
                     setNewPhone(text);
                     if (text.length === 10) {
-                      if (plateOne.length === 3 && plateTwo.length === 3) Keyboard.dismiss()
+                      if (plateOne.length === 3 && plateTwo.length === 3)
+                        Keyboard.dismiss()
                     }
                   }}
                   value={newPhone}
                 />}
               {codeError && <Text>{codeError}</Text>}
-              <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '30%', width: '60%', justifyContent: 'center', paddingTop: '10%' }}>
+              <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                alignContent: 'center',
+                height: '30%',
+                width: '60%',
+                justifyContent: 'center',
+                paddingTop: '10%'
+              }}>
                 <CheckBox
                   value={prepayDay}
                   onValueChange={() => setPrepayDay(!prepayDay)}
                   style={{ alignSelf: 'center' }}
-                  tintColors={{ true: '#FFF200', false: '#FFF200' }}
+                  tintColors={{
+                    true: '#FFF200',
+                    false: '#FFF200'
+                  }}
                 />
-                <Text style={{ color: '#FFF200', fontFamily: 'Montserrat-Bold', fontSize: width * 0.03, textAlign: 'center' }}>PASE DIA</Text>
+                <Text style={{
+                  color: '#FFF200',
+                  fontFamily: 'Montserrat-Bold',
+                  fontSize: width * 0.03,
+                  textAlign: 'center'
+                }}>
+                  PASE DIA
+                      </Text>
               </View>
 
 
-              <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '40%', width: '100%', justifyContent: 'center' }}>
+              <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                alignContent: 'center',
+                height: '40%',
+                width: '100%',
+                justifyContent: 'center'
+              }}>
                 {!loadingStart &&
                   <Button onPress={() => {
 
@@ -462,7 +539,11 @@ const UserInput = (props) => {
                   }}
                     title="I N I C I A R"
                     color='#FFF200'
-                    style={[!existingUser || plateOne === "" || plateTwo === "" ? styles.buttonIDisabled : styles.buttonI]}
+                    style={[!existingUser || plateOne === "" || plateTwo === "" ?
+                      styles.buttonIDisabled
+                      :
+                      styles.buttonI
+                    ]}
                     textStyle={styles.buttonText}
                     disabled={!existingUser || plateOne === "" || plateTwo === ""}
 
@@ -485,7 +566,11 @@ const UserInput = (props) => {
                     }}
                     disabled={(plateOne + plateTwo).length < 5}
                   >
-                    <Image style={styles.qrImage} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
+                    <Image
+                      style={styles.qrImage}
+                      resizeMode={"contain"}
+                      source={require('../../../assets/images/qr.png')}
+                    />
                   </TouchableOpacity>
                 }
               </View>
@@ -493,34 +578,80 @@ const UserInput = (props) => {
           </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={{
-            height: '57%',
-            backgroundColor: '#F8F8F8',
-            borderTopLeftRadius: 30,
-            borderTopRightRadius: 30,
-            alignContent: 'center',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}>
-            <View style={{ height: '70%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
-
+          <View style={styles.containerTwo}>
+            <View style={styles.infoContainer}>
               <View style={{ height: "90%", width: '90%' }}>
                 <View style={{ width: '100%', alignItems: 'center' }}>
-                  <Text style={{ fontFamily: 'Montserrat-Bold', color: '#00A9A0', fontSize: width * 0.027, textAlign: 'center' }}>{mensualityUserName}</Text>
+                  {mensualityExists ?
+                    <View style={{
+                      width: '100%',
+                      justifyContent: 'center'
+                    }}>
+                      <Text style={{
+                        fontFamily: 'Montserrat-Bold',
+                        color: '#00A9A0',
+                        fontSize: width * 0.027,
+                        textAlign: 'center'
+                      }}>{mensualityUserName}</Text>
+                      <View style={{
+                        width: '100%',
+                        flexDirection: 'row',
+                        justifyContent: 'center'
+                      }}>
+                        <Text style={styles.infoText}>
+                          Capacidad:
+                         </Text>
 
-                  <Text style={{ fontFamily: 'Montserrat-Bold', color: '#00A9A0', fontSize: width * 0.027 }}>Capacidad:   {mensualityCapacity}</Text>
-                  <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
-                    <Text style={{ fontFamily: 'Montserrat-Bold', color: '#00A9A0', fontSize: width * 0.027 }}>Placas parqueadas:   </Text>
+                        <Text style={styles.infoText}>
+                          {' ' + mensualityCapacity}
+                        </Text>
+                      </View>
+                      <View style={{
+                        width: '100%',
+                        flexDirection: 'row',
+                        justifyContent: 'center'
+                      }}>
+                        <Text style={styles.infoText}>
+                          Placas parqueadas:
+                         </Text>
 
-                    <Text style={{ fontFamily: 'Montserrat-Bold', color: '#00A9A0', fontSize: width * 0.027 }}>
-                      {mensualityParkedPlates}
-                    </Text>
+                        <Text style={styles.infoText}>
+                          {' ' + mensualityParkedPlates}
+                        </Text>
+                      </View>
+                    </View>
+                    :
+                    <View style={{
+                      width: '100%',
+                      flexDirection: 'row',
+                      justifyContent: 'center'
+                    }}>
+
+                    </View>
+                  }
+                  {prepayDayRecip ?
+                    <View style={{
+                      width: '100%',
+                      flexDirection: 'row',
+                      justifyContent: 'center'
+                    }}>
+                      <Text style={styles.infoText}> Vigencia pase día:   </Text>
+                      <Text style={styles.infoText}>
+                        {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('L') : ''} {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('LT') : ''}
+                      </Text>
+                    </View>
+                    :
+                    <View style={{
+                      width: '100%',
+                      flexDirection: 'row',
+                      justifyContent: 'center'
+                    }}>
+
+                    </View>
+                  }
 
 
-                  </View>
                 </View>
-
-
                 {historyExists ?
                   <Table borderStyle={{ borderColor: '#00A9A0' }}>
                     <Row
@@ -728,19 +859,7 @@ const UserInput = (props) => {
                 </View>
                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                   <Button onPress={() => {
-                    setModalVisible(!modalVisible);
-                    setPlateOne("");
-                    setPlateTwo("");
-                    setNewPhone("");
-                    setPrepayDay(false);
-                    setPhones([{ label: 'Selecciona un número', value: 1 }]);
-                    setPhone(1);
-                    setShowDropdown(false);
-                    setShowPhoneInput(false);
-                    setPrepayDay(false);
-                    setShowPhoneInput(false);
-                    setHistoryExists(false)
-
+                    restart();
                   }}
                     title="E N T E N D I D O"
                     color="#00A9A0"

@@ -58,7 +58,7 @@ const HomeIndex = (props) => {
             expoToken: props.expoToken.expoToken
           });
         } catch (err) {
-          console.log("[updateExpoToken - Home screen]:", err)
+          // console.log("[updateExpoToken - Home screen]:", err)
           console.log(err?.response)
         }
       }

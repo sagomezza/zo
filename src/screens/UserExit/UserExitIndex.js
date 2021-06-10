@@ -117,7 +117,6 @@ const UserOut = (props) => {
       } catch (err) {
         console.log(err?.response)
         console.log(err)
-
       }
     }
     readParanoicUser()
@@ -134,19 +133,8 @@ const UserOut = (props) => {
   async function checkParkingPlate() {
     try {
       if ((plateOne + plateTwo).length >= 5 || (plateOneCall + plateTwoCall).length >= 5) {
-        console.log('inside CHEKPARK-----------------')
         let idempotencyKey = createIdempotency(uid.uid)
         let reserve = reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
-        console.log('OMG', reserve)
-        console.log({
-          plate: plateOne + plateTwo,
-          hqId: reserve[0].hqId,
-          phone: reserve[0].phone,
-          officialEmail: officialProps.email,
-          dateFinished: new Date(),
-          prepaidDay: true,
-          verificationCode: inputVerificationCode
-        })
         const response = await instance.post(
           CHECK_PARKING,
           {
@@ -174,12 +162,10 @@ const UserOut = (props) => {
         setInputVerificationCode(response.data.data.verificationCode + '')
 
       } else if ((plateOneCall + plateTwoCall).length === 0) {
-        console.log('no plate')
+        // console.log('no plate')
       }
 
     } catch (err) {
-      console.log('outside CHEKPARK-----------------')
-
       console.log(err)
       console.log(err?.response)
       setModal5Visible(true);
@@ -212,11 +198,8 @@ const UserOut = (props) => {
         setCheck(response.data.data)
         setPlateOne(response.data.data.plate.substring(0, 3))
         setPlateTwo(response.data.data.plate.substring(3, 6))
-
       }
     } catch (err) {
-      console.log('outside CHEKPARK-CODE---------------')
-
       console.log(err)
       console.log(err?.response)
       setModal5Visible(true);
