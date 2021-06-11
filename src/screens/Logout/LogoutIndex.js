@@ -42,7 +42,7 @@ import * as Device from "expo-device";
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips, uid } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  const startTime = officialProps.schedule.start
+  const startTime = officialProps.schedule !== undefined ? officialProps.schedule.start : "";
 
   const HomeStyles = StyleSheet.create({
     plateInput: {
@@ -110,11 +110,9 @@ const LogoutIndex = (props) => {
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
   const [logoutError, setLogoutError] = useState(false);
-
   const [total, setTotal] = useState(0);
   const [shiftRecips, setShiftRecips] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
-  const [hqInfo, setHqInfo] = useState([]);
   const hq = props.hq;
   const [inputBaseValue, setInputBaseValue] = useState('');
   const [inputValue, setInputValue] = useState('');
@@ -127,7 +125,6 @@ const LogoutIndex = (props) => {
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         setUidLogout(user.uid)
-
       } else {
       }
     })
@@ -190,7 +187,6 @@ const LogoutIndex = (props) => {
       setModal3Visible(true);
       Sentry.captureException('Error in end of shift', err?.response)
       // asociar a un evento de sentry, si pasa error intentar de nuevo descartar
-
     }
   }
 
@@ -225,12 +221,11 @@ const LogoutIndex = (props) => {
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{ height: '38%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
-
             <View style={{ flexDirection: 'column', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%' }}>
-              <Text style={{ fontSize: width * 0.04, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>{officialProps.name + ' ' + officialProps.lastName}</Text>
-              <View style={{}}>
-                <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: width * 0.03, color: '#FFFFFF' }}>{hq.name}</Text>
-              </View>
+              <Text style={{ fontSize: width * 0.04, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>
+                {officialProps.name + ' ' + officialProps.lastName}
+              </Text>
+              <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: width * 0.03, color: '#FFFFFF' }}>{hq.name}</Text>
             </View>
             <View style={{
               flexDirection: 'row',
@@ -263,11 +258,15 @@ const LogoutIndex = (props) => {
               </View>
             </View>
             <View style={{ width: '30%' }}>
-              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.032 }}>{"TOTAL: "}{`$${numberWithPoints(total)}`}</Text>
+              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.032 }}>
+                {"TOTAL: "}{`$${numberWithPoints(total)}`}
+              </Text>
             </View>
             <View style={{ flexDirection: 'row', width: '80%', height: '22%', alignItems: 'center', alignContent: 'center', padding: '1%', justifyContent: 'center' }}>
-              <View style={{ width: '21%' }}>
-                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>{"BASE: "} </Text>
+              <View style={{ width: '30%' }}>
+                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>
+                  {"BASE: "}
+                </Text>
               </View>
               <View style={{
                 justifyContent: "center",
@@ -286,21 +285,15 @@ const LogoutIndex = (props) => {
                   textAlign='center'
                   editable={isDisabled}
                   onChangeText={text => setInputBaseValue(text) + ''}
-                  value={inputBaseValue == 0 ? '' : inputBaseValue + ''}
-
+                  value={inputBaseValue}
                 />
-                {/* <TouchableOpacity style={[!inputValue.length === 0 ? styles.buttonTDisabled : styles.buttonT]}
-                  onPress={() => {
-                    setModal2Visible(true)
-                  }}
-                  disabled={inputValue.length === 0}>
-                  <Icon name='save' color='#00A9A0' style={{ marginTop: '4%' }} />
-                </TouchableOpacity> */}
               </View>
             </View>
             <View style={{ flexDirection: 'row', width: '80%', height: '22%', alignItems: 'center', alignContent: 'center', padding: '1%', justifyContent: 'space-between' }}>
               <View style={{ width: '30%' }}>
-                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>{"DINERO EN EFECTIVO: "} </Text>
+                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>
+                  {"DINERO EN EFECTIVO: "}
+                </Text>
               </View>
               <View style={{
                 justifyContent: "center",
@@ -312,29 +305,16 @@ const LogoutIndex = (props) => {
               }}>
                 <TextInput
                   placeholder='$'
-                  style={
-                    styles.textInput
-                  }
+                  style={total === inputValue ? styles.textInput : styles.textInputDifTotal}
                   keyboardType='numeric'
                   textAlign='center'
                   editable={isDisabled}
                   onChangeText={text => setInputValue(text) + ''}
-                  value={inputValue == 0 ? '' : inputValue + ''}
-
+                  value={inputValue}
                 />
-                <TouchableOpacity style={[!inputValue.length === 0 ? styles.buttonTDisabled : styles.buttonT]}
-                  onPress={() => {
-                    setModal2Visible(true)
-                  }}
-                  disabled={inputValue.length === 0}>
-                  <Icon name='save' color='#00A9A0' style={{ marginTop: '4%' }} />
-                </TouchableOpacity>
               </View>
             </View>
-
-
           </View>
-
           <View style={{
             height: '58%',
             backgroundColor: '#F8F8F8',
@@ -377,9 +357,9 @@ const LogoutIndex = (props) => {
                 setModalVisible(true)
               }}
                 title="C E R R A R  T U R N O"
-                disabled={!inputValue.length === 0}
+                disabled={inputValue.length === 0 || inputBaseValue.length === 0}
                 color="#00A9A0"
-                style={[inputValue.length === 0 ? styles.shiftButtonDisabled : styles.shiftButton]}
+                style={[inputValue.length === 0 || inputBaseValue.length === 0 ? styles.shiftButtonDisabled : styles.shiftButton]}
                 textStyle={{
                   color: "#FFFFFF",
                   textAlign: "center",
@@ -394,57 +374,6 @@ const LogoutIndex = (props) => {
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
-
-      <Modal
-        animationType="fade"
-        transparent={true}
-        backdropOpacity={0.3}
-        visible={modal2Visible}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalText}> ¿Estás seguro de que quieres guardar el total?  </Text>
-              </View>
-              <View style={{ height: '30%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
-                <View style={{ width: '75%', height: '50%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
-                  <Button onPress={() => {
-                    setModal2Visible(!modal2Visible);
-                    setIsDisabled(false)
-                  }}
-                    title="S I"
-                    color="#00A9A0"
-                    style={
-                      styles.modal2Button
-                    }
-                    textStyle={{
-                      color: "#FFFFFF",
-                      textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
-                    }} />
-                </View>
-                <View style={{ width: '75%', height: '50%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
-                  <Button onPress={() => {
-                    setModal2Visible(!modal2Visible);
-
-                  }}
-                    title="N O"
-                    color="#00A9A0"
-                    style={
-                      styles.modal2Button
-                    }
-                    textStyle={{
-                      color: "#FFFFFF",
-                      textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
-                    }} />
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
       <Modal
         animationType="fade"
         transparent={true}
@@ -460,9 +389,21 @@ const LogoutIndex = (props) => {
               padding: '2%'
             }}
             >
-              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalText}> ¿Quieres continuar con el cierre de turno? </Text>
+              {total - inputValue !== 0 ?
+                <View style={{ margin: '2%', justifyContent: 'center', height: '30%' }}>
+                  <Text style={styles.modalTextAlert}>
+                    Tiene una diferencia de {`$${numberWithPoints(total - inputValue)}`} ¿está seguro que desea guardar y cerrar?
+                  </Text>
+                </View>
+                :
+                <View style={{ margin: '2%', justifyContent: 'flex-end', height: '30%' }}>
+                <Text style={styles.modalText}>
+                  Una vez cierres el turno no podrás modificar el valor ingresado  ¿está seguro que deseas guardar y cerrar?
+                </Text>
               </View>
+              }
+
+
               <View style={{
                 height: '30%',
                 width: '100%',

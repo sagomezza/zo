@@ -15,6 +15,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF200',
         borderRadius: 20
     },
+    textInputDifTotal: {
+        width: '82%',
+        height: '74%',
+        marginRight: '5%',
+        marginLeft: '0%',
+        fontSize: width * 0.045,
+        fontFamily: 'Montserrat-Bold',
+        color: '#FF4500',
+        backgroundColor: '#FFF200',
+        borderRadius: 20
+    },
     timePlate: {
         width: '49%',
         height: '77%',
@@ -86,7 +97,7 @@ const styles = StyleSheet.create({
     modalText: {
         textAlign: "center",
         fontFamily: 'Montserrat-Regular',
-        color: '#B7B7B7',
+        color: '#A9A9A9',
         fontSize: normalize(20)
     },
     modalTextAlert: {
