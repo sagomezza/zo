@@ -389,10 +389,10 @@ const LogoutIndex = (props) => {
               padding: '2%'
             }}
             >
-              {total - inputValue !== 0 ?
+              {Number(total) - Number(inputValue) !== 0 ?
                 <View style={{ margin: '2%', justifyContent: 'center', height: '30%' }}>
                   <Text style={styles.modalTextAlert}>
-                    Tiene una diferencia de {`$${numberWithPoints(total - inputValue)}`} ¿está seguro que desea guardar y cerrar?
+                    Tiene una diferencia de {`$${numberWithPoints(Number(total) - Number(inputValue))}`} ¿está seguro que desea guardar y cerrar?
                   </Text>
                 </View>
                 :
