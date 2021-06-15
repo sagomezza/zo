@@ -7,7 +7,9 @@ import {
     Modal,
     ImageBackground,
     Keyboard,
-    FlatList
+    FlatList,
+    ActivityIndicator
+
 } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from '../Blacklist/styles';
@@ -38,6 +40,7 @@ const Blacklist = (props) => {
 
     const [listHQDebts, setListHQDebts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [loadingListHQDebts, setLoadingListHQDebts] = useState(true);
     const [findUserByPlateInfo, setFindUserByPlateInfo] = useState([]);
     const [blacklist, setBlacklist] = useState([]);
     let blacklistValue = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].value : 0;
@@ -94,6 +97,7 @@ const Blacklist = (props) => {
     }, []);
 
     const listHQDebtsCall = async () => {
+        setLoadingListHQDebts(true);
         try {
             const response = await instance.post(
                 LIST_HQ_DEBTS,
@@ -103,9 +107,13 @@ const Blacklist = (props) => {
                 { timeout: TIMEOUT }
             )
             setListHQDebts(response.data.data)
+            setLoadingListHQDebts(false);
+
         } catch (err) {
             console.log(err)
             console.log(err?.response)
+            setLoadingListHQDebts(false);
+
         }
     };
 
@@ -212,31 +220,43 @@ const Blacklist = (props) => {
                             <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
                                 <Text style={styles.textListTitle} >LISTA NEGRA</Text>
                             </View>
-                            <View style={{ height: "90%" }}>
-                                {listHQDebts.length > 0 ?
-                                    <FlatList
-                                        style={{ height: "37%" }}
-                                        data={listHQDebts}
-                                        keyExtractor={({ id }) => id}
-                                        renderItem={({ item }) => {
-                                            return (
-                                                <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '4%', marginLeft: '10%', marginRight: '10%', marginTop: '2%', alignItems: 'center' }} >
-                                                    <View style={{ marginBottom: '2%' }} >
-                                                        <Text style={styles.textPlaca}>{item.plate}</Text>
-                                                    </View>
-                                                    <View style={{ flex: 1, alignItems: 'flex-end', marginBottom: '2%' }} >
-                                                        <Text style={styles.textMoney}>{`$${numberWithPoints(item.value)}`}</Text>
-                                                    </View>
-                                                </View>
-                                            )
-                                        }}
-                                    />
-                                    :
-                                    <View style={{ marginLeft: '13%', padding: '10%' }}>
-                                        <Text style={styles.textPago}> No se encuentran registros en el historial </Text>
+                            {loadingListHQDebts ?
+                                <View style={{ height: "90%" }}>
+                                    <View style={{ justifyContent: 'center', height: '100%' }}>
+                                        <ActivityIndicator size={"large"} color={'#00A9A0'} />
                                     </View>
-                                }
-                            </View>
+                                </View>
+                                :
+                                <View style={{ height: "90%" }}>
+                                    {listHQDebts.length > 0 ?
+                                        <FlatList
+                                            style={{ height: "37%" }}
+                                            data={listHQDebts}
+                                            keyExtractor={({ id }) => id}
+                                            renderItem={({ item }) => {
+                                                return (
+                                                    <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '4%', marginLeft: '10%', marginRight: '10%', marginTop: '2%', alignItems: 'center' }} >
+                                                        <View style={{ marginBottom: '2%' }} >
+                                                            <Text style={styles.textPlaca}>{item.plate}</Text>
+                                                        </View>
+                                                        <View style={{ flex: 1, alignItems: 'flex-end', marginBottom: '2%' }} >
+                                                            <Text style={styles.textMoney}>{`$${numberWithPoints(item.value)}`}</Text>
+                                                        </View>
+                                                    </View>
+                                                )
+                                            }}
+                                        />
+                                        :
+                                        <View style={{ marginLeft: '13%', padding: '10%' }}>
+                                            <Text style={styles.textPago}> No se encuentran registros en el historial </Text>
+                                        </View>
+                                    }
+                                </View>
+                            }
+
+
+
+
                         </View>
                     </View>
                     <View style={{

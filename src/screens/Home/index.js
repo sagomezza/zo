@@ -192,9 +192,13 @@ const HomeIndex = (props) => {
               <Text style={HomeStyles.textListTitle} >HISTORIAL DE PAGOS</Text>
             </View>
             {loadingRecips ?
-              <View style={{ justifyContent: 'center', height: '100%' }}>
-                <ActivityIndicator size={"large"} color={'#00A9A0'} />
+              <View style={{ height: "72%" }}>
+
+                <View style={{ justifyContent: 'center', height: '100%' }}>
+                  <ActivityIndicator size={"large"} color={'#00A9A0'} />
+                </View>
               </View>
+
 
               :
               <View style={{ height: "72%" }}>
@@ -241,9 +245,13 @@ const HomeIndex = (props) => {
               <Text style={HomeStyles.textListTitle} >VEHÍCULOS PARQUEADOS</Text>
             </View>
             {loadingReservations ?
-              <View style={{ justifyContent: 'center', height: '100%' }}>
-                <ActivityIndicator size={"large"} color={'#00A9A0'} />
+              <View style={{ height: "72%" }}>
+
+                <View style={{ justifyContent: 'center', height: '100%' }}>
+                  <ActivityIndicator size={"large"} color={'#00A9A0'} />
+                </View>
               </View>
+
               :
               <View style={{ height: "72%" }}>
                 {reservations.reservations.length > 0 ?

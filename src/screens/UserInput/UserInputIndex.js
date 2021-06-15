@@ -13,6 +13,7 @@ import { ImageBackground } from 'react-native';
 
 import CheckBox from '@react-native-community/checkbox';
 import { TextInput } from 'react-native-gesture-handler';
+import CurrencyInput from 'react-native-currency-input';
 import styles from './UserInputStyles';
 import FooterIndex from '../../components/Footer/index';
 import { Table, Row, Rows } from 'react-native-table-component';
@@ -109,7 +110,7 @@ const UserInput = (props) => {
       startPark();
     }
   }
-  const restart =  () => {
+  const restart = () => {
     setModalVisible(!modalVisible);
     setPlateOne("");
     setPlateTwo("");
@@ -125,7 +126,7 @@ const UserInput = (props) => {
     setPrepayDayRecip(false);
     setShowDropdown(false);
   }
-  
+
 
 
 
@@ -354,7 +355,6 @@ const UserInput = (props) => {
     }
   };
 
-  let textinputMoney = (totalPay === 0 ? '' : '' + totalPay)
   let inputChange = (totalPay - prepayDayValue) <= 0 ? '' : '' + (totalPay - prepayDayValue)
 
   return (
@@ -424,7 +424,7 @@ const UserInput = (props) => {
                 fontSize: width * 0.03
               }}>
                 I  N  G  R  E  S  E     C  E  L  U  L  A  R
-                   </Text>
+              </Text>
             </View>
             <View style={{
               flexDirection: 'column',
@@ -519,7 +519,7 @@ const UserInput = (props) => {
                   textAlign: 'center'
                 }}>
                   PASE DIA
-                      </Text>
+                </Text>
               </View>
 
 
@@ -600,7 +600,7 @@ const UserInput = (props) => {
                       }}>
                         <Text style={styles.infoText}>
                           Capacidad:
-                         </Text>
+                        </Text>
 
                         <Text style={styles.infoText}>
                           {' ' + mensualityCapacity}
@@ -613,7 +613,7 @@ const UserInput = (props) => {
                       }}>
                         <Text style={styles.infoText}>
                           Placas parqueadas:
-                         </Text>
+                        </Text>
 
                         <Text style={styles.infoText}>
                           {' ' + mensualityParkedPlates}
@@ -759,7 +759,10 @@ const UserInput = (props) => {
                 <View style={{ justifyContent: 'space-between', height: '40%', flexDirection: 'column', paddingBottom: '6%' }}>
                   <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
                     <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Pago:  </Text>
-                    <TextInput
+                    <CurrencyInput
+                      placeholder='$'
+                      textAlign='center'
+                      keyboardType='numeric'
                       style={{
                         borderWidth: 1,
                         borderColor: '#00A9A0',
@@ -770,13 +773,15 @@ const UserInput = (props) => {
                         borderRadius: 10,
                         color: '#00A9A0'
                       }}
-                      keyboardType='numeric'
-                      placeholder='$ 0'
-                      textAlign='center'
-
-                      value={textinputMoney}
-                      onChangeText={(text) => {
-                        setTotalPay(text);
+                      value={totalPay}
+                      onChangeValue={text => setTotalPay(text)}
+                      prefix="$"
+                      delimiter="."
+                      separator="."
+                      precision={0}
+                      onChangeText={(formattedValue) => {
+                        // console.log(formattedValue);
+                        // $2,310.46
                       }}
                     />
                   </View>

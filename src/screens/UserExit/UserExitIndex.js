@@ -9,6 +9,7 @@ import {
   Dimensions
 } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
+import CurrencyInput from 'react-native-currency-input';
 import { Text, TouchableOpacity } from 'react-native';
 import { ImageBackground } from 'react-native';
 import styles from '../UserExit/UserExitStyles';
@@ -38,7 +39,7 @@ const UserOut = (props) => {
   // const [qrCodePlate, setQrCodePlate] = useState(qrPlate);
   // const [qrCodePhone, setQrCodePhone] = useState(qrPhone);
   const [totalAmount, setTotalAmount] = useState(0);
-  const [totalPay, setTotalPay] = useState(0);
+  const [totalPay, setTotalPay] = useState('');
   const [recip, setRecip] = useState({})
   const [loading, setLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
@@ -51,6 +52,7 @@ const UserOut = (props) => {
   const [plateTwoCall, setPlateTwoCall] = useState('');
   const [dateStart, setDateStart] = useState('');
   const [dateFinished, setDateFinished] = useState('');
+  const [loadingCheckParking, setLoadingCheckParking] = useState(false);
   const [check, setCheck] = useState({})
   const [pendingValue, setPendingValue] = useState(0)
   let pendingValueNum = pendingValue !== undefined ? `$${numberWithPoints(pendingValue)}` : `$${numberWithPoints(0)}`
@@ -76,7 +78,7 @@ const UserOut = (props) => {
     setModal4Visible(false);
     setModal5Visible(false);
     setTotalAmount(0);
-    setTotalPay(0);
+    setTotalPay('');
     setPlateOne('');
     setPlateTwo('');
     setPlateOneCall('');
@@ -124,13 +126,12 @@ const UserOut = (props) => {
 
   useEffect(() => {
     if ((plateOneCall + plateTwoCall).length > 5) {
-      console.log('plateCall useEffect--------------------')
       checkParkingPlate();
     }
-
   }, [plateOneCall, plateTwoCall])
 
   async function checkParkingPlate() {
+    setLoadingCheckParking(true);
     try {
       if ((plateOne + plateTwo).length >= 5 || (plateOneCall + plateTwoCall).length >= 5) {
         let idempotencyKey = createIdempotency(uid.uid)
@@ -160,23 +161,21 @@ const UserOut = (props) => {
         setPendingValue(response.data.data.pendingValue)
         setCheck(response.data.data)
         setInputVerificationCode(response.data.data.verificationCode + '')
-
+        setLoadingCheckParking(false);
       } else if ((plateOneCall + plateTwoCall).length === 0) {
         // console.log('no plate')
       }
-
     } catch (err) {
       console.log(err)
       console.log(err?.response)
       setModal5Visible(true);
+      setLoadingCheckParking(false);
     }
   }
 
   async function checkParkingCode() {
     try {
       if (inputVerificationCode.length === 5) {
-        console.log('inside CHEKPARK-CODE---------------')
-
         let reserve = props.reservations.reservations.filter(reserve => reserve.verificationCode === Number(inputVerificationCode));
         const response = await instance.post(
           CHECK_PARKING,
@@ -187,9 +186,8 @@ const UserOut = (props) => {
             dateFinished: new Date(),
             prepaidDay: true,
             verificationCode: Number(inputVerificationCode)
-          },
-          { timeout: TIMEOUT }
-        )
+          }, { timeout: TIMEOUT })
+
         setDateFinished(new Date());
         setDateStart(response.data.data.dateStart);
         setTotalAmount(response.data.data.total);
@@ -205,8 +203,6 @@ const UserOut = (props) => {
       setModal5Visible(true);
     }
   }
-
-  
 
   async function readHq() {
     try {
@@ -226,10 +222,6 @@ const UserOut = (props) => {
   };
 
   const getRecips = async () => {
-    console.log({
-      hqId: officialHq,
-      officialEmail: officialProps.email
-    })
     try {
       const response = await instance.post(GET_RECIPS, {
         hqId: officialHq,
@@ -273,13 +265,16 @@ const UserOut = (props) => {
         }
       );
       setLoading(false)
+      setModal4Visible(false);
       if (showModal) {
         console.log(showModal)
         setModalVisible(true)
       }
       store.dispatch(actions.setPhone(''))
       store.dispatch(actions.setQr(''))
-      readHq()
+      readHq();
+      restart();
+
       setRecip(response.data.data);
       getRecips()
       setIsDisabled(true);
@@ -288,6 +283,7 @@ const UserOut = (props) => {
       console.log(err)
       setLoading(false);
       setIsDisabled(true);
+      setModal4Visible(false);
       setErr("Algo malo pasó, vuelve a intentarlo más tarde")
     }
   }
@@ -322,7 +318,6 @@ const UserOut = (props) => {
 
   let phoneNumber = check.phone + ''
   let phoneNumberLength = phoneNumber.length
-  let textinputMoney = (totalPay === 0 ? '' : '' + totalPay)
   let inputChange = (totalPay - totalAmount) <= 0 ? '' : '' + (totalPay - totalAmount)
 
   return (
@@ -378,6 +373,9 @@ const UserOut = (props) => {
                   checkParkingPlate();
                 }}
               />
+                <View style={{ justifyContent: 'flex-end', height: '100%' }}>
+                  {/* <ActivityIndicator size={"small"} color={'#00A9A0'} /> */}
+                </View>
               <TouchableOpacity
                 style={styles.buttonT}
                 onPress={() => { navigation.navigate('QRscanner') }}>
@@ -495,15 +493,23 @@ const UserOut = (props) => {
                 <Text style={{ fontFamily: 'Montserrat-Bold', fontSize: width * 0.034, color: '#8F8F8F' }} >{"Valor ingresado"}</Text>
               </View>
               <View style={{ alignContent: 'center', alignItems: 'center', width: '67%', height: '62%' }}>
-                <TextInput
-                  style={styles.inputMoney}
+                <CurrencyInput
+                  placeholder='$'
+                  textAlign='center'
                   keyboardType='numeric'
-                  placeholder='$ 0'
-                  value={textinputMoney}
-                  onChangeText={(text) => {
-                    setTotalPay(text);
+                  style={styles.inputMoney}
+                  value={totalPay}
+                  onChangeValue={text => setTotalPay(text)}
+                  prefix="$"
+                  delimiter="."
+                  separator="."
+                  precision={0}
+                  onChangeText={(formattedValue) => {
+                    // console.log(formattedValue);
+                    // $2,310.46
                   }}
                 />
+
               </View>
             </View>
 
@@ -804,7 +810,10 @@ const UserOut = (props) => {
               <View style={{ justifyContent: 'space-between', height: '40%', flexDirection: 'column', paddingBottom: '6%' }}>
                 <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
                   <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Pago parcial:  </Text>
-                  <TextInput
+                  <CurrencyInput
+                    placeholder='$'
+                    textAlign='center'
+                    keyboardType='numeric'
                     style={{
                       borderWidth: 1,
                       borderColor: '#F8F8F8',
@@ -815,12 +824,16 @@ const UserOut = (props) => {
                       borderRadius: 10,
                       color: '#00A9A0'
                     }}
-                    keyboardType='numeric'
-                    placeholder='$'
-                    textAlign='center'
-                    keyboardType={"numeric"}
-                    value={totalPay == 0 ? '' : totalPay + ''}
-                    onChangeText={text => setTotalPay(text)}
+                    value={totalPay}
+                    onChangeValue={text => setTotalPay(text)}
+                    prefix="$"
+                    delimiter="."
+                    separator="."
+                    precision={0}
+                    onChangeText={(formattedValue) => {
+                      // console.log(formattedValue);
+                      // $2,310.46
+                    }}
                   />
                 </View>
                 <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
@@ -836,13 +849,13 @@ const UserOut = (props) => {
                     }}
                     textAlign='center'
                     editable={false}
-                    value={(totalAmount - totalPay) < 0 ? '0' : '$' + (totalAmount - totalPay)}
+                    value={(totalAmount - totalPay) < 0 ? '0' : `$${numberWithPoints(totalAmount - totalPay)}`}
                   />
                 </View>
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
-                  setModal4Visible(!modal4Visible);
+
                   finishParking("parcial-pending", false)
                 }}
                   title="G U A R D A R"
@@ -854,7 +867,8 @@ const UserOut = (props) => {
                     color: "#FFFFFF",
                     textAlign: "center",
                     fontFamily: 'Montserrat-Bold'
-                  }} />
+                  }}
+                  activityIndicatorStatus={loading} />
               </View>
             </View>
           </View>

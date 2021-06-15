@@ -7,6 +7,7 @@ import {
   Modal,
   TouchableHighlight,
   Dimensions,
+  ActivityIndicator,
   Image
 } from 'react-native';
 import { ImageBackground } from 'react-native';
@@ -112,6 +113,7 @@ const LogoutIndex = (props) => {
   const [logoutError, setLogoutError] = useState(false);
   const [total, setTotal] = useState(0);
   const [shiftRecips, setShiftRecips] = useState('');
+  const [loadingShiftRecips, setLoadingShiftRecips] = useState(true);
   const [isDisabled, setIsDisabled] = useState(true);
   const hq = props.hq;
   const [inputBaseValue, setInputBaseValue] = useState('');
@@ -136,6 +138,7 @@ const LogoutIndex = (props) => {
       )
     }
     const getShiftRecips = async () => {
+      setLoadingShiftRecips(true);
       try {
         const response = await instance.post(GET_SHIFT_RECIPS, {
           email: officialProps.email,
@@ -148,8 +151,10 @@ const LogoutIndex = (props) => {
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
         }
+        setLoadingShiftRecips(false);
       } catch (err) {
         console.log(err?.response)
+        setLoadingShiftRecips(false);
       }
     }
     getShiftRecips();
@@ -331,7 +336,7 @@ const LogoutIndex = (props) => {
                     // $2,310.46
                   }}
                 />
-                
+
               </View>
             </View>
           </View>
@@ -344,29 +349,41 @@ const LogoutIndex = (props) => {
             alignItems: 'center'
 
           }}>
-            <View style={{ height: '55%', width: '78%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
-              <View style={{ paddingBottom: 10, height: "95%" }}>
-                <FlatList
-                  data={shiftRecips}
-                  keyExtractor={({ id }) => id}
-                  renderItem={({ item }) => {
-                    return (
-                      <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: '7%', marginRight: '7%', marginTop: 20 }} >
-                        <View style={{ marginBottom: 10 }} >
-                          <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
-                          <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
-                        </View>
-                        <View style={{ flex: 1, alignItems: 'flex-end' }} >
-                          <Text style={styles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
-                        </View>
-                      </View>
-                    )
-                  }}
-                />
+            {loadingShiftRecips ?
+              <View style={{ height: '55%', width: '78%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
+                <View style={{ justifyContent: 'center', height: '100%' }}>
+                  <ActivityIndicator size={"large"} color={'#00A9A0'} />
+                </View>
               </View>
-
-
-            </View>
+              :
+              <View style={{ height: '55%', width: '78%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
+                {shiftRecips.length > 0 ?
+                  <View style={{ paddingBottom: 10, height: "95%" }}>
+                    <FlatList
+                      data={shiftRecips}
+                      keyExtractor={({ id }) => id}
+                      renderItem={({ item }) => {
+                        return (
+                          <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: '7%', marginRight: '7%', marginTop: 20 }} >
+                            <View style={{ marginBottom: 10 }} >
+                              <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
+                              <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
+                            </View>
+                            <View style={{ flex: 1, alignItems: 'flex-end' }} >
+                              <Text style={styles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
+                            </View>
+                          </View>
+                        )
+                      }}
+                    />
+                  </View>
+                  :
+                  <View style={{ marginLeft: '13%', padding: '10%' }}>
+                    <Text style={styles.textPago}> No se encuentran registros en el historial </Text>
+                  </View>
+                }
+              </View>
+            }
             <View style={{
               width: '75%',
               height: '13%',

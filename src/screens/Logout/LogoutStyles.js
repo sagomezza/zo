@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     textInput: {
@@ -138,6 +138,11 @@ const styles = StyleSheet.create({
         shadowRadius: 50,
         elevation: 5,
         flexDirection: 'column'
+    },
+    textPago: {
+        fontSize: width * 0.02,
+        color: '#5D5D5D',
+        fontFamily: 'Montserrat-Regular'
     },
 })
 export default styles;
