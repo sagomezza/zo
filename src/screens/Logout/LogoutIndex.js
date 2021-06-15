@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   StyleSheet,
   View,
@@ -37,6 +37,7 @@ import store from '../../config/store';
 import { createIdempotency } from '../../utils/idempotency';
 import * as Sentry from "@sentry/browser";
 import * as Device from "expo-device";
+import CurrencyInput from 'react-native-currency-input';
 
 
 const LogoutIndex = (props) => {
@@ -106,7 +107,6 @@ const LogoutIndex = (props) => {
   });
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
   const [logoutError, setLogoutError] = useState(false);
@@ -120,6 +120,7 @@ const LogoutIndex = (props) => {
   const [macAddress, setMacAddress] = useState('');
   const [uidLogout, setUidLogout] = useState('');
   const uidDefini = uid.uid !== '' ? uid.uid : uidLogout;
+
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -261,6 +262,9 @@ const LogoutIndex = (props) => {
               <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.032 }}>
                 {"TOTAL: "}{`$${numberWithPoints(total)}`}
               </Text>
+
+
+
             </View>
             <View style={{ flexDirection: 'row', width: '80%', height: '22%', alignItems: 'center', alignContent: 'center', padding: '1%', justifyContent: 'center' }}>
               <View style={{ width: '30%' }}>
@@ -276,16 +280,23 @@ const LogoutIndex = (props) => {
                 width: '70%',
                 height: '80%'
               }}>
-                <TextInput
+                <CurrencyInput
                   placeholder='$'
+                  textAlign='center'
+
                   style={
                     styles.textInput
                   }
-                  keyboardType='numeric'
-                  textAlign='center'
-                  editable={isDisabled}
-                  onChangeText={text => setInputBaseValue(text) + ''}
                   value={inputBaseValue}
+                  onChangeValue={text => setInputBaseValue(text)}
+                  prefix="$"
+                  delimiter="."
+                  separator="."
+                  precision={0}
+                  onChangeText={(formattedValue) => {
+                    // console.log(formattedValue);
+                    // $2,310.46
+                  }}
                 />
               </View>
             </View>
@@ -295,6 +306,7 @@ const LogoutIndex = (props) => {
                   {"DINERO EN EFECTIVO: "}
                 </Text>
               </View>
+
               <View style={{
                 justifyContent: "center",
                 alignContent: 'center',
@@ -303,15 +315,23 @@ const LogoutIndex = (props) => {
                 width: '70%',
                 height: '80%'
               }}>
-                <TextInput
+                <CurrencyInput
                   placeholder='$'
-                  style={total === inputValue ? styles.textInput : styles.textInputDifTotal}
-                  keyboardType='numeric'
                   textAlign='center'
-                  editable={isDisabled}
-                  onChangeText={text => setInputValue(text) + ''}
+                  keyboardType='numeric'
+                  style={total === inputValue ? styles.textInput : styles.textInputDifTotal}
                   value={inputValue}
+                  onChangeValue={text => setInputValue(text)}
+                  prefix="$"
+                  delimiter="."
+                  separator="."
+                  precision={0}
+                  onChangeText={(formattedValue) => {
+                    // console.log(formattedValue);
+                    // $2,310.46
+                  }}
                 />
+                
               </View>
             </View>
           </View>
@@ -397,10 +417,10 @@ const LogoutIndex = (props) => {
                 </View>
                 :
                 <View style={{ margin: '2%', justifyContent: 'flex-end', height: '30%' }}>
-                <Text style={styles.modalText}>
-                  Una vez cierres el turno no podrás modificar el valor ingresado  ¿está seguro que deseas guardar y cerrar?
-                </Text>
-              </View>
+                  <Text style={styles.modalText}>
+                    Una vez cierres el turno no podrás modificar el valor ingresado  ¿está seguro que deseas guardar y cerrar?
+                  </Text>
+                </View>
               }
 
 
