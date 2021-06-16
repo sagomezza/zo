@@ -1,18 +1,67 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  topImage: {
+    flex: 1,
+    width: '100%',
+    height: '40%',
+    flexDirection: 'column'
+  },
+  bottomContainer: {
+    height: '66%',
+    backgroundColor: '#F8F8F8',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    alignContent: 'center',
+    alignItems: 'center'
+  },
+  bikeCounter: {
+    height: '70%',
+    width: '70%',
+    flexDirection: 'column',
+    alignItems: 'center',
+    alignContent: 'center',
+    marginTop: '13%',
+    marginLeft: '4%'
+  },
+  bikeImage: {
+    width: "40%",
+    height: "40%",
+    marginTop: '10%'
+  },
+  carImage: {
+    width: "38%",
+    height: "38%",
+    marginTop: '10%'
+  },
+  listContainer: {
+    height: '38%',
+    width: '73%',
+    backgroundColor: '#FFFFFF',
+    marginTop: '2%',
+    borderRadius: 10,
+  },
+  list: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderColor: "#E9E9E9",
+    marginBottom: '2%',
+    marginLeft: '10%',
+    marginRight: '10%',
+    marginTop: '0%'
+  },
   plateContainer: {
     flexDirection: "row",
     alignContent: 'center',
-    alignItems:'center',
+    alignItems: 'center',
     width: '100%',
     height: '23%',
     justifyContent: 'center'
   },
   plateInput: {
-    width: '45%', 
+    width: '45%',
     height: '90%',
 
   },
@@ -34,7 +83,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold'
   },
   textListTitle: {
-    fontSize: width * 0.025 ,
+    fontSize: width * 0.025,
     color: '#00A9A0',
     fontFamily: 'Montserrat-Bold'
   },
@@ -48,6 +97,11 @@ const styles = StyleSheet.create({
     color: '#5D5D5D',
     fontFamily: 'Montserrat-Regular'
   },
+  footerContainer: {
+    height: '17%',
+    width: '100%',
+    justifyContent: 'flex-end'
+  }
 });
 
 export default styles;

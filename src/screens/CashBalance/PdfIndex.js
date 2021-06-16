@@ -65,11 +65,9 @@ const txtGenerator = (props) => {
     try {
       const todayRecips = totalRecips.filter(recip => moment(recip.dateFinished).isBetween(date1, date2))
       // console.log(todayRecips)
-
       setDataToday(todayRecips)
     } catch (err) {
       console.log(err)
-
     }
   }, [date1, date2]);
 
@@ -91,7 +89,6 @@ const txtGenerator = (props) => {
         setSignatureUri(file.uri);
         setSign(true);
         console.log(file.uri);
-
         console.log("-------2-----")
 
       })
@@ -127,11 +124,8 @@ const txtGenerator = (props) => {
       .then(snapshot => {
         try {
           if (snapshot.empty) {
-            // setLoadingBoxGenerator(true);
             setModal3Visible(true);
-            // return
           }
-
           let reports = []
           snapshot.forEach(doc => {
             let data = doc.data()
@@ -140,8 +134,6 @@ const txtGenerator = (props) => {
             data.dateStart = moment(data.dateStart.toDate()).add(-5, "hours")
             reports.push(data)
           })
-
-
 
           let dateStart = moment()
             .add(-1, "days")
@@ -162,7 +154,7 @@ const txtGenerator = (props) => {
           })
           if (dailyReports.length === 0 || dailyReports.length < 3) {
             setModal3Visible(true);
-          }else if (reports.length > 2) {
+          } else if (reports.length > 2) {
             let boxTotal = 0
             dailyReports.forEach(report => {
               boxTotal += report.total
@@ -175,8 +167,6 @@ const txtGenerator = (props) => {
             gotBoxTotal();
 
           }
-
-          // console.log(boxTotal)
           setLoadingBoxGenerator(false);
         } catch (err) {
           console.log(err)
@@ -216,13 +206,12 @@ const txtGenerator = (props) => {
         { timeout: TIMEOUT }
       );
       setListBox(response.data.data)
-    setLoadingReadBoxReport(false);
+      setLoadingReadBoxReport(false);
 
     } catch (err) {
-    setLoadingReadBoxReport(false);
-
+      setLoadingReadBoxReport(false);
       // console.log(err)
-      // console.log(err?.response)
+      console.log(err?.response)
     }
   };
 
@@ -315,8 +304,6 @@ const txtGenerator = (props) => {
     }
   }
 
-
-
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground
@@ -335,7 +322,6 @@ const txtGenerator = (props) => {
           </View>
           <View style={styles.listContainer}>
             <View style={styles.listOne}>
-
               <View style={{
                 marginLeft: '10%',
                 marginBottom: '3%',
@@ -365,7 +351,11 @@ const txtGenerator = (props) => {
                           <Text style={styles.textPago}>Pago por ${formatHours(item.hours)} horas</Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
-                          <Text style={styles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
+                          <Text style={styles.textMoney}>
+                            {item.cash === 0 && item.change === 0 ? '$0' : ''}
+                            {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                            {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                          </Text>
                         </View>
                       </View>
                     )
@@ -455,12 +445,8 @@ const txtGenerator = (props) => {
                                   disabled={true}
                                 />
                               }
-
                             </View>
                           </View>
-
-
-
                         </TouchableOpacity>
                       )
                     }}
@@ -497,7 +483,7 @@ const txtGenerator = (props) => {
                         fontFamily: 'Montserrat-Bold'
                       }}>
                         Ingrese el valor exacto:
-                        </Text>
+                      </Text>
                       <Text style={{
                         ...styles.modalText,
                         fontSize: normalize(20),

@@ -147,6 +147,7 @@ const LogoutIndex = (props) => {
         },
           { timeout: TIMEOUT }
         );
+        console.log(response.data.data.recips[30])
         if (response.data.response === 1) {
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
@@ -165,7 +166,6 @@ const LogoutIndex = (props) => {
     setLoading(true);
     try {
       let idempotencyKey = createIdempotency(uid.uid)
-
       const response = await instance.post(MARK_END_OF_SHIFT, {
         email: officialProps.email,
         id: officialProps.id,
@@ -184,7 +184,6 @@ const LogoutIndex = (props) => {
       });
       setLoading(false);
       setModal4Visible(true);
-
     } catch (err) {
       // console.log(err)
       console.log(err?.response)
@@ -226,12 +225,31 @@ const LogoutIndex = (props) => {
         source={require('../../../assets/images/Stripes.png')}>
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={{ height: '38%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
-            <View style={{ flexDirection: 'column', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%' }}>
-              <Text style={{ fontSize: width * 0.04, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>
+          <View style={{
+            height: '38%',
+            alignContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column'
+          }} >
+            <View style={{
+              flexDirection: 'column',
+              alignItems: 'center',
+              alignContent: 'center',
+              height: '20%',
+              width: '60%'
+            }}>
+              <Text style={{
+                fontSize: width * 0.04,
+                fontFamily: 'Montserrat-Bold',
+                color: '#FFFFFF'
+              }}>
                 {officialProps.name + ' ' + officialProps.lastName}
               </Text>
-              <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: width * 0.03, color: '#FFFFFF' }}>{hq.name}</Text>
+              <Text style={{
+                fontFamily: 'Montserrat-Regular',
+                fontSize: width * 0.03,
+                color: '#FFFFFF'
+              }}>{hq.name}</Text>
             </View>
             <View style={{
               flexDirection: 'row',
@@ -263,15 +281,28 @@ const LogoutIndex = (props) => {
 
               </View>
             </View>
-            <View style={{ width: '30%' }}>
-              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.032 }}>
+            <View style={{
+              width: '50%',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+              <Text style={{
+                fontFamily: 'Montserrat-Bold',
+                color: '#FFFFFF',
+                fontSize: width * 0.032
+              }}>
                 {"TOTAL: "}{`$${numberWithPoints(total)}`}
               </Text>
-
-
-
             </View>
-            <View style={{ flexDirection: 'row', width: '80%', height: '22%', alignItems: 'center', alignContent: 'center', padding: '1%', justifyContent: 'center' }}>
+            <View style={{
+              flexDirection: 'row',
+              width: '80%',
+              height: '22%',
+              alignItems: 'center',
+              alignContent: 'center',
+              padding: '1%',
+              justifyContent: 'center'
+            }}>
               <View style={{ width: '30%' }}>
                 <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>
                   {"BASE: "}
@@ -305,9 +336,21 @@ const LogoutIndex = (props) => {
                 />
               </View>
             </View>
-            <View style={{ flexDirection: 'row', width: '80%', height: '22%', alignItems: 'center', alignContent: 'center', padding: '1%', justifyContent: 'space-between' }}>
+            <View style={{
+              flexDirection: 'row',
+              width: '80%',
+              height: '22%',
+              alignItems: 'center',
+              alignContent: 'center',
+              padding: '1%',
+              justifyContent: 'space-between'
+            }}>
               <View style={{ width: '30%' }}>
-                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>
+                <Text style={{
+                  fontFamily: 'Montserrat-Bold',
+                  color: '#FFFFFF',
+                  fontSize: width * 0.030
+                }}>
                   {"DINERO EN EFECTIVO: "}
                 </Text>
               </View>
@@ -347,16 +390,27 @@ const LogoutIndex = (props) => {
             borderTopRightRadius: 30,
             alignContent: 'center',
             alignItems: 'center'
-
           }}>
             {loadingShiftRecips ?
-              <View style={{ height: '55%', width: '78%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
+              <View style={{
+                height: '55%',
+                width: '78%',
+                backgroundColor: '#FFFFFF',
+                marginTop: '6%',
+                borderRadius: 10
+              }}>
                 <View style={{ justifyContent: 'center', height: '100%' }}>
                   <ActivityIndicator size={"large"} color={'#00A9A0'} />
                 </View>
               </View>
               :
-              <View style={{ height: '55%', width: '78%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
+              <View style={{
+                height: '55%',
+                width: '78%',
+                backgroundColor: '#FFFFFF',
+                marginTop: '6%',
+                borderRadius: 10
+              }}>
                 {shiftRecips.length > 0 ?
                   <View style={{ paddingBottom: 10, height: "95%" }}>
                     <FlatList
@@ -364,13 +418,26 @@ const LogoutIndex = (props) => {
                       keyExtractor={({ id }) => id}
                       renderItem={({ item }) => {
                         return (
-                          <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: '7%', marginRight: '7%', marginTop: 20 }} >
+                          <View style={{
+                            flexDirection: "row",
+                            position: 'relative',
+                            borderBottomWidth: 1,
+                            borderColor: "#96A3A0",
+                            marginBottom: 10,
+                            marginLeft: '7%',
+                            marginRight: '7%',
+                            marginTop: 20
+                          }} >
                             <View style={{ marginBottom: 10 }} >
                               <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
                               <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
                             </View>
                             <View style={{ flex: 1, alignItems: 'flex-end' }} >
-                              <Text style={styles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
+                              <Text style={styles.textMoney}>
+                                {item.cash === 0 && item.change === 0 ? '$0' : ''}
+                                {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                                {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                              </Text>
                             </View>
                           </View>
                         )
@@ -404,9 +471,12 @@ const LogoutIndex = (props) => {
                 }
                 } />
             </View>
-            <View style={{ height: '22%', width: '100%', justifyContent: 'flex-end' }}>
+            <View style={{
+              height: '22%',
+              width: '100%',
+              justifyContent: 'flex-end'
+            }}>
               <FooterIndex navigation={navigation} />
-
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -439,8 +509,6 @@ const LogoutIndex = (props) => {
                   </Text>
                 </View>
               }
-
-
               <View style={{
                 height: '30%',
                 width: '100%',
@@ -550,18 +618,14 @@ const LogoutIndex = (props) => {
               {logoutError ?
                 <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
                   <Text style={styles.modalText}> ¡ Algo malo pasó ! </Text>
-
                   <Text style={styles.modalText}> Espera un momento y dale en el botón para intentar de nuevo. </Text>
                 </View>
                 :
                 <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
                   <Text style={styles.modalText}> ¡ Se cerró el turno con éxito ! </Text>
-
                   <Text style={styles.modalText}> Dale en el botón para realizar el cierre de sesión </Text>
                 </View>
-
               }
-
               <View style={{
                 height: '30%',
                 width: '100%',
@@ -593,7 +657,6 @@ const LogoutIndex = (props) => {
                     }}
                   />
                 </View>
-
               </View>
             </View>
 
