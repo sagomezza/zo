@@ -57,9 +57,9 @@ const Transactions = (props) => {
                                                     </View>
                                                     <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
                                                         <Text style={styles.textMoney}>
-                                                            {item.cash === 0 && item.change < 0 ? '' : ''}
+                                                            {item.cash === 0 && item.change === 0 ? '$0' : ''}
                                                             {item.cash > 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                                                            {item.cash > 0 && item.change > 0 ? `$${numberWithPoints(item.total)}` : ''}
+                                                            {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
                                                         </Text>
                                                     </View>
                                                 </View>

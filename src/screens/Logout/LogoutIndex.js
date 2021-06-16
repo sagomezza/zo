@@ -148,6 +148,7 @@ const LogoutIndex = (props) => {
           { timeout: TIMEOUT }
         );
         if (response.data.response === 1) {
+          console.log(response.data.data)
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
         }
@@ -165,7 +166,6 @@ const LogoutIndex = (props) => {
     setLoading(true);
     try {
       let idempotencyKey = createIdempotency(uid.uid)
-
       const response = await instance.post(MARK_END_OF_SHIFT, {
         email: officialProps.email,
         id: officialProps.id,
@@ -184,7 +184,6 @@ const LogoutIndex = (props) => {
       });
       setLoading(false);
       setModal4Visible(true);
-
     } catch (err) {
       // console.log(err)
       console.log(err?.response)
@@ -434,7 +433,11 @@ const LogoutIndex = (props) => {
                               <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
                             </View>
                             <View style={{ flex: 1, alignItems: 'flex-end' }} >
-                              <Text style={styles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
+                              <Text style={styles.textMoney}>
+                                {item.cash === 0 && item.change === 0 ? '$0' : ''}
+                                {item.cash > 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                                {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                              </Text>
                             </View>
                           </View>
                         )
