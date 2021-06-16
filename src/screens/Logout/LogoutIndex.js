@@ -263,13 +263,14 @@ const LogoutIndex = (props) => {
 
               </View>
             </View>
-            <View style={{ width: '30%' }}>
+            <View style={{
+              width: '50%',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
               <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.032 }}>
                 {"TOTAL: "}{`$${numberWithPoints(total)}`}
               </Text>
-
-
-
             </View>
             <View style={{ flexDirection: 'row', width: '80%', height: '22%', alignItems: 'center', alignContent: 'center', padding: '1%', justifyContent: 'center' }}>
               <View style={{ width: '30%' }}>

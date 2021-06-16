@@ -10,7 +10,7 @@ import { ImageBackground } from 'react-native';
 import Header from '../../components/Header/HeaderIndex';
 import numberWithPoints from '../../config/services/numberWithPoints';
 import FooterIndex from '../../components/Footer';
-import HomeStyles from '../Home/HomeStyles';
+import styles from '../Home/HomeStyles';
 import instance from "../../config/axios";
 import moment from 'moment';
 // api
@@ -20,7 +20,6 @@ import { TIMEOUT } from '../../config/constants/constants';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import store from '../../config/store';
-import { firestore } from '../../config/firebase';
 
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
@@ -39,15 +38,12 @@ const HomeIndex = (props) => {
           { timeout: TIMEOUT }
         );
         setLoadingRecips(false);
-
         if (response.data.response === 1) {
           store.dispatch(actions.setRecips(response.data.data));
         }
       } catch (err) {
         setLoadingRecips(false);
-
         console.log(err?.response)
-        // console.log("err: ", err);
       }
     };
 
@@ -72,8 +68,6 @@ const HomeIndex = (props) => {
       }
     }
 
-
-
     const readHq = async () => {
       setLoadingReservations(true);
       try {
@@ -87,14 +81,13 @@ const HomeIndex = (props) => {
           store.dispatch(actions.setHq(response.data.data));
         }
         setLoadingReservations(false);
-
       } catch (err) {
         setLoadingReservations(false);
-
         console.log("err: ", err);
         console.log(err?.response)
       }
     };
+    
     getRecips();
     readHq();
     updateExpoToken();
@@ -110,17 +103,15 @@ const HomeIndex = (props) => {
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground
-        style={{
-          flex: 1,
-          width: '100%',
-          height: '40%',
-          flexDirection: 'column'
-        }}
+        style={styles.topImage}
         source={require('../../../assets/images/Home.png')}>
         <Header navigation={navigation} />
-        <View style={HomeStyles.plateContainer}>
-
-          <View style={{ ...HomeStyles.plateInput, alignItems: 'center', alignContent: 'center' }}>
+        <View style={styles.plateContainer}>
+          <View style={{
+            ...styles.plateInput,
+            alignItems: 'center',
+            alignContent: 'center'
+          }}>
             <ImageBackground
               style={{
                 width: '78%',
@@ -129,77 +120,65 @@ const HomeIndex = (props) => {
               }}
               resizeMode={"contain"}
               source={require('../../../assets/images/Circulo.png')}>
-              <View style={{
-                height: '70%',
-                width: '70%',
-                flexDirection: 'column',
-                alignItems: 'center',
-                alignContent: 'center',
-                marginTop: '13%',
-                marginLeft: '4%'
-              }} >
-                <Image style={{ width: "40%", height: "40%", marginTop: '10%' }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoM.png')} />
+              <View style={styles.bikeCounter} >
+                <Image
+                  style={styles.bikeImage}
+                  resizeMode={"contain"}
+                  source={require('../../../assets/images/TrazadoM.png')}
+                />
                 <View style={{ flexDirection: 'row', height: '30%' }}>
-                  <Text style={HomeStyles.plateInputTextBig}>
+                  <Text style={styles.plateInputTextBig}>
                     {`${hq.occupiedBikes}`}
                   </Text>
-                  <Text style={HomeStyles.plateInputTextSmall} >{`/${hq.totalBikes}`}</Text>
+                  <Text style={styles.plateInputTextSmall} >
+                    {`/${hq.totalBikes}`}
+                  </Text>
                 </View>
               </View>
             </ImageBackground>
           </View>
-          <View style={HomeStyles.plateInput}>
+          <View style={styles.plateInput}>
             <ImageBackground
               style={{
                 width: '78%',
                 height: '98%',
                 marginLeft: '10%'
-
               }}
               resizeMode={"contain"}
               source={require('../../../assets/images/Circulo.png')}>
-              <View style={{
-                height: '70%',
-                width: '70%',
-                flexDirection: 'column',
-                alignItems: 'center',
-                alignContent: 'center',
-                marginTop: '13%',
-                marginLeft: '4%'
-              }} >
-                <Image style={{ width: "38%", height: "38%", marginTop: '10%' }} resizeMode={"contain"} source={require('../../../assets/images/TrazadoC.png')} />
+              <View style={styles.bikeCounter} >
+                <Image
+                  style={styles.carImage}
+                  resizeMode={"contain"}
+                  source={require('../../../assets/images/TrazadoC.png')}
+                />
                 <View style={{ flexDirection: 'row', height: '30%' }}>
-                  <Text style={HomeStyles.plateInputTextBig}>
+                  <Text style={styles.plateInputTextBig}>
                     {`${hq.occupiedCars}`}
                   </Text>
-                  <Text style={HomeStyles.plateInputTextSmall} >{`/${hq.totalCars}`}</Text>
+                  <Text style={styles.plateInputTextSmall} >
+                    {`/${hq.totalCars}`}
+                  </Text>
                 </View>
               </View>
             </ImageBackground>
           </View>
         </View>
-        <View style={{
-          height: '66%',
-          backgroundColor: '#F8F8F8',
-          borderTopLeftRadius: 30,
-          borderTopRightRadius: 30,
-          alignContent: 'center',
-          alignItems: 'center',
-
-        }}>
-          <View style={{ height: '38%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '2%', borderRadius: 10 }}>
-            <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
-              <Text style={HomeStyles.textListTitle} >HISTORIAL DE PAGOS</Text>
+        <View style={styles.bottomContainer}>
+          <View style={styles.listContainer}>
+            <View style={{
+              marginLeft: '10%',
+              marginBottom: '3%',
+              marginTop: '3%'
+            }}>
+              <Text style={styles.textListTitle} >HISTORIAL DE PAGOS</Text>
             </View>
             {loadingRecips ?
               <View style={{ height: "72%" }}>
-
                 <View style={{ justifyContent: 'center', height: '100%' }}>
                   <ActivityIndicator size={"large"} color={'#00A9A0'} />
                 </View>
               </View>
-
-
               :
               <View style={{ height: "72%" }}>
                 {recips.recips.length > 0 ?
@@ -209,17 +188,18 @@ const HomeIndex = (props) => {
                     keyExtractor={(item, index) => String(index)}
                     renderItem={({ item }) => {
                       return (
-                        <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
+                        <View style={styles.list} >
                           <View style={{ marginBottom: '2%' }} >
-                            <Text style={HomeStyles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
-                            <Text style={HomeStyles.textPago}>Pago por
-                              {
-                                item.hours === '1 month' ? ' mensualidad' : `${formatHours(item.hours)} horas`
-                              }
+                            <Text style={styles.textPlaca}>
+                              {typeof item.plate === 'string' ? item.plate : item.plate[0]}
+                            </Text>
+                            <Text style={styles.textPago}>
+                              Pago por
+                              {item.hours === '1 month' ? ' mensualidad' : `${formatHours(item.hours)} horas`}
                             </Text>
                           </View>
                           <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
-                            <Text style={HomeStyles.textMoney}>
+                            <Text style={styles.textMoney}>
                               {item.cash === 0 && item.change < 0 ? '' : ''}
                               {item.cash > 0 && item.change < 0 ? `$${numberWithPoints(item.total)}` : ''}
                               {item.cash > 0 && item.change > 0 ? `$${numberWithPoints(item.total)}` : ''}
@@ -230,28 +210,23 @@ const HomeIndex = (props) => {
                     }}
                   />
                   : <View style={{ marginLeft: '13%', padding: '10%' }}>
-                    <Text style={HomeStyles.textPago}> No se encuentran registros en el historial </Text>
+                    <Text style={styles.textPago}>
+                      No se encuentran registros en el historial
+                    </Text>
                   </View>
                 }
-
-              </View>
-
-            }
-
-
+              </View>}
           </View>
-          <View style={{ height: '38%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '1%', borderRadius: 10 }}>
+          <View style={styles.listContainer}>
             <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
-              <Text style={HomeStyles.textListTitle} >VEHÍCULOS PARQUEADOS</Text>
+              <Text style={styles.textListTitle} >VEHÍCULOS PARQUEADOS</Text>
             </View>
             {loadingReservations ?
               <View style={{ height: "72%" }}>
-
                 <View style={{ justifyContent: 'center', height: '100%' }}>
                   <ActivityIndicator size={"large"} color={'#00A9A0'} />
                 </View>
               </View>
-
               :
               <View style={{ height: "72%" }}>
                 {reservations.reservations.length > 0 ?
@@ -261,14 +236,14 @@ const HomeIndex = (props) => {
                     keyExtractor={(item, index) => String(index)}
                     renderItem={({ item }) => {
                       return (
-                        <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
+                        <View style={styles.list} >
                           <View style={{ marginBottom: '2%' }} >
-                            <Text style={HomeStyles.textPlaca}>{item.plate}</Text>
-                            <Text style={HomeStyles.textPago}>{item.verificationCode}</Text>
+                            <Text style={styles.textPlaca}>{item.plate}</Text>
+                            <Text style={styles.textPago}>{item.verificationCode}</Text>
                           </View>
                           <View style={{ flex: 1, alignItems: 'flex-end' }} >
-                            <Text style={HomeStyles.textMoney}>{moment(item.dateStart).format('L')}  {moment(item.dateStart).format('LT')}</Text>
-                            <Text style={HomeStyles.textPago}>
+                            <Text style={styles.textMoney}>{moment(item.dateStart).format('L')}  {moment(item.dateStart).format('LT')}</Text>
+                            <Text style={styles.textPago}>
                               Pago por
                               {item.prepayFullDay === true ? " pase día" : ""}
                               {item.mensuality === true ? " mensualidad" : ""}
@@ -282,14 +257,16 @@ const HomeIndex = (props) => {
                   />
                   :
                   <View style={{ marginLeft: '13%', padding: '10%' }}>
-                    <Text style={HomeStyles.textPago}>No hay parqueos activos en este momento</Text>
+                    <Text style={styles.textPago}>
+                      No hay parqueos activos en este momento
+                    </Text>
                   </View>
                 }
               </View>
             }
 
           </View>
-          <View style={{ height: '17%', width: '100%', justifyContent: 'flex-end' }}>
+          <View style={styles.footerContainer}>
             <FooterIndex navigation={navigation} />
           </View>
         </View>
