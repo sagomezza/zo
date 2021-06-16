@@ -147,8 +147,8 @@ const LogoutIndex = (props) => {
         },
           { timeout: TIMEOUT }
         );
+        console.log(response.data.data.recips[30])
         if (response.data.response === 1) {
-          console.log(response.data.data)
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
         }
@@ -435,7 +435,7 @@ const LogoutIndex = (props) => {
                             <View style={{ flex: 1, alignItems: 'flex-end' }} >
                               <Text style={styles.textMoney}>
                                 {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                                {item.cash > 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                                {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
                                 {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
                               </Text>
                             </View>
