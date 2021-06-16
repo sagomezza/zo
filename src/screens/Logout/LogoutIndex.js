@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,6 +7,7 @@ import {
   Modal,
   TouchableHighlight,
   Dimensions,
+  ActivityIndicator,
   Image
 } from 'react-native';
 import { ImageBackground } from 'react-native';
@@ -37,12 +38,13 @@ import store from '../../config/store';
 import { createIdempotency } from '../../utils/idempotency';
 import * as Sentry from "@sentry/browser";
 import * as Device from "expo-device";
+import CurrencyInput from 'react-native-currency-input';
 
 
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips, uid } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  const startTime = officialProps.schedule.start
+  const startTime = officialProps.schedule !== undefined ? officialProps.schedule.start : "";
 
   const HomeStyles = StyleSheet.create({
     plateInput: {
@@ -106,15 +108,13 @@ const LogoutIndex = (props) => {
   });
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
   const [logoutError, setLogoutError] = useState(false);
-
   const [total, setTotal] = useState(0);
   const [shiftRecips, setShiftRecips] = useState('');
+  const [loadingShiftRecips, setLoadingShiftRecips] = useState(true);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [hqInfo, setHqInfo] = useState([]);
   const hq = props.hq;
   const [inputBaseValue, setInputBaseValue] = useState('');
   const [inputValue, setInputValue] = useState('');
@@ -123,23 +123,22 @@ const LogoutIndex = (props) => {
   const [uidLogout, setUidLogout] = useState('');
   const uidDefini = uid.uid !== '' ? uid.uid : uidLogout;
 
+
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         setUidLogout(user.uid)
-
       } else {
       }
     })
     const macAdd = () => {
-
       Network.getMacAddressAsync().then(state => {
         setMacAddress(state)
-
       }
       )
     }
     const getShiftRecips = async () => {
+      setLoadingShiftRecips(true);
       try {
         const response = await instance.post(GET_SHIFT_RECIPS, {
           email: officialProps.email,
@@ -148,14 +147,14 @@ const LogoutIndex = (props) => {
         },
           { timeout: TIMEOUT }
         );
-        console.log(response.data)
         if (response.data.response === 1) {
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
         }
+        setLoadingShiftRecips(false);
       } catch (err) {
         console.log(err?.response)
-
+        setLoadingShiftRecips(false);
       }
     }
     getShiftRecips();
@@ -164,19 +163,6 @@ const LogoutIndex = (props) => {
 
   const markEndOfShift = async () => {
     setLoading(true);
-    console.log({
-      email: officialProps.email,
-      id: officialProps.id,
-      date: new Date(),
-      total: Number(total),
-      input: Number(inputValue),
-      base: Number(inputBaseValue),
-      hqId: officialHq,
-      macAddress: macAddress,
-      uid: uidDefini,
-      deviceId: `${Device.brand}-${Device.modelName}-${Device.deviceName}-${Device.deviceYearClass}`
-
-    })
     try {
       let idempotencyKey = createIdempotency(uid.uid)
 
@@ -207,7 +193,6 @@ const LogoutIndex = (props) => {
       setModal3Visible(true);
       Sentry.captureException('Error in end of shift', err?.response)
       // asociar a un evento de sentry, si pasa error intentar de nuevo descartar
-
     }
   }
 
@@ -221,7 +206,6 @@ const LogoutIndex = (props) => {
         setModal4Visible(false);
         setLoading(false);
         navigation.navigate('Login');
-        
       }).catch(function (error) {
         // An error happened.
         Sentry.captureException('Error in logout', error)
@@ -229,7 +213,6 @@ const LogoutIndex = (props) => {
         setLogoutError(true);
       });
   }
-
 
   return (
     <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
@@ -244,12 +227,11 @@ const LogoutIndex = (props) => {
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{ height: '38%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
-
             <View style={{ flexDirection: 'column', alignItems: 'center', alignContent: 'center', height: '20%', width: '60%' }}>
-              <Text style={{ fontSize: width * 0.04, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>{officialProps.name + ' ' + officialProps.lastName}</Text>
-              <View style={{}}>
-                <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: width * 0.03, color: '#FFFFFF' }}>{hq.name}</Text>
-              </View>
+              <Text style={{ fontSize: width * 0.04, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>
+                {officialProps.name + ' ' + officialProps.lastName}
+              </Text>
+              <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: width * 0.03, color: '#FFFFFF' }}>{hq.name}</Text>
             </View>
             <View style={{
               flexDirection: 'row',
@@ -282,11 +264,18 @@ const LogoutIndex = (props) => {
               </View>
             </View>
             <View style={{ width: '30%' }}>
-              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.032 }}>{"TOTAL: "}{`$${numberWithPoints(total)}`}</Text>
+              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.032 }}>
+                {"TOTAL: "}{`$${numberWithPoints(total)}`}
+              </Text>
+
+
+
             </View>
             <View style={{ flexDirection: 'row', width: '80%', height: '22%', alignItems: 'center', alignContent: 'center', padding: '1%', justifyContent: 'center' }}>
-              <View style={{ width: '21%' }}>
-                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>{"BASE: "} </Text>
+              <View style={{ width: '30%' }}>
+                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>
+                  {"BASE: "}
+                </Text>
               </View>
               <View style={{
                 justifyContent: "center",
@@ -296,31 +285,33 @@ const LogoutIndex = (props) => {
                 width: '70%',
                 height: '80%'
               }}>
-                <TextInput
+                <CurrencyInput
                   placeholder='$'
+                  textAlign='center'
+
                   style={
                     styles.textInput
                   }
-                  keyboardType='numeric'
-                  textAlign='center'
-                  editable={isDisabled}
-                  onChangeText={text => setInputBaseValue(text) + ''}
-                  value={inputBaseValue == 0 ? '' : inputBaseValue + ''}
-
-                />
-                {/* <TouchableOpacity style={[!inputValue.length === 0 ? styles.buttonTDisabled : styles.buttonT]}
-                  onPress={() => {
-                    setModal2Visible(true)
+                  value={inputBaseValue}
+                  onChangeValue={text => setInputBaseValue(text)}
+                  prefix="$"
+                  delimiter="."
+                  separator="."
+                  precision={0}
+                  onChangeText={(formattedValue) => {
+                    // console.log(formattedValue);
+                    // $2,310.46
                   }}
-                  disabled={inputValue.length === 0}>
-                  <Icon name='save' color='#00A9A0' style={{ marginTop: '4%' }} />
-                </TouchableOpacity> */}
+                />
               </View>
             </View>
             <View style={{ flexDirection: 'row', width: '80%', height: '22%', alignItems: 'center', alignContent: 'center', padding: '1%', justifyContent: 'space-between' }}>
               <View style={{ width: '30%' }}>
-                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>{"DINERO EN EFECTIVO: "} </Text>
+                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>
+                  {"DINERO EN EFECTIVO: "}
+                </Text>
               </View>
+
               <View style={{
                 justifyContent: "center",
                 alignContent: 'center',
@@ -329,31 +320,26 @@ const LogoutIndex = (props) => {
                 width: '70%',
                 height: '80%'
               }}>
-                <TextInput
+                <CurrencyInput
                   placeholder='$'
-                  style={
-                    styles.textInput
-                  }
-                  keyboardType='numeric'
                   textAlign='center'
-                  editable={isDisabled}
-                  onChangeText={text => setInputValue(text) + ''}
-                  value={inputValue == 0 ? '' : inputValue + ''}
-
-                />
-                <TouchableOpacity style={[!inputValue.length === 0 ? styles.buttonTDisabled : styles.buttonT]}
-                  onPress={() => {
-                    setModal2Visible(true)
+                  keyboardType='numeric'
+                  style={total === inputValue ? styles.textInput : styles.textInputDifTotal}
+                  value={inputValue}
+                  onChangeValue={text => setInputValue(text)}
+                  prefix="$"
+                  delimiter="."
+                  separator="."
+                  precision={0}
+                  onChangeText={(formattedValue) => {
+                    // console.log(formattedValue);
+                    // $2,310.46
                   }}
-                  disabled={inputValue.length === 0}>
-                  <Icon name='save' color='#00A9A0' style={{ marginTop: '4%' }} />
-                </TouchableOpacity>
+                />
+
               </View>
             </View>
-
-
           </View>
-
           <View style={{
             height: '58%',
             backgroundColor: '#F8F8F8',
@@ -363,29 +349,41 @@ const LogoutIndex = (props) => {
             alignItems: 'center'
 
           }}>
-            <View style={{ height: '55%', width: '78%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
-              <View style={{ paddingBottom: 10, height: "95%" }}>
-                <FlatList
-                  data={shiftRecips}
-                  keyExtractor={({ id }) => id}
-                  renderItem={({ item }) => {
-                    return (
-                      <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: '7%', marginRight: '7%', marginTop: 20 }} >
-                        <View style={{ marginBottom: 10 }} >
-                          <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
-                          <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
-                        </View>
-                        <View style={{ flex: 1, alignItems: 'flex-end' }} >
-                          <Text style={styles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
-                        </View>
-                      </View>
-                    )
-                  }}
-                />
+            {loadingShiftRecips ?
+              <View style={{ height: '55%', width: '78%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
+                <View style={{ justifyContent: 'center', height: '100%' }}>
+                  <ActivityIndicator size={"large"} color={'#00A9A0'} />
+                </View>
               </View>
-
-
-            </View>
+              :
+              <View style={{ height: '55%', width: '78%', backgroundColor: '#FFFFFF', marginTop: '6%', borderRadius: 10 }}>
+                {shiftRecips.length > 0 ?
+                  <View style={{ paddingBottom: 10, height: "95%" }}>
+                    <FlatList
+                      data={shiftRecips}
+                      keyExtractor={({ id }) => id}
+                      renderItem={({ item }) => {
+                        return (
+                          <View style={{ flexDirection: "row", position: 'relative', borderBottomWidth: 1, borderColor: "#96A3A0", marginBottom: 10, marginLeft: '7%', marginRight: '7%', marginTop: 20 }} >
+                            <View style={{ marginBottom: 10 }} >
+                              <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
+                              <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
+                            </View>
+                            <View style={{ flex: 1, alignItems: 'flex-end' }} >
+                              <Text style={styles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
+                            </View>
+                          </View>
+                        )
+                      }}
+                    />
+                  </View>
+                  :
+                  <View style={{ marginLeft: '13%', padding: '10%' }}>
+                    <Text style={styles.textPago}> No se encuentran registros en el historial </Text>
+                  </View>
+                }
+              </View>
+            }
             <View style={{
               width: '75%',
               height: '13%',
@@ -396,9 +394,9 @@ const LogoutIndex = (props) => {
                 setModalVisible(true)
               }}
                 title="C E R R A R  T U R N O"
-                disabled={!inputValue.length === 0}
+                disabled={inputValue.length === 0 || inputBaseValue.length === 0}
                 color="#00A9A0"
-                style={[inputValue.length === 0 ? styles.shiftButtonDisabled : styles.shiftButton]}
+                style={[inputValue.length === 0 || inputBaseValue.length === 0 ? styles.shiftButtonDisabled : styles.shiftButton]}
                 textStyle={{
                   color: "#FFFFFF",
                   textAlign: "center",
@@ -413,57 +411,6 @@ const LogoutIndex = (props) => {
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
-
-      <Modal
-        animationType="fade"
-        transparent={true}
-        backdropOpacity={0.3}
-        visible={modal2Visible}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalText}> ¿Estás seguro de que quieres guardar el total?  </Text>
-              </View>
-              <View style={{ height: '30%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
-                <View style={{ width: '75%', height: '50%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
-                  <Button onPress={() => {
-                    setModal2Visible(!modal2Visible);
-                    setIsDisabled(false)
-                  }}
-                    title="S I"
-                    color="#00A9A0"
-                    style={
-                      styles.modal2Button
-                    }
-                    textStyle={{
-                      color: "#FFFFFF",
-                      textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
-                    }} />
-                </View>
-                <View style={{ width: '75%', height: '50%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
-                  <Button onPress={() => {
-                    setModal2Visible(!modal2Visible);
-
-                  }}
-                    title="N O"
-                    color="#00A9A0"
-                    style={
-                      styles.modal2Button
-                    }
-                    textStyle={{
-                      color: "#FFFFFF",
-                      textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
-                    }} />
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
       <Modal
         animationType="fade"
         transparent={true}
@@ -479,9 +426,21 @@ const LogoutIndex = (props) => {
               padding: '2%'
             }}
             >
-              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalText}> ¿Quieres continuar con el cierre de turno? </Text>
-              </View>
+              {Number(total) - Number(inputValue) !== 0 ?
+                <View style={{ margin: '2%', justifyContent: 'center', height: '30%' }}>
+                  <Text style={styles.modalTextAlert}>
+                    Tiene una diferencia de {`$${numberWithPoints(Number(total) - Number(inputValue))}`} ¿está seguro que desea guardar y cerrar?
+                  </Text>
+                </View>
+                :
+                <View style={{ margin: '2%', justifyContent: 'flex-end', height: '30%' }}>
+                  <Text style={styles.modalText}>
+                    Una vez cierres el turno no podrás modificar el valor ingresado  ¿está seguro que deseas guardar y cerrar?
+                  </Text>
+                </View>
+              }
+
+
               <View style={{
                 height: '30%',
                 width: '100%',

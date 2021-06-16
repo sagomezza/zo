@@ -3,7 +3,8 @@ import {
   View,
   Text,
   FlatList,
-  Image
+  Image,
+  ActivityIndicator
 } from 'react-native';
 import { ImageBackground } from 'react-native';
 import Header from '../../components/Header/HeaderIndex';
@@ -24,9 +25,12 @@ import { firestore } from '../../config/firebase';
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
+  const [loadingRecips, setLoadingRecips] = useState(true);
+  const [loadingReservations, setLoadingReservations] = useState(true);
 
   useEffect(() => {
     const getRecips = async () => {
+      setLoadingRecips(true);
       try {
         const response = await instance.post(GET_RECIPS, {
           hqId: officialHq,
@@ -34,10 +38,14 @@ const HomeIndex = (props) => {
         },
           { timeout: TIMEOUT }
         );
+        setLoadingRecips(false);
+
         if (response.data.response === 1) {
           store.dispatch(actions.setRecips(response.data.data));
         }
       } catch (err) {
+        setLoadingRecips(false);
+
         console.log(err?.response)
         // console.log("err: ", err);
       }
@@ -58,38 +66,16 @@ const HomeIndex = (props) => {
             expoToken: props.expoToken.expoToken
           });
         } catch (err) {
-          console.log("[updateExpoToken - Home screen]:", err)
+          // console.log("[updateExpoToken - Home screen]:", err)
           console.log(err?.response)
         }
       }
     }
 
-    // const parked = (hqId) => {
 
-    //   try {
-    //     firestore.collection("headquarters")
-    //       .get()
-    //       .then(snapshot => {
-    //         if (snapshot.empty) {
-    //           console.log('---------------nope')
-    //         } else {
-    //           snapshot.forEach(doc => {
-    //             console.log(doc)
-    //             console.log('---------------yep')
-
-    //           })
-    //         }
-    //       })
-    //       .catch(error => {
-    //         console.log(error)
-    //       })
-
-    //   } catch (err) {
-    //     console.log(err)
-    //   }
-    // }
 
     const readHq = async () => {
+      setLoadingReservations(true);
       try {
         const response = await instance.post(READ_HQ, {
           id: officialHq
@@ -100,7 +86,11 @@ const HomeIndex = (props) => {
           store.dispatch(actions.setReservations(response.data.data.reservations));
           store.dispatch(actions.setHq(response.data.data));
         }
+        setLoadingReservations(false);
+
       } catch (err) {
+        setLoadingReservations(false);
+
         console.log("err: ", err);
         console.log(err?.response)
       }
@@ -201,78 +191,103 @@ const HomeIndex = (props) => {
             <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
               <Text style={HomeStyles.textListTitle} >HISTORIAL DE PAGOS</Text>
             </View>
-            <View style={{ height: "72%" }}>
-              {recips.recips.length > 0 ?
-                <FlatList
-                  style={{ height: "37%" }}
-                  data={recips.recips}
-                  keyExtractor={(item, index) => String(index)}
-                  renderItem={({ item }) => {
-                    return (
-                      <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
-                        <View style={{ marginBottom: '2%' }} >
-                          <Text style={HomeStyles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
-                          <Text style={HomeStyles.textPago}>Pago por
-                          {
-                              item.hours === '1 month' ? ' mensualidad' : `${formatHours(item.hours)} horas`
-                            }
-                          </Text>
-                        </View>
-                        <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
-                          <Text style={HomeStyles.textMoney}>
-                            {item.cash === 0 && item.change < 0 ? '' : ''}
-                            {item.cash > 0 && item.change < 0 ? `$${numberWithPoints(item.total)}` : ''}
-                            {item.cash > 0 && item.change > 0 ? `$${numberWithPoints(item.total)}` : ''}
-                          </Text>
-                        </View>
-                      </View>
-                    )
-                  }}
-                />
-                :
-                <View style={{ marginLeft: '13%', padding: '10%' }}>
-                  <Text style={HomeStyles.textPago}> No se encuentran registros en el historial </Text>
+            {loadingRecips ?
+              <View style={{ height: "72%" }}>
+
+                <View style={{ justifyContent: 'center', height: '100%' }}>
+                  <ActivityIndicator size={"large"} color={'#00A9A0'} />
                 </View>
-              }
-            </View>
+              </View>
+
+
+              :
+              <View style={{ height: "72%" }}>
+                {recips.recips.length > 0 ?
+                  <FlatList
+                    style={{ height: "37%" }}
+                    data={recips.recips}
+                    keyExtractor={(item, index) => String(index)}
+                    renderItem={({ item }) => {
+                      return (
+                        <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
+                          <View style={{ marginBottom: '2%' }} >
+                            <Text style={HomeStyles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
+                            <Text style={HomeStyles.textPago}>Pago por
+                              {
+                                item.hours === '1 month' ? ' mensualidad' : `${formatHours(item.hours)} horas`
+                              }
+                            </Text>
+                          </View>
+                          <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
+                            <Text style={HomeStyles.textMoney}>
+                              {item.cash === 0 && item.change < 0 ? '' : ''}
+                              {item.cash > 0 && item.change < 0 ? `$${numberWithPoints(item.total)}` : ''}
+                              {item.cash > 0 && item.change > 0 ? `$${numberWithPoints(item.total)}` : ''}
+                            </Text>
+                          </View>
+                        </View>
+                      )
+                    }}
+                  />
+                  : <View style={{ marginLeft: '13%', padding: '10%' }}>
+                    <Text style={HomeStyles.textPago}> No se encuentran registros en el historial </Text>
+                  </View>
+                }
+
+              </View>
+
+            }
+
+
           </View>
           <View style={{ height: '38%', width: '73%', backgroundColor: '#FFFFFF', marginTop: '1%', borderRadius: 10 }}>
             <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
               <Text style={HomeStyles.textListTitle} >VEHÍCULOS PARQUEADOS</Text>
             </View>
-            <View style={{ height: "72%" }}>
-              {reservations.reservations.length > 0 ?
-                <FlatList
-                  style={{ height: "37%" }}
-                  data={reservations.reservations}
-                  keyExtractor={(item, index) => String(index)}
-                  renderItem={({ item }) => {
-                    return (
-                      <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
-                        <View style={{ marginBottom: '2%' }} >
-                          <Text style={HomeStyles.textPlaca}>{item.plate}</Text>
-                          <Text style={HomeStyles.textPago}>{item.verificationCode}</Text>
-                        </View>
-                        <View style={{ flex: 1, alignItems: 'flex-end' }} >
-                          <Text style={HomeStyles.textMoney}>{moment(item.dateStart).format('L')}  {moment(item.dateStart).format('LT')}</Text>
-                          <Text style={HomeStyles.textPago}>
-                            Pago por
-                            {item.prepayFullDay === true ? " pase día" : ""}
-                            {item.mensuality === true ? " mensualidad" : ""}
-                            {item.isParanoic === true ? " horas" : ""}
-                            {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? " horas" : ""}
-                          </Text>
-                        </View>
-                      </View>
-                    )
-                  }}
-                />
-                :
-                <View style={{ marginLeft: '13%', padding: '10%' }}>
-                  <Text style={HomeStyles.textPago}>No hay parqueos activos en este momento</Text>
+            {loadingReservations ?
+              <View style={{ height: "72%" }}>
+
+                <View style={{ justifyContent: 'center', height: '100%' }}>
+                  <ActivityIndicator size={"large"} color={'#00A9A0'} />
                 </View>
-              }
-            </View>
+              </View>
+
+              :
+              <View style={{ height: "72%" }}>
+                {reservations.reservations.length > 0 ?
+                  <FlatList
+                    style={{ height: "37%" }}
+                    data={reservations.reservations}
+                    keyExtractor={(item, index) => String(index)}
+                    renderItem={({ item }) => {
+                      return (
+                        <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
+                          <View style={{ marginBottom: '2%' }} >
+                            <Text style={HomeStyles.textPlaca}>{item.plate}</Text>
+                            <Text style={HomeStyles.textPago}>{item.verificationCode}</Text>
+                          </View>
+                          <View style={{ flex: 1, alignItems: 'flex-end' }} >
+                            <Text style={HomeStyles.textMoney}>{moment(item.dateStart).format('L')}  {moment(item.dateStart).format('LT')}</Text>
+                            <Text style={HomeStyles.textPago}>
+                              Pago por
+                              {item.prepayFullDay === true ? " pase día" : ""}
+                              {item.mensuality === true ? " mensualidad" : ""}
+                              {item.isParanoic === true ? " horas" : ""}
+                              {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? " horas" : ""}
+                            </Text>
+                          </View>
+                        </View>
+                      )
+                    }}
+                  />
+                  :
+                  <View style={{ marginLeft: '13%', padding: '10%' }}>
+                    <Text style={HomeStyles.textPago}>No hay parqueos activos en este momento</Text>
+                  </View>
+                }
+              </View>
+            }
+
           </View>
           <View style={{ height: '17%', width: '100%', justifyContent: 'flex-end' }}>
             <FooterIndex navigation={navigation} />

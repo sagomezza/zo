@@ -145,10 +145,10 @@ const LoginIndex = (props) => {
 
   const revokeCurrentSessions = async (uid) => {
     try {
-      console.log(uid);
-      console.log(
-        `${Device.brand}-${Device.modelName}-${Device.deviceName}-${Device.deviceYearClass}`
-      );
+      // console.log(uid);
+      // console.log(
+      //   `${Device.brand}-${Device.modelName}-${Device.deviceName}-${Device.deviceYearClass}`
+      // );
       const response = await instance.post(REVOKE_CURRENT_SESSIONS, {
         uid: uid,
         deviceId: `${Device.brand}-${Device.modelName}-${Device.deviceName}-${Device.deviceYearClass}`,

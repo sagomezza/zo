@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import normalize from '../../config/services/normalizeFontSize';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     textInput: {
@@ -12,6 +12,17 @@ const styles = StyleSheet.create({
         fontSize: width * 0.045,
         fontFamily: 'Montserrat-Bold',
         color: '#00A9A0',
+        backgroundColor: '#FFF200',
+        borderRadius: 20
+    },
+    textInputDifTotal: {
+        width: '82%',
+        height: '74%',
+        marginRight: '5%',
+        marginLeft: '0%',
+        fontSize: width * 0.045,
+        fontFamily: 'Montserrat-Bold',
+        color: '#FF4500',
         backgroundColor: '#FFF200',
         borderRadius: 20
     },
@@ -86,7 +97,7 @@ const styles = StyleSheet.create({
     modalText: {
         textAlign: "center",
         fontFamily: 'Montserrat-Regular',
-        color: '#B7B7B7',
+        color: '#A9A9A9',
         fontSize: normalize(20)
     },
     modalTextAlert: {
@@ -127,6 +138,11 @@ const styles = StyleSheet.create({
         shadowRadius: 50,
         elevation: 5,
         flexDirection: 'column'
+    },
+    textPago: {
+        fontSize: width * 0.02,
+        color: '#5D5D5D',
+        fontFamily: 'Montserrat-Regular'
     },
 })
 export default styles;
