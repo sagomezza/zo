@@ -93,10 +93,8 @@ const UserInput = (props) => {
   const [mensualityExists, setMensualityExists] = useState(false);
   const mensualityInfo = mensuality.data !== undefined ? mensuality.data[0] : "";
   const mensualityUserName = mensualityInfo.userName !== undefined ? mensualityInfo.userName : ' ';
-  const mensualityUserPhone = mensualityInfo.userPhone !== undefined ? mensualityInfo.userPhone : ' ';
   const mensualityCapacity = mensualityInfo.capacity !== undefined ? mensualityInfo.capacity : ' ';
   const mensualityParkedPlates = mensualityInfo.parkedPlatesList !== undefined ? mensualityInfo.parkedPlatesList.length : ' ';
-
 
   const priceVehicleType = () => {
     if (isCharacterALetter(plateTwo[2]) || plateTwo.length === 2) {
@@ -110,6 +108,7 @@ const UserInput = (props) => {
       startPark();
     }
   }
+
   const restart = () => {
     setModalVisible(!modalVisible);
     setPlateOne("");
@@ -126,9 +125,6 @@ const UserInput = (props) => {
     setPrepayDayRecip(false);
     setShowDropdown(false);
   }
-
-
-
 
   const clearPlateOne = () => {
     setPlateOne('');
@@ -243,7 +239,6 @@ const UserInput = (props) => {
       setPrepayDayRecip(false);
     }
   }
-
 
   useEffect(() => {
     async function createUser() {
@@ -360,12 +355,7 @@ const UserInput = (props) => {
   return (
     <View style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
       <ImageBackground
-        style={{
-          flex: 1,
-          width: '100%',
-          height: '50%',
-          flexDirection: 'column'
-        }}
+        style={styles.imageBackground}
         source={require('../../../assets/images/Stripes.png')}>
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -412,12 +402,7 @@ const UserInput = (props) => {
                 }}
               />
             </View>
-            <View style={{
-              alignItems: 'center',
-              alignContent: 'center',
-              height: '10%',
-              width: '100%'
-            }}>
+            <View style={styles.textContainer}>
               <Text style={{
                 fontFamily: 'Montserrat-Bold',
                 color: '#FFFFFF',
@@ -426,26 +411,14 @@ const UserInput = (props) => {
                 I  N  G  R  E  S  E     C  E  L  U  L  A  R
               </Text>
             </View>
-            <View style={{
-              flexDirection: 'column',
-              alignItems: 'center',
-              alignContent: 'center',
-              zIndex: 10, height: '62%',
-              width: '60%',
-              borderWith: 1
-            }}>
+            <View style={styles.dropdownContainer}>
               {!showPhoneInput ?
                 <DropDownPicker
                   items={phones}
                   zIndex={30}
                   disabled={!showDropdown}
                   placeholder={"Selecciona un numero"}
-                  placeholderStyle={{
-                    color: '#8F8F8F',
-                    fontSize: width * 0.04,
-                    textAlign: 'center',
-                    fontFamily: 'Montserrat-Bold'
-                  }}
+                  placeholderStyle={styles.dropdownPlaceholder}
                   selectedLabelStyle={{
                     color: '#8F8F8F',
                     fontSize: normalize(30),

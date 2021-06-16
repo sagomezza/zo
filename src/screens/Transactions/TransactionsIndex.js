@@ -52,11 +52,15 @@ const Transactions = (props) => {
                                             return (
                                                 <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
                                                     <View style={{ marginBottom: '2%' }} >
-                                                        <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0] }</Text>
+                                                        <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
                                                         <Text style={styles.textPago}>{`Pago por ${formatHours(item.hours)} horas`}</Text>
                                                     </View>
                                                     <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
-                                                        <Text style={styles.textMoney}>{`$${numberWithPoints(item.total)}`}</Text>
+                                                        <Text style={styles.textMoney}>
+                                                            {item.cash === 0 && item.change < 0 ? '' : ''}
+                                                            {item.cash > 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                                                            {item.cash > 0 && item.change > 0 ? `$${numberWithPoints(item.total)}` : ''}
+                                                        </Text>
                                                     </View>
                                                 </View>
                                             )

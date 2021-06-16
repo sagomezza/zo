@@ -37,6 +37,7 @@ const HomeIndex = (props) => {
         },
           { timeout: TIMEOUT }
         );
+        console.log(response.data.data[0])
         setLoadingRecips(false);
         if (response.data.response === 1) {
           store.dispatch(actions.setRecips(response.data.data));
@@ -201,7 +202,7 @@ const HomeIndex = (props) => {
                           <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
                             <Text style={styles.textMoney}>
                               {item.cash === 0 && item.change < 0 ? '' : ''}
-                              {item.cash > 0 && item.change < 0 ? `$${numberWithPoints(item.total)}` : ''}
+                              {item.cash > 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
                               {item.cash > 0 && item.change > 0 ? `$${numberWithPoints(item.total)}` : ''}
                             </Text>
                           </View>

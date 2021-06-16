@@ -4,11 +4,11 @@ import normalize from '../../config/services/normalizeFontSize';
 const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  container: {
+  imageBackground: {
     flex: 1,
-    padding: 16,
-    paddingTop: 30,
-    backgroundColor: '#fff'
+    width: '100%',
+    height: '50%',
+    flexDirection: 'column'
   },
   head: {
     height: 40,
@@ -27,6 +27,25 @@ const styles = StyleSheet.create({
     height: '20%',
     width: '60%',
     marginTop: '2%'
+  },
+  textContainer: {
+    alignItems: 'center',
+    alignContent: 'center',
+    height: '10%',
+    width: '100%',
+  },
+  dropdownContainer:{
+    flexDirection: 'column',
+    alignItems: 'center',
+    alignContent: 'center',
+    zIndex: 10, height: '62%',
+    width: '60%'
+  },
+  dropdownPlaceholder:{
+    color: '#8F8F8F',
+    fontSize: width * 0.04,
+    textAlign: 'center',
+    fontFamily: 'Montserrat-Bold'
   },
   phoneDropdown: {
     backgroundColor: '#fafafa',
