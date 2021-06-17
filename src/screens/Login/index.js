@@ -84,17 +84,12 @@ const LoginIndex = (props) => {
         email.toString(),
         password.toString()
       );
-      // console.log('-----------------uid-LOGIN------------')
-      // console.log(response.user.uid)
-      // console.log('-----------------uid-LOGIN------------')
-      // console.log(response.user.toJSON().stsTokenManager.accessToken)
       let fbToken = response.user.toJSON().stsTokenManager.accessToken;
       if (Platform.OS === "android" && Platform.Version < 23) {
         await AsyncStorage.setItem("firebaseToken", fbToken);
       } else {
         await SecureStore.setItemAsync("firebaseToken", fbToken);
       }
-
       let readOff = await instance.post(
         READ_OFFICIAL,
         {
@@ -145,10 +140,6 @@ const LoginIndex = (props) => {
 
   const revokeCurrentSessions = async (uid) => {
     try {
-      // console.log(uid);
-      // console.log(
-      //   `${Device.brand}-${Device.modelName}-${Device.deviceName}-${Device.deviceYearClass}`
-      // );
       const response = await instance.post(REVOKE_CURRENT_SESSIONS, {
         uid: uid,
         deviceId: `${Device.brand}-${Device.modelName}-${Device.deviceName}-${Device.deviceYearClass}`,
@@ -177,11 +168,7 @@ const LoginIndex = (props) => {
   return (
     <View style={{ flex: 1, backgroundColor: "#00A9A0" }}>
       <ImageBackground
-        style={{
-          flex: 1,
-          width: "100%",
-          height: "100%",
-        }}
+        style={styles.backgroundImage}
         source={require("../../../assets/images/Login.png")}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -193,25 +180,12 @@ const LoginIndex = (props) => {
                 source={require("../../../assets/images/icon.png")}
               />
             </View>
-            <View
-              style={{
-                height: "10%",
-                width: "60%",
-                justifyContent: "center",
-                alignContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text style={styles.loginText}>I N I C I O   D E   S E S I Ó N</Text>
+            <View style={styles.loginTextContainer} >
+              <Text style={styles.loginText}>
+                I N I C I O   D E   S E S I Ó N
+              </Text>
             </View>
-            <View
-              style={{
-                width: "100%",
-                height: "25%",
-                alignContent: "center",
-                alignItems: "center",
-              }}
-            >
+            <View style={styles.inputsContainer}>
               <View>
                 <Text style={styles.titleInputText}>Correo</Text>
                 <View style={styles.textInputContainer}>
@@ -245,33 +219,13 @@ const LoginIndex = (props) => {
                 {error !== "" && <Text style={styles.alertText}>{error}</Text>}
               </View>
             </View>
-            <View
-              style={{
-                width: "55%",
-                height: "10%",
-                justifyContent: "center",
-                alignContent: "center",
-                marginTop: "6%",
-              }}
-            >
+            <View style={styles.buttonContainer}>
               <Button
-                onPress={() => {
-                  firstLogin();
-                }}
+                onPress={() => firstLogin()}
                 title="I N G R E S A R"
                 color="#FFE828"
-                style={{
-                  borderWidth: normalize(1),
-                  borderColor: "#707070",
-                  alignSelf: "center",
-                  width: "80%",
-                  height: "60%",
-                }}
-                textStyle={{
-                  color: "#00A9A0",
-                  fontFamily: "Montserrat-Bold",
-                  fontSize: width * 0.032,
-                }}
+                style={styles.button}
+                textStyle={styles.buttonText}
                 activityIndicatorStatus={loading}
               />
               <TouchableOpacity style={{ alignSelf: "center" }}>

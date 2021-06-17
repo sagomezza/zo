@@ -12,11 +12,29 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     borderWidth: 1
   },
+  backgroundImage: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+  },
+  loginTextContainer: {
+    height: "10%",
+    width: "60%",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+  },
   loginText: {
     color: 'white',
     fontSize: width * 0.029,
     marginBottom: '20%',
     fontFamily: 'Montserrat-Bold'
+  },
+  inputsContainer: {
+    width: "100%",
+    height: "25%",
+    alignContent: "center",
+    alignItems: "center",
   },
   titleInputText: {
     color: 'white',
@@ -30,13 +48,24 @@ const styles = StyleSheet.create({
     fontSize: width * 0.02,
     fontFamily: 'Montserrat-Regular'
   },
+  buttonContainer: {
+    width: "55%",
+    height: "10%",
+    justifyContent: "center",
+    alignContent: "center",
+    marginTop: "6%",
+  },
   button: {
-    height: normalize(30),
-    width: "50%",
-    borderRadius: 20,
-    backgroundColor: '#FFE828',
-    alignContent: 'center',
-    alignItems: 'center'
+    borderWidth: normalize(1),
+    borderColor: "#707070",
+    alignSelf: "center",
+    width: "80%",
+    height: "60%",
+  },
+  buttonText: {
+    color: "#00A9A0",
+    fontFamily: "Montserrat-Bold",
+    fontSize: width * 0.032,
   },
   restoreText: {
     color: 'white',
