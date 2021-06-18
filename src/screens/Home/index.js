@@ -43,7 +43,7 @@ const HomeIndex = (props) => {
         }
       } catch (err) {
         setLoadingRecips(false);
-        console.log(err?.response)
+        // console.log(err?.response)
       }
     };
 

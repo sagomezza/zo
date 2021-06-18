@@ -34,18 +34,34 @@ const styles = StyleSheet.create({
     height: '10%',
     width: '100%',
   },
-  dropdownContainer:{
+  dropdownContainer: {
     flexDirection: 'column',
     alignItems: 'center',
     alignContent: 'center',
     zIndex: 10, height: '62%',
     width: '60%'
   },
-  dropdownPlaceholder:{
+  dropdownPlaceholder: {
     color: '#8F8F8F',
     fontSize: width * 0.04,
     textAlign: 'center',
     fontFamily: 'Montserrat-Bold'
+  },
+  dropdownSelectedLabel: {
+    color: '#8F8F8F',
+    fontSize: normalize(30),
+    textAlign: 'center',
+    fontFamily: 'Montserrat-Bold'
+  },
+  dropdown: {
+    backgroundColor: '#fafafa',
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15
+  },
+  dropdownArrow: {
+    alignItems: 'flex-start',
+    alignContent: 'flex-start',
+    justifyContent: 'flex-start'
   },
   phoneDropdown: {
     backgroundColor: '#fafafa',
@@ -59,6 +75,29 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
     color: '#D9D9D9',
     fontSize: width * 0.035
+  },
+  checkPrepayContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignContent: 'center',
+    height: '30%',
+    width: '60%',
+    justifyContent: 'center',
+    paddingTop: '10%'
+  },
+  prepayDayText: {
+    color: '#FFF200',
+    fontFamily: 'Montserrat-Bold',
+    fontSize: width * 0.03,
+    textAlign: 'center'
+  },
+  startButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignContent: 'center',
+    height: '40%',
+    width: '100%',
+    justifyContent: 'center'
   },
   containerTwo: {
     height: '57%',
@@ -186,13 +225,13 @@ const styles = StyleSheet.create({
     marginTop: '4%'
   },
 
+  // modal 
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     // marginTop: 22,
     backgroundColor: 'rgba(52, 52, 52, 0.8)',
-
   },
   modalView: {
     height: normalize(400),
@@ -216,18 +255,33 @@ const styles = StyleSheet.create({
     borderWidth: 1
 
   },
-  openButton: {
-    backgroundColor: "#F194FF",
-    borderRadius: 20,
-    padding: 10,
-    borderColor: '#D9D9D9',
-    borderWidth: 1
-  },
-  textStyle: {
-    color: "gray",
-    fontWeight: "bold",
+  // modal2
+  modalTextAlert: {
     textAlign: "center",
-    fontFamily: 'Montserrat-Regular'
+    fontFamily: 'Montserrat-Regular',
+    color: 'red',
+    fontSize: normalize(22),
+    margin: '2%'
+  },
+  modalButton: {
+    width: '100%',
+    height: '70%',
+  },
+  // modal
+  currencyInput: {
+    borderWidth: 1,
+    borderColor: '#00A9A0',
+    fontSize: normalize(20),
+    fontFamily: 'Montserrat-Bold',
+    backgroundColor: '#FFFFFF',
+    width: '60%',
+    borderRadius: 10,
+    color: '#00A9A0'
+  },
+  modalButtonDisabled: {
+    width: '100%',
+    height: '70%',
+    opacity: 0.5
   },
   modalPhoneText: {
     textAlign: "center",
@@ -240,40 +294,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     color: '#B7B7B7',
     fontSize: normalize(20)
-  },
-  modalTextAlert: {
-    textAlign: "center",
-    fontFamily: 'Montserrat-Regular',
-    color: 'red',
-    fontSize: normalize(22),
-    margin: '2%'
-  },
-  modalButton: {
-    width: '100%',
-    height: '70%',
-  },
-  modalButtonDisabled: {
-    width: '100%',
-    height: '70%',
-    opacity: 0.5
-  },
-  tableText: {
-    fontFamily: 'Montserrat-Regular',
-  },
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  checkboxContainer: {
-    flexDirection: "row",
-    color: '#FFF200'
-  },
-  checkbox: {
-    alignSelf: "center",
-  },
-  label: {
-    margin: 8,
   },
 });
 

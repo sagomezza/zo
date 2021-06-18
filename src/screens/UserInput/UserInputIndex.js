@@ -34,6 +34,7 @@ import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 
 import { createIdempotency } from '../../utils/idempotency'
+import { StyleProvider } from 'native-base';
 
 const { width, height } = Dimensions.get('window');
 
@@ -419,27 +420,14 @@ const UserInput = (props) => {
                   disabled={!showDropdown}
                   placeholder={"Selecciona un numero"}
                   placeholderStyle={styles.dropdownPlaceholder}
-                  selectedLabelStyle={{
-                    color: '#8F8F8F',
-                    fontSize: normalize(30),
-                    textAlign: 'center',
-                    fontFamily: 'Montserrat-Bold'
-                  }}
+                  selectedLabelStyle={styles.dropdownSelectedLabel}
                   containerStyle={{ height: '23%', width: '100%' }}
                   style={styles.phoneDropdown}
                   labelStyle={styles.dropdownLabel}
                   dropDownMaxHeight={100}
-                  dropDownStyle={{
-                    backgroundColor: '#fafafa',
-                    borderBottomLeftRadius: 15,
-                    borderBottomRightRadius: 15
-                  }}
+                  dropDownStyle={styles.dropdown}
                   arrowColor={'#00A9A0'}
-                  arrowStyle={{
-                    alignItems: 'flex-start',
-                    alignContent: 'flex-start',
-                    justifyContent: 'flex-start'
-                  }}
+                  arrowStyle={styles.dropdownArrow}
                   arrowSize={24}
                   onChangeItem={item => {
                     if (item.value === 0) {
@@ -447,9 +435,7 @@ const UserInput = (props) => {
                     } else {
                       setPhone(item.value)
                     }
-
-                  }
-                  }
+                  }}
                 /> :
                 <TextInput
                   placeholder={''}
@@ -467,15 +453,7 @@ const UserInput = (props) => {
                   value={newPhone}
                 />}
               {codeError && <Text>{codeError}</Text>}
-              <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                alignContent: 'center',
-                height: '30%',
-                width: '60%',
-                justifyContent: 'center',
-                paddingTop: '10%'
-              }}>
+              <View style={styles.checkPrepayContainer}>
                 <CheckBox
                   value={prepayDay}
                   onValueChange={() => setPrepayDay(!prepayDay)}
@@ -485,30 +463,16 @@ const UserInput = (props) => {
                     false: '#FFF200'
                   }}
                 />
-                <Text style={{
-                  color: '#FFF200',
-                  fontFamily: 'Montserrat-Bold',
-                  fontSize: width * 0.03,
-                  textAlign: 'center'
-                }}>
+                <Text style={styles.prepayDayText}>
                   PASE DIA
                 </Text>
               </View>
 
 
-              <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                alignContent: 'center',
-                height: '40%',
-                width: '100%',
-                justifyContent: 'center'
-              }}>
+              <View style={styles.startButtonContainer}>
                 {!loadingStart &&
                   <Button onPress={() => {
-
                     priceVehicleType();
-
                   }}
                     title="I N I C I A R"
                     color='#FFF200'
@@ -519,7 +483,6 @@ const UserInput = (props) => {
                     ]}
                     textStyle={styles.buttonText}
                     disabled={!existingUser || plateOne === "" || plateTwo === ""}
-
                   />
                 }
                 {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
@@ -535,7 +498,6 @@ const UserInput = (props) => {
                       setLoadingStart(false);
                       store.dispatch(actions.setQr(plateOne + plateTwo));
                       navigation.navigate('QRscanner');
-
                     }}
                     disabled={(plateOne + plateTwo).length < 5}
                   >
@@ -599,7 +561,6 @@ const UserInput = (props) => {
                       flexDirection: 'row',
                       justifyContent: 'center'
                     }}>
-
                     </View>
                   }
                   {prepayDayRecip ?
@@ -619,11 +580,8 @@ const UserInput = (props) => {
                       flexDirection: 'row',
                       justifyContent: 'center'
                     }}>
-
                     </View>
                   }
-
-
                 </View>
                 {historyExists ?
                   <Table borderStyle={{ borderColor: '#00A9A0' }}>
@@ -669,7 +627,6 @@ const UserInput = (props) => {
                 width: '100%',
                 justifyContent: 'space-between',
                 padding: '2%'
-
               }}>
                 <View style={{
                   margin: '4%',
@@ -726,26 +683,26 @@ const UserInput = (props) => {
 
               }}>
                 <View style={{ margin: '4%', justifyContent: 'center', height: ' 30%' }}>
-                  <Text style={styles.modalTextAlert}>Cobrar pase día </Text>
-                  <Text style={styles.modalTextAlert}>{`$${numberWithPoints(prepayDayValue)}`}</Text>
+                  <Text style={styles.modalTextAlert}>
+                    Cobrar pase día
+                  </Text>
+                  <Text style={styles.modalTextAlert}>
+                    {`$${numberWithPoints(prepayDayValue)}`}
+                  </Text>
                 </View>
-                <View style={{ justifyContent: 'space-between', height: '40%', flexDirection: 'column', paddingBottom: '6%' }}>
+                <View style={{
+                  justifyContent: 'space-between',
+                  height: '40%',
+                  flexDirection: 'column',
+                  paddingBottom: '6%'
+                }}>
                   <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
                     <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Pago:  </Text>
                     <CurrencyInput
                       placeholder='$'
                       textAlign='center'
                       keyboardType='numeric'
-                      style={{
-                        borderWidth: 1,
-                        borderColor: '#00A9A0',
-                        fontSize: normalize(20),
-                        fontFamily: 'Montserrat-Bold',
-                        backgroundColor: '#FFFFFF',
-                        width: '60%',
-                        borderRadius: 10,
-                        color: '#00A9A0'
-                      }}
+                      style={styles.currencyInput}
                       value={totalPay}
                       onChangeValue={text => setTotalPay(text)}
                       prefix="$"
@@ -761,20 +718,10 @@ const UserInput = (props) => {
                   <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
                     <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}> A devolver:  </Text>
                     <TextInput
-                      style={{
-                        borderWidth: 1,
-                        borderColor: '#00A9A0',
-                        fontSize: normalize(20),
-                        fontFamily: 'Montserrat-Bold',
-                        backgroundColor: '#FFFFFF',
-                        width: '60%',
-                        borderRadius: 10,
-                        color: '#00A9A0'
-                      }}
+                      style={styles.currencyInput}
                       keyboardType='numeric'
                       placeholder='$'
                       textAlign='center'
-
                       editable={false}
                       value={`$${numberWithPoints(inputChange)}`}
                     />
@@ -786,7 +733,6 @@ const UserInput = (props) => {
                   }}
                     title="G U A R D A R"
                     color="#00A9A0"
-
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
@@ -796,12 +742,9 @@ const UserInput = (props) => {
                     disabled={totalPay - prepayDayValue < 0}
                     activityIndicatorStatus={loadingStart} />
                 </View>
-
-
               </View>
             </View>
           </View>
-
           :
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
@@ -869,7 +812,6 @@ const UserInput = (props) => {
               width: '100%',
               justifyContent: 'space-between',
               padding: '2%'
-
             }}>
               <View style={{ margin: '4%', justifyContent: 'center', height: ' 60%' }}>
                 <Text style={styles.modalTextAlert}> Este usuario se encuentra en lista negra:  </Text>
@@ -926,12 +868,10 @@ const UserInput = (props) => {
                   }}
                     title="E N T E N D I D O"
                     color="#00A9A0"
-                    style={
-                      {
+                    style={{
                         width: normalize(250),
                         height: '85%'
-                      }
-                    }
+                      }}
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
@@ -954,30 +894,24 @@ const UserInput = (props) => {
             <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
               <View style={{ margin: '4%', justifyContent: 'space-between', height: ' 65%' }}>
                 <Text style={{ ...styles.modalTextAlert, fontFamily: 'Montserrat-Bold' }}> Alerta </Text>
-
                 <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#8F8F8F' }}> Las celdas disponibles para esta mensualidad ya están ocupadas. Al hacer el ingreso del vehículo se hará el cobro por horas. </Text>
                 <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#8F8F8F' }}> ¿ Desea continuar ? </Text>
-
               </View>
               <View style={{ height: '25%', width: '100%', justifyContent: 'flex-start', flexDirection: 'column' }}>
                 <Button onPress={() => {
                   setMaxCapMensuality(false);
-
                 }}
                   title="S I"
                   color="#00A9A0"
-                  style={
-                    {
+                  style={{
                       width: '100%',
                       height: '60%'
-                    }
-                  }
+                    }}
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
                     fontFamily: 'Montserrat-Bold'
                   }} />
-
                 <Button onPress={() => {
                   setMaxCapMensuality(false);
                   setPlateOne("");
@@ -994,12 +928,10 @@ const UserInput = (props) => {
                 }}
                   title="N O"
                   color="gray"
-                  style={
-                    {
-                      width: '100%',
-                      height: '60%'
-                    }
-                  }
+                  style={{
+                    width: '100%',
+                    height: '60%'
+                  }}
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",

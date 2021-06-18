@@ -57,17 +57,20 @@ const txtGenerator = (props) => {
 
   const [date1, setDate1] = useState(new Date(moment().subtract(1, 'days')));
   const [date2, setDate2] = useState(new Date());
-
+  const [loadingTodayRecips, setLoadingTodayRecips] = useState(true);
   const [signature, setSign] = useState(false);
   const [signatureUri, setSignatureUri] = useState("")
 
   useEffect(() => {
+    setLoadingTodayRecips(true);
     try {
       const todayRecips = totalRecips.filter(recip => moment(recip.dateFinished).isBetween(date1, date2))
       // console.log(todayRecips)
       setDataToday(todayRecips)
+      setLoadingTodayRecips(false);
     } catch (err) {
       console.log(err)
+      setLoadingTodayRecips(false);
     }
   }, [date1, date2]);
 
@@ -329,39 +332,56 @@ const txtGenerator = (props) => {
               }}>
                 <Text style={styles.textListTitle} >TRANSACCIONES DEL DÍA</Text>
               </View>
-              <View style={{ height: "72%" }}>
-                {/* {recips.recips.length > 0 ? */}
-                <FlatList
-                  style={{ height: "37%" }}
-                  data={dataToday}
-                  keyExtractor={(item, index) => String(index)}
-                  renderItem={({ item }) => {
-                    return (
-                      <View style={{
-                        flexDirection: "row",
-                        borderBottomWidth: 1,
-                        borderColor: "#E9E9E9",
-                        marginBottom: '2%',
-                        marginLeft: '10%',
-                        marginRight: '10%',
-                        marginTop: '0%'
-                      }} >
-                        <View style={{ marginBottom: '2%' }} >
-                          <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
-                          <Text style={styles.textPago}>Pago por ${formatHours(item.hours)} horas</Text>
-                        </View>
-                        <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
-                          <Text style={styles.textMoney}>
-                            {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                            {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                            {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
-                          </Text>
-                        </View>
-                      </View>
-                    )
-                  }}
-                />
-              </View>
+              {loadingTodayRecips ?
+                <View style={{ height: "72%" }}>
+                  <View style={{ justifyContent: 'center', height: '100%' }}>
+                    <ActivityIndicator size={"large"} color={'#00A9A0'} />
+                  </View>
+                </View>
+                :
+                <View style={{ height: "72%" }}>
+                  {dataToday.length > 0 ?
+                    <FlatList
+                      style={{ height: "37%" }}
+                      data={dataToday}
+                      keyExtractor={(item, index) => String(index)}
+                      renderItem={({ item }) => {
+                        return (
+                          <View style={{
+                            flexDirection: "row",
+                            borderBottomWidth: 1,
+                            borderColor: "#E9E9E9",
+                            marginBottom: '2%',
+                            marginLeft: '10%',
+                            marginRight: '10%',
+                            marginTop: '0%'
+                          }} >
+                            <View style={{ marginBottom: '2%' }} >
+                              <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
+                              <Text style={styles.textPago}>Pago por ${formatHours(item.hours)} horas</Text>
+                            </View>
+                            <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
+                              <Text style={styles.textMoney}>
+                                {item.cash === 0 && item.change === 0 ? '$0' : ''}
+                                {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                                {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                              </Text>
+                            </View>
+                          </View>
+                        )
+                      }}
+                    />
+                    :
+                    <View style={{ marginLeft: '13%', padding: '10%' }}>
+                      <Text style={styles.textPago}>
+                        No se encuentran registros en el historial
+                      </Text>
+                    </View>
+                  }
+
+                </View>
+              }
+
             </View>
             <View style={{ height: '10%', width: '85%', alignSelf: 'center' }}>
               <Button
@@ -388,75 +408,88 @@ const txtGenerator = (props) => {
               <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
                 <Text style={styles.textListTitle} >CIERRES DE CAJA ANTERIORES</Text>
               </View>
-              <View style={{ height: "70%" }}>
-                {!loadingReadBoxReport ?
-                  <FlatList
-                    style={{ height: "40%" }}
-                    data={listBox}
-                    keyExtractor={(item, index) => String(index)}
-                    renderItem={({ item, index }) => {
-                      return (
-                        <TouchableOpacity
-                          key={index.toString()}
-                          onPress={() => {
-                            readBoxReport(item.id);
+              {!loadingReadBoxReport ?
+                <View style={{ height: "70%" }}>
+                  {
+                    listBox.length > 0 ?
+                      <FlatList
+                        style={{ height: "40%" }}
+                        data={listBox}
+                        keyExtractor={(item, index) => String(index)}
+                        renderItem={({ item, index }) => {
+                          return (
+                            <TouchableOpacity
+                              key={index.toString()}
+                              onPress={() => {
+                                readBoxReport(item.id);
 
-                          }}
-                        >
+                              }}
+                            >
 
-                          <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%', justifyContent: 'space-between' }} >
-                            <View style={{ marginBottom: '0%' }} >
-                              <Text style={styles.textPago}> </Text>
+                              <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%', justifyContent: 'space-between' }} >
+                                <View style={{ marginBottom: '0%' }} >
+                                  <Text style={styles.textPago}> </Text>
 
-                              <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')} {moment(item.dateFinished).format('LT')}</Text>
-                            </View>
-                            <View style={{ alignItems: 'flex-end', marginTop: '3%', width: '49%' }} >
-                              {item.status === 'active' ?
-                                <Button
-                                  // onPress={onShare}
-                                  title="Abierto"
-                                  color='#FFFFFF'
-                                  style={{
-                                    borderColor: "#00A9A0",
-                                    borderWidth: 1,
-                                    width: '90%'
-                                  }}
-                                  textStyle={{
-                                    color: "#00A9A0",
-                                    fontFamily: 'Montserrat-Bold',
-                                    fontSize: width * 0.02
-                                  }}
-                                  disabled={true}
-                                />
-                                :
-                                <Button
-                                  // onPress={onShare}
-                                  title="Cerrado"
-                                  color='#00A9A0'
-                                  style={{
-                                    borderColor: "#707070",
-                                    width: '90%'
-                                  }}
-                                  textStyle={{
-                                    color: "#FFFFFF",
-                                    fontFamily: 'Montserrat-Bold',
-                                    fontSize: width * 0.02
-                                  }}
-                                  disabled={true}
-                                />
-                              }
-                            </View>
-                          </View>
-                        </TouchableOpacity>
-                      )
-                    }}
-                  />
-                  :
-                  <View style={{ justifyContent: 'center', height: '100%' }}>
-                    <ActivityIndicator size={"large"} color={'#00A9A0'} />
-                  </View>
-                }
-              </View>
+                                  <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')} {moment(item.dateFinished).format('LT')}</Text>
+                                </View>
+                                <View style={{ alignItems: 'flex-end', marginTop: '3%', width: '49%' }} >
+                                  {item.status === 'active' ?
+                                    <Button
+                                      // onPress={onShare}
+                                      title="Abierto"
+                                      color='#FFFFFF'
+                                      style={{
+                                        borderColor: "#00A9A0",
+                                        borderWidth: 1,
+                                        width: '90%'
+                                      }}
+                                      textStyle={{
+                                        color: "#00A9A0",
+                                        fontFamily: 'Montserrat-Bold',
+                                        fontSize: width * 0.02
+                                      }}
+                                      disabled={true}
+                                    />
+                                    :
+                                    <Button
+                                      // onPress={onShare}
+                                      title="Cerrado"
+                                      color='#00A9A0'
+                                      style={{
+                                        borderColor: "#707070",
+                                        width: '90%'
+                                      }}
+                                      textStyle={{
+                                        color: "#FFFFFF",
+                                        fontFamily: 'Montserrat-Bold',
+                                        fontSize: width * 0.02
+                                      }}
+                                      disabled={true}
+                                    />
+                                  }
+                                </View>
+                              </View>
+                            </TouchableOpacity>
+                          )
+                        }}
+                      />
+                      :
+                      <View style={{ height: "70%" }}>
+
+                        <View style={{ marginLeft: '13%', padding: '10%' }}>
+                          <Text style={styles.textPago}>
+                            No se encuentran registros en el historial
+                          </Text>
+                        </View>
+                      </View>
+
+                  }
+                </View>
+                :
+                <View style={{ justifyContent: 'center', height: '100%' }}>
+                  <ActivityIndicator size={"large"} color={'#00A9A0'} />
+                </View>
+              }
             </View>
             <Modal
               animationType="fade"

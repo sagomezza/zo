@@ -4,27 +4,42 @@ import normalize from '../../config/services/normalizeFontSize';
 const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-    textInput: {
-        width: '82%',
-        height: '74%',
-        marginRight: '5%',
-        marginLeft: '0%',
-        fontSize: width * 0.045,
-        fontFamily: 'Montserrat-Bold',
-        color: '#00A9A0',
-        backgroundColor: '#FFF200',
-        borderRadius: 20
+    imageBackground: {
+        flex: 1,
+        width: '100%',
+        height: '60%',
+        flexDirection: 'column'
     },
-    textInputDifTotal: {
-        width: '82%',
-        height: '74%',
-        marginRight: '5%',
-        marginLeft: '0%',
-        fontSize: width * 0.045,
+    topContainer: {
+        height: '38%',
+        alignContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+    },
+    officialNameContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        alignContent: 'center',
+        height: '20%',
+        width: '60%',
+    },
+    officialNameText: {
+        fontSize: width * 0.04,
         fontFamily: 'Montserrat-Bold',
-        color: '#FF4500',
-        backgroundColor: '#FFF200',
-        borderRadius: 20
+        color: '#FFFFFF'
+    },
+    officialNameText2: {
+        fontFamily: 'Montserrat-Regular',
+        fontSize: width * 0.03,
+        color: '#FFFFFF'
+    },
+    timePlatesContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignContent: 'center',
+        height: '25%',
+        width: '80%',
+        justifyContent: 'space-between',
     },
     timePlate: {
         width: '49%',
@@ -47,26 +62,79 @@ const styles = StyleSheet.create({
         fontSize: width * 0.027,
         color: '#FFFFFF'
     },
-    buttonT: {
-        borderRadius: 4,
+    totalContainer: {
+        width: '50%',
+        justifyContent: 'center',
         alignItems: 'center',
-        alignContent: 'center',
-        height: normalize(30),
-        width: normalize(30),
-        backgroundColor: "#FFF200",
-        padding: '1%',
-        marginLeft: '2%'
     },
-    buttonTDisabled: {
-        borderRadius: 4,
+    totalText: {
+        fontFamily: 'Montserrat-Bold',
+        color: '#FFFFFF',
+        fontSize: width * 0.032
+    },
+    cashContainer: {
+        flexDirection: 'row',
+        width: '80%',
+        height: '22%',
         alignItems: 'center',
         alignContent: 'center',
-        height: normalize(30),
-        width: normalize(30),
-        backgroundColor: "#FFF200",
         padding: '1%',
-        marginLeft: '2%',
-        opacity: 0.5
+        justifyContent: 'center',
+    },
+    currencyInputContainer: {
+        justifyContent: "center",
+        alignContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        width: '70%',
+        height: '80%',
+    },
+    textInput: {
+        width: '82%',
+        height: '74%',
+        marginRight: '5%',
+        marginLeft: '0%',
+        fontSize: width * 0.045,
+        fontFamily: 'Montserrat-Bold',
+        color: '#00A9A0',
+        backgroundColor: '#FFF200',
+        borderRadius: 20
+    },
+    textInputDifTotal: {
+        width: '82%',
+        height: '74%',
+        marginRight: '5%',
+        marginLeft: '0%',
+        fontSize: width * 0.045,
+        fontFamily: 'Montserrat-Bold',
+        color: '#FF4500',
+        backgroundColor: '#FFF200',
+        borderRadius: 20
+    },
+    bottomContainer: {
+        height: '58%',
+        backgroundColor: '#F8F8F8',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        alignContent: 'center',
+        alignItems: 'center',
+    },
+    listContainer: {
+        height: '55%',
+        width: '78%',
+        backgroundColor: '#FFFFFF',
+        marginTop: '6%',
+        borderRadius: 10,
+    },
+    flatlist: {
+        flexDirection: "row",
+        position: 'relative',
+        borderBottomWidth: 1,
+        borderColor: "#96A3A0",
+        marginBottom: 10,
+        marginLeft: '7%',
+        marginRight: '7%',
+        marginTop: 20
     },
     textPlaca: {
         fontSize: width * 0.03,
@@ -94,6 +162,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         opacity: 0.5
     },
+    // modal
     modalText: {
         textAlign: "center",
         fontFamily: 'Montserrat-Regular',
@@ -139,10 +208,6 @@ const styles = StyleSheet.create({
         elevation: 5,
         flexDirection: 'column'
     },
-    textPago: {
-        fontSize: width * 0.02,
-        color: '#5D5D5D',
-        fontFamily: 'Montserrat-Regular'
-    },
+
 })
 export default styles;
