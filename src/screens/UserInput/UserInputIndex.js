@@ -72,7 +72,7 @@ const UserInput = (props) => {
   const [showPhoneInput, setShowPhoneInput] = useState(false)
   const [codeError, setErrorText] = useState(false);
 
-  const [phone, setPhone] = useState(1);
+  const [phone, setPhone] = useState(null);
   const [phones, setPhones] = useState([{ label: 'Selecciona un número', value: 1 }]);
   const [showDropdown, setShowDropdown] = useState(false)
   const [newPhone, setNewPhone] = useState('');
@@ -111,24 +111,44 @@ const UserInput = (props) => {
   }
 
   const restart = () => {
-    setModalVisible(!modalVisible);
+    setModalVisible(false);
+    setModal2Visible(false);
+    setErrorModalVisible(false);
+    setMaxCapMensuality(false);
     setPlateOne("");
     setPlateTwo("");
     setNewPhone("");
     setPrepayDay(false);
-    setPhones([{ label: '', value: 1 }]);
-    setPhone(1);
+    setPhones([{ label: 'Selecciona un número', value: 1 }]);
+    setPhone(null);
+    setShowPhoneInput(false);
+    setPrepayDay(false);
+    setShowPhoneInput(false);
+    setHistoryExists(false);
+    setMensuality({});
+    setLoadingStart(false);
+    setMensualityExists(false);
+    setPrepayDayRecip(false);
+    setShowDropdown(false);
+  }
+
+  const restartSearch = () => {
+    setPhones([{ label: 'Selecciona un número', value: 1 }]);
+    setPhone(null);
+    setShowDropdown(false);
+    setNewPhone("");
+    setPrepayDay(false);
     setShowPhoneInput(false);
     setPrepayDay(false);
     setShowPhoneInput(false);
     setHistoryExists(false);
     setMensualityExists(false);
     setPrepayDayRecip(false);
-    setShowDropdown(false);
   }
 
   const clearPlateOne = () => {
     setPlateOne('');
+
   }
   const clearPlateTwo = () => {
     setPlateTwo('');
@@ -151,7 +171,7 @@ const UserInput = (props) => {
         )
         setFindUserByPlateInfo(response.data);
         setExistingUser(true)
-        setPhone(1);
+        setPhone(null);
         setShowPhoneInput(false);
         setShowDropdown(true);
         setBlacklist(response.data.blackList);
@@ -161,8 +181,9 @@ const UserInput = (props) => {
         });
         auxPhones.push({ label: '+ agregar', value: 0 })
         setPhones(auxPhones);
+
         if (response.data.blackList && response.data.blackList.length > 0) {
-          setModal3Visible()
+          setModal3Visible(true)
         }
       }
     } catch (err) {
@@ -281,18 +302,6 @@ const UserInput = (props) => {
         } else {
           change = totalPay - prepayDayValue
         }
-        // console.log({
-        //   plate: plateOne + plateTwo,
-        //   hqId: officialHq,
-        //   dateStart: new Date(),
-        //   phone: !showPhoneInput ? phone : '+57' + newPhone,
-        //   prepayFullDay: prepayDay,
-        //   officialEmail: officialEmail,
-        //   type,
-        //   cash: Number(totalPay),
-        //   change: totalPay - prepayDayValue
-        // })
-
         const response = await instance.post(
           START_PARKING,
           {
@@ -350,6 +359,7 @@ const UserInput = (props) => {
       console.log(err?.response)
     }
   };
+  let controller;
 
   let inputChange = (totalPay - prepayDayValue) <= 0 ? '' : '' + (totalPay - prepayDayValue)
 
@@ -377,7 +387,8 @@ const UserInput = (props) => {
                   };
                 }}
                 value={plateOne}
-                onFocus={() => { clearPlateOne(); clearPlateTwo(); }}
+
+                onFocus={() => { clearPlateOne(); clearPlateTwo(); restartSearch(); }}
               />
               <TextInput
                 ref={refPlateTwo}
@@ -388,7 +399,9 @@ const UserInput = (props) => {
                 maxLength={3}
                 autoCapitalize={"characters"}
                 keyboardType='default'
-                onFocus={() => { clearPlateTwo(); }}
+
+
+                onFocus={() => { clearPlateTwo(); controller.reset(); restartSearch(); }}
                 onChangeText={text => {
                   setPlateTwo(text.trim());
                   if (text.length === 3) {
@@ -418,9 +431,10 @@ const UserInput = (props) => {
                   items={phones}
                   zIndex={30}
                   disabled={!showDropdown}
-                  placeholder={"Selecciona un numero"}
+                  defaultValue={phone === null ? 1 : phone}
+                  placeholder={"Selecciona un número"}
                   placeholderStyle={styles.dropdownPlaceholder}
-                  selectedLabelStyle={styles.dropdownSelectedLabel}
+                  selectedLabelStyle={styles.dropdownPlaceholder}
                   containerStyle={{ height: '23%', width: '100%' }}
                   style={styles.phoneDropdown}
                   labelStyle={styles.dropdownLabel}
@@ -429,6 +443,7 @@ const UserInput = (props) => {
                   arrowColor={'#00A9A0'}
                   arrowStyle={styles.dropdownArrow}
                   arrowSize={24}
+                  controller={instance => controller = instance}
                   onChangeItem={item => {
                     if (item.value === 0) {
                       setShowPhoneInput(true)
@@ -499,7 +514,7 @@ const UserInput = (props) => {
                       store.dispatch(actions.setQr(plateOne + plateTwo));
                       navigation.navigate('QRscanner');
                     }}
-                    disabled={(plateOne + plateTwo).length < 5}
+                    disabled={(plateOne + plateTwo).length < 5 && phone !== null}
                   >
                     <Image
                       style={styles.qrImage}
@@ -613,59 +628,46 @@ const UserInput = (props) => {
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
-      <View>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          backdropOpacity={0.3}
-          visible={modal2Visible}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={modal2Visible}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{
+              height: '100%',
+              width: '100%',
+              justifyContent: 'space-between',
+              padding: '2%'
+            }}>
               <View style={{
-                height: '100%',
-                width: '100%',
-                justifyContent: 'space-between',
-                padding: '2%'
+                margin: '4%',
+                justifyContent: 'flex-end',
+                height: ' 40%'
               }}>
-                <View style={{
-                  margin: '4%',
-                  justifyContent: 'flex-end',
-                  height: ' 40%'
-                }}>
-                  <Text style={styles.modalTextAlert}> Este vehículo ya se encuentra parqueado. </Text>
-                </View>
-                <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                  <Button onPress={() => {
-                    setModal2Visible(!modal2Visible);
-                    setPlateOne("");
-                    setPlateTwo("");
-                    setNewPhone("");
-                    setPrepayDay(false);
-                    setLoadingStart(false);
-                    setPhone(1);
-                    setShowDropdown(false);
-                    setShowPhoneInput(false);
-                    setPhones([{ label: 'Selecciona un número', value: 1 }]);
-                    setHistoryExists(false)
-
-                  }}
-                    title="E N T E N D I D O"
-                    color="#00A9A0"
-                    style={
-                      styles.modalButton
-                    }
-                    textStyle={{
-                      color: "#FFFFFF",
-                      textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
-                    }} />
-                </View>
+                <Text style={styles.modalTextAlert}> Este vehículo ya se encuentra parqueado. </Text>
+              </View>
+              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                <Button onPress={() => {
+                  restart();
+                }}
+                  title="E N T E N D I D O"
+                  color="#00A9A0"
+                  style={
+                    styles.modalButton
+                  }
+                  textStyle={{
+                    color: "#FFFFFF",
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Bold'
+                  }} />
               </View>
             </View>
           </View>
-        </Modal>
-      </View>
+        </View>
+      </Modal>
       <Modal
         animationType="fade"
         transparent={true}
@@ -854,24 +856,14 @@ const UserInput = (props) => {
               <View style={{ height: '30%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
                 <View style={{ width: '75%', height: '50%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                   <Button onPress={() => {
-                    setErrorModalVisible(false);
-                    setPlateOne("");
-                    setPlateTwo("");
-                    setNewPhone("");
-                    setPrepayDay(false);
-                    setLoadingStart(false);
-                    setPhone(1);
-                    setShowDropdown(false);
-                    setShowPhoneInput(false);
-                    setPhones([{ label: 'Selecciona un número', value: 1 }]);
-                    setHistoryExists(false)
+                    restart();
                   }}
                     title="E N T E N D I D O"
                     color="#00A9A0"
                     style={{
-                        width: normalize(250),
-                        height: '85%'
-                      }}
+                      width: normalize(250),
+                      height: '85%'
+                    }}
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
@@ -904,27 +896,16 @@ const UserInput = (props) => {
                   title="S I"
                   color="#00A9A0"
                   style={{
-                      width: '100%',
-                      height: '60%'
-                    }}
+                    width: '100%',
+                    height: '60%'
+                  }}
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
                     fontFamily: 'Montserrat-Bold'
                   }} />
                 <Button onPress={() => {
-                  setMaxCapMensuality(false);
-                  setPlateOne("");
-                  setPlateTwo("");
-                  setNewPhone("");
-                  setPrepayDay(false);
-                  setLoadingStart(false);
-                  setPhone(1);
-                  setShowDropdown(false);
-                  setShowPhoneInput(false);
-                  setPhones([{ label: 'Selecciona un número', value: 1 }]);
-                  setHistoryExists(false)
-                  setMensuality({});
+                  restart();
                 }}
                   title="N O"
                   color="gray"

@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   Dimensions
 } from 'react-native';
+import CurrencyInput from 'react-native-currency-input';
 import instance from "../../config/axios";
 import firebase, { firestore } from "../../config/firebase";
 import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT, GET_BOX_TOTAL } from "../../config/api";
@@ -238,7 +239,6 @@ const txtGenerator = (props) => {
       console.log(err)
       console.log(err?.response)
       setLoadingBoxGenerator(false);
-
     }
   };
 
@@ -540,7 +540,10 @@ const txtGenerator = (props) => {
                           ...styles.modalText,
                           fontSize: normalize(20)
                         }}>Base:  </Text>
-                        <TextInput
+                        <CurrencyInput
+                          placeholder='$'
+                          textAlign='center'
+                          keyboardType='numeric'
                           style={{
                             borderWidth: 1,
                             fontSize: normalize(20),
@@ -551,17 +554,25 @@ const txtGenerator = (props) => {
                             borderColor: '#00A9A0',
                             color: '#00A9A0'
                           }}
-                          keyboardType='numeric'
-                          placeholder='$'
-                          textAlign='center'
-                          keyboardType={"numeric"}
-                          value={base == 0 ? '' : base + ''}
-                          onChangeText={text => setBase(text)}
+                          value={base}
+                          onChangeValue={text => setBase(text)}
+                          prefix="$"
+                          delimiter="."
+                          separator="."
+                          precision={0}
+                          onChangeText={(formattedValue) => {
+                            // console.log(formattedValue);
+                            // $2,310.46
+                          }}
                         />
+
                       </View>
                       <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
                         <Text style={{ ...styles.modalText, fontSize: normalize(20) }}> Producido :  </Text>
-                        <TextInput
+                        <CurrencyInput
+                          placeholder='$'
+                          textAlign='center'
+                          keyboardType='numeric'
                           style={{
                             borderWidth: 1,
                             fontSize: normalize(20),
@@ -572,11 +583,16 @@ const txtGenerator = (props) => {
                             borderColor: '#00A9A0',
                             color: '#00A9A0'
                           }}
-                          keyboardType='numeric'
-                          placeholder='$'
-                          textAlign='center'
-                          value={totalReported == 0 ? '' : totalReported + ''}
-                          onChangeText={text => settoTalReported(text)}
+                          value={totalReported}
+                          onChangeValue={text => settoTalReported(text)}
+                          prefix="$"
+                          delimiter="."
+                          separator="."
+                          precision={0}
+                          onChangeText={(formattedValue) => {
+                            // console.log(formattedValue);
+                            // $2,310.46
+                          }}
                         />
                       </View>
                     </View>

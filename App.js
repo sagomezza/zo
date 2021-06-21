@@ -77,12 +77,13 @@ const App = () => {
 
 
   useEffect(() => {
+    // console.log("start", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
+    const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
 
     const checkOfficialHours = setInterval(() => {
-      let hours = moment(new Date()).diff(officialScheduleStart, 'hours', true);
+      let hours = moment(new Date()).diff(offStart, 'hours', true);
       // console.log(hours)
       // console.log("new Date() func", new Date())
-      // console.log("start", officialScheduleStart)
       if (
         Number(hours) > 7.25 && Number(hours) <= 7.5 ||
         Number(hours) > 7.5 && Number(hours) <= 7.75 ||
