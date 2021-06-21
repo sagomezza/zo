@@ -44,7 +44,8 @@ import CurrencyInput from 'react-native-currency-input';
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips, uid } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  const startTime = officialProps.schedule !== undefined ? officialProps.schedule.start : "";
+  const startTimeSeconds = officialProps.schedule !== undefined ? officialProps.schedule.start : "";
+  const startTime = startTimeSeconds._seconds
 
   const HomeStyles = StyleSheet.create({
     plateInput: {
@@ -235,7 +236,7 @@ const LogoutIndex = (props) => {
                   source={require('../../../assets/images/Inicio.png')} />
                 <View style={{}} >
                   <Text style={styles.timePlateTitle}>Tiempo de inicio:</Text>
-                  <Text style={styles.timePlateInfo}>{moment(startTime).format('L')} {moment(startTime).format('LT')} </Text>
+                  <Text style={styles.timePlateInfo}>{moment(startTime * 1000).subtract(5, 'hours').format('L')} {moment(startTime * 1000).subtract(5, 'hours').format('LT')} </Text>
                 </View>
               </View>
               <View style={styles.timePlate}>
@@ -352,7 +353,7 @@ const LogoutIndex = (props) => {
               height: '13%',
               justifyContent: 'flex-end'
             }}>
-              <Button onPress={() => {setModalVisible(true)}}
+              <Button onPress={() => { setModalVisible(true) }}
                 title="C E R R A R  T U R N O"
                 disabled={inputValue.length === 0 || inputBaseValue.length === 0}
                 color="#00A9A0"
