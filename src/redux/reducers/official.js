@@ -9,7 +9,9 @@ const initialState = {
     lastName: null,
     id: null,
     hq: [],
-    schedule: null
+    schedule: null,
+    start: null
+
 } 
 
 const officialReducer = (state=initialState, action ) => {
@@ -24,7 +26,8 @@ const officialReducer = (state=initialState, action ) => {
                 lastName: action.payload.lastName,
                 id: action.payload.id,
                 hq: action.payload.hq,
-                schedule: action.payload.schedule
+                schedule: action.payload.schedule,
+                start: action.payload.start
             };
 
         default:

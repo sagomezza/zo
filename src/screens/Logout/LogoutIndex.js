@@ -44,8 +44,8 @@ import CurrencyInput from 'react-native-currency-input';
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips, uid } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  const startTimeSeconds = officialProps.schedule !== undefined ? officialProps.schedule.start : "";
-  const startTime = startTimeSeconds._seconds
+  const startTimeSchedule = officialProps.start ? officialProps.start : "";
+  const startTime =  startTimeSchedule._seconds ? startTimeSchedule._seconds: ''
 
   const HomeStyles = StyleSheet.create({
     plateInput: {
