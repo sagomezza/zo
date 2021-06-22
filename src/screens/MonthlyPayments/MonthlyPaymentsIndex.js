@@ -231,6 +231,26 @@ const MonthlyPayments = (props) => {
 
     async function createUser() {
         setLoading(true);
+        // console.log({
+        //     type: "full",
+        //     vehicleType: 'car',
+        //     email: emailNewMen,
+        //     phone: '+57' + phoneNewMen,
+        //     name: nameNewMen,
+        //     lastName: lastNameNewMen,
+        //     expoToken: "expoToken",
+        //     monthlyUser: true,
+        //     plate: firstPlateNewMen,
+        //     hqId: officialHq,
+        //     mensualityType: 'personal',
+        //     capacity: 1,
+        //     cash: Number(totalPay),
+        //     change: totalPay - monthPrice,
+        //     officialEmail: officialProps.email,
+        //     nid: newMenNid,
+        //     pending: pendingMensualityPay,
+        //     generateRecip: generateMenRecip
+        // })
         try {
             if (firstPlateNewMen.length >= 5 && phoneNewMen.length === 10) {
                 let type
@@ -267,6 +287,8 @@ const MonthlyPayments = (props) => {
                         timeout: TIMEOUT
                     }
                 )
+                console.log('In create USER', response)
+
                 setModal4Visible(true);
                 setModal3Visible(false);
                 setLoading(false);
@@ -318,7 +340,7 @@ const MonthlyPayments = (props) => {
             }
         } catch (err) {
             console.log(err)
-            console.log(err?.response)
+            console.log("ERROR ", err?.response)
             setLoading(false);
             setModal5Visible(true);
 
@@ -348,12 +370,9 @@ const MonthlyPayments = (props) => {
                     setNewMensualityPlates(plates)
 
                 }
-
                 // console.log(response.data.data[0].plates)
                 setLoading(false);
                 mensualityPriceMonthVehType();
-
-
             }
             if (firstPlateNewMen.length >= 5) {
                 const response = await instance.post(
@@ -627,7 +646,6 @@ const MonthlyPayments = (props) => {
                                     </Text>
                                     :
                                     <Text style={styles.notFoundText}>
-
                                     </Text>
                                 }
                                 <Button onPress={() => {
@@ -641,7 +659,6 @@ const MonthlyPayments = (props) => {
                                 />
                             </View>
                         }
-
                     </View>
                     <View style={{
                         height: '18%',
@@ -1165,12 +1182,6 @@ const MonthlyPayments = (props) => {
                                                 setPendingMensualityPay(!pendingMensualityPay);
                                                 setGenerateMenRecip(!generateMenRecip);
                                             }
-
-                                            console.log('recip:', generateMenRecip);
-                                            console.log('pending:', pendingMensualityPay);
-                                            console.log(totalPay);
-
-
                                         }
                                         }
                                         style={{ alignSelf: 'center' }}
@@ -1198,7 +1209,10 @@ const MonthlyPayments = (props) => {
                                             fontSize: width * 0.03,
                                             fontFamily: 'Montserrat-Bold'
                                         }}>Pago:  </Text>
-                                        <TextInput
+                                        <CurrencyInput
+                                            placeholder='$'
+                                            textAlign='center'
+                                            keyboardType='numeric'
                                             style={{
                                                 borderWidth: 1,
                                                 borderColor: '#00A9A0',
@@ -1209,16 +1223,16 @@ const MonthlyPayments = (props) => {
                                                 borderRadius: 10,
                                                 color: '#00A9A0'
                                             }}
-                                            keyboardType='numeric'
-                                            placeholder='$ 0'
-                                            textAlign='center'
-
-                                            value={textinputMoney}
-                                            onChangeText={(text) => {
-                                                setTotalPay(text);
-                                            }}
+                                            value={totalPay}
+                                            onChangeValue={text => setTotalPay(text)}
+                                            prefix="$"
+                                            delimiter="."
+                                            separator="."
+                                            precision={0}
                                             editable={pendingMensualityPay === false}
+
                                         />
+                                        
                                     </View>
                                     <View style={{
                                         flexDirection: "row",
@@ -1537,7 +1551,7 @@ const MonthlyPayments = (props) => {
                                     fontSize: normalize(20),
                                     color: 'red'
                                 }}
-                                >  En este momento no está disponible la red, intentar nuevamente. </Text>
+                                >  Algo malo pasó, inténtalo de nuevo más tarde. </Text>
                             </View>
 
                             <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
