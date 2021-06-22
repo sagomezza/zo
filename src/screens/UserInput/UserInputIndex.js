@@ -52,6 +52,9 @@ const UserInput = (props) => {
   const [prepayDay, setPrepayDay] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
+  const [ carParksFull, setCarParksFull ] = useState(false);
+  const [ bikeParksFull, setBikeParksFull ] = useState(false);
+  const [alreadyParked, setAlreadyParked] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
@@ -115,6 +118,9 @@ const UserInput = (props) => {
     setModal2Visible(false);
     setErrorModalVisible(false);
     setMaxCapMensuality(false);
+    setCarParksFull(false);
+    setBikeParksFull(false);
+    setAlreadyParked(false);
     setPlateOne("");
     setPlateTwo("");
     setNewPhone("");
@@ -334,8 +340,18 @@ const UserInput = (props) => {
 
     } catch (err) {
       setLoadingStart(false)
+      // response -2 -> already parked
+      // response -3 -> car parks full
+      // response -4 -> bike parks full
       if (err?.response.data.response === -2) {
-        setModal2Visible(true)
+        setAlreadyParked(true);
+        setModal2Visible(true);
+      } else if (err?.response.data.response === -3) {
+        setCarParksFull(true);
+        setModal2Visible(true);
+      } else if (err?.response.data.response === -4) {
+        setBikeParksFull(true);
+        setModal2Visible(true);
       } else {
         setErrorModalVisible(true)
       }
@@ -647,7 +663,9 @@ const UserInput = (props) => {
                 justifyContent: 'flex-end',
                 height: ' 40%'
               }}>
-                <Text style={styles.modalTextAlert}> Este vehículo ya se encuentra parqueado. </Text>
+                {carParksFull && <Text style={styles.modalTextAlert}> Las celdas para carros llegaron a su máxima capacidad. </Text>}
+                {bikeParksFull && <Text style={styles.modalTextAlert}> Las celdas para motos llegaron a su máxima capacidad. </Text>}
+                {alreadyParked && <Text style={styles.modalTextAlert}> Este vehículo ya se encuentra parqueado. </Text>}
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
