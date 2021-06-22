@@ -257,6 +257,11 @@ const styles = StyleSheet.create({
         width: '60%',
         borderRadius: 10,
         color: '#00A9A0'
+    },
+    footer:{
+        height: '18%',
+        width: '100%',
+        justifyContent: 'flex-end'
     }
 
 });

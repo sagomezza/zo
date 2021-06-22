@@ -150,7 +150,6 @@ const MonthlyPayments = (props) => {
         setTotalPay(0);
         setMonthPrice(0);
         setMonthPrice(0);
-
     }
 
     const clearPageInfo = () => {
@@ -195,9 +194,7 @@ const MonthlyPayments = (props) => {
     async function editUser(idUser) {
         setLoading(true);
         try {
-            console.log(
-                newObjUserEdit
-            )
+            console.log(newObjUserEdit)
             if (userIdToEdit !== '') {
                 const response = await instance.post(
                     EDIT_USER,
@@ -287,7 +284,7 @@ const MonthlyPayments = (props) => {
                         timeout: TIMEOUT
                     }
                 )
-                console.log('In create USER', response)
+                console.log('In create USER', response.data.response)
 
                 setModal4Visible(true);
                 setModal3Visible(false);
@@ -334,9 +331,11 @@ const MonthlyPayments = (props) => {
                         timeout: TIMEOUT
                     }
                 )
-                setModal4Visible(true);
-                setModal3Visible(false);
-                setLoading(false);
+                if (response.data.response === 1) {
+                    setModal4Visible(true);
+                    setModal3Visible(false);
+                    setLoading(false);
+                }
             }
         } catch (err) {
             console.log(err)
@@ -358,21 +357,23 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                setMensualityExists(true);
-                setMensuality(response.data)
-                // setMensualityPlates(response.data.data[0].plates)
-                if (response.data.data[0].plates !== undefined) {
-                    let menPlates = response.data.data[0].plates
-                    let plates = []
-                    menPlates.forEach(function (value) {
-                        plates.push({ plate: value })
-                    });
-                    setNewMensualityPlates(plates)
+                if (response.data.response === 1) {
+                    setMensualityExists(true);
+                    setMensuality(response.data)
+                    // setMensualityPlates(response.data.data[0].plates)
+                    if (response.data.data[0].plates !== undefined) {
+                        let menPlates = response.data.data[0].plates
+                        let plates = []
+                        menPlates.forEach(function (value) {
+                            plates.push({ plate: value })
+                        });
+                        setNewMensualityPlates(plates)
 
+                    }
+                    // console.log(response.data.data[0].plates)
+                    setLoading(false);
+                    mensualityPriceMonthVehType();
                 }
-                // console.log(response.data.data[0].plates)
-                setLoading(false);
-                mensualityPriceMonthVehType();
             }
             if (firstPlateNewMen.length >= 5) {
                 const response = await instance.post(
@@ -383,8 +384,10 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                setLoading(false);
-                setMdlMenAlreadyExists(true);
+                if (response.data.response === 1) {
+                    setLoading(false);
+                    setMdlMenAlreadyExists(true);
+                }
             }
         } catch (err) {
             console.log(err)
@@ -399,7 +402,6 @@ const MonthlyPayments = (props) => {
 
     async function editMensuality() {
         setLoading(true);
-
         try {
             if (plateOne.length === 3 && plateTwo.length >= 2) {
                 const response = await instance.post(
@@ -410,8 +412,10 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                setLoading(false);
-                setModalVisible(!modalVisible);
+                if (response.data.response === 1) {
+                    setLoading(false);
+                    setModalVisible(!modalVisible);
+                }
             }
         } catch (err) {
             console.log(err)
@@ -421,6 +425,17 @@ const MonthlyPayments = (props) => {
         }
     }
 
+    const editMenButton = () => {
+        setModalVisible(true);
+        setFirstPlate(firstPlateData + '');
+        setSecondPlate(secondPlateData + '');
+        setThirdPlate(thirdPlateData + '');
+        setFourthPlate(fourthPlateData + '');
+        setFifthPlate(fifthPlateData + '');
+        setUserName(userNameData);
+        setUserEmail(userEmailData);
+        setUserPhone(userPhoneData);
+    }
     async function renewMensuality() {
         setLoading(true)
         try {
@@ -456,7 +471,6 @@ const MonthlyPayments = (props) => {
             console.log(err)
             console.log(err?.response.data)
             setLoading(false)
-
         }
     }
 
@@ -606,26 +620,14 @@ const MonthlyPayments = (props) => {
                                     </View>
                                 </View>
                                 <View style={styles.mensualityInfoButtonsContainer}>
-                                    <Button onPress={() => {
-                                        setModal2Visible(true);
-                                    }}
+                                    <Button onPress={() => setModal2Visible(true)}
                                         title="Pagar / Renovar"
                                         color='gray'
                                         style={[plateOne === "" || plateTwo === "" ? styles.buttonReDisabled : styles.buttonRe]}
                                         textStyle={styles.buttonTextRenew}
                                         disabled={plateOne === "" || plateTwo === ""}
                                     />
-                                    <Button onPress={() => {
-                                        setModalVisible(true);
-                                        setFirstPlate(firstPlateData + '');
-                                        setSecondPlate(secondPlateData + '');
-                                        setThirdPlate(thirdPlateData + '');
-                                        setFourthPlate(fourthPlateData + '');
-                                        setFifthPlate(fifthPlateData + '');
-                                        setUserName(userNameData);
-                                        setUserEmail(userEmailData);
-                                        setUserPhone(userPhoneData);
-                                    }}
+                                    <Button onPress={editMenButton}
                                         title="  E D I T A R  "
                                         color='gray'
                                         style={[plateOne === "" || plateTwo === "" ? styles.buttonEdDisabled : styles.buttonEd]}
@@ -648,9 +650,7 @@ const MonthlyPayments = (props) => {
                                     <Text style={styles.notFoundText}>
                                     </Text>
                                 }
-                                <Button onPress={() => {
-                                    setModal3Visible(true);
-                                }}
+                                <Button onPress={() => setModal3Visible(true)}
                                     title="C R E A R"
                                     color='gray'
                                     style={styles.buttonEd}
@@ -660,11 +660,7 @@ const MonthlyPayments = (props) => {
                             </View>
                         }
                     </View>
-                    <View style={{
-                        height: '18%',
-                        width: '100%',
-                        justifyContent: 'flex-end'
-                    }}>
+                    <View style={styles.footer}>
                         <FooterIndex navigation={navigation} />
                     </View>
                 </View>
@@ -1232,7 +1228,7 @@ const MonthlyPayments = (props) => {
                                             editable={pendingMensualityPay === false}
 
                                         />
-                                        
+
                                     </View>
                                     <View style={{
                                         flexDirection: "row",
