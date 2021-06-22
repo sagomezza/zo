@@ -52,8 +52,8 @@ const UserInput = (props) => {
   const [prepayDay, setPrepayDay] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
-  const [ carParksFull, setCarParksFull ] = useState(false);
-  const [ bikeParksFull, setBikeParksFull ] = useState(false);
+  const [carParksFull, setCarParksFull] = useState(false);
+  const [bikeParksFull, setBikeParksFull] = useState(false);
   const [alreadyParked, setAlreadyParked] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
@@ -175,21 +175,23 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        setFindUserByPlateInfo(response.data);
-        setExistingUser(true)
-        setPhone(null);
-        setShowPhoneInput(false);
-        setShowDropdown(true);
-        setBlacklist(response.data.blackList);
-        const auxPhones = []
-        response.data.data.forEach(phone => {
-          auxPhones.push({ label: phone, value: phone })
-        });
-        auxPhones.push({ label: '+ agregar', value: 0 })
-        setPhones(auxPhones);
+        if (response.data.response === 1) {
+          setFindUserByPlateInfo(response.data);
+          setExistingUser(true)
+          setPhone(null);
+          setShowPhoneInput(false);
+          setShowDropdown(true);
+          setBlacklist(response.data.blackList);
+          const auxPhones = []
+          response.data.data.forEach(phone => {
+            auxPhones.push({ label: phone, value: phone })
+          });
+          auxPhones.push({ label: '+ agregar', value: 0 })
+          setPhones(auxPhones);
 
-        if (response.data.blackList && response.data.blackList.length > 0) {
-          setModal3Visible(true)
+          if (response.data.blackList && response.data.blackList.length > 0) {
+            setModal3Visible(true)
+          }
         }
       }
     } catch (err) {
@@ -213,17 +215,18 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        setMensualityExists(true);
-        setMensuality(response.data)
-        if (response.data.data[0].capacity === response.data.data[0].parkedPlatesList.length) {
-          setMaxCapMensuality(true);
+        if (response.data.response === 1) {
+          setMensualityExists(true);
+          setMensuality(response.data)
+          if (response.data.data[0].capacity === response.data.data[0].parkedPlatesList.length) {
+            setMaxCapMensuality(true);
+          }
         }
       }
     } catch (err) {
       setMensualityExists(false);
       // console.log(err)
       // console.log(err?.response)
-      // setErrorModalVisible(true);
     }
   }
 
@@ -238,27 +241,26 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        setHistoryExists(true)
-        setHistoryInfo(response.data.data)
-        if (response.data.data[0].prepayFullDay) {
-          setPrepayDayDateFinished(response.data.data[0].dateFinished)
-          setPrepayDayRecip(true);
-
-        } else {
-          setPrepayDayDateFinished('');
-          setPrepayDayRecip(false);
-
-
+        if (response.data.response === 1) {
+          setHistoryExists(true)
+          setHistoryInfo(response.data.data)
+          if (response.data.data[0].prepayFullDay) {
+            setPrepayDayDateFinished(response.data.data[0].dateFinished)
+            setPrepayDayRecip(true);
+          } else {
+            setPrepayDayDateFinished('');
+            setPrepayDayRecip(false);
+          }
+          const auxTable = []
+          response.data.data.forEach(element => {
+            const auxElement = []
+            auxElement.push(element.plate)
+            auxElement.push(moment(element.dateFinished).format('L'))
+            auxElement.push(`$${numberWithPoints(element.total)}`)
+            auxTable.push(auxElement)
+          });
+          setTableData(auxTable);
         }
-        const auxTable = []
-        response.data.data.forEach(element => {
-          const auxElement = []
-          auxElement.push(element.plate)
-          auxElement.push(moment(element.dateFinished).format('L'))
-          auxElement.push(`$${numberWithPoints(element.total)}`)
-          auxTable.push(auxElement)
-        });
-        setTableData(auxTable);
       }
     } catch (err) {
       // console.log(err)
@@ -281,8 +283,10 @@ const UserInput = (props) => {
             },
             { timeout: TIMEOUT }
           )
+          if (response.data.response) {
+            setExistingUser(true);
+          }
         }
-        setExistingUser(true);
       } catch (err) {
         console.log(err)
         console.log(err?.response)
@@ -327,17 +331,18 @@ const UserInput = (props) => {
             }, timeout: TIMEOUT
           }
         )
-        setStartParking(response?.data?.data);
-        setPhones([{ label: 'Selecciona un número', value: 1 }]);
-        setBlacklistExists(false);
-        readHq();
-        setLoadingStart(false);
-        setPrepayDay(false);
-        setPrepayDayValue(0);
-        setTotalPay(0);
-        setModalVisible(true);
+        if (response.data.response) {
+          setStartParking(response?.data?.data);
+          setPhones([{ label: 'Selecciona un número', value: 1 }]);
+          setBlacklistExists(false);
+          readHq();
+          setLoadingStart(false);
+          setPrepayDay(false);
+          setPrepayDayValue(0);
+          setTotalPay(0);
+          setModalVisible(true);
+        }
       }
-
     } catch (err) {
       setLoadingStart(false)
       // response -2 -> already parked
@@ -357,7 +362,6 @@ const UserInput = (props) => {
       }
       console.log(err)
       console.log(err?.response)
-
     }
   };
 
@@ -366,7 +370,7 @@ const UserInput = (props) => {
       const response = await instance.post(READ_HQ, {
         id: officialHq
       });
-      if (response.data.response) {
+      if (response.data.response === 1) {
         store.dispatch(actions.setReservations(response.data.data.reservations));
         store.dispatch(actions.setHq(response.data.data));
       }
@@ -375,8 +379,8 @@ const UserInput = (props) => {
       console.log(err?.response)
     }
   };
-  let controller;
 
+  let controller;
   let inputChange = (totalPay - prepayDayValue) <= 0 ? '' : '' + (totalPay - prepayDayValue)
 
   return (
