@@ -283,7 +283,7 @@ const UserInput = (props) => {
             },
             { timeout: TIMEOUT }
           )
-          if (response.data.response) {
+          if (response.data.response === 1) {
             setExistingUser(true);
           }
         }
@@ -331,7 +331,7 @@ const UserInput = (props) => {
             }, timeout: TIMEOUT
           }
         )
-        if (response.data.response) {
+        if (response.data.response === 1) {
           setStartParking(response?.data?.data);
           setPhones([{ label: 'Selecciona un número', value: 1 }]);
           setBlacklistExists(false);
