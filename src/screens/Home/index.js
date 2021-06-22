@@ -37,9 +37,9 @@ const HomeIndex = (props) => {
         },
           { timeout: TIMEOUT }
         );
-        setLoadingRecips(false);
         if (response.data.response === 1) {
           store.dispatch(actions.setRecips(response.data.data));
+          setLoadingRecips(false);
         }
       } catch (err) {
         setLoadingRecips(false);
@@ -76,11 +76,11 @@ const HomeIndex = (props) => {
         },
           { timeout: TIMEOUT }
         );
-        if (response.data.response) {
+        if (response.data.response === 1) {
           store.dispatch(actions.setReservations(response.data.data.reservations));
           store.dispatch(actions.setHq(response.data.data));
+          setLoadingReservations(false);
         }
-        setLoadingReservations(false);
       } catch (err) {
         setLoadingReservations(false);
         console.log("err: ", err);
