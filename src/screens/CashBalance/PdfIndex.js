@@ -209,9 +209,10 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      setListBox(response.data.data)
-      setLoadingReadBoxReport(false);
-
+      if (response.data.response === 1) {
+        setListBox(response.data.data);
+        setLoadingReadBoxReport(false);
+      }
     } catch (err) {
       setLoadingReadBoxReport(false);
       // console.log(err)
@@ -230,11 +231,13 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      setBase(0);
-      settoTalReported(0);
-      listBoxClose();
-      setLoadingBoxGenerator(false);
-      setModalVisible(!modalVisible);
+      if (response.data.response === 1) {
+        setBase(0);
+        settoTalReported(0);
+        listBoxClose();
+        setLoadingBoxGenerator(false);
+        setModalVisible(!modalVisible);
+      }
     } catch (err) {
       console.log(err)
       console.log(err?.response)
@@ -252,10 +255,12 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      setModal2Visible(true)
-      setReadBoxReportInfo(response.data.data)
-      setBoxStatus(response.data.data.status)
-      setLoadingReadBoxReport(false);
+      if (response.data.response === 1) {
+        setModal2Visible(true)
+        setReadBoxReportInfo(response.data.data)
+        setBoxStatus(response.data.data.status)
+        setLoadingReadBoxReport(false);
+      }
     } catch (err) {
       console.log(err)
       setLoadingReadBoxReport(false);
@@ -277,11 +282,9 @@ const txtGenerator = (props) => {
         .ref()
         .child("/" + fileName)
         .put(blob);
-
       const downloadUri = await result.ref.getDownloadURL();
       console.log(downloadUri)
       console.log(boxId)
-
       const response2 = await instance.post(SAVE_SIGN_REPORT, {
         id: boxId,
         sign: downloadUri
@@ -295,7 +298,6 @@ const txtGenerator = (props) => {
       listBoxClose();
       setSign(false);
       setLoadingBoxGenerator(false);
-
     } catch (err) {
       setLoadingBoxGenerator(false);
       console.log("in error")

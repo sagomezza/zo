@@ -107,14 +107,16 @@ const UserOut = (props) => {
             },
             { timeout: TIMEOUT }
           )
-          const splitPlate = (response.data.data.plate)
-          const splitPlateFive = splitPlate[5] !== undefined ? splitPlate[5] : '';
-          setPlateOne(splitPlate[0] + splitPlate[1] + splitPlate[2])
-          setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlateFive)
-          setPlateOneCall(splitPlate[0] + splitPlate[1] + splitPlate[2])
-          setPlateTwoCall(splitPlate[3] + splitPlate[4] + splitPlateFive)
-          checkParkingPlate();
-          setIsParanoicUser(true)
+          if (response.data.response === 1) {
+            const splitPlate = (response.data.data.plate)
+            const splitPlateFive = splitPlate[5] !== undefined ? splitPlate[5] : '';
+            setPlateOne(splitPlate[0] + splitPlate[1] + splitPlate[2])
+            setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlateFive)
+            setPlateOneCall(splitPlate[0] + splitPlate[1] + splitPlate[2])
+            setPlateTwoCall(splitPlate[3] + splitPlate[4] + splitPlateFive)
+            checkParkingPlate();
+            setIsParanoicUser(true)
+          }
         }
       } catch (err) {
         console.log(err?.response)
@@ -154,14 +156,17 @@ const UserOut = (props) => {
             }, timeout: TIMEOUT
           }
         )
-        setDateFinished(new Date());
-        setDateStart(response.data.data.dateStart);
-        setTotalAmount(response.data.data.total);
-        setIsDisabled(false)
-        setPendingValue(response.data.data.pendingValue)
-        setCheck(response.data.data)
-        setInputVerificationCode(response.data.data.verificationCode + '')
-        setLoadingCheckParking(false);
+        if (response.data.response === 1) {
+          setDateFinished(new Date());
+          setDateStart(response.data.data.dateStart);
+          setTotalAmount(response.data.data.total);
+          setIsDisabled(false)
+          setPendingValue(response.data.data.pendingValue)
+          setCheck(response.data.data)
+          setInputVerificationCode(response.data.data.verificationCode + '')
+          setLoadingCheckParking(false);
+        }
+
       } else if ((plateOneCall + plateTwoCall).length === 0) {
         // console.log('no plate')
       }
@@ -186,16 +191,18 @@ const UserOut = (props) => {
             dateFinished: new Date(),
             prepaidDay: true,
             verificationCode: Number(inputVerificationCode)
-          }, { timeout: TIMEOUT })
-
-        setDateFinished(new Date());
-        setDateStart(response.data.data.dateStart);
-        setTotalAmount(response.data.data.total);
-        setIsDisabled(false)
-        setPendingValue(response.data.data.pendingValue)
-        setCheck(response.data.data)
-        setPlateOne(response.data.data.plate.substring(0, 3))
-        setPlateTwo(response.data.data.plate.substring(3, 6))
+          }, { timeout: TIMEOUT }
+        )
+        if (response.data.response === 1) {
+          setDateFinished(new Date());
+          setDateStart(response.data.data.dateStart);
+          setTotalAmount(response.data.data.total);
+          setIsDisabled(false)
+          setPendingValue(response.data.data.pendingValue)
+          setCheck(response.data.data)
+          setPlateOne(response.data.data.plate.substring(0, 3))
+          setPlateTwo(response.data.data.plate.substring(3, 6))
+        }
       }
     } catch (err) {
       console.log(err)
@@ -211,7 +218,7 @@ const UserOut = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      if (response.data.response) {
+      if (response.data.response === 1) {
         store.dispatch(actions.setReservations(response.data.data.reservations));
         store.dispatch(actions.setHq(response.data.data));
       }
@@ -264,20 +271,21 @@ const UserOut = (props) => {
           }, timeout: TIMEOUT
         }
       );
-      setLoading(false)
-      setModal4Visible(false);
-      if (showModal) {
-        console.log(showModal)
-        setModalVisible(true)
+      if (response.data.response === 1) {
+        setLoading(false)
+        setModal4Visible(false);
+        if (showModal) {
+          console.log(showModal)
+          setModalVisible(true)
+        }
+        store.dispatch(actions.setPhone(''))
+        store.dispatch(actions.setQr(''))
+        readHq();
+        restart();
+        setRecip(response.data.data);
+        getRecips()
+        setIsDisabled(true);
       }
-      store.dispatch(actions.setPhone(''))
-      store.dispatch(actions.setQr(''))
-      readHq();
-      restart();
-
-      setRecip(response.data.data);
-      getRecips()
-      setIsDisabled(true);
     } catch (err) {
       console.log(err?.response)
       console.log(err)

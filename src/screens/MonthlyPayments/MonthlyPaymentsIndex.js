@@ -284,12 +284,11 @@ const MonthlyPayments = (props) => {
                         timeout: TIMEOUT
                     }
                 )
-                console.log('In create USER', response.data.response)
-
-                setModal4Visible(true);
-                setModal3Visible(false);
-                setLoading(false);
-                console.log(response.data)
+                if (response.data.response === 1){
+                    setModal4Visible(true);
+                    setModal3Visible(false);
+                    setLoading(false);
+                }
             }
         } catch (err) {
             console.log(err)
@@ -368,9 +367,7 @@ const MonthlyPayments = (props) => {
                             plates.push({ plate: value })
                         });
                         setNewMensualityPlates(plates)
-
                     }
-                    // console.log(response.data.data[0].plates)
                     setLoading(false);
                     mensualityPriceMonthVehType();
                 }
