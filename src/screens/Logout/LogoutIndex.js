@@ -45,7 +45,7 @@ const LogoutIndex = (props) => {
   const { navigation, officialProps, recips, uid } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const startTimeSchedule = officialProps.start ? officialProps.start : "";
-  const startTime =  startTimeSchedule._seconds ? startTimeSchedule._seconds: ''
+  const startTime = startTimeSchedule._seconds ? startTimeSchedule._seconds : ''
 
   const HomeStyles = StyleSheet.create({
     plateInput: {
@@ -152,8 +152,9 @@ const LogoutIndex = (props) => {
         if (response.data.response === 1) {
           setTotal(response.data.data.total);
           setShiftRecips(response.data.data.recips);
+          setLoadingShiftRecips(false);
+
         }
-        setLoadingShiftRecips(false);
       } catch (err) {
         console.log(err?.response)
         setLoadingShiftRecips(false);
@@ -183,8 +184,10 @@ const LogoutIndex = (props) => {
           "x-idempotence-key": idempotencyKey
         }, timeout: TIMEOUT
       });
-      setLoading(false);
-      setModal4Visible(true);
+      if (response.data.response === 1) {
+        setLoading(false);
+        setModal4Visible(true);
+      }
     } catch (err) {
       // console.log(err)
       console.log(err?.response)
