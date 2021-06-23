@@ -187,6 +187,7 @@ const LogoutIndex = (props) => {
       if (response.data.response === 1) {
         setLoading(false);
         setModal4Visible(true);
+        store.dispatch(actions.setRecips([]));
       }
     } catch (err) {
       // console.log(err)
