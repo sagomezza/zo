@@ -23,13 +23,14 @@ import FooterIndex from '../../components/Footer';
 import Button from '../../components/Button';
 import DropDownPicker from 'react-native-dropdown-picker';
 // api
-import { FIND_MENSUALITY_PLATE, RENEW_MENSUALITY, EDIT_MENSUALITY, CREATE_USER, CREATE_MENSUALITY, EDIT_USER } from "../../config/api";
+import { FIND_MENSUALITY_PLATE, RENEW_MENSUALITY, EDIT_MENSUALITY, CREATE_USER, CREATE_MENSUALITY, EDIT_USER, GET_RECIPS } from "../../config/api";
 import instance from "../../config/axios";
 import { TIMEOUT } from '../../config/constants/constants';
 import { firestore } from '../../config/firebase';
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
+import store from '../../config/store';
 import { createIdempotency } from '../../utils/idempotency'
 
 const { width, height } = Dimensions.get('window');
@@ -438,6 +439,7 @@ const MonthlyPayments = (props) => {
         setUserEmail(userEmailData);
         setUserPhone(userPhoneData);
     }
+    
     async function renewMensuality() {
         setLoading(true)
         try {
@@ -467,6 +469,7 @@ const MonthlyPayments = (props) => {
                 } else {
                     mensualityRenewedModal();
                 }
+                getRecips();
                 setLoading(false)
             }
         } catch (err) {
@@ -475,6 +478,23 @@ const MonthlyPayments = (props) => {
             setLoading(false)
         }
     }
+
+    const getRecips = async () => {
+        try {
+            const response = await instance.post(GET_RECIPS, {
+                hqId: officialHq,
+                officialEmail: officialProps.email
+            },
+                { timeout: TIMEOUT }
+            );
+            if (response.data.response === 1) {
+                store.dispatch(actions.setRecips(response.data.data));
+            }
+        } catch (err) {
+            console.log(err?.response)
+            console.log(err)
+        }
+    };
 
     let textinputMoney = (totalPay === 0 ? '' : '' + totalPay)
     let inputChange = (totalPay - monthPrice) <= 0 ? '' : '' + (totalPay - monthPrice)
