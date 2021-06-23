@@ -163,6 +163,7 @@ const MonthlyPayments = (props) => {
     }
 
     const user = () => {
+        setLoading(true);
         setPendingMensualityPay(false);
         setGenerateMenRecip(true);
         try {
@@ -183,10 +184,13 @@ const MonthlyPayments = (props) => {
                     }
                 })
                 .catch(error => {
-                    console.log(error)
+                    setLoading(false);
+                    console.log(error);
                 })
         } catch (err) {
             console.log(err)
+            setLoading(false);
+
         }
     };
 
@@ -228,26 +232,26 @@ const MonthlyPayments = (props) => {
 
     async function createUser() {
         setLoading(true);
-        // console.log({
-        //     type: "full",
-        //     vehicleType: 'car',
-        //     email: emailNewMen,
-        //     phone: '+57' + phoneNewMen,
-        //     name: nameNewMen,
-        //     lastName: lastNameNewMen,
-        //     expoToken: "expoToken",
-        //     monthlyUser: true,
-        //     plate: firstPlateNewMen,
-        //     hqId: officialHq,
-        //     mensualityType: 'personal',
-        //     capacity: 1,
-        //     cash: Number(totalPay),
-        //     change: totalPay - monthPrice,
-        //     officialEmail: officialProps.email,
-        //     nid: newMenNid,
-        //     pending: pendingMensualityPay,
-        //     generateRecip: generateMenRecip
-        // })
+        console.log({
+            type: "full",
+            vehicleType: 'car',
+            email: emailNewMen,
+            phone: '+57' + phoneNewMen,
+            name: nameNewMen,
+            lastName: lastNameNewMen,
+            expoToken: "expoToken",
+            monthlyUser: true,
+            plate: firstPlateNewMen,
+            hqId: officialHq,
+            mensualityType: 'personal',
+            capacity: 1,
+            cash: Number(totalPay),
+            change: totalPay - monthPrice,
+            officialEmail: officialProps.email,
+            nid: newMenNid,
+            pending: pendingMensualityPay,
+            generateRecip: generateMenRecip
+        })
         try {
             if (firstPlateNewMen.length >= 5 && phoneNewMen.length === 10) {
                 let type
@@ -284,7 +288,8 @@ const MonthlyPayments = (props) => {
                         timeout: TIMEOUT
                     }
                 )
-                if (response.data.response === 1){
+                console.log('CREATEUSER', response.data.response)
+                if (response.data.response === 1) {
                     setModal4Visible(true);
                     setModal3Visible(false);
                     setLoading(false);
