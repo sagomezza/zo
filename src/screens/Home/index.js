@@ -14,7 +14,7 @@ import styles from '../Home/HomeStyles';
 import instance from "../../config/axios";
 import moment from 'moment';
 // api
-import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL, EDIT_ADMIN } from "../../config/api";
+import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL, EDIT_ADMIN, READ_OFFICIAL } from "../../config/api";
 import { TIMEOUT } from '../../config/constants/constants';
 // redux
 import { connect } from "react-redux";
@@ -28,6 +28,24 @@ const HomeIndex = (props) => {
   const [loadingReservations, setLoadingReservations] = useState(true);
 
   useEffect(() => {
+    const offData =async () => {
+      try {
+        let response = await instance.post(
+          READ_OFFICIAL,
+          {
+            email: officialProps.email,
+          },
+          { timeout: TIMEOUT }
+        );
+        store.dispatch(actions.setOfficial(response.data.data));
+        
+      } catch (err) {
+        // console.log(err?.response)
+
+      }
+    }
+
+
     const getRecips = async () => {
       setLoadingRecips(true);
       try {
@@ -91,6 +109,7 @@ const HomeIndex = (props) => {
     getRecips();
     readHq();
     updateExpoToken();
+    offData();
     // parked(officialHq);
   }, []);
 

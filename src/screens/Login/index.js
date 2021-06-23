@@ -90,22 +90,26 @@ const LoginIndex = (props) => {
       } else {
         await SecureStore.setItemAsync("firebaseToken", fbToken);
       }
-      let readOff = await instance.post(
-        READ_OFFICIAL,
-        {
-          email: email,
-        },
-        { timeout: TIMEOUT }
-      );
-      await startShift();
-      props.setOfficial(readOff.data.data);
-      setLoading(false);
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [{ name: "Home" }],
-        })
-      );
+      if (response) {
+        let readOff = await instance.post(
+          READ_OFFICIAL,
+          {
+            email: email,
+          },
+          { timeout: TIMEOUT }
+        );
+        await startShift();
+        props.setOfficial(readOff.data.data);
+        store.dispatch(actions.setOfficial(readOff.data.data));
+        setLoading(false);
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{ name: "Home" }],
+          })
+        );
+      }
+
     } catch (err) {
       try {
         let readOff = await instance.post(
