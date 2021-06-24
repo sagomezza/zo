@@ -402,7 +402,7 @@ const LogoutIndex = (props) => {
                 :
                 <View style={{ margin: '2%', justifyContent: 'flex-end', height: '30%' }}>
                   <Text style={styles.modalText}>
-                    Una vez cierres el turno no podrás modificar el valor ingresado  ¿está seguro que deseas guardar y cerrar?
+                    Una vez cierres el turno no podrás modificar el valor ingresado  ¿está seguro que desea guardar y cerrar?
                   </Text>
                 </View>
               }
