@@ -51,42 +51,51 @@ const App = () => {
   const [lastLoginAt, setLastLoginAt] = useState('');
   const [logoutSnackbar, setLogoutSnackbar] = useState(false)
   const [officialData, setOfficialData] = useState({});
-  const officialScheduleStart = officialData.schedule !== undefined ? officialData.schedule.start : "NONE";
-  const dateNow = new Date()
-  let diffOfficialScheduleStart = moment(dateNow).diff(officialScheduleStart, 'hours', true);
+  const officialScheduleStart = officialData.start !== undefined ? officialData.start : "NONE";
 
   // useEffect(() => {
   //   throw new Error("Zona P first Sentry error")
   // }, [])
+  Network.getNetworkStateAsync().then(state => {
+    // console.log('Connection type:', state.type);
+    // console.log('Is connected?:', state.isConnected);
+    // console.log('Is internet reachable?:', state.isInternetReachable);
+    state.isConnected === false ? setIsConnected(false) : setIsConnected(true);
+  });
 
   const checkInternetReachable = () => {
     // console.log("-------Connection Information------")
     Network.getNetworkStateAsync().then(state => {
-      // console.log('Connection type:', state.type);
-      // console.log('Is connected?:', state.isConnected);
-      // console.log('Is internet reachable?:', state.isInternetReachable);
+      console.log('Connection TYPE:', state.type);
+      console.log('Is connected?:', state.isConnected);
+      console.log('Is internet reachable?:', state.isInternetReachable);
       state.isConnected === false ? setIsConnected(false) : setIsConnected(true);
     });
   }
 
-  const checkOfficialHours = () => {
-    // console.log(diffOfficialScheduleStart)
-    if (
-      Number(diffOfficialScheduleStart) === 7.25 ||
-      Number(diffOfficialScheduleStart) === 7.5 ||
-      Number(diffOfficialScheduleStart) === 7.75 ||
-      Number(diffOfficialScheduleStart) === 8
-    ) {
-      setLogoutSnackbar(true);
+  const MINUTE_MS = 60000;
 
-    }
-
-  }
 
   useEffect(() => {
-    checkInternetReachable();
-    checkOfficialHours();
-  }, [diffOfficialScheduleStart])
+    // console.log("start", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
+    const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
+
+    const checkOfficialHours = setInterval(() => {
+      let hours = moment(new Date()).diff(offStart, 'hours', true);
+      // console.log(hours)
+      // console.log("new Date() func", new Date())
+      if (
+        Number(hours) > 7.25 && Number(hours) <= 7.5 ||
+        Number(hours) > 7.5 && Number(hours) <= 7.75 ||
+        Number(hours) > 7.75 && Number(hours) <= 8 ||
+        Number(hours) > 8
+      ) {
+        setLogoutSnackbar(true);
+      }
+    }, MINUTE_MS);
+
+    return () => clearInterval(checkOfficialHours);
+  }, [])
 
   Sentry.init({
     dsn: 'https://022b0475f7b147aba62d6d1988bf95df@o479500.ingest.sentry.io/5644578',
@@ -103,7 +112,7 @@ const App = () => {
         });
         if (response.data.response) {
           store.dispatch(setOfficial(response.data.data));
-          // console.log(response)
+          // console.log(response.data.data)
           setOfficialData(response.data.data)
         }
       } catch (error) {
@@ -123,6 +132,7 @@ const App = () => {
         } catch (err) {
           console.log(err)
           console.log(err?.response)
+          console.log('ERRORRR')
         }
         //console.log("err: ", error);
       }

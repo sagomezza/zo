@@ -71,24 +71,17 @@ const BarcodeScanner = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        if (response !== undefined) {
+        if (response.data.response === 1) {
           setStartParking(response.data.data);
           readHq();
           setPlate(qr.plate);
           setModalVisible(true);
-
         }
-
       }
     }
     catch (err) {
-      console.log('startparkinghqcatch 1-----------')
       console.log(err);
-      console.log('startparkinghqcatch-----------')
-
       console.log(err?.response);
-      console.log('start-----------')
-
       if (err?.response.data.response === -2) setModal2Visible(true)
     }
     store.dispatch(actions.setQr(''))
@@ -99,7 +92,7 @@ const BarcodeScanner = (props) => {
       const response = await instance.post(READ_HQ, {
         id: officialHq
       });
-      if (response.data.response) {
+      if (response.data.response === 1) {
         store.dispatch(actions.setReservations(response.data.data.reservations));
         store.dispatch(actions.setHq(response.data.data));
       }

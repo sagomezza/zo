@@ -40,8 +40,10 @@ const NewsReport = (props) => {
             },
                 { timeout: TIMEOUT }
             );
-            setLoadingReport(false);
-            setModalVisible(true);
+            if (response.data.response === 1){
+                setLoadingReport(false);
+                setModalVisible(true);
+            }
         } catch (err) {
             setLoadingReport(false);
             console.log(err)

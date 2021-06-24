@@ -107,14 +107,16 @@ const UserOut = (props) => {
             },
             { timeout: TIMEOUT }
           )
-          const splitPlate = (response.data.data.plate)
-          const splitPlateFive = splitPlate[5] !== undefined ? splitPlate[5] : '';
-          setPlateOne(splitPlate[0] + splitPlate[1] + splitPlate[2])
-          setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlateFive)
-          setPlateOneCall(splitPlate[0] + splitPlate[1] + splitPlate[2])
-          setPlateTwoCall(splitPlate[3] + splitPlate[4] + splitPlateFive)
-          checkParkingPlate();
-          setIsParanoicUser(true)
+          if (response.data.response === 1) {
+            const splitPlate = (response.data.data.plate)
+            const splitPlateFive = splitPlate[5] !== undefined ? splitPlate[5] : '';
+            setPlateOne(splitPlate[0] + splitPlate[1] + splitPlate[2])
+            setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlateFive)
+            setPlateOneCall(splitPlate[0] + splitPlate[1] + splitPlate[2])
+            setPlateTwoCall(splitPlate[3] + splitPlate[4] + splitPlateFive)
+            checkParkingPlate();
+            setIsParanoicUser(true)
+          }
         }
       } catch (err) {
         console.log(err?.response)
@@ -154,14 +156,17 @@ const UserOut = (props) => {
             }, timeout: TIMEOUT
           }
         )
-        setDateFinished(new Date());
-        setDateStart(response.data.data.dateStart);
-        setTotalAmount(response.data.data.total);
-        setIsDisabled(false)
-        setPendingValue(response.data.data.pendingValue)
-        setCheck(response.data.data)
-        setInputVerificationCode(response.data.data.verificationCode + '')
-        setLoadingCheckParking(false);
+        if (response.data.response === 1) {
+          setDateFinished(new Date());
+          setDateStart(response.data.data.dateStart);
+          setTotalAmount(response.data.data.total);
+          setIsDisabled(false)
+          setPendingValue(response.data.data.pendingValue)
+          setCheck(response.data.data)
+          setInputVerificationCode(response.data.data.verificationCode + '')
+          setLoadingCheckParking(false);
+        }
+
       } else if ((plateOneCall + plateTwoCall).length === 0) {
         // console.log('no plate')
       }
@@ -186,16 +191,18 @@ const UserOut = (props) => {
             dateFinished: new Date(),
             prepaidDay: true,
             verificationCode: Number(inputVerificationCode)
-          }, { timeout: TIMEOUT })
-
-        setDateFinished(new Date());
-        setDateStart(response.data.data.dateStart);
-        setTotalAmount(response.data.data.total);
-        setIsDisabled(false)
-        setPendingValue(response.data.data.pendingValue)
-        setCheck(response.data.data)
-        setPlateOne(response.data.data.plate.substring(0, 3))
-        setPlateTwo(response.data.data.plate.substring(3, 6))
+          }, { timeout: TIMEOUT }
+        )
+        if (response.data.response === 1) {
+          setDateFinished(new Date());
+          setDateStart(response.data.data.dateStart);
+          setTotalAmount(response.data.data.total);
+          setIsDisabled(false)
+          setPendingValue(response.data.data.pendingValue)
+          setCheck(response.data.data)
+          setPlateOne(response.data.data.plate.substring(0, 3))
+          setPlateTwo(response.data.data.plate.substring(3, 6))
+        }
       }
     } catch (err) {
       console.log(err)
@@ -211,7 +218,7 @@ const UserOut = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      if (response.data.response) {
+      if (response.data.response === 1) {
         store.dispatch(actions.setReservations(response.data.data.reservations));
         store.dispatch(actions.setHq(response.data.data));
       }
@@ -264,20 +271,21 @@ const UserOut = (props) => {
           }, timeout: TIMEOUT
         }
       );
-      setLoading(false)
-      setModal4Visible(false);
-      if (showModal) {
-        console.log(showModal)
-        setModalVisible(true)
+      if (response.data.response === 1) {
+        setLoading(false)
+        setModal4Visible(false);
+        if (showModal) {
+          console.log(showModal)
+          setModalVisible(true)
+        }
+        store.dispatch(actions.setPhone(''))
+        store.dispatch(actions.setQr(''))
+        readHq();
+        restart();
+        setRecip(response.data.data);
+        getRecips()
+        setIsDisabled(true);
       }
-      store.dispatch(actions.setPhone(''))
-      store.dispatch(actions.setQr(''))
-      readHq();
-      restart();
-
-      setRecip(response.data.data);
-      getRecips()
-      setIsDisabled(true);
     } catch (err) {
       console.log(err?.response)
       console.log(err)
@@ -323,17 +331,12 @@ const UserOut = (props) => {
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <ImageBackground
-        style={{
-          flex: 1,
-          width: '100%',
-          height: '60%',
-          flexDirection: 'column'
-        }}
+        style={styles.imageBackground}
         source={require('../../../assets/images/Stripes.png')}>
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={{ height: '42%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
-            <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '18%', width: '80%' }}>
+          <View style={styles.topContainer} >
+            <View style={styles.platesContainer}>
               <TextInput
                 ref={refPlateOne}
                 placeholder={'EVZ'}
@@ -373,9 +376,6 @@ const UserOut = (props) => {
                   checkParkingPlate();
                 }}
               />
-                <View style={{ justifyContent: 'flex-end', height: '100%' }}>
-                  {/* <ActivityIndicator size={"small"} color={'#00A9A0'} /> */}
-                </View>
               <TouchableOpacity
                 style={styles.buttonT}
                 onPress={() => { navigation.navigate('QRscanner') }}>
@@ -385,9 +385,7 @@ const UserOut = (props) => {
                   source={require('../../../assets/images/qr.png')}
                 />
               </TouchableOpacity>
-
             </View>
-
             <View style={styles.codeContainer}>
               <TextInput
                 style={styles.codeText}
@@ -410,16 +408,11 @@ const UserOut = (props) => {
               />
             </View>
             <View style={styles.textPhoneCode}>
-              <Text style={styles.infoUserText}> {phoneNumberLength > 13 ? '' : check.phone} </Text>
+              <Text style={styles.infoUserText}>
+                {phoneNumberLength > 13 ? '' : check.phone}
+              </Text>
             </View>
-            <View style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              alignContent: 'center',
-              height: '17%',
-              width: '80%',
-              justifyContent: 'space-between'
-            }}>
+            <View style={styles.timePlateContainer}>
               <View style={styles.timePlate}>
                 <Image
                   style={{ width: '18%' }}
@@ -445,32 +438,28 @@ const UserOut = (props) => {
             <View style={styles.textPhoneCode}>
               <Text style={styles.infoUserText}> TOTAL HORAS:  {Object.keys(check).length === 0 ? '' : Math.round(check.hours)}</Text>
             </View>
-            <View style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              alignContent: 'center',
-              height: '25%',
-              width: '80%',
-              justifyContent: 'space-between'
-            }}>
+            <View style={styles.totalPayContainer}>
               <Text style={styles.infoUserText}>{"TOTAL A PAGAR"}</Text>
-              <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+              <View style={{
+                justifyContent: 'center',
+                alignContent: 'center',
+                alignItems: 'center'
+              }}>
                 <View style={styles.payplate}>
-                  <Text style={styles.payText}>{`$${numberWithPoints(totalAmount)}`}</Text>
+                  <Text style={styles.payText}>
+                    {`$${numberWithPoints(totalAmount)}`}
+                  </Text>
                 </View>
-                <View style={{ height: '30%', width: '100%', flexDirection: 'row', justifyContent: 'center', marginTop: '2%' }}>
-                  <Text style={{ fontSize: width * 0.035, color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{"Saldo pendiente: "}</Text>
-                  <Text style={{ fontSize: width * 0.035, color: '#FFFFFF', fontFamily: 'Montserrat-Bold' }}>{pendingValueNum}</Text>
-
+                <View style={styles.pendingContainer}>
+                  <Text style={styles.pendingText}>
+                    {"Saldo pendiente: "}</Text>
+                  <Text style={styles.pendingText}>
+                    {pendingValueNum}</Text>
                 </View>
               </View>
-
-
             </View>
-
           </View>
         </TouchableWithoutFeedback>
-
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{
             height: '45%',
@@ -490,9 +479,20 @@ const UserOut = (props) => {
               height: '20%'
             }}>
               <View style={{ width: '32%' }}>
-                <Text style={{ fontFamily: 'Montserrat-Bold', fontSize: width * 0.034, color: '#8F8F8F' }} >{"Valor ingresado"}</Text>
+                <Text style={{
+                  fontFamily: 'Montserrat-Bold',
+                  fontSize: width * 0.034,
+                  color: '#8F8F8F'
+                }} >
+                  {"Valor ingresado"}
+                </Text>
               </View>
-              <View style={{ alignContent: 'center', alignItems: 'center', width: '67%', height: '62%' }}>
+              <View style={{
+                alignContent: 'center',
+                alignItems: 'center',
+                width: '67%',
+                height: '62%'
+              }}>
                 <CurrencyInput
                   placeholder='$'
                   textAlign='center'
@@ -504,17 +504,24 @@ const UserOut = (props) => {
                   delimiter="."
                   separator="."
                   precision={0}
-                  onChangeText={(formattedValue) => {
-                    // console.log(formattedValue);
-                    // $2,310.46
-                  }}
+                // onChangeText={(formattedValue) => {
+                // }}
                 />
-
               </View>
             </View>
-
-            <View style={{ width: '80%', height: '10%', alignContent: 'flex-end', alignItems: 'flex-end', justifyContent: 'center' }}>
-              <View style={{ flexDirection: 'row', width: '67%', justifyContent: 'space-between', height: '70%' }}>
+            <View style={{
+              width: '80%',
+              height: '10%',
+              alignContent: 'flex-end',
+              alignItems: 'flex-end',
+              justifyContent: 'center'
+            }}>
+              <View style={{
+                flexDirection: 'row',
+                width: '67%',
+                justifyContent: 'space-between',
+                height: '70%'
+              }}>
                 <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(5000)}>
                   <Text style={styles.miniButtonMoneyText}>$5.000</Text>
                 </TouchableOpacity>
@@ -530,11 +537,30 @@ const UserOut = (props) => {
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row', width: '80%', height: '20%', justifyContent: 'flex-end', alignContent: 'center', alignItems: 'center' }}>
+            <View style={{
+              flexDirection: 'row',
+              width: '80%',
+              height: '20%',
+              justifyContent: 'flex-end',
+              alignContent: 'center',
+              alignItems: 'center'
+            }}>
               <View style={{ width: '33%', paddingRight: '2%' }}>
-                <Text style={{ fontFamily: 'Montserrat-Bold', fontSize: width * 0.034, color: '#8F8F8F', textAlign: 'right' }}>{"A devolver"}</Text>
+                <Text style={{
+                  fontFamily: 'Montserrat-Bold',
+                  fontSize: width * 0.034,
+                  color: '#8F8F8F',
+                  textAlign: 'right'
+                }}>
+                  {"A devolver"}
+                </Text>
               </View>
-              <View style={{ alignContent: 'center', alignItems: 'center', width: '67%', height: '62%' }}>
+              <View style={{
+                alignContent: 'center',
+                alignItems: 'center',
+                width: '67%',
+                height: '62%'
+              }}>
                 <TextInput
                   style={styles.inputMoney}
                   keyboardType='numeric'
@@ -548,7 +574,13 @@ const UserOut = (props) => {
 
             <View style={{ height: '24%', width: '80%', justifyContent: 'flex-end' }}>
               {err !== "" &&
-                <Text style={{ color: "red", fontFamily: 'Montserrat-Regular', alignSelf: 'center' }}>{err}</Text>
+                <Text style={{
+                  color: "red",
+                  fontFamily: 'Montserrat-Regular',
+                  alignSelf: 'center'
+                }}>
+                  {err}
+                </Text>
               }
               {!loading &&
                 <View style={{ width: '100%', height: ' 35%', marginTop: '2%' }}>
@@ -588,9 +620,7 @@ const UserOut = (props) => {
             </View>
             <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end' }}>
               <FooterIndex navigation={navigation} />
-
             </View>
-
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
@@ -700,11 +730,25 @@ const UserOut = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
+            <View style={{
+              height: '100%',
+              width: '100%',
+              justifyContent: 'space-between',
+              padding: '3%'
+            }}>
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalText}> ¿Estás seguro de que hay un pago pendiente?  </Text>
+                <Text style={styles.modalText}>
+                  ¿Estás seguro de que hay un pago pendiente?
+                </Text>
               </View>
-              <View style={{ height: '30%', width: '100%', justifyContent: 'space-between', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
+              <View style={{
+                height: '30%',
+                width: '100%',
+                justifyContent: 'space-between',
+                flexDirection: 'column',
+                alignContent: 'center',
+                alignItems: 'center'
+              }}>
                 <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
                   <Button onPress={() => {
                     setModal2Visible(!modal2Visible);
@@ -750,11 +794,23 @@ const UserOut = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
+            <View style={{
+              height: '100%',
+              width: '100%',
+              justifyContent: 'space-between',
+              padding: '3%'
+            }}>
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
                 <Text style={styles.modalText}> Elija el tipo de pago  </Text>
               </View>
-              <View style={{ height: '30%', width: '100%', justifyContent: 'space-between', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
+              <View style={{
+                height: '30%',
+                width: '100%',
+                justifyContent: 'space-between',
+                flexDirection: 'column',
+                alignContent: 'center',
+                alignItems: 'center'
+              }}>
                 <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
                   <Button onPress={() => {
                     setModal3Visible(!modal3Visible);
@@ -802,14 +858,34 @@ const UserOut = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
+            <View style={{
+              height: '100%',
+              width: '100%',
+              justifyContent: 'space-between',
+              padding: '3%'
+            }}>
               <View style={{ margin: '4%', justifyContent: 'center', height: ' 30%' }}>
-                <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Ingresa el valor exacto de pago: </Text>
-                <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Total a pagar: {`$${numberWithPoints(totalAmount)}`}</Text>
+                <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>
+                  Ingresa el valor exacto de pago:
+                </Text>
+                <Text style={{
+                  ...styles.modalText,
+                  fontSize: normalize(20),
+                  fontFamily: 'Montserrat-Bold'
+                }}>
+                  Total a pagar: {`$${numberWithPoints(totalAmount)}`}
+                </Text>
               </View>
-              <View style={{ justifyContent: 'space-between', height: '40%', flexDirection: 'column', paddingBottom: '6%' }}>
+              <View style={{
+                justifyContent: 'space-between',
+                height: '40%',
+                flexDirection: 'column',
+                paddingBottom: '6%'
+              }}>
                 <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
-                  <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Pago parcial:  </Text>
+                  <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>
+                    Pago parcial:
+                  </Text>
                   <CurrencyInput
                     placeholder='$'
                     textAlign='center'

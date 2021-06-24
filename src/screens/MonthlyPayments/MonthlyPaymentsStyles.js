@@ -21,11 +21,31 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+    infoButtonsContainer:{
+        height: '97%',
+        width: '87%',
+        marginTop: '2%',
+        alignContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    plateListContainer:{
+        flexDirection: 'column',
+        width: '60%',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
+    },
     imageStyle: {
         flex: 1,
         width: '100%',
         height: '40%',
         flexDirection: 'column'
+    },
+    topContainer: {
+        height: '17%',
+        alignContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
     },
     plateInputContainer: {
         flexDirection: 'row',
@@ -45,7 +65,12 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         color: '#00A9A0'
     },
-    buttonI: {
+    buttonContainer:{
+        height: '30%',
+        width: '57%',
+        justifyContent: 'flex-end'
+    },
+    searchButton: {
         borderRadius: 30,
         height: '80%',
         width: '100%'
@@ -104,7 +129,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Regular',
         textAlign: 'center'
     },
-    buttonIDisabled: {
+    searchButtonDisabled: {
         borderRadius: 30,
         height: '80%',
         width: '100%',
@@ -120,6 +145,7 @@ const styles = StyleSheet.create({
         fontSize: width * 0.025,
         color: '#00A9A0'
     },
+    // modals
     centeredView: {
         flex: 1,
         justifyContent: "center",
@@ -200,7 +226,7 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'space-between',
         alignContent: 'center',
-        alignItems: 'center' 
+        alignItems: 'center'
     },
     mensualityInfoButtonsContainer: {
         height: '16%',
@@ -231,6 +257,11 @@ const styles = StyleSheet.create({
         width: '60%',
         borderRadius: 10,
         color: '#00A9A0'
+    },
+    footer:{
+        height: '18%',
+        width: '100%',
+        justifyContent: 'flex-end'
     }
 
 });

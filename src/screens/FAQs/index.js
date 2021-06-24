@@ -32,26 +32,6 @@ const FAQs = (props) => {
     const [status, setStatus] = React.useState({});
     const [videoUrl, setVideoUrl] = useState();
 
-    // const getVideo = async (source) => {
-    //     console.log('getVideo fn', source)
-    //     try {
-    //         console.log(`faqVideos/${source}`)
-
-    //         let snapshot = await storage
-    //             .ref(`faqVideos/${source}`)
-    //             .listAll();
-    //         console.log(snapshot.items)
-
-    //         snapshot.items.forEach((doc) => {
-    //             doc.getDownloadURL().then((url) => {
-    //                 console.log('URL VIDEO', url)
-    //                 setVideoUrl(url);
-    //             });
-    //         });
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // }
 
     const FAQs = [
         {
@@ -145,18 +125,12 @@ const FAQs = (props) => {
                                                         isLooping
                                                         onPlaybackStatusUpdate={status => setStatus(() => status)}
                                                     />
-
                                                 </View>
                                             </CollapseBody>
                                         </Collapse>
                                     )
                                 }}
                             />
-
-
-
-
-
                         </View>
 
                     </View>

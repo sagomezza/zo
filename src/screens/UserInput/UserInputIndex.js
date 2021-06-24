@@ -34,6 +34,7 @@ import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 
 import { createIdempotency } from '../../utils/idempotency'
+import { StyleProvider } from 'native-base';
 
 const { width, height } = Dimensions.get('window');
 
@@ -51,6 +52,9 @@ const UserInput = (props) => {
   const [prepayDay, setPrepayDay] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
+  const [carParksFull, setCarParksFull] = useState(false);
+  const [bikeParksFull, setBikeParksFull] = useState(false);
+  const [alreadyParked, setAlreadyParked] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
@@ -71,7 +75,7 @@ const UserInput = (props) => {
   const [showPhoneInput, setShowPhoneInput] = useState(false)
   const [codeError, setErrorText] = useState(false);
 
-  const [phone, setPhone] = useState(1);
+  const [phone, setPhone] = useState(null);
   const [phones, setPhones] = useState([{ label: 'Selecciona un número', value: 1 }]);
   const [showDropdown, setShowDropdown] = useState(false)
   const [newPhone, setNewPhone] = useState('');
@@ -110,24 +114,47 @@ const UserInput = (props) => {
   }
 
   const restart = () => {
-    setModalVisible(!modalVisible);
+    setModalVisible(false);
+    setModal2Visible(false);
+    setErrorModalVisible(false);
+    setMaxCapMensuality(false);
+    setCarParksFull(false);
+    setBikeParksFull(false);
+    setAlreadyParked(false);
     setPlateOne("");
     setPlateTwo("");
     setNewPhone("");
     setPrepayDay(false);
-    setPhones([{ label: '', value: 1 }]);
-    setPhone(1);
+    setPhones([{ label: 'Selecciona un número', value: 1 }]);
+    setPhone(null);
+    setShowPhoneInput(false);
+    setPrepayDay(false);
+    setShowPhoneInput(false);
+    setHistoryExists(false);
+    setMensuality({});
+    setLoadingStart(false);
+    setMensualityExists(false);
+    setPrepayDayRecip(false);
+    setShowDropdown(false);
+  }
+
+  const restartSearch = () => {
+    setPhones([{ label: 'Selecciona un número', value: 1 }]);
+    setPhone(null);
+    setShowDropdown(false);
+    setNewPhone("");
+    setPrepayDay(false);
     setShowPhoneInput(false);
     setPrepayDay(false);
     setShowPhoneInput(false);
     setHistoryExists(false);
     setMensualityExists(false);
     setPrepayDayRecip(false);
-    setShowDropdown(false);
   }
 
   const clearPlateOne = () => {
     setPlateOne('');
+
   }
   const clearPlateTwo = () => {
     setPlateTwo('');
@@ -148,20 +175,23 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        setFindUserByPlateInfo(response.data);
-        setExistingUser(true)
-        setPhone(1);
-        setShowPhoneInput(false);
-        setShowDropdown(true);
-        setBlacklist(response.data.blackList);
-        const auxPhones = []
-        response.data.data.forEach(phone => {
-          auxPhones.push({ label: phone, value: phone })
-        });
-        auxPhones.push({ label: '+ agregar', value: 0 })
-        setPhones(auxPhones);
-        if (response.data.blackList && response.data.blackList.length > 0) {
-          setModal3Visible()
+        if (response.data.response === 1) {
+          setFindUserByPlateInfo(response.data);
+          setExistingUser(true)
+          setPhone(null);
+          setShowPhoneInput(false);
+          setShowDropdown(true);
+          setBlacklist(response.data.blackList);
+          const auxPhones = []
+          response.data.data.forEach(phone => {
+            auxPhones.push({ label: phone, value: phone })
+          });
+          auxPhones.push({ label: '+ agregar', value: 0 })
+          setPhones(auxPhones);
+
+          if (response.data.blackList && response.data.blackList.length > 0) {
+            setModal3Visible(true)
+          }
         }
       }
     } catch (err) {
@@ -185,17 +215,18 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        setMensualityExists(true);
-        setMensuality(response.data)
-        if (response.data.data[0].capacity === response.data.data[0].parkedPlatesList.length) {
-          setMaxCapMensuality(true);
+        if (response.data.response === 1) {
+          setMensualityExists(true);
+          setMensuality(response.data)
+          if (response.data.data[0].capacity === response.data.data[0].parkedPlatesList.length) {
+            setMaxCapMensuality(true);
+          }
         }
       }
     } catch (err) {
       setMensualityExists(false);
       // console.log(err)
       // console.log(err?.response)
-      // setErrorModalVisible(true);
     }
   }
 
@@ -210,27 +241,26 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        setHistoryExists(true)
-        setHistoryInfo(response.data.data)
-        if (response.data.data[0].prepayFullDay) {
-          setPrepayDayDateFinished(response.data.data[0].dateFinished)
-          setPrepayDayRecip(true);
-
-        } else {
-          setPrepayDayDateFinished('');
-          setPrepayDayRecip(false);
-
-
+        if (response.data.response === 1) {
+          setHistoryExists(true)
+          setHistoryInfo(response.data.data)
+          if (response.data.data[0].prepayFullDay) {
+            setPrepayDayDateFinished(response.data.data[0].dateFinished)
+            setPrepayDayRecip(true);
+          } else {
+            setPrepayDayDateFinished('');
+            setPrepayDayRecip(false);
+          }
+          const auxTable = []
+          response.data.data.forEach(element => {
+            const auxElement = []
+            auxElement.push(element.plate)
+            auxElement.push(moment(element.dateFinished).format('L'))
+            auxElement.push(`$${numberWithPoints(element.total)}`)
+            auxTable.push(auxElement)
+          });
+          setTableData(auxTable);
         }
-        const auxTable = []
-        response.data.data.forEach(element => {
-          const auxElement = []
-          auxElement.push(element.plate)
-          auxElement.push(moment(element.dateFinished).format('L'))
-          auxElement.push(`$${numberWithPoints(element.total)}`)
-          auxTable.push(auxElement)
-        });
-        setTableData(auxTable);
       }
     } catch (err) {
       // console.log(err)
@@ -253,8 +283,10 @@ const UserInput = (props) => {
             },
             { timeout: TIMEOUT }
           )
+          if (response.data.response === 1) {
+            setExistingUser(true);
+          }
         }
-        setExistingUser(true);
       } catch (err) {
         console.log(err)
         console.log(err?.response)
@@ -280,18 +312,6 @@ const UserInput = (props) => {
         } else {
           change = totalPay - prepayDayValue
         }
-        // console.log({
-        //   plate: plateOne + plateTwo,
-        //   hqId: officialHq,
-        //   dateStart: new Date(),
-        //   phone: !showPhoneInput ? phone : '+57' + newPhone,
-        //   prepayFullDay: prepayDay,
-        //   officialEmail: officialEmail,
-        //   type,
-        //   cash: Number(totalPay),
-        //   change: totalPay - prepayDayValue
-        // })
-
         const response = await instance.post(
           START_PARKING,
           {
@@ -311,27 +331,37 @@ const UserInput = (props) => {
             }, timeout: TIMEOUT
           }
         )
-        setStartParking(response?.data?.data);
-        setPhones([{ label: 'Selecciona un número', value: 1 }]);
-        setBlacklistExists(false);
-        readHq();
-        setLoadingStart(false);
-        setPrepayDay(false);
-        setPrepayDayValue(0);
-        setTotalPay(0);
-        setModalVisible(true);
+        if (response.data.response === 1) {
+          setStartParking(response?.data?.data);
+          setPhones([{ label: 'Selecciona un número', value: 1 }]);
+          setBlacklistExists(false);
+          readHq();
+          setLoadingStart(false);
+          setPrepayDay(false);
+          setPrepayDayValue(0);
+          setTotalPay(0);
+          setModalVisible(true);
+        }
       }
-
     } catch (err) {
       setLoadingStart(false)
+      // response -2 -> already parked
+      // response -3 -> car parks full
+      // response -4 -> bike parks full
       if (err?.response.data.response === -2) {
-        setModal2Visible(true)
+        setAlreadyParked(true);
+        setModal2Visible(true);
+      } else if (err?.response.data.response === -3) {
+        setCarParksFull(true);
+        setModal2Visible(true);
+      } else if (err?.response.data.response === -4) {
+        setBikeParksFull(true);
+        setModal2Visible(true);
       } else {
         setErrorModalVisible(true)
       }
       console.log(err)
       console.log(err?.response)
-
     }
   };
 
@@ -340,7 +370,7 @@ const UserInput = (props) => {
       const response = await instance.post(READ_HQ, {
         id: officialHq
       });
-      if (response.data.response) {
+      if (response.data.response === 1) {
         store.dispatch(actions.setReservations(response.data.data.reservations));
         store.dispatch(actions.setHq(response.data.data));
       }
@@ -350,6 +380,7 @@ const UserInput = (props) => {
     }
   };
 
+  let controller;
   let inputChange = (totalPay - prepayDayValue) <= 0 ? '' : '' + (totalPay - prepayDayValue)
 
   return (
@@ -376,7 +407,8 @@ const UserInput = (props) => {
                   };
                 }}
                 value={plateOne}
-                onFocus={() => { clearPlateOne(); clearPlateTwo(); }}
+
+                onFocus={() => { clearPlateOne(); clearPlateTwo(); restartSearch(); }}
               />
               <TextInput
                 ref={refPlateTwo}
@@ -387,7 +419,9 @@ const UserInput = (props) => {
                 maxLength={3}
                 autoCapitalize={"characters"}
                 keyboardType='default'
-                onFocus={() => { clearPlateTwo(); }}
+
+
+                onFocus={() => { clearPlateTwo(); controller.reset(); restartSearch(); }}
                 onChangeText={text => {
                   setPlateTwo(text.trim());
                   if (text.length === 3) {
@@ -417,39 +451,26 @@ const UserInput = (props) => {
                   items={phones}
                   zIndex={30}
                   disabled={!showDropdown}
-                  placeholder={"Selecciona un numero"}
+                  defaultValue={phone === null ? 1 : phone}
+                  placeholder={"Selecciona un número"}
                   placeholderStyle={styles.dropdownPlaceholder}
-                  selectedLabelStyle={{
-                    color: '#8F8F8F',
-                    fontSize: normalize(30),
-                    textAlign: 'center',
-                    fontFamily: 'Montserrat-Bold'
-                  }}
+                  selectedLabelStyle={styles.dropdownPlaceholder}
                   containerStyle={{ height: '23%', width: '100%' }}
                   style={styles.phoneDropdown}
                   labelStyle={styles.dropdownLabel}
                   dropDownMaxHeight={100}
-                  dropDownStyle={{
-                    backgroundColor: '#fafafa',
-                    borderBottomLeftRadius: 15,
-                    borderBottomRightRadius: 15
-                  }}
+                  dropDownStyle={styles.dropdown}
                   arrowColor={'#00A9A0'}
-                  arrowStyle={{
-                    alignItems: 'flex-start',
-                    alignContent: 'flex-start',
-                    justifyContent: 'flex-start'
-                  }}
+                  arrowStyle={styles.dropdownArrow}
                   arrowSize={24}
+                  controller={instance => controller = instance}
                   onChangeItem={item => {
                     if (item.value === 0) {
                       setShowPhoneInput(true)
                     } else {
                       setPhone(item.value)
                     }
-
-                  }
-                  }
+                  }}
                 /> :
                 <TextInput
                   placeholder={''}
@@ -467,15 +488,7 @@ const UserInput = (props) => {
                   value={newPhone}
                 />}
               {codeError && <Text>{codeError}</Text>}
-              <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                alignContent: 'center',
-                height: '30%',
-                width: '60%',
-                justifyContent: 'center',
-                paddingTop: '10%'
-              }}>
+              <View style={styles.checkPrepayContainer}>
                 <CheckBox
                   value={prepayDay}
                   onValueChange={() => setPrepayDay(!prepayDay)}
@@ -485,30 +498,16 @@ const UserInput = (props) => {
                     false: '#FFF200'
                   }}
                 />
-                <Text style={{
-                  color: '#FFF200',
-                  fontFamily: 'Montserrat-Bold',
-                  fontSize: width * 0.03,
-                  textAlign: 'center'
-                }}>
+                <Text style={styles.prepayDayText}>
                   PASE DIA
                 </Text>
               </View>
 
 
-              <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                alignContent: 'center',
-                height: '40%',
-                width: '100%',
-                justifyContent: 'center'
-              }}>
+              <View style={styles.startButtonContainer}>
                 {!loadingStart &&
                   <Button onPress={() => {
-
                     priceVehicleType();
-
                   }}
                     title="I N I C I A R"
                     color='#FFF200'
@@ -519,7 +518,6 @@ const UserInput = (props) => {
                     ]}
                     textStyle={styles.buttonText}
                     disabled={!existingUser || plateOne === "" || plateTwo === ""}
-
                   />
                 }
                 {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
@@ -535,9 +533,8 @@ const UserInput = (props) => {
                       setLoadingStart(false);
                       store.dispatch(actions.setQr(plateOne + plateTwo));
                       navigation.navigate('QRscanner');
-
                     }}
-                    disabled={(plateOne + plateTwo).length < 5}
+                    disabled={(plateOne + plateTwo).length < 5 && phone !== null}
                   >
                     <Image
                       style={styles.qrImage}
@@ -599,7 +596,6 @@ const UserInput = (props) => {
                       flexDirection: 'row',
                       justifyContent: 'center'
                     }}>
-
                     </View>
                   }
                   {prepayDayRecip ?
@@ -619,11 +615,8 @@ const UserInput = (props) => {
                       flexDirection: 'row',
                       justifyContent: 'center'
                     }}>
-
                     </View>
                   }
-
-
                 </View>
                 {historyExists ?
                   <Table borderStyle={{ borderColor: '#00A9A0' }}>
@@ -655,60 +648,48 @@ const UserInput = (props) => {
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
-      <View>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          backdropOpacity={0.3}
-          visible={modal2Visible}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={modal2Visible}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{
+              height: '100%',
+              width: '100%',
+              justifyContent: 'space-between',
+              padding: '2%'
+            }}>
               <View style={{
-                height: '100%',
-                width: '100%',
-                justifyContent: 'space-between',
-                padding: '2%'
-
+                margin: '4%',
+                justifyContent: 'flex-end',
+                height: ' 40%'
               }}>
-                <View style={{
-                  margin: '4%',
-                  justifyContent: 'flex-end',
-                  height: ' 40%'
-                }}>
-                  <Text style={styles.modalTextAlert}> Este vehículo ya se encuentra parqueado. </Text>
-                </View>
-                <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                  <Button onPress={() => {
-                    setModal2Visible(!modal2Visible);
-                    setPlateOne("");
-                    setPlateTwo("");
-                    setNewPhone("");
-                    setPrepayDay(false);
-                    setLoadingStart(false);
-                    setPhone(1);
-                    setShowDropdown(false);
-                    setShowPhoneInput(false);
-                    setPhones([{ label: 'Selecciona un número', value: 1 }]);
-                    setHistoryExists(false)
-
-                  }}
-                    title="E N T E N D I D O"
-                    color="#00A9A0"
-                    style={
-                      styles.modalButton
-                    }
-                    textStyle={{
-                      color: "#FFFFFF",
-                      textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
-                    }} />
-                </View>
+                {carParksFull && <Text style={styles.modalTextAlert}> Las celdas para carros llegaron a su máxima capacidad. </Text>}
+                {bikeParksFull && <Text style={styles.modalTextAlert}> Las celdas para motos llegaron a su máxima capacidad. </Text>}
+                {alreadyParked && <Text style={styles.modalTextAlert}> Este vehículo ya se encuentra parqueado. </Text>}
+              </View>
+              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                <Button onPress={() => {
+                  restart();
+                }}
+                  title="E N T E N D I D O"
+                  color="#00A9A0"
+                  style={
+                    styles.modalButton
+                  }
+                  textStyle={{
+                    color: "#FFFFFF",
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Bold'
+                  }} />
               </View>
             </View>
           </View>
-        </Modal>
-      </View>
+        </View>
+      </Modal>
       <Modal
         animationType="fade"
         transparent={true}
@@ -726,26 +707,26 @@ const UserInput = (props) => {
 
               }}>
                 <View style={{ margin: '4%', justifyContent: 'center', height: ' 30%' }}>
-                  <Text style={styles.modalTextAlert}>Cobrar pase día </Text>
-                  <Text style={styles.modalTextAlert}>{`$${numberWithPoints(prepayDayValue)}`}</Text>
+                  <Text style={styles.modalTextAlert}>
+                    Cobrar pase día
+                  </Text>
+                  <Text style={styles.modalTextAlert}>
+                    {`$${numberWithPoints(prepayDayValue)}`}
+                  </Text>
                 </View>
-                <View style={{ justifyContent: 'space-between', height: '40%', flexDirection: 'column', paddingBottom: '6%' }}>
+                <View style={{
+                  justifyContent: 'space-between',
+                  height: '40%',
+                  flexDirection: 'column',
+                  paddingBottom: '6%'
+                }}>
                   <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
                     <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Pago:  </Text>
                     <CurrencyInput
                       placeholder='$'
                       textAlign='center'
                       keyboardType='numeric'
-                      style={{
-                        borderWidth: 1,
-                        borderColor: '#00A9A0',
-                        fontSize: normalize(20),
-                        fontFamily: 'Montserrat-Bold',
-                        backgroundColor: '#FFFFFF',
-                        width: '60%',
-                        borderRadius: 10,
-                        color: '#00A9A0'
-                      }}
+                      style={styles.currencyInput}
                       value={totalPay}
                       onChangeValue={text => setTotalPay(text)}
                       prefix="$"
@@ -761,20 +742,10 @@ const UserInput = (props) => {
                   <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
                     <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}> A devolver:  </Text>
                     <TextInput
-                      style={{
-                        borderWidth: 1,
-                        borderColor: '#00A9A0',
-                        fontSize: normalize(20),
-                        fontFamily: 'Montserrat-Bold',
-                        backgroundColor: '#FFFFFF',
-                        width: '60%',
-                        borderRadius: 10,
-                        color: '#00A9A0'
-                      }}
+                      style={styles.currencyInput}
                       keyboardType='numeric'
                       placeholder='$'
                       textAlign='center'
-
                       editable={false}
                       value={`$${numberWithPoints(inputChange)}`}
                     />
@@ -786,7 +757,6 @@ const UserInput = (props) => {
                   }}
                     title="G U A R D A R"
                     color="#00A9A0"
-
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
@@ -796,12 +766,9 @@ const UserInput = (props) => {
                     disabled={totalPay - prepayDayValue < 0}
                     activityIndicatorStatus={loadingStart} />
                 </View>
-
-
               </View>
             </View>
           </View>
-
           :
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
@@ -869,7 +836,6 @@ const UserInput = (props) => {
               width: '100%',
               justifyContent: 'space-between',
               padding: '2%'
-
             }}>
               <View style={{ margin: '4%', justifyContent: 'center', height: ' 60%' }}>
                 <Text style={styles.modalTextAlert}> Este usuario se encuentra en lista negra:  </Text>
@@ -912,26 +878,14 @@ const UserInput = (props) => {
               <View style={{ height: '30%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
                 <View style={{ width: '75%', height: '50%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                   <Button onPress={() => {
-                    setErrorModalVisible(false);
-                    setPlateOne("");
-                    setPlateTwo("");
-                    setNewPhone("");
-                    setPrepayDay(false);
-                    setLoadingStart(false);
-                    setPhone(1);
-                    setShowDropdown(false);
-                    setShowPhoneInput(false);
-                    setPhones([{ label: 'Selecciona un número', value: 1 }]);
-                    setHistoryExists(false)
+                    restart();
                   }}
                     title="E N T E N D I D O"
                     color="#00A9A0"
-                    style={
-                      {
-                        width: normalize(250),
-                        height: '85%'
-                      }
-                    }
+                    style={{
+                      width: normalize(250),
+                      height: '85%'
+                    }}
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
@@ -954,52 +908,33 @@ const UserInput = (props) => {
             <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
               <View style={{ margin: '4%', justifyContent: 'space-between', height: ' 65%' }}>
                 <Text style={{ ...styles.modalTextAlert, fontFamily: 'Montserrat-Bold' }}> Alerta </Text>
-
                 <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#8F8F8F' }}> Las celdas disponibles para esta mensualidad ya están ocupadas. Al hacer el ingreso del vehículo se hará el cobro por horas. </Text>
                 <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#8F8F8F' }}> ¿ Desea continuar ? </Text>
-
               </View>
               <View style={{ height: '25%', width: '100%', justifyContent: 'flex-start', flexDirection: 'column' }}>
                 <Button onPress={() => {
                   setMaxCapMensuality(false);
-
                 }}
                   title="S I"
                   color="#00A9A0"
-                  style={
-                    {
-                      width: '100%',
-                      height: '60%'
-                    }
-                  }
+                  style={{
+                    width: '100%',
+                    height: '60%'
+                  }}
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
                     fontFamily: 'Montserrat-Bold'
                   }} />
-
                 <Button onPress={() => {
-                  setMaxCapMensuality(false);
-                  setPlateOne("");
-                  setPlateTwo("");
-                  setNewPhone("");
-                  setPrepayDay(false);
-                  setLoadingStart(false);
-                  setPhone(1);
-                  setShowDropdown(false);
-                  setShowPhoneInput(false);
-                  setPhones([{ label: 'Selecciona un número', value: 1 }]);
-                  setHistoryExists(false)
-                  setMensuality({});
+                  restart();
                 }}
                   title="N O"
                   color="gray"
-                  style={
-                    {
-                      width: '100%',
-                      height: '60%'
-                    }
-                  }
+                  style={{
+                    width: '100%',
+                    height: '60%'
+                  }}
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
