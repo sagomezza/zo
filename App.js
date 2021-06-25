@@ -79,6 +79,8 @@ const App = () => {
 
 
   useEffect(() => {
+    
+
     // console.log("start", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
     const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
 
@@ -109,6 +111,7 @@ const App = () => {
     //console.log("USER. ", userEmail);
     if (userEmail) {
       try {
+        Sentry.Browser.captureException('userEmail that goes to readOfficial', userEmail)
         const response = await instance.post(READ_OFFICIAL, {
           email: userEmail
         });
@@ -118,8 +121,7 @@ const App = () => {
           setOfficialData(response.data.data)
         }
       } catch (err) {
-        Sentry.captureException('Error in readUser readOfficial ', err?.response)
-
+        Sentry.Browser.captureException('readOfficial catch towards readAdmin err:', err)
         try {
           let readOff = await instance.post(
             READ_ADMIN,
@@ -132,16 +134,13 @@ const App = () => {
           data.hq = readOff.data.data.hqs
           store.dispatch(setOfficial(data));
           setOfficialData(data)
-
         } catch (err) {
-          Sentry.captureException('Error in try catch of readAdmin', err?.response)
-
+          Sentry.Browser.captureException('readAdmin catch err:', err)
           console.log(err)
           console.log(err?.response)
-          console.log('ERRORRR')
         }
         //console.log("err: ", error);
-      }
+      } 
     }
     setLoginState(false);
   }
@@ -150,6 +149,7 @@ const App = () => {
     // console.log("[App/updateUserState] ", user);
     // if (user.lastLoginAt !== null ) saveLastLoginAt(user.lastLoginAt);
     if (user) {
+      Sentry.Browser.captureException('updateUserState user: ', user)
       // console.log("[metadata] ", auth.currentUser.metadata);
       // console.log(user.lastLoginAt)
       setUser(user);
