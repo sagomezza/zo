@@ -79,8 +79,7 @@ const App = () => {
 
 
   useEffect(() => {
-    
-
+    Sentry.Browser.captureException('Starting app.js')
     // console.log("start", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
     const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
 
@@ -108,6 +107,7 @@ const App = () => {
   });
 
   const readUser = async (userEmail) => {
+    Sentry.Browser.captureException('readUser')
     //console.log("USER. ", userEmail);
     if (userEmail) {
       try {
@@ -120,6 +120,7 @@ const App = () => {
           // console.log(response.data.data)
           setOfficialData(response.data.data)
         }
+
       } catch (err) {
         Sentry.Browser.captureException('readOfficial catch towards readAdmin err:', err)
         try {
@@ -140,16 +141,18 @@ const App = () => {
           console.log(err?.response)
         }
         //console.log("err: ", error);
-      } 
+      }
     }
     setLoginState(false);
   }
 
   const updateUserState = useCallback((user) => {
+    Sentry.Browser.captureException('[App/updateUserState] ', user)
+
     // console.log("[App/updateUserState] ", user);
     // if (user.lastLoginAt !== null ) saveLastLoginAt(user.lastLoginAt);
     if (user) {
-      Sentry.Browser.captureException('updateUserState user: ', user)
+      Sentry.Browser.captureException('updateUserState user: ', user.email)
       // console.log("[metadata] ", auth.currentUser.metadata);
       // console.log(user.lastLoginAt)
       setUser(user);
@@ -167,6 +170,8 @@ const App = () => {
 
 
   useEffect(() => {
+    Sentry.Browser.captureException('[App] ')
+
     setLoginState(true);
     // const userLastLoginAt =  AsyncStorage.getItem(STORAGE_KEY)
     // if (userLastLoginAt !== null) setLastLoginAt(userLastLoginAt)
@@ -191,15 +196,23 @@ const App = () => {
   }, []);
 
   async function registerForPushNotificationsAsync() {
+    Sentry.Browser.captureException('[App/registerForPushNotificationsAsync] ')
+
     let token;
     if (Constants.isDevice) {
+      Sentry.Browser.captureException('[App/registerForPushNotificationsAsync/Constants.iseDevice] ')
+
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
       let finalStatus = existingStatus;
       if (existingStatus !== 'granted') {
+        Sentry.Browser.captureException('[App/registerForPushNotificationsAsync/Constants.iseDevice/existingStatusgranted] ')
+
         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
         finalStatus = status;
       }
       if (finalStatus !== 'granted') {
+        Sentry.Browser.captureException('[App/registerForPushNotificationsAsync/Constants.iseDevice/finalStatusgranted] ')
+
         //alert('Failed to get push token for push notification!');
         return;
       }
@@ -210,6 +223,8 @@ const App = () => {
     }
 
     if (Platform.OS === 'android') {
+      Sentry.Browser.captureException('[App/registerForPushNotificationsAsync/platformOSAndroid] ')
+
       Notifications.setNotificationChannelAsync('default', {
         name: 'default',
         importance: Notifications.AndroidImportance.MAX,
