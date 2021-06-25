@@ -219,6 +219,7 @@ const UserOut = (props) => {
         { timeout: TIMEOUT }
       );
       if (response.data.response === 1) {
+        getRecips();
         store.dispatch(actions.setReservations(response.data.data.reservations));
         store.dispatch(actions.setHq(response.data.data));
       }
@@ -240,6 +241,7 @@ const UserOut = (props) => {
         store.dispatch(actions.setRecips(response.data.data));
       }
     } catch (err) {
+      console.log('No recips found')
       console.log(err?.response)
       console.log(err)
     }
@@ -271,19 +273,20 @@ const UserOut = (props) => {
           }, timeout: TIMEOUT
         }
       );
+      // console.log('Finishparking response', response.data.response)
       if (response.data.response === 1) {
         setLoading(false)
         setModal4Visible(false);
         if (showModal) {
-          console.log(showModal)
+          // console.log('Showmodal FinishParking', showModal)
           setModalVisible(true)
+        } else {
+          restart();
         }
         store.dispatch(actions.setPhone(''))
         store.dispatch(actions.setQr(''))
         readHq();
-        restart();
         setRecip(response.data.data);
-        getRecips()
         setIsDisabled(true);
       }
     } catch (err) {
@@ -829,8 +832,8 @@ const UserOut = (props) => {
                 </View>
                 <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
                   <Button onPress={() => {
-                    setModal3Visible(!modal3Visible);
-                    setModal4Visible(!modal4Visible);
+                    setModal3Visible(false);
+                    setModal4Visible(true);
 
                   }}
                     title="P A R C I A L"

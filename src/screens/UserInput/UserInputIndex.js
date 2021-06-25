@@ -175,6 +175,7 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
+
         if (response.data.response === 1) {
           setFindUserByPlateInfo(response.data);
           setExistingUser(true)
@@ -283,11 +284,21 @@ const UserInput = (props) => {
             },
             { timeout: TIMEOUT }
           )
+          // console.log('CREATEUSER-------------------',response.data.response)
           if (response.data.response === 1) {
+            // new user created successfully
+            setExistingUser(true);
+          }
+          if (response.data.response === 2) {
+            // user exists, plate added to user
             setExistingUser(true);
           }
         }
       } catch (err) {
+        if (err?.response.data.response === -1) {
+          // User already exists 
+          setExistingUser(true);
+        }
         console.log(err)
         console.log(err?.response)
       }
@@ -335,12 +346,12 @@ const UserInput = (props) => {
           setStartParking(response?.data?.data);
           setPhones([{ label: 'Selecciona un número', value: 1 }]);
           setBlacklistExists(false);
-          readHq();
           setLoadingStart(false);
           setPrepayDay(false);
           setPrepayDayValue(0);
           setTotalPay(0);
           setModalVisible(true);
+          readHq();
         }
       }
     } catch (err) {
@@ -380,7 +391,6 @@ const UserInput = (props) => {
     }
   };
 
-  let controller;
   let inputChange = (totalPay - prepayDayValue) <= 0 ? '' : '' + (totalPay - prepayDayValue)
 
   return (
@@ -421,7 +431,7 @@ const UserInput = (props) => {
                 keyboardType='default'
 
 
-                onFocus={() => { clearPlateTwo(); controller.reset(); restartSearch(); }}
+                onFocus={() => { clearPlateTwo(); restartSearch(); }}
                 onChangeText={text => {
                   setPlateTwo(text.trim());
                   if (text.length === 3) {
@@ -463,7 +473,6 @@ const UserInput = (props) => {
                   arrowColor={'#00A9A0'}
                   arrowStyle={styles.dropdownArrow}
                   arrowSize={24}
-                  controller={instance => controller = instance}
                   onChangeItem={item => {
                     if (item.value === 0) {
                       setShowPhoneInput(true)
