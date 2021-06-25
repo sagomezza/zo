@@ -53,7 +53,7 @@ const App = () => {
   const [lastLoginAt, setLastLoginAt] = useState('');
   const [logoutSnackbar, setLogoutSnackbar] = useState(false)
   const [officialData, setOfficialData] = useState({});
-  const officialScheduleStart = officialData.start !== undefined ? officialData.start : "NONE";
+  const officialScheduleStart = officialData.start !== undefined ? officialData.start : null;
 
   // useEffect(() => {
   //   throw new Error("Zona P first Sentry error")
@@ -80,24 +80,30 @@ const App = () => {
 
   useEffect(() => {
     Sentry.Browser.captureException('Starting app.js')
-    // console.log("start", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
-    const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
 
-    const checkOfficialHours = setInterval(() => {
-      let hours = moment(new Date()).diff(offStart, 'hours', true);
-      // console.log(hours)
-      // console.log("new Date() func", new Date())
-      if (
-        Number(hours) > 7.25 && Number(hours) <= 7.5 ||
-        Number(hours) > 7.5 && Number(hours) <= 7.75 ||
-        Number(hours) > 7.75 && Number(hours) <= 8 ||
-        Number(hours) > 8
-      ) {
-        setLogoutSnackbar(true);
-      }
-    }, MINUTE_MS);
+    if (officialScheduleStart !== null) {
+    // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
 
-    return () => clearInterval(checkOfficialHours);
+      const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
+
+      const checkOfficialHours = setInterval(() => {
+        let hours = moment(new Date()).diff(offStart, 'hours', true);
+        // console.log(hours)
+        // console.log("new Date() func", new Date())
+        if (
+          Number(hours) > 7.25 && Number(hours) <= 7.5 ||
+          Number(hours) > 7.5 && Number(hours) <= 7.75 ||
+          Number(hours) > 7.75 && Number(hours) <= 8 ||
+          Number(hours) > 8
+        ) {
+          setLogoutSnackbar(true);
+        }
+      }, MINUTE_MS);
+
+      return () => clearInterval(checkOfficialHours);
+    }
+
+
   }, [])
 
   Sentry.init({
