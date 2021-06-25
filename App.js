@@ -20,7 +20,9 @@ import moment from 'moment';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import * as Permissions from "expo-permissions";
-import * as Sentry from 'sentry-expo';
+// import * as Sentry from 'sentry-expo';
+import * as Sentry from "@sentry/browser";
+
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -115,7 +117,9 @@ const App = () => {
           // console.log(response.data.data)
           setOfficialData(response.data.data)
         }
-      } catch (error) {
+      } catch (err) {
+        Sentry.captureException('Error in readUser catch ', err?.response)
+
         try {
           let readOff = await instance.post(
             READ_ADMIN,
@@ -130,6 +134,8 @@ const App = () => {
           setOfficialData(data)
 
         } catch (err) {
+          Sentry.captureException('Error in try catch of readUser catch', err?.response)
+
           console.log(err)
           console.log(err?.response)
           console.log('ERRORRR')
