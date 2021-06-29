@@ -80,15 +80,18 @@ const App = () => {
 
   useEffect(() => {
     Sentry.Browser.captureException('Starting app.js')
+    // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
+
 
     if (officialScheduleStart !== null) {
-      // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
+      console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
+
 
       const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
 
       const checkOfficialHours = setInterval(() => {
         let hours = moment(new Date()).diff(offStart, 'hours', true);
-        // console.log(hours)
+        console.log(hours)
         // console.log("new Date() func", new Date())
         if (
           Number(hours) > 7.25 && Number(hours) <= 7.5 ||
