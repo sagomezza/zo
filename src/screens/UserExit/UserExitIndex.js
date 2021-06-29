@@ -99,7 +99,6 @@ const UserOut = (props) => {
     async function readParanoicUser() {
       try {
         if ((qr.plate).length === 0 && (qr.phone).length > 0) {
-          console.log(qr.phone)
           const response = await instance.post(
             READ_PARANOIC_USER,
             {
@@ -107,16 +106,14 @@ const UserOut = (props) => {
             },
             { timeout: TIMEOUT }
           )
-          if (response.data.response === 1) {
-            const splitPlate = (response.data.data.plate)
-            const splitPlateFive = splitPlate[5] !== undefined ? splitPlate[5] : '';
-            setPlateOne(splitPlate[0] + splitPlate[1] + splitPlate[2])
-            setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlateFive)
-            setPlateOneCall(splitPlate[0] + splitPlate[1] + splitPlate[2])
-            setPlateTwoCall(splitPlate[3] + splitPlate[4] + splitPlateFive)
-            checkParkingPlate();
-            setIsParanoicUser(true)
-          }
+          const splitPlate = (response.data.data.plate)
+          const splitPlateFive = splitPlate[5] !== undefined ? splitPlate[5] : '';
+          setPlateOne(splitPlate[0] + splitPlate[1] + splitPlate[2])
+          setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlateFive)
+          setPlateOneCall(splitPlate[0] + splitPlate[1] + splitPlate[2])
+          setPlateTwoCall(splitPlate[3] + splitPlate[4] + splitPlateFive)
+          checkParkingPlate();
+          setIsParanoicUser(true)
         }
       } catch (err) {
         console.log(err?.response)
@@ -136,27 +133,28 @@ const UserOut = (props) => {
     setLoadingCheckParking(true);
     try {
       if ((plateOne + plateTwo).length >= 5 || (plateOneCall + plateTwoCall).length >= 5) {
-        let idempotencyKey = createIdempotency(uid.uid)
         let reserve = reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
-        const response = await instance.post(
-          CHECK_PARKING,
-          {
-            plate: plateOne + plateTwo,
-            hqId: reserve[0].hqId,
-            phone: reserve[0].phone,
-            officialEmail: officialProps.email,
-            dateFinished: new Date(),
-            prepaidDay: true,
-            verificationCode: inputVerificationCode
-          },
-          { timeout: TIMEOUT },
-          {
-            headers: {
-              "x-idempotence-key": idempotencyKey
-            }, timeout: TIMEOUT
-          }
-        )
-        if (response.data.response === 1) {
+        if (reserve) {
+          let idempotencyKey = createIdempotency(uid.uid)
+          const response = await instance.post(
+            CHECK_PARKING,
+            {
+              plate: plateOne + plateTwo,
+              hqId: reserve[0].hqId,
+              phone: reserve[0].phone,
+              officialEmail: officialProps.email,
+              dateFinished: new Date(),
+              prepaidDay: true,
+              verificationCode: inputVerificationCode
+            },
+            { timeout: TIMEOUT },
+            {
+              headers: {
+                "x-idempotence-key": idempotencyKey
+              }, timeout: TIMEOUT
+            }
+
+          )
           setDateFinished(new Date());
           setDateStart(response.data.data.dateStart);
           setTotalAmount(response.data.data.total);
@@ -166,7 +164,6 @@ const UserOut = (props) => {
           setInputVerificationCode(response.data.data.verificationCode + '')
           setLoadingCheckParking(false);
         }
-
       } else if ((plateOneCall + plateTwoCall).length === 0) {
         // console.log('no plate')
       }
@@ -181,7 +178,7 @@ const UserOut = (props) => {
   async function checkParkingCode() {
     try {
       if (inputVerificationCode.length === 5) {
-        let reserve = props.reservations.reservations.filter(reserve => reserve.verificationCode === Number(inputVerificationCode));
+        let reserve = reservations.reservations.filter(reserve => reserve.verificationCode === Number(inputVerificationCode));
         const response = await instance.post(
           CHECK_PARKING,
           {
@@ -193,16 +190,14 @@ const UserOut = (props) => {
             verificationCode: Number(inputVerificationCode)
           }, { timeout: TIMEOUT }
         )
-        if (response.data.response === 1) {
-          setDateFinished(new Date());
-          setDateStart(response.data.data.dateStart);
-          setTotalAmount(response.data.data.total);
-          setIsDisabled(false)
-          setPendingValue(response.data.data.pendingValue)
-          setCheck(response.data.data)
-          setPlateOne(response.data.data.plate.substring(0, 3))
-          setPlateTwo(response.data.data.plate.substring(3, 6))
-        }
+        setDateFinished(new Date());
+        setDateStart(response.data.data.dateStart);
+        setTotalAmount(response.data.data.total);
+        setIsDisabled(false)
+        setPendingValue(response.data.data.pendingValue)
+        setCheck(response.data.data)
+        setPlateOne(response.data.data.plate.substring(0, 3))
+        setPlateTwo(response.data.data.plate.substring(3, 6))
       }
     } catch (err) {
       console.log(err)
@@ -218,11 +213,9 @@ const UserOut = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      if (response.data.response === 1) {
-        getRecips();
-        store.dispatch(actions.setReservations(response.data.data.reservations));
-        store.dispatch(actions.setHq(response.data.data));
-      }
+      getRecips();
+      store.dispatch(actions.setReservations(response.data.data.reservations));
+      store.dispatch(actions.setHq(response.data.data));
     } catch (err) {
       console.log(err?.response)
       console.log(err)
@@ -237,9 +230,7 @@ const UserOut = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      if (response.data.response === 1) {
-        store.dispatch(actions.setRecips(response.data.data));
-      }
+      store.dispatch(actions.setRecips(response.data.data));
     } catch (err) {
       console.log('No recips found')
       console.log(err?.response)
@@ -273,22 +264,18 @@ const UserOut = (props) => {
           }, timeout: TIMEOUT
         }
       );
-      // console.log('Finishparking response', response.data.response)
-      if (response.data.response === 1) {
-        setLoading(false)
-        setModal4Visible(false);
-        if (showModal) {
-          // console.log('Showmodal FinishParking', showModal)
-          setModalVisible(true)
-        } else {
-          restart();
-        }
-        store.dispatch(actions.setPhone(''))
-        store.dispatch(actions.setQr(''))
-        readHq();
-        setRecip(response.data.data);
-        setIsDisabled(true);
+      setLoading(false)
+      setModal4Visible(false);
+      if (showModal) {
+        setModalVisible(true)
+      } else {
+        restart();
       }
+      store.dispatch(actions.setPhone(''))
+      store.dispatch(actions.setQr(''))
+      readHq();
+      setRecip(response.data.data);
+      setIsDisabled(true);
     } catch (err) {
       console.log(err?.response)
       console.log(err)

@@ -121,21 +121,21 @@ const UserInput = (props) => {
     setCarParksFull(false);
     setBikeParksFull(false);
     setAlreadyParked(false);
-    setPlateOne("");
-    setPlateTwo("");
-    setNewPhone("");
-    setPrepayDay(false);
     setPhones([{ label: 'Selecciona un número', value: 1 }]);
     setPhone(null);
-    setShowPhoneInput(false);
+    setShowDropdown(false);
+    setNewPhone("");
     setPrepayDay(false);
     setShowPhoneInput(false);
     setHistoryExists(false);
-    setMensuality({});
-    setLoadingStart(false);
     setMensualityExists(false);
     setPrepayDayRecip(false);
-    setShowDropdown(false);
+    setPlateOne("");
+    setPlateTwo("");
+    setPrepayDay(false);
+    setShowPhoneInput(false);
+    setMensuality({});
+    setLoadingStart(false);
   }
 
   const restartSearch = () => {
@@ -175,24 +175,21 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
+        setFindUserByPlateInfo(response.data);
+        setExistingUser(true)
+        setPhone(null);
+        setShowPhoneInput(false);
+        setShowDropdown(true);
+        setBlacklist(response.data.blackList);
+        const auxPhones = []
+        response.data.data.forEach(phone => {
+          auxPhones.push({ label: phone, value: phone })
+        });
+        auxPhones.push({ label: '+ agregar', value: 0 })
+        setPhones(auxPhones);
 
-        if (response.data.response === 1) {
-          setFindUserByPlateInfo(response.data);
-          setExistingUser(true)
-          setPhone(null);
-          setShowPhoneInput(false);
-          setShowDropdown(true);
-          setBlacklist(response.data.blackList);
-          const auxPhones = []
-          response.data.data.forEach(phone => {
-            auxPhones.push({ label: phone, value: phone })
-          });
-          auxPhones.push({ label: '+ agregar', value: 0 })
-          setPhones(auxPhones);
-
-          if (response.data.blackList && response.data.blackList.length > 0) {
-            setModal3Visible(true)
-          }
+        if (response.data.blackList && response.data.blackList.length > 0) {
+          setModal3Visible(true)
         }
       }
     } catch (err) {
@@ -216,12 +213,10 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        if (response.data.response === 1) {
-          setMensualityExists(true);
-          setMensuality(response.data)
-          if (response.data.data[0].capacity === response.data.data[0].parkedPlatesList.length) {
-            setMaxCapMensuality(true);
-          }
+        setMensualityExists(true);
+        setMensuality(response.data)
+        if (response.data.data[0].capacity === response.data.data[0].parkedPlatesList.length) {
+          setMaxCapMensuality(true);
         }
       }
     } catch (err) {
@@ -242,26 +237,24 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        if (response.data.response === 1) {
-          setHistoryExists(true)
-          setHistoryInfo(response.data.data)
-          if (response.data.data[0].prepayFullDay) {
-            setPrepayDayDateFinished(response.data.data[0].dateFinished)
-            setPrepayDayRecip(true);
-          } else {
-            setPrepayDayDateFinished('');
-            setPrepayDayRecip(false);
-          }
-          const auxTable = []
-          response.data.data.forEach(element => {
-            const auxElement = []
-            auxElement.push(element.plate)
-            auxElement.push(moment(element.dateFinished).format('L'))
-            auxElement.push(`$${numberWithPoints(element.total)}`)
-            auxTable.push(auxElement)
-          });
-          setTableData(auxTable);
+        setHistoryExists(true)
+        setHistoryInfo(response.data.data)
+        if (response.data.data[0].prepayFullDay) {
+          setPrepayDayDateFinished(response.data.data[0].dateFinished)
+          setPrepayDayRecip(true);
+        } else {
+          setPrepayDayDateFinished('');
+          setPrepayDayRecip(false);
         }
+        const auxTable = []
+        response.data.data.forEach(element => {
+          const auxElement = []
+          auxElement.push(element.plate)
+          auxElement.push(moment(element.dateFinished).format('L'))
+          auxElement.push(`$${numberWithPoints(element.total)}`)
+          auxTable.push(auxElement)
+        });
+        setTableData(auxTable);
       }
     } catch (err) {
       // console.log(err)
@@ -284,15 +277,7 @@ const UserInput = (props) => {
             },
             { timeout: TIMEOUT }
           )
-          // console.log('CREATEUSER-------------------',response.data.response)
-          if (response.data.response === 1) {
-            // new user created successfully
-            setExistingUser(true);
-          }
-          if (response.data.response === 2) {
-            // user exists, plate added to user
-            setExistingUser(true);
-          }
+          setExistingUser(true);
         }
       } catch (err) {
         if (err?.response.data.response === -1) {
@@ -342,17 +327,15 @@ const UserInput = (props) => {
             }, timeout: TIMEOUT
           }
         )
-        if (response.data.response === 1) {
-          setStartParking(response?.data?.data);
-          setPhones([{ label: 'Selecciona un número', value: 1 }]);
-          setBlacklistExists(false);
-          setLoadingStart(false);
-          setPrepayDay(false);
-          setPrepayDayValue(0);
-          setTotalPay(0);
-          setModalVisible(true);
-          readHq();
-        }
+        setStartParking(response?.data?.data);
+        setPhones([{ label: 'Selecciona un número', value: 1 }]);
+        setBlacklistExists(false);
+        setLoadingStart(false);
+        setPrepayDay(false);
+        setPrepayDayValue(0);
+        setTotalPay(0);
+        setModalVisible(true);
+        readHq();
       }
     } catch (err) {
       setLoadingStart(false)
@@ -381,10 +364,8 @@ const UserInput = (props) => {
       const response = await instance.post(READ_HQ, {
         id: officialHq
       });
-      if (response.data.response === 1) {
-        store.dispatch(actions.setReservations(response.data.data.reservations));
-        store.dispatch(actions.setHq(response.data.data));
-      }
+      store.dispatch(actions.setReservations(response.data.data.reservations));
+      store.dispatch(actions.setHq(response.data.data));
     } catch (err) {
       console.log(err)
       console.log(err?.response)
@@ -532,18 +513,15 @@ const UserInput = (props) => {
                 {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
                 {!loadingStart &&
                   <TouchableOpacity
-                    style={[styles.buttonT, (plateOne + plateTwo).length < 5 ? styles.buttonTDisabled : styles.buttonT]}
+                    style={[styles.buttonT, (plateOne + plateTwo).length < 5  ? styles.buttonTDisabled : styles.buttonT]}
                     onPress={() => {
-                      setLoadingStart(true);
-                      setPlateOne("");
-                      setPlateTwo("");
-                      setPhone("");
-                      setShowPhoneInput(false);
-                      setLoadingStart(false);
+                      restartSearch();
+                      clearPlateOne(); 
+                      clearPlateTwo();
                       store.dispatch(actions.setQr(plateOne + plateTwo));
                       navigation.navigate('QRscanner');
                     }}
-                    disabled={(plateOne + plateTwo).length < 5 && phone !== null}
+                    disabled={(plateOne + plateTwo).length < 5 }
                   >
                     <Image
                       style={styles.qrImage}

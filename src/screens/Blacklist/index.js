@@ -82,10 +82,8 @@ const Blacklist = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                if (response.data.response === 1) {
-                    setFindUserByPlateInfo(response.data);
-                    setBlacklist(response.data.blackList);
-                }
+                setFindUserByPlateInfo(response.data);
+                setBlacklist(response.data.blackList);
 
             }
         } catch (err) {
@@ -109,10 +107,8 @@ const Blacklist = (props) => {
                 },
                 { timeout: TIMEOUT }
             )
-            if (response.data.response === 1) {
-                setListHQDebts(response.data.data)
-                setLoadingListHQDebts(false);
-            }
+            setListHQDebts(response.data.data)
+            setLoadingListHQDebts(false);
         } catch (err) {
             console.log(err)
             console.log(err?.response)
@@ -133,10 +129,8 @@ const Blacklist = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                if (response.data.response === 1) {
-                    setLoading(false);
-                    setModalVisible(true);
-                }
+                setLoading(false);
+                setModalVisible(true);
             }
         } catch (err) {
             console.log(err)
