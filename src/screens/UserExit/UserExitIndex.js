@@ -99,7 +99,6 @@ const UserOut = (props) => {
     async function readParanoicUser() {
       try {
         if ((qr.plate).length === 0 && (qr.phone).length > 0) {
-          console.log(qr.phone)
           const response = await instance.post(
             READ_PARANOIC_USER,
             {
@@ -134,34 +133,37 @@ const UserOut = (props) => {
     setLoadingCheckParking(true);
     try {
       if ((plateOne + plateTwo).length >= 5 || (plateOneCall + plateTwoCall).length >= 5) {
-        let idempotencyKey = createIdempotency(uid.uid)
         let reserve = reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
-        const response = await instance.post(
-          CHECK_PARKING,
-          {
-            plate: plateOne + plateTwo,
-            hqId: reserve[0].hqId,
-            phone: reserve[0].phone,
-            officialEmail: officialProps.email,
-            dateFinished: new Date(),
-            prepaidDay: true,
-            verificationCode: inputVerificationCode
-          },
-          { timeout: TIMEOUT },
-          {
-            headers: {
-              "x-idempotence-key": idempotencyKey
-            }, timeout: TIMEOUT
-          }
-        )
-        setDateFinished(new Date());
-        setDateStart(response.data.data.dateStart);
-        setTotalAmount(response.data.data.total);
-        setIsDisabled(false)
-        setPendingValue(response.data.data.pendingValue)
-        setCheck(response.data.data)
-        setInputVerificationCode(response.data.data.verificationCode + '')
-        setLoadingCheckParking(false);
+        if (reserve) {
+          let idempotencyKey = createIdempotency(uid.uid)
+          const response = await instance.post(
+            CHECK_PARKING,
+            {
+              plate: plateOne + plateTwo,
+              hqId: reserve[0].hqId,
+              phone: reserve[0].phone,
+              officialEmail: officialProps.email,
+              dateFinished: new Date(),
+              prepaidDay: true,
+              verificationCode: inputVerificationCode
+            },
+            { timeout: TIMEOUT },
+            {
+              headers: {
+                "x-idempotence-key": idempotencyKey
+              }, timeout: TIMEOUT
+            }
+
+          )
+          setDateFinished(new Date());
+          setDateStart(response.data.data.dateStart);
+          setTotalAmount(response.data.data.total);
+          setIsDisabled(false)
+          setPendingValue(response.data.data.pendingValue)
+          setCheck(response.data.data)
+          setInputVerificationCode(response.data.data.verificationCode + '')
+          setLoadingCheckParking(false);
+        }
       } else if ((plateOneCall + plateTwoCall).length === 0) {
         // console.log('no plate')
       }
@@ -176,7 +178,7 @@ const UserOut = (props) => {
   async function checkParkingCode() {
     try {
       if (inputVerificationCode.length === 5) {
-        let reserve = props.reservations.reservations.filter(reserve => reserve.verificationCode === Number(inputVerificationCode));
+        let reserve = reservations.reservations.filter(reserve => reserve.verificationCode === Number(inputVerificationCode));
         const response = await instance.post(
           CHECK_PARKING,
           {
