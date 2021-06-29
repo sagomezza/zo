@@ -513,18 +513,15 @@ const UserInput = (props) => {
                 {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
                 {!loadingStart &&
                   <TouchableOpacity
-                    style={[styles.buttonT, (plateOne + plateTwo).length < 5 ? styles.buttonTDisabled : styles.buttonT]}
+                    style={[styles.buttonT, (plateOne + plateTwo).length < 5  ? styles.buttonTDisabled : styles.buttonT]}
                     onPress={() => {
-                      setLoadingStart(true);
-                      setPlateOne("");
-                      setPlateTwo("");
-                      setPhone("");
-                      setShowPhoneInput(false);
-                      setLoadingStart(false);
+                      restartSearch();
+                      clearPlateOne(); 
+                      clearPlateTwo();
                       store.dispatch(actions.setQr(plateOne + plateTwo));
                       navigation.navigate('QRscanner');
                     }}
-                    disabled={(plateOne + plateTwo).length < 5 && phone !== null}
+                    disabled={(plateOne + plateTwo).length < 5 }
                   >
                     <Image
                       style={styles.qrImage}
