@@ -36,7 +36,7 @@ const { width, height } = Dimensions.get('window');
 const txtGenerator = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  const totalRecips = recips.recips !== undefined ? recips.recips : "";
+  const totalRecips = recips.recips !== undefined ? recips.recips : [];
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
@@ -55,25 +55,29 @@ const txtGenerator = (props) => {
   const [boxStatus, setBoxStatus] = useState("");
   const [boxId, setBoxId] = useState("");
   const [reports, setReports] = useState([]);
-
-  const [date1, setDate1] = useState(new Date(moment().subtract(1, 'days')));
-  const [date2, setDate2] = useState(new Date());
+  const [date2, setDate2] = useState(moment().subtract(5, 'hours'));
+  const [date1, setDate1] = useState(moment(date2).subtract(1, 'days'));
   const [loadingTodayRecips, setLoadingTodayRecips] = useState(true);
   const [signature, setSign] = useState(false);
   const [signatureUri, setSignatureUri] = useState("")
 
   useEffect(() => {
     setLoadingTodayRecips(true);
+    console.log('RECIP TOTAL', recips.recips)
+
     try {
-      const todayRecips = totalRecips.filter(recip => moment(recip.dateFinished).isBetween(date1, date2))
-      // console.log(todayRecips)
+      const todayRecips = totalRecips.filter(recip =>
+        recip.dateFactured ?
+          moment(moment(new Date(recip.dateFactured._seconds * 1000)).subtract(5, 'hours')).isBetween(date1, date2)
+          :
+          moment(recip.dateFinished).isBetween(date1, date2))
       setDataToday(todayRecips)
       setLoadingTodayRecips(false);
     } catch (err) {
       console.log(err)
       setLoadingTodayRecips(false);
     }
-  }, [date1, date2]);
+  }, []);
 
   useEffect(() => {
     listBoxClose();
