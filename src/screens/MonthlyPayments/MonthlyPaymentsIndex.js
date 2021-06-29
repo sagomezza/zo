@@ -170,7 +170,6 @@ const MonthlyPayments = (props) => {
         try {
             setLoading(true);
             firestore.collection("users")
-                .where('plates', "array-contains", firstPlateNewMen)
                 .where('phone', '==', '+57' + phoneNewMen)
                 .get()
                 .then(snapshot => {
@@ -199,7 +198,7 @@ const MonthlyPayments = (props) => {
     async function editUser(idUser) {
         setLoading(true);
         try {
-            console.log(newObjUserEdit)
+            // console.log(newObjUserEdit)
             if (userIdToEdit !== '') {
                 const response = await instance.post(
                     EDIT_USER,
@@ -233,26 +232,6 @@ const MonthlyPayments = (props) => {
 
     async function createUser() {
         setLoading(true);
-        console.log({
-            type: "full",
-            vehicleType: 'car',
-            email: emailNewMen,
-            phone: '+57' + phoneNewMen,
-            name: nameNewMen,
-            lastName: lastNameNewMen,
-            expoToken: "expoToken",
-            monthlyUser: true,
-            plate: firstPlateNewMen,
-            hqId: officialHq,
-            mensualityType: 'personal',
-            capacity: 1,
-            cash: Number(totalPay),
-            change: totalPay - monthPrice,
-            officialEmail: officialProps.email,
-            nid: newMenNid,
-            pending: pendingMensualityPay,
-            generateRecip: generateMenRecip
-        })
         try {
             if (firstPlateNewMen.length >= 5 && phoneNewMen.length === 10) {
                 let type
@@ -289,6 +268,9 @@ const MonthlyPayments = (props) => {
                         timeout: TIMEOUT
                     }
                 )
+                console.log('RESPONSE EXISTING USER CHANGE TO MENSUALITY', response.data.response)
+                console.log('RESPONSE EXISTING USER CHANGE TO MENSUALITY', response.data)
+
                 setModal4Visible(true);
                 setModal3Visible(false);
                 setLoading(false);
@@ -333,6 +315,7 @@ const MonthlyPayments = (props) => {
                         timeout: TIMEOUT
                     }
                 )
+                console.log('RESPONSE CREATE MENSUALITY', response.data)
                 setModal4Visible(true);
                 setModal3Visible(false);
                 setLoading(false);

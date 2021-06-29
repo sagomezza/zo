@@ -121,21 +121,21 @@ const UserInput = (props) => {
     setCarParksFull(false);
     setBikeParksFull(false);
     setAlreadyParked(false);
-    setPlateOne("");
-    setPlateTwo("");
-    setNewPhone("");
-    setPrepayDay(false);
     setPhones([{ label: 'Selecciona un número', value: 1 }]);
     setPhone(null);
-    setShowPhoneInput(false);
+    setShowDropdown(false);
+    setNewPhone("");
     setPrepayDay(false);
     setShowPhoneInput(false);
     setHistoryExists(false);
-    setMensuality({});
-    setLoadingStart(false);
     setMensualityExists(false);
     setPrepayDayRecip(false);
-    setShowDropdown(false);
+    setPlateOne("");
+    setPlateTwo("");
+    setPrepayDay(false);
+    setShowPhoneInput(false);
+    setMensuality({});
+    setLoadingStart(false);
   }
 
   const restartSearch = () => {
