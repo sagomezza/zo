@@ -181,24 +181,6 @@ const txtGenerator = (props) => {
         console.log(err)
         setLoadingBoxGenerator(false);
       })
-
-
-    // try {
-    //   const response = await instance.post(GET_BOX_TOTAL, {
-    //     hqId: officialProps.hq[0]
-    //   },
-    //     { timeout: TIMEOUT }
-    //   );
-    //   if (response.data.response === 1) {
-    //     setShiftsOfBox(response.data.data);
-    //   }
-    //   gotBoxTotal();
-    // } catch (err) {
-    //   setLoadingBoxGenerator(false);
-    //   console.log(err)
-    //   console.log(err?.response)
-    //   setModal3Visible(true);
-    // }
   };
 
   const listBoxClose = async () => {
@@ -209,10 +191,8 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      if (response.data.response === 1) {
-        setListBox(response.data.data);
-        setLoadingReadBoxReport(false);
-      }
+      setListBox(response.data.data);
+      setLoadingReadBoxReport(false);
     } catch (err) {
       setLoadingReadBoxReport(false);
       // console.log(err)
@@ -231,13 +211,11 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      if (response.data.response === 1) {
-        setBase(0);
-        settoTalReported(0);
-        listBoxClose();
-        setLoadingBoxGenerator(false);
-        setModalVisible(!modalVisible);
-      }
+      setBase(0);
+      settoTalReported(0);
+      listBoxClose();
+      setLoadingBoxGenerator(false);
+      setModalVisible(!modalVisible);
     } catch (err) {
       console.log(err)
       console.log(err?.response)
@@ -255,12 +233,10 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      if (response.data.response === 1) {
-        setModal2Visible(true)
-        setReadBoxReportInfo(response.data.data)
-        setBoxStatus(response.data.data.status)
-        setLoadingReadBoxReport(false);
-      }
+      setModal2Visible(true)
+      setReadBoxReportInfo(response.data.data)
+      setBoxStatus(response.data.data.status)
+      setLoadingReadBoxReport(false);
     } catch (err) {
       console.log(err)
       setLoadingReadBoxReport(false);
@@ -291,9 +267,6 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      // if (response.data.response === 1) {
-      //   store.dispatch(actions.setRecips(response.data.data.total));
-      // }
       setModal2Visible(false);
       listBoxClose();
       setSign(false);

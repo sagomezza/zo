@@ -28,7 +28,7 @@ const HomeIndex = (props) => {
   const [loadingReservations, setLoadingReservations] = useState(true);
 
   useEffect(() => {
-    const offData =async () => {
+    const offData = async () => {
       try {
         let response = await instance.post(
           READ_OFFICIAL,
@@ -38,10 +38,8 @@ const HomeIndex = (props) => {
           { timeout: TIMEOUT }
         );
         store.dispatch(actions.setOfficial(response.data.data));
-        
       } catch (err) {
         // console.log(err?.response)
-
       }
     }
 
@@ -55,10 +53,8 @@ const HomeIndex = (props) => {
         },
           { timeout: TIMEOUT }
         );
-        if (response.data.response === 1) {
-          store.dispatch(actions.setRecips(response.data.data));
-          setLoadingRecips(false);
-        }
+        store.dispatch(actions.setRecips(response.data.data));
+        setLoadingRecips(false);
       } catch (err) {
         setLoadingRecips(false);
         // console.log(err?.response)
@@ -94,11 +90,9 @@ const HomeIndex = (props) => {
         },
           { timeout: TIMEOUT }
         );
-        if (response.data.response === 1) {
-          store.dispatch(actions.setReservations(response.data.data.reservations));
-          store.dispatch(actions.setHq(response.data.data));
-          setLoadingReservations(false);
-        }
+        store.dispatch(actions.setReservations(response.data.data.reservations));
+        store.dispatch(actions.setHq(response.data.data));
+        setLoadingReservations(false);
       } catch (err) {
         setLoadingReservations(false);
         console.log("err: ", err);

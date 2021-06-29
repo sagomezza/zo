@@ -82,7 +82,7 @@ const App = () => {
     Sentry.Browser.captureException('Starting app.js')
 
     if (officialScheduleStart !== null) {
-    // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
+      // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
 
       const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
 
@@ -121,11 +121,9 @@ const App = () => {
         const response = await instance.post(READ_OFFICIAL, {
           email: userEmail
         });
-        if (response.data.response) {
-          store.dispatch(setOfficial(response.data.data));
-          // console.log(response.data.data)
-          setOfficialData(response.data.data)
-        }
+        store.dispatch(setOfficial(response.data.data));
+        // console.log(response.data.data)
+        setOfficialData(response.data.data)
 
       } catch (err) {
         Sentry.Browser.captureException('readOfficial catch towards readAdmin err:', err)

@@ -289,12 +289,9 @@ const MonthlyPayments = (props) => {
                         timeout: TIMEOUT
                     }
                 )
-                console.log('CREATEUSER', response.data.response)
-                if (response.data.response === 1) {
-                    setModal4Visible(true);
-                    setModal3Visible(false);
-                    setLoading(false);
-                }
+                setModal4Visible(true);
+                setModal3Visible(false);
+                setLoading(false);
             }
         } catch (err) {
             console.log(err)
@@ -336,11 +333,9 @@ const MonthlyPayments = (props) => {
                         timeout: TIMEOUT
                     }
                 )
-                if (response.data.response === 1) {
-                    setModal4Visible(true);
-                    setModal3Visible(false);
-                    setLoading(false);
-                }
+                setModal4Visible(true);
+                setModal3Visible(false);
+                setLoading(false);
             }
         } catch (err) {
             console.log(err)
@@ -362,21 +357,19 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                if (response.data.response === 1) {
-                    setMensualityExists(true);
-                    setMensuality(response.data)
-                    // setMensualityPlates(response.data.data[0].plates)
-                    if (response.data.data[0].plates !== undefined) {
-                        let menPlates = response.data.data[0].plates
-                        let plates = []
-                        menPlates.forEach(function (value) {
-                            plates.push({ plate: value })
-                        });
-                        setNewMensualityPlates(plates)
-                    }
-                    setLoading(false);
-                    mensualityPriceMonthVehType();
+                setMensualityExists(true);
+                setMensuality(response.data)
+                // setMensualityPlates(response.data.data[0].plates)
+                if (response.data.data[0].plates !== undefined) {
+                    let menPlates = response.data.data[0].plates
+                    let plates = []
+                    menPlates.forEach(function (value) {
+                        plates.push({ plate: value })
+                    });
+                    setNewMensualityPlates(plates)
                 }
+                setLoading(false);
+                mensualityPriceMonthVehType();
             }
             if (firstPlateNewMen.length >= 5) {
                 const response = await instance.post(
@@ -387,10 +380,8 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                if (response.data.response === 1) {
-                    setLoading(false);
-                    setMdlMenAlreadyExists(true);
-                }
+                setLoading(false);
+                setMdlMenAlreadyExists(true);
             }
         } catch (err) {
             console.log(err)
@@ -415,10 +406,8 @@ const MonthlyPayments = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                if (response.data.response === 1) {
-                    setLoading(false);
-                    setModalVisible(!modalVisible);
-                }
+                setLoading(false);
+                setModalVisible(!modalVisible);
             }
         } catch (err) {
             console.log(err)
@@ -439,7 +428,7 @@ const MonthlyPayments = (props) => {
         setUserEmail(userEmailData);
         setUserPhone(userPhoneData);
     }
-    
+
     async function renewMensuality() {
         setLoading(true)
         try {
@@ -487,9 +476,7 @@ const MonthlyPayments = (props) => {
             },
                 { timeout: TIMEOUT }
             );
-            if (response.data.response === 1) {
-                store.dispatch(actions.setRecips(response.data.data));
-            }
+            store.dispatch(actions.setRecips(response.data.data));
         } catch (err) {
             console.log(err?.response)
             console.log(err)
