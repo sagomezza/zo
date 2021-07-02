@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { 
-  Text, 
-  View, 
-  Modal, 
-  Image 
+import {
+  Text,
+  View,
+  Modal,
+  Image
 } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
@@ -56,7 +56,7 @@ const BarcodeScanner = (props) => {
         navigation.navigate("UserOut")
       } else {
         let type
-        if (isCharacterALetter(qr.plate[5]) || qr.plate.length === 5 ) type = "bike"
+        if (isCharacterALetter(qr.plate[5]) || qr.plate.length === 5) type = "bike"
         else type = "car"
         const response = await instance.post(
           START_PARKING,
@@ -71,12 +71,10 @@ const BarcodeScanner = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        if (response.data.response === 1) {
-          setStartParking(response.data.data);
-          readHq();
-          setPlate(qr.plate);
-          setModalVisible(true);
-        }
+        setStartParking(response.data.data);
+        readHq();
+        setPlate(qr.plate);
+        setModalVisible(true);
       }
     }
     catch (err) {
@@ -92,10 +90,8 @@ const BarcodeScanner = (props) => {
       const response = await instance.post(READ_HQ, {
         id: officialHq
       });
-      if (response.data.response === 1) {
-        store.dispatch(actions.setReservations(response.data.data.reservations));
-        store.dispatch(actions.setHq(response.data.data));
-      }
+      store.dispatch(actions.setReservations(response.data.data.reservations));
+      store.dispatch(actions.setHq(response.data.data));
     } catch (error) {
       console.log("err: ", error);
       console.log(err?.response?.data);
@@ -134,7 +130,7 @@ const BarcodeScanner = (props) => {
                 }}
               >
                 ESCANEAR CÓDIGO QR
-                    </Text>
+              </Text>
             </View>
             <View style={styles.middleSection}>
               <View style={styles.darkenSection}></View>

@@ -40,10 +40,8 @@ const NewsReport = (props) => {
             },
                 { timeout: TIMEOUT }
             );
-            if (response.data.response === 1){
-                setLoadingReport(false);
-                setModalVisible(true);
-            }
+            setLoadingReport(false);
+            setModalVisible(true);
         } catch (err) {
             setLoadingReport(false);
             console.log(err)
@@ -122,7 +120,7 @@ const NewsReport = (props) => {
                     transparent={true}
                     backdropOpacity={0.3}
                     visible={modalVisible}
-                    
+
                 >
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>

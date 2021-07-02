@@ -36,7 +36,7 @@ const { width, height } = Dimensions.get('window');
 const txtGenerator = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  const totalRecips = recips.recips !== undefined ? recips.recips : "";
+  const totalRecips = recips.recips !== undefined ? recips.recips : [];
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
@@ -55,25 +55,29 @@ const txtGenerator = (props) => {
   const [boxStatus, setBoxStatus] = useState("");
   const [boxId, setBoxId] = useState("");
   const [reports, setReports] = useState([]);
-
-  const [date1, setDate1] = useState(new Date(moment().subtract(1, 'days')));
-  const [date2, setDate2] = useState(new Date());
+  const [date2, setDate2] = useState(moment().subtract(5, 'hours'));
+  const [date1, setDate1] = useState(moment(date2).subtract(1, 'days'));
   const [loadingTodayRecips, setLoadingTodayRecips] = useState(true);
   const [signature, setSign] = useState(false);
   const [signatureUri, setSignatureUri] = useState("")
 
   useEffect(() => {
     setLoadingTodayRecips(true);
+    console.log('RECIP TOTAL', recips.recips)
+
     try {
-      const todayRecips = totalRecips.filter(recip => moment(recip.dateFinished).isBetween(date1, date2))
-      // console.log(todayRecips)
+      const todayRecips = totalRecips.filter(recip =>
+        recip.dateFactured ?
+          moment(moment(new Date(recip.dateFactured._seconds * 1000)).subtract(5, 'hours')).isBetween(date1, date2)
+          :
+          moment(recip.dateFinished).isBetween(date1, date2))
       setDataToday(todayRecips)
       setLoadingTodayRecips(false);
     } catch (err) {
       console.log(err)
       setLoadingTodayRecips(false);
     }
-  }, [date1, date2]);
+  }, []);
 
   useEffect(() => {
     listBoxClose();
@@ -181,24 +185,6 @@ const txtGenerator = (props) => {
         console.log(err)
         setLoadingBoxGenerator(false);
       })
-
-
-    // try {
-    //   const response = await instance.post(GET_BOX_TOTAL, {
-    //     hqId: officialProps.hq[0]
-    //   },
-    //     { timeout: TIMEOUT }
-    //   );
-    //   if (response.data.response === 1) {
-    //     setShiftsOfBox(response.data.data);
-    //   }
-    //   gotBoxTotal();
-    // } catch (err) {
-    //   setLoadingBoxGenerator(false);
-    //   console.log(err)
-    //   console.log(err?.response)
-    //   setModal3Visible(true);
-    // }
   };
 
   const listBoxClose = async () => {
@@ -209,10 +195,8 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      if (response.data.response === 1) {
-        setListBox(response.data.data);
-        setLoadingReadBoxReport(false);
-      }
+      setListBox(response.data.data);
+      setLoadingReadBoxReport(false);
     } catch (err) {
       setLoadingReadBoxReport(false);
       // console.log(err)
@@ -231,13 +215,11 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      if (response.data.response === 1) {
-        setBase(0);
-        settoTalReported(0);
-        listBoxClose();
-        setLoadingBoxGenerator(false);
-        setModalVisible(!modalVisible);
-      }
+      setBase(0);
+      settoTalReported(0);
+      listBoxClose();
+      setLoadingBoxGenerator(false);
+      setModalVisible(!modalVisible);
     } catch (err) {
       console.log(err)
       console.log(err?.response)
@@ -255,12 +237,10 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      if (response.data.response === 1) {
-        setModal2Visible(true)
-        setReadBoxReportInfo(response.data.data)
-        setBoxStatus(response.data.data.status)
-        setLoadingReadBoxReport(false);
-      }
+      setModal2Visible(true)
+      setReadBoxReportInfo(response.data.data)
+      setBoxStatus(response.data.data.status)
+      setLoadingReadBoxReport(false);
     } catch (err) {
       console.log(err)
       setLoadingReadBoxReport(false);
@@ -291,9 +271,6 @@ const txtGenerator = (props) => {
       },
         { timeout: TIMEOUT }
       );
-      // if (response.data.response === 1) {
-      //   store.dispatch(actions.setRecips(response.data.data.total));
-      // }
       setModal2Visible(false);
       listBoxClose();
       setSign(false);
