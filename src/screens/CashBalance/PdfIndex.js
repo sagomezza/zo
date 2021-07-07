@@ -14,7 +14,7 @@ import {
 import CurrencyInput from 'react-native-currency-input';
 import instance from "../../config/axios";
 import firebase, { firestore } from "../../config/firebase";
-import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT, GET_BOX_TOTAL } from "../../config/api";
+import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT } from "../../config/api";
 import { connect } from 'react-redux';
 import { TIMEOUT } from '../../config/constants/constants';
 import * as actions from "../../redux/actions";

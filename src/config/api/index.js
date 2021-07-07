@@ -222,22 +222,100 @@ no param            : response: -1, message: `Error: Empty object`
 !sign               : response: -1, message: `Missing data: sign` 
 */
 export const READ_BOX_REPORT = "/readBoxReport";
+/*
+PARAMS : id
+no params           : response: -1, message: `Error: Empty object` 
+!id                 : response: -1, message: `Missing data: id`
+!doc.exists         : response: -1, err: "Hq not found!" 
+box found           : 
+*/
+
 export const LIST_BOX_CLOSE = "/listBoxClose";
+/*
+PARAMS : hqId
+no parms : response: -1, message: `Error: Empty object`
+!hdId : response: -1, message: `Missing data: hqId`
+snapshot.empty : response: -1, err: "Hq not found or the hq doesn't have a blox closes!"
+snapshot : response: 1, message: `Box found succesfully`, data: boxes 
+err : --
+*/
+
 export const GET_SHIFTS_OF_BOX = "/getShiftsOfBox";
+/*
+PARAMS :
+*/
+
 export const GET_BOX_TOTAL = "/getBoxTotal";
+/*
+PARAMS :
+*/
+
 
 //------------------------USER------------------------
 export const CREATE_USER = "/createUser";
+/*
+PARAMS : type, vehicleType, email, phone, name, lastName, expoToken, monthlyUser, plate, hqId, mensualityType, capacity, cash, change, officialEmail, nid, pending, generateRecip
+no params : response: -1, message: `Error: Empty object`
+!params : response: -1, message: `Missing data: param`
+createUser and mensuality : response: 1, message: `User created succesfully`, id: response.id 
+err createUser and mensuality : --
+user already exists and no new info : response: -1, message: "User already exists and there was no new info to update"
+user already exists and new info : response: 2, message: `User already exists but added the new plate to the profile`
+err : --
+err : --
+
+*/
+ 
 export const READ_USER = "/readUser";
+/*
+PARAMS :
+*/
+
 export const EDIT_USER = "/editUser";
+/*
+PARAMS :
+*/
+
 export const FIND_USER_BY_PLATE = "/findUserByPlate";
+/*
+PARAMS :
+*/
+
 export const CREATE_MENSUALITY = "/createMensuality";
+/*
+PARAMS :
+*/
+
 export const FIND_MENSUALITY_PLATE = "/findMensualityPlate";
-export const EDIT_MENSUALITY = "/editMensuality"
-export const RENEW_MENSUALITY = "/renewMensuality"
+/*
+PARAMS :
+*/
+
+export const EDIT_MENSUALITY = "/editMensuality";
+/*
+PARAMS :
+*/
+
+export const RENEW_MENSUALITY = "/renewMensuality";
+/*
+PARAMS :
+*/
+
 export const CREATE_PARANOIC_USER = "/createParanoicUser";
+/*
+PARAMS :
+*/
+
 export const GET_PARANOICS_FROM_HQ = "/getParanoicsFromHq";
+/*
+PARAMS :
+*/
+
 export const READ_PARANOIC_USER = "/readParanoicUser";
+/*
+PARAMS :
+*/
+
 
 //------------------------STORAGE------------------------
 export const STORAGE_KEY = '@save_lastLoginAt';
