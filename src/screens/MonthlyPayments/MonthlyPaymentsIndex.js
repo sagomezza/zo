@@ -194,6 +194,11 @@ const MonthlyPayments = (props) => {
     setMonthPrice(0);
     setMonthPrice(0);
   };
+  const mensualityEditedModal = () => {
+    setLoading(false);
+    setModalVisible(false);
+    findMensualityPlate();
+  };
 
   const clearPageInfo = () => {
     setPlateOne("");
@@ -414,11 +419,6 @@ const MonthlyPayments = (props) => {
   async function editMensuality() {
     setLoading(true);
     try {
-      console.log({
-        id: mensualityInfo.id,
-        plates: newPlates,
-        phone: "+57" + userPhone,
-      });
       if (plateOne.length === 3 && plateTwo.length >= 2) {
         const response = await instance.post(
           EDIT_MENSUALITY,
@@ -429,8 +429,8 @@ const MonthlyPayments = (props) => {
           },
           { timeout: TIMEOUT }
         );
-        setLoading(false);
-        setModalVisible(!modalVisible);
+        mensualityEditedModal();
+
       }
     } catch (err) {
       console.log(err);
@@ -589,7 +589,7 @@ const MonthlyPayments = (props) => {
               color="gray"
               style={styles.searchButton}
               textStyle={styles.buttonTextClear}
-              // activityIndicatorStatus={loading}
+            // activityIndicatorStatus={loading}
             />
           </View>
         </View>
@@ -705,7 +705,7 @@ const MonthlyPayments = (props) => {
                   color="gray"
                   style={styles.buttonEd}
                   textStyle={styles.buttonTextRenew}
-                  // disabled={!(plateOne.length === 3 && plateTwo.length === 3) || !mensualityExists}
+                // disabled={!(plateOne.length === 3 && plateTwo.length === 3) || !mensualityExists}
                 />
               </View>
             )}
