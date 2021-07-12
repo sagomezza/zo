@@ -267,7 +267,7 @@ const LogoutIndex = (props) => {
                   textAlign='center'
                   style={styles.textInput}
                   value={inputBaseValue}
-                  onChangeValue={text => setInputBaseValue(text)}
+                  onChangeValue={text => {text === null ? setInputBaseValue(0) : setInputBaseValue(text)}}
                   prefix="$"
                   delimiter="."
                   separator="."
@@ -295,7 +295,7 @@ const LogoutIndex = (props) => {
                   keyboardType='numeric'
                   style={total === inputValue ? styles.textInput : styles.textInputDifTotal}
                   value={inputValue}
-                  onChangeValue={text => setInputValue(text)}
+                  onChangeValue={text => { text === null ? setInputValue(0) :  setInputValue(text)}}
                   prefix="$"
                   delimiter="."
                   separator="."
@@ -353,7 +353,7 @@ const LogoutIndex = (props) => {
               height: '13%',
               justifyContent: 'flex-end'
             }}>
-              <Button onPress={() => { setModalVisible(true) }}
+              <Button onPress={() => { setModalVisible(true); console.log(inputBaseValue); console.log(inputValue); }}
                 title="C E R R A R  T U R N O"
                 disabled={inputValue.length === 0 || inputBaseValue.length === 0}
                 color="#00A9A0"
