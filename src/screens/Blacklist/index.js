@@ -19,6 +19,7 @@ import numberWithPoints from '../../config/services/numberWithPoints';
 import Header from '../../components/Header/HeaderIndex';
 import FooterIndex from '../../components/Footer';
 import Button from '../../components/Button';
+import CurrencyInput from 'react-native-currency-input';
 // api
 import { CREATE_USER, PAY_DEBTS, FIND_USER_BY_PLATE, LIST_HQ_DEBTS } from "../../config/api";
 import instance from "../../config/axios";
@@ -37,12 +38,13 @@ const Blacklist = (props) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modal2Visible, setModal2Visible] = useState(false);
     const [modal3Visible, setModal3Visible] = useState(false);
-
+    const [totalPay, setTotalPay] = useState(0);
     const [listHQDebts, setListHQDebts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [loadingListHQDebts, setLoadingListHQDebts] = useState(true);
     const [findUserByPlateInfo, setFindUserByPlateInfo] = useState([]);
     const [blacklist, setBlacklist] = useState([]);
+    const [blackListExists, setBlacklistExists] = useState(false);
     let blacklistValue = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].value : 0;
 
     const clearPlateOne = () => {
@@ -53,9 +55,9 @@ const Blacklist = (props) => {
     }
 
     const debtPayedSuccess = () => {
+        listHQDebtsCall();
         clearPlateOne();
         clearPlateTwo();
-        listHQDebtsCall();
         setModalVisible(false);
     }
 
@@ -82,11 +84,18 @@ const Blacklist = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                setFindUserByPlateInfo(response.data);
-                setBlacklist(response.data.blackList);
-
+                console.log("------------", response.data)
+                if (response.data.blackList){
+                    setFindUserByPlateInfo(response.data);
+                    setBlacklist(response.data.blackList);
+                    setBlacklistExists(true);
+                } else {
+                    setModal3Visible(true);
+                }
+                
             }
         } catch (err) {
+            setBlacklistExists(false);
             console.log(err)
             console.log(err?.response)
             if (err?.response.data.response === -1) setModal2Visible(true);
@@ -119,16 +128,27 @@ const Blacklist = (props) => {
     async function payDebts() {
         setLoading(true);
         try {
+            console.log({
+                hqId: officialHq,
+                plate: plateOne + plateTwo,
+                value: Number(blacklistValue),
+                cash: Number(totalPay),
+                change: Number(inputChange)
+            })
             if (plateOne.length === 3 && plateTwo.length >= 2) {
                 const response = await instance.post(
                     PAY_DEBTS,
                     {
                         hqId: officialHq,
                         plate: plateOne + plateTwo,
-                        value: blacklistValue
+                        value: Number(blacklistValue),
+                        cash: Number(totalPay),
+                        change: Number(inputChange)
                     },
                     { timeout: TIMEOUT }
                 )
+                setTotalPay(0);
+                setBlacklistExists(false);
                 setLoading(false);
                 setModalVisible(true);
             }
@@ -136,7 +156,7 @@ const Blacklist = (props) => {
             console.log(err)
             console.log(err?.response)
             setLoading(false);
-            if (err?.response.data.response === -1) setModal3Visible(true);
+            if (err?.response.data.response === -2) setModal3Visible(true);
         }
     }
 
@@ -145,6 +165,8 @@ const Blacklist = (props) => {
             return Math.round(hours)
         } else return hours
     }
+    let inputChange = (totalPay - blacklistValue) <= 0 ? 0 : '' + (totalPay - blacklistValue)
+
 
     return (
         <View style={{ flex: 1 }}>
@@ -201,7 +223,7 @@ const Blacklist = (props) => {
                     </View>
                     <View style={{ height: '40%', width: '57%', justifyContent: 'center' }}>
                         <Button onPress={() => {
-                            payDebts();
+                            setModalVisible(true);
                         }}
                             title="P A G A R"
                             color='#FFF200'
@@ -251,10 +273,6 @@ const Blacklist = (props) => {
                                     }
                                 </View>
                             }
-
-
-
-
                         </View>
                     </View>
                     <View style={{
@@ -274,32 +292,134 @@ const Blacklist = (props) => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <View style={{
-                            height: '100%',
-                            width: '100%',
-                            justifyContent: 'space-between',
-                            padding: '2%'
 
-                        }}>
-                            <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                                <Text style={styles.modalTextAlert}> La deuda se ha pagado con éxito. </Text>
+                        {blackListExists ?
+                            <View style={{
+                                height: '100%',
+                                width: '100%',
+                                justifyContent: 'space-between',
+                                padding: '2%'
+
+                            }}>
+                                <View style={{ margin: '4%', justifyContent: 'center', height: ' 20%' }}>
+                                    <Text style={styles.modalTextAlert}>
+                                        Cobrar deuda:
+                                    </Text>
+                                    <Text style={styles.modalTextAlert}>
+                                        {`$${numberWithPoints(blacklistValue)}`}
+                                    </Text>
+                                </View>
+                                <View style={{
+                                    justifyContent: 'space-between',
+                                    height: '40%',
+                                    flexDirection: 'column',
+                                    paddingBottom: '6%'
+                                }}>
+                                    <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
+                                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Pago:  </Text>
+                                        <CurrencyInput
+                                            placeholder='$'
+                                            textAlign='center'
+                                            keyboardType='numeric'
+                                            style={styles.currencyInput}
+                                            value={totalPay}
+                                            onChangeValue={text => setTotalPay(text)}
+                                            prefix="$"
+                                            delimiter="."
+                                            separator="."
+                                            precision={0}
+                                            onChangeText={(formattedValue) => {
+                                                // console.log(formattedValue);
+                                                // $2,310.46
+                                            }}
+                                        />
+                                    </View>
+                                    <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
+                                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}> A devolver:  </Text>
+                                        <TextInput
+                                            style={styles.currencyInput}
+                                            keyboardType='numeric'
+                                            placeholder='$'
+                                            textAlign='center'
+                                            editable={false}
+                                            value={`$${numberWithPoints(inputChange)}`}
+                                        />
+                                    </View>
+
+                                </View>
+                                <View style={{ height: '15%', width: '100%', justifyContent: 'flex-end' }}>
+                                    <Button onPress={() => {
+                                        payDebts();
+                                    }}
+                                        title="P A G A R "
+                                        color="#00A9A0"
+                                        style={totalPay - blacklistValue < 0
+                                            ? styles.modalButtonDisabled : styles.modalButton
+                                        }
+                                        textStyle={{
+                                            color: "#FFFFFF",
+                                            textAlign: "center",
+                                            fontFamily: 'Montserrat-Bold'
+                                        }}
+                                        activityIndicatorStatus={loading}
+                                        disabled={totalPay - blacklistValue < 0}
+                                    />
+                                </View>
+                                <View style={{ height: '15%', width: '100%', justifyContent: 'flex-end' }}>
+                                    <Button onPress={() => {
+                                        setBlacklistExists(false);
+                                        setModalVisible(false);
+                                        clearPlateOne();
+                                        clearPlateTwo();
+                                        setTotalPay(0);
+
+                                    }}
+                                        title="D E V O L V E R"
+                                        color="gray"
+                                        style={
+                                            styles.modalButton
+                                        }
+                                        textStyle={{
+                                            color: "#FFFFFF",
+                                            textAlign: "center",
+                                            fontFamily: 'Montserrat-Bold'
+                                        }} />
+                                </View>
+
                             </View>
-                            <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                                <Button onPress={() => {
-                                    debtPayedSuccess();
-                                }}
-                                    title="E N T E N D I D O"
-                                    color="#00A9A0"
-                                    style={
-                                        styles.modalButton
-                                    }
-                                    textStyle={{
-                                        color: "#FFFFFF",
-                                        textAlign: "center",
-                                        fontFamily: 'Montserrat-Bold'
-                                    }} />
+                            :
+                            <View style={{
+                                height: '100%',
+                                width: '100%',
+                                justifyContent: 'space-between',
+                                padding: '2%'
+
+                            }}>
+                                <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                                    <Text style={styles.modalTextAlert}> La deuda ya fue retirada. </Text>
+                                </View>
+                                <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                                    <Button onPress={() => {
+                                        debtPayedSuccess();
+                                    }}
+                                        title="E N T E N D I D O"
+                                        color="#00A9A0"
+                                        style={
+                                            styles.modalButton
+                                        }
+                                        textStyle={{
+                                            color: "#FFFFFF",
+                                            textAlign: "center",
+                                            fontFamily: 'Montserrat-Bold'
+                                        }} />
+                                </View>
                             </View>
-                        </View>
+
+
+
+
+                        }
+
                     </View>
                 </View>
             </Modal>

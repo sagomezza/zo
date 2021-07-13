@@ -150,6 +150,7 @@ const LoginIndex = (props) => {
       });
       onLoginPress();
     } catch (err) {
+      setLoading(false);
       console.log(err);
       console.log(err?.response);
     }

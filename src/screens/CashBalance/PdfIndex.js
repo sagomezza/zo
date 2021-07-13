@@ -14,7 +14,7 @@ import {
 import CurrencyInput from 'react-native-currency-input';
 import instance from "../../config/axios";
 import firebase, { firestore } from "../../config/firebase";
-import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT, GET_BOX_TOTAL } from "../../config/api";
+import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT } from "../../config/api";
 import { connect } from 'react-redux';
 import { TIMEOUT } from '../../config/constants/constants';
 import * as actions from "../../redux/actions";
@@ -63,7 +63,7 @@ const txtGenerator = (props) => {
 
   useEffect(() => {
     setLoadingTodayRecips(true);
-    console.log('RECIP TOTAL', recips.recips)
+    // console.log('RECIP TOTAL', recips.recips)
 
     try {
       const todayRecips = totalRecips.filter(recip =>
@@ -157,9 +157,15 @@ const txtGenerator = (props) => {
             .set("seconds", 59)
             .set("milliseconds", 59)
 
+          console.log('DATESTART--------------------', dateStart)
+          console.log('DATESTART--------------------', dateEnd)
+          
+
+
           const dailyReports = reports.filter((report) => {
-            return report.dateStart >= dateStart
+            return report.dateStart >= dateStart && report.dateStart <= dateEnd 
           })
+          console.log('DAILY REPORTS', dailyReports)
           if (dailyReports.length === 0 || dailyReports.length < 3) {
             setModal3Visible(true);
           } else if (reports.length > 2) {
@@ -169,7 +175,7 @@ const txtGenerator = (props) => {
             })
             // console.log(dateStart)
             // console.log(dateEnd)
-            console.log(dailyReports)
+            console.log('DAILY REPORTS------------', dailyReports)
             setReports(dailyReports);
             setShiftsOfBox(boxTotal);
             gotBoxTotal();
@@ -726,7 +732,7 @@ const txtGenerator = (props) => {
                 <View style={styles.modalView}>
                   <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '5%' }}>
                     <View style={{ justifyContent: 'center', height: '30%' }}>
-                      <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> No se han realizado cierres de turno. </Text>
+                      <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> No se han realizado los cierres de turno necesarios para generar un cierre de caja. </Text>
                     </View>
 
                     <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>

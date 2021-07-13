@@ -186,7 +186,6 @@ const LogoutIndex = (props) => {
       store.dispatch(actions.setOfficial({}));
 
     } catch (err) {
-      // console.log(err)
       console.log(err?.response)
       setLoading(false);
       setModalVisible(!modalVisible);
@@ -250,11 +249,7 @@ const LogoutIndex = (props) => {
                 </View>
               </View>
             </View>
-            <View style={styles.totalContainer}>
-              <Text style={styles.totalText}>
-                {"TOTAL: "}{`$${numberWithPoints(total)}`}
-              </Text>
-            </View>
+
             <View style={styles.cashContainer}>
               <View style={{ width: '30%' }}>
                 <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>
@@ -267,13 +262,12 @@ const LogoutIndex = (props) => {
                   textAlign='center'
                   style={styles.textInput}
                   value={inputBaseValue}
-                  onChangeValue={text => setInputBaseValue(text)}
+                  onChangeValue={text => { text === null ? setInputBaseValue(0) : setInputBaseValue(text) }}
                   prefix="$"
                   delimiter="."
                   separator="."
                   precision={0}
-                // onChangeText={(formattedValue) => {
-                // }}
+
                 />
               </View>
             </View>
@@ -295,7 +289,7 @@ const LogoutIndex = (props) => {
                   keyboardType='numeric'
                   style={total === inputValue ? styles.textInput : styles.textInputDifTotal}
                   value={inputValue}
-                  onChangeValue={text => setInputValue(text)}
+                  onChangeValue={text => { text === null ? setInputValue(0) : setInputValue(text) }}
                   prefix="$"
                   delimiter="."
                   separator="."
@@ -353,7 +347,7 @@ const LogoutIndex = (props) => {
               height: '13%',
               justifyContent: 'flex-end'
             }}>
-              <Button onPress={() => { setModalVisible(true) }}
+              <Button onPress={() => { setModalVisible(true);  }}
                 title="C E R R A R  T U R N O"
                 disabled={inputValue.length === 0 || inputBaseValue.length === 0}
                 color="#00A9A0"
@@ -389,19 +383,11 @@ const LogoutIndex = (props) => {
               padding: '2%'
             }}
             >
-              {Number(total) - Number(inputValue) !== 0 ?
-                <View style={{ margin: '2%', justifyContent: 'center', height: '30%' }}>
-                  <Text style={styles.modalTextAlert}>
-                    Tiene una diferencia de {`$${numberWithPoints(Number(total) - Number(inputValue))}`} ¿está seguro que desea guardar y cerrar?
-                  </Text>
-                </View>
-                :
-                <View style={{ margin: '2%', justifyContent: 'flex-end', height: '30%' }}>
-                  <Text style={styles.modalText}>
-                    Una vez cierres el turno no podrás modificar el valor ingresado  ¿está seguro que desea guardar y cerrar?
-                  </Text>
-                </View>
-              }
+              <View style={{ margin: '2%', justifyContent: 'flex-end', height: '30%' }}>
+                <Text style={styles.modalText}>
+                  Una vez cierres el turno no podrás modificar el valor ingresado  ¿está seguro que desea guardar y cerrar?
+                </Text>
+              </View>
               <View style={{
                 height: '30%',
                 width: '100%',
@@ -509,27 +495,42 @@ const LogoutIndex = (props) => {
             }}
             >
               {logoutError ?
-                <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+                <View style={{ margin: '2%', justifyContent: 'flex-end', height: '40%' }}>
                   <Text style={styles.modalText}> ¡ Algo malo pasó ! </Text>
                   <Text style={styles.modalText}> Espera un momento y dale en el botón para intentar de nuevo. </Text>
                 </View>
                 :
-                <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                  <Text style={styles.modalText}> ¡ Se cerró el turno con éxito ! </Text>
-                  <Text style={styles.modalText}> Dale en el botón para realizar el cierre de sesión </Text>
+                <View style={{ margin: '2%', justifyContent: 'space-between', height: ' 80%' }}>
+                  <View style={{ justifyContent: 'center', height: '20%' }}>
+                    <Text style={styles.modalText}> ¡ Se cerró el turno con éxito ! </Text>
+                  </View>
+                  <Text style={styles.modalTextAlert}>
+                    {"TOTAL CALCULADO: "}{`$${numberWithPoints(Number(total))}`}
+                  </Text>
+                  <Text style={styles.modalTextAlert}>
+                    {"TOTAL REPORTADO: "}{`$${numberWithPoints(Number(inputValue))}`}
+                  </Text>
+                  <Text style={styles.modalTextAlert}>
+                    Tiene una diferencia de {`$${numberWithPoints(Number(total) - Number(inputValue))}`}
+                  </Text>
+                  <View style={{ justifyContent: 'center', height: '25%' }}>
+
+                    <Text style={styles.modalText}> Dale en el botón para realizar el cierre de sesión </Text>
+                  </View>
+
                 </View>
               }
               <View style={{
-                height: '30%',
+                height: '20%',
                 width: '100%',
-                justifyContent: 'space-between',
+                justifyContent: 'center',
                 flexDirection: 'column',
-                alignItems: 'center'
+                alignItems: 'center',
               }}>
                 <View style={{
                   width: '100%',
                   justifyContent: 'center',
-                  height: '50%',
+                  height: '60%',
                   alignItems: 'center'
                 }}>
                   <Button onPress={() => {

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'https://us-central1-bluspot-worker.cloudfunctions.net',
+    baseURL: 'http://zonap.us-east-1.elasticbeanstalk.com',
     timeout: 3000,
 });
 

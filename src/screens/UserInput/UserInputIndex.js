@@ -440,7 +440,7 @@ const UserInput = (props) => {
               {!showPhoneInput ?
                 <DropDownPicker
                   items={phones}
-                  zIndex={30}
+                  zIndex={80}
                   disabled={!showDropdown}
                   defaultValue={phone === null ? 1 : phone}
                   placeholder={"Selecciona un número"}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ImageBackground } from 'react-native';
 import { 
     Text, 
@@ -6,16 +6,11 @@ import {
     FlatList 
 } from 'react-native';
 import { connect } from "react-redux";
-import instance from "../../config/axios";
-import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL, EDIT_ADMIN } from "../../config/api";
-import store from '../../config/store';
 import * as actions from "../../redux/actions";
 import Header from '../../components/Header/HeaderIndex';
 import ActiveServicesStyles from '../ActiveServices/ActiveServicesStyles';
 import FooterIndex from '../../components/Footer';
 import moment from 'moment';
-import numberWithPoints from '../../config/services/numberWithPoints';
-import normalize from '../../config/services/normalizeFontSize';
 
 const ActiveServices = (props) => {
     const { navigation, officialProps, reservations } = props;

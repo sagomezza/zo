@@ -102,11 +102,8 @@ const App = () => {
           setLogoutSnackbar(true);
         }
       }, MINUTE_MS);
-
       return () => clearInterval(checkOfficialHours);
     }
-
-
   }, [])
 
   Sentry.init({

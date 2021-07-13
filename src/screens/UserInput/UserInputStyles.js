@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignContent: 'center',
     zIndex: 10, height: '62%',
-    width: '60%'
+    width: '60%',
   },
   dropdownPlaceholder: {
     color: '#8F8F8F',
