@@ -55,9 +55,9 @@ const Blacklist = (props) => {
     }
 
     const debtPayedSuccess = () => {
+        listHQDebtsCall();
         clearPlateOne();
         clearPlateTwo();
-        listHQDebtsCall();
         setModalVisible(false);
     }
 
@@ -84,9 +84,15 @@ const Blacklist = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                setFindUserByPlateInfo(response.data);
-                setBlacklist(response.data.blackList);
-                setBlacklistExists(true);
+                console.log("------------", response.data)
+                if (response.data.blackList){
+                    setFindUserByPlateInfo(response.data);
+                    setBlacklist(response.data.blackList);
+                    setBlacklistExists(true);
+                } else {
+                    setModal3Visible(true);
+                }
+                
             }
         } catch (err) {
             setBlacklistExists(false);
@@ -159,7 +165,7 @@ const Blacklist = (props) => {
             return Math.round(hours)
         } else return hours
     }
-    let inputChange = (totalPay - blacklistValue) <= 0 ? '' : '' + (totalPay - blacklistValue)
+    let inputChange = (totalPay - blacklistValue) <= 0 ? 0 : '' + (totalPay - blacklistValue)
 
 
     return (
@@ -347,14 +353,17 @@ const Blacklist = (props) => {
                                     }}
                                         title="P A G A R "
                                         color="#00A9A0"
-                                        style={
-                                            styles.modalButton
+                                        style={totalPay - blacklistValue < 0
+                                            ? styles.modalButtonDisabled : styles.modalButton
                                         }
                                         textStyle={{
                                             color: "#FFFFFF",
                                             textAlign: "center",
                                             fontFamily: 'Montserrat-Bold'
-                                        }} />
+                                        }}
+                                        activityIndicatorStatus={loading}
+                                        disabled={totalPay - blacklistValue < 0}
+                                    />
                                 </View>
                                 <View style={{ height: '15%', width: '100%', justifyContent: 'flex-end' }}>
                                     <Button onPress={() => {
@@ -387,7 +396,7 @@ const Blacklist = (props) => {
 
                             }}>
                                 <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                                    <Text style={styles.modalTextAlert}> La deuda se ha pagado con éxito. </Text>
+                                    <Text style={styles.modalTextAlert}> La deuda ya fue retirada. </Text>
                                 </View>
                                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                                     <Button onPress={() => {

@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     },
     modalButtonDisabled: {
         width: '100%',
-        height: '90%',
+        height: '80%',
         opacity: 0.5
     },
     textPlaca: {
