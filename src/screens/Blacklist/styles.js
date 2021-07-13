@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     },
     modalButton: {
         width: '100%',
-        height: '70%',
+        height: '80%',
     },
     modalButtonDisabled: {
         width: '100%',
@@ -198,6 +198,16 @@ const styles = StyleSheet.create({
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },
+    currencyInput: {
+        borderWidth: 1,
+        borderColor: '#00A9A0',
+        fontSize: normalize(20),
+        fontFamily: 'Montserrat-Bold',
+        backgroundColor: '#FFFFFF',
+        width: '60%',
+        borderRadius: 10,
+        color: '#00A9A0'
+      },
 
 });
 
