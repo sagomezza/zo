@@ -35,6 +35,7 @@ import * as actions from "../../redux/actions";
 
 import { createIdempotency } from '../../utils/idempotency'
 import { StyleProvider } from 'native-base';
+import { firestore } from '../../config/firebase';
 
 const { width, height } = Dimensions.get('window');
 
@@ -163,6 +164,71 @@ const UserInput = (props) => {
   const isCharacterALetter = (char) => {
     return (/[a-zA-Z]/).test(char)
   }
+
+  // const findUserByPlate = async () => {
+  //   if (plateOne.length === 3 && plateTwo.length >= 2) {
+  //     firestore
+  //       .collection("users")
+  //       .where("plates", "array-contains", plateOne + plateTwo)
+  //       .get()
+  //       .then(snapshot => {
+  //         if (snapshot.empty) {
+  //           setFindUserByPlateInfo([]);
+  //           setExistingUser(false);
+  //           setShowDropdown(false);
+  //           setShowPhoneInput(true);
+  //         }
+  //         firestore
+  //           .collection("blacklist")
+  //           .where("plate", "==", plateOne + plateTwo)
+  //           .where('status', '==', 'active')
+  //           .get()
+  //           .then(snapshot => {
+  //             if (snapshot.empty) {
+  //               // No BL found: does nothing?
+  //             }
+  //             let bl = []
+  //             snapshot.forEach(doc => {
+  //               let data = doc.data()
+  //               data.date = data.date.nanoseconds ? data.date.toDate() : data.date
+  //               data.id = doc.id
+  //               bl.push(data)
+  //             })
+  //             console.log("BLACKLIST FS", bl)
+  //               .then(blRes => {
+  //                 let users = []
+  //                 let fullData = []
+  //                 snapshot.forEach(doc => {
+  //                   let data = doc.data()
+  //                   users.push(data.phone)
+  //                   data.id = doc.id
+  //                   fullData.push(data)
+  //                 });
+  //                 console.log("USERS FS", users)
+  //                 console.log("FULLDATA FS", fullData)
+  //               })
+  //               .catch(err => {
+  //                 if (err.response && err.response === -1) {
+  //                   let users = []
+  //                   let fullData = []
+  //                   snapshot.forEach(doc => {
+  //                     let data = doc.data()
+  //                     users.push(data.phone)
+  //                     data.id = doc.id
+  //                     fullData.push(data)
+  //                   });
+  //                 } else {
+  //                   // how to treat 
+  //                 }
+  //               })
+  //           })
+
+  //       })
+  //       .catch(err => {
+  //         console.log(err)
+  //       })
+  //   }
+  // }
 
   async function findUserByPlate() {
     try {
@@ -513,15 +579,15 @@ const UserInput = (props) => {
                 {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
                 {!loadingStart &&
                   <TouchableOpacity
-                    style={[styles.buttonT, (plateOne + plateTwo).length < 5  ? styles.buttonTDisabled : styles.buttonT]}
+                    style={[styles.buttonT, (plateOne + plateTwo).length < 5 ? styles.buttonTDisabled : styles.buttonT]}
                     onPress={() => {
                       restartSearch();
-                      clearPlateOne(); 
+                      clearPlateOne();
                       clearPlateTwo();
                       store.dispatch(actions.setQr(plateOne + plateTwo));
                       navigation.navigate('QRscanner');
                     }}
-                    disabled={(plateOne + plateTwo).length < 5 }
+                    disabled={(plateOne + plateTwo).length < 5}
                   >
                     <Image
                       style={styles.qrImage}

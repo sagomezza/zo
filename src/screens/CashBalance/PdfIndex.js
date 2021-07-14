@@ -173,9 +173,6 @@ const txtGenerator = (props) => {
             dailyReports.forEach(report => {
               boxTotal += report.total
             })
-            // console.log(dateStart)
-            // console.log(dateEnd)
-            console.log('DAILY REPORTS------------', dailyReports)
             setReports(dailyReports);
             setShiftsOfBox(boxTotal);
             gotBoxTotal();
