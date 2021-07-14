@@ -46,68 +46,6 @@ const LogoutIndex = (props) => {
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const startTimeSchedule = officialProps.start ? officialProps.start : "";
   const startTime = startTimeSchedule._seconds ? startTimeSchedule._seconds : ''
-
-  const HomeStyles = StyleSheet.create({
-    plateInput: {
-      borderColor: 'gray',
-      borderWidth: 1,
-      borderRadius: 20,
-    },
-    plateInputText: {
-      fontSize: 35,
-      textAlign: 'center',
-      marginTop: '8%'
-    },
-    centeredView: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      // marginTop: 22,
-      backgroundColor: 'rgba(52, 52, 52, 0.8)',
-    },
-    modalView: {
-      height: normalize(350),
-      width: normalize(400),
-      padding: normalize(20),
-      borderRadius: 50,
-      borderColor: '#707070',
-      borderWidth: 1,
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      backgroundColor: '#FFF',
-      shadowColor: '#FFF',
-      shadowOffset: {
-        width: 50,
-        height: 50,
-      },
-      shadowOpacity: 0,
-      shadowRadius: 50,
-      elevation: 5,
-      flexDirection: 'column'
-    },
-    openButton: {
-      backgroundColor: "#F194FF",
-      borderRadius: 10,
-      borderColor: '#D9D9D9',
-      borderWidth: 1,
-      margin: '5%',
-      width: '20%',
-      height: '40%',
-      alignItems: 'center',
-      alignContent: 'center'
-    },
-    textStyle: {
-      color: "gray",
-      fontWeight: "bold",
-      textAlign: "center"
-    },
-    modalText: {
-      marginBottom: 15,
-      textAlign: "center"
-    },
-
-  });
-
   const [modalVisible, setModalVisible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
@@ -267,7 +205,6 @@ const LogoutIndex = (props) => {
                   delimiter="."
                   separator="."
                   precision={0}
-
                 />
               </View>
             </View>
@@ -281,7 +218,6 @@ const LogoutIndex = (props) => {
                   {"DINERO EN EFECTIVO: "}
                 </Text>
               </View>
-
               <View style={styles.currencyInputContainer}>
                 <CurrencyInput
                   placeholder='$'
@@ -294,8 +230,6 @@ const LogoutIndex = (props) => {
                   delimiter="."
                   separator="."
                   precision={0}
-                // onChangeText={(formattedValue) => {
-                // }}
                 />
               </View>
             </View>
@@ -374,8 +308,8 @@ const LogoutIndex = (props) => {
         backdropOpacity={0.3}
         visible={modalVisible}
       >
-        <View style={HomeStyles.centeredView}>
-          <View style={HomeStyles.modalView}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
             <View style={{
               height: '100%',
               width: '100%',
@@ -485,8 +419,8 @@ const LogoutIndex = (props) => {
         backdropOpacity={0.3}
         visible={modal4Visible}
       >
-        <View style={HomeStyles.centeredView}>
-          <View style={HomeStyles.modalView}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
             <View style={{
               height: '100%',
               width: '100%',
@@ -553,7 +487,6 @@ const LogoutIndex = (props) => {
                 </View>
               </View>
             </View>
-
           </View>
         </View>
       </Modal>

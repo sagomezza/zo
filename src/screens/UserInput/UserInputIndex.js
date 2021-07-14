@@ -529,7 +529,7 @@ const UserInput = (props) => {
                   }}
                 /> :
                 <TextInput
-                  placeholder={''}
+                  placeholder={'Ingrese celular'}
                   style={styles.textInput}
                   keyboardType='numeric'
                   textAlign='center'
