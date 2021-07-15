@@ -213,6 +213,8 @@ const HomeIndex = (props) => {
       }
     }
 
+  
+
     const readHq = async () => {
       setLoadingReservations(true);
       try {
@@ -230,7 +232,6 @@ const HomeIndex = (props) => {
         console.log(err?.response)
       }
     };
-    console.log("OFFICIALPROPS-----", officialProps)
 
     // getRecips();
     readHq();

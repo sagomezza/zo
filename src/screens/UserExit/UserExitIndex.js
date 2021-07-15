@@ -343,7 +343,7 @@ const UserOut = (props) => {
                   };
                 }}
                 value={plateOne}
-                onFocus={() => { setPlateOne(''); setPlateTwo(''); }}
+                onFocus={() => { restart(); }}
               />
               <TextInput
                 ref={refPlateTwo}
@@ -386,7 +386,7 @@ const UserOut = (props) => {
                 textAlign='center'
                 maxLength={5}
                 autoCapitalize={'characters'}
-                onFocus={() => { setInputVerificationCode(''); }}
+                onFocus={() => { restart(); }}
                 onChangeText={text => {
                   if (text.length === 5) { Keyboard.dismiss() }
                   setInputVerificationCode(text.trim());
