@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     margin: 6,
     color: '#00A9A0',
     alignSelf: 'center',
-    fontFamily: 'Montserrat-Regular'
+    fontFamily: 'Montserrat-Regular',
   },
   plateInput: {
     width: '46%',
