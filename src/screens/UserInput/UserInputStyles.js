@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   textInput: {
-    width: '100%',
+    width: '60%',
     height: '6%',
     fontSize: width * 0.04,
     fontFamily: 'Montserrat-Bold',
