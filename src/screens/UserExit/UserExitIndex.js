@@ -692,7 +692,7 @@ const UserOut = (props) => {
                 <Text style={styles.modalText}>¡Cobro exitoso! </Text>
                 <Text style={styles.modalText}> Hora: {moment().format('LT')}</Text>
               </View>
-              <View style={{ height: '15%', width: '100%', justifyContent: 'flex-end' }}>
+              <View style={{ height: '19%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
                   restart();
                 }}
@@ -919,7 +919,7 @@ const UserOut = (props) => {
                   />
                 </View>
               </View>
-              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+              <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
 
                   finishParking("parcial-pending", false)

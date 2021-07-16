@@ -8,17 +8,19 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '50%',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    zIndex: -5
   },
   head: {
     height: 40,
     alignContent: 'center',
   },
   containerOne: {
+    position: "relative",
     height: '30%',
     alignContent: 'center',
     alignItems: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',borderWidth: 1, zIndex: 100000
   },
   plateContainer: {
     flexDirection: 'row',
@@ -38,25 +40,28 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     alignContent: 'center',
-    zIndex: 10, height: '62%',
+     height: '120%',
     width: '60%',
   },
   dropdownPlaceholder: {
     color: '#8F8F8F',
     fontSize: width * 0.04,
     textAlign: 'center',
-    fontFamily: 'Montserrat-Bold'
+    fontFamily: 'Montserrat-Bold',
+    elevation: 999
   },
   dropdownSelectedLabel: {
     color: '#8F8F8F',
     fontSize: normalize(30),
     textAlign: 'center',
-    fontFamily: 'Montserrat-Bold'
+    fontFamily: 'Montserrat-Bold',
+    elevation: 999
   },
   dropdown: {
     backgroundColor: '#fafafa',
     borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15
+    borderBottomRightRadius: 15,
+    elevation: 999
   },
   dropdownArrow: {
     alignItems: 'flex-start',
@@ -64,11 +69,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start'
   },
   phoneDropdown: {
-    backgroundColor: '#fafafa',
+    // backgroundColor: '#fafafa',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20
+    borderBottomRightRadius: 20,
+    overflow: "visible", position: "relative", top : 0
+
   },
   dropdownLabel: {
     justifyContent: 'center',
@@ -80,10 +87,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignContent: 'center',
-    height: '30%',
+    height: '15%',
     width: '60%',
     justifyContent: 'center',
-    paddingTop: '10%'
+    paddingTop: '6%'
   },
   prepayDayText: {
     color: '#FFF200',
@@ -95,7 +102,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignContent: 'center',
-    height: '40%',
+    height: '25%',
     width: '100%',
     justifyContent: 'center'
   },
@@ -106,7 +113,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     alignContent: 'center',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    position: "relative"
   },
   infoContainer: {
     height: '70%',
@@ -148,7 +156,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: '100%',
-    height: '20%',
+    height: '14%',
     fontSize: width * 0.04,
     fontFamily: 'Montserrat-Bold',
     color: '#8F8F8F',

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'http://zonap.us-east-1.elasticbeanstalk.com',
+    baseURL: 'http://zonaptest2-env.eba-4fv5f7v4.us-east-1.elasticbeanstalk.com',
     timeout: 3000,
 });
 

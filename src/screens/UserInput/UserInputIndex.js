@@ -447,7 +447,7 @@ const UserInput = (props) => {
         source={require('../../../assets/images/Stripes.png')}>
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={styles.containerOne}>
+          <View style={styles.containerOne} >
             <View style={styles.plateContainer}>
               <TextInput
                 ref={refPlateOne}
@@ -502,20 +502,22 @@ const UserInput = (props) => {
                 I  N  G  R  E  S  E     C  E  L  U  L  A  R
               </Text>
             </View>
+            
+            
             <View style={styles.dropdownContainer}>
               {!showPhoneInput ?
                 <DropDownPicker
                   items={phones}
-                  zIndex={80}
+                  zIndex={150}
                   disabled={!showDropdown}
                   defaultValue={phone === null ? 1 : phone}
                   placeholder={"Selecciona un número"}
                   placeholderStyle={styles.dropdownPlaceholder}
                   selectedLabelStyle={styles.dropdownPlaceholder}
-                  containerStyle={{ height: '23%', width: '100%' }}
+                  containerStyle={{ height: '14%', width: '100%' }}
                   style={styles.phoneDropdown}
                   labelStyle={styles.dropdownLabel}
-                  dropDownMaxHeight={100}
+                  dropDownMaxHeight={300}
                   dropDownStyle={styles.dropdown}
                   arrowColor={'#00A9A0'}
                   arrowStyle={styles.dropdownArrow}
@@ -527,7 +529,9 @@ const UserInput = (props) => {
                       setPhone(item.value)
                     }
                   }}
-                /> :
+                  dropDownContainerStyle={{position: "relative", top : 0}}
+                />
+                 :
                 <TextInput
                   placeholder={'Ingrese celular'}
                   style={styles.textInput}
