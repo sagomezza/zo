@@ -209,6 +209,10 @@ const HomeIndex = (props) => {
 
     const updateExpoToken = async () => {
       try {
+        console.log({
+          id: officialProps.id,
+          expoToken: props.expoToken.expoToken
+        })
         await instance.post(EDIT_OFFICIAL, {
           id: officialProps.id,
           expoToken: props.expoToken.expoToken
