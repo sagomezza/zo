@@ -246,7 +246,7 @@ const LogoutIndex = (props) => {
                     <FlatList
                       data={shiftRecips}
                       keyExtractor={({ id }) => id}
-                      renderItem={({ item }) => {
+                      renderItem={({ item, index }) => {
                         return (
                           <TouchableOpacity
                             key={index.toString()}
