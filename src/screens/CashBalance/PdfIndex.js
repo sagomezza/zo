@@ -157,15 +157,10 @@ const txtGenerator = (props) => {
             .set("seconds", 59)
             .set("milliseconds", 59)
 
-          console.log('DATESTART--------------------', dateStart)
-          console.log('DATESTART--------------------', dateEnd)
-          
-
-
           const dailyReports = reports.filter((report) => {
             return report.dateStart >= dateStart && report.dateStart <= dateEnd 
           })
-          console.log('DAILY REPORTS', dailyReports)
+          // console.log('DAILY REPORTS', dailyReports)
           if (dailyReports.length === 0 || dailyReports.length < 3) {
             setModal3Visible(true);
           } else if (reports.length > 2) {
@@ -173,9 +168,6 @@ const txtGenerator = (props) => {
             dailyReports.forEach(report => {
               boxTotal += report.total
             })
-            // console.log(dateStart)
-            // console.log(dateEnd)
-            console.log('DAILY REPORTS------------', dailyReports)
             setReports(dailyReports);
             setShiftsOfBox(boxTotal);
             gotBoxTotal();

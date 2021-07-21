@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
 
   },
   modalView: {
-    height: normalize(400),
+    height: normalize(480),
     width: '75%',
     padding: '5%',
     borderRadius: 50,

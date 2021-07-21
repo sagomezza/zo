@@ -1,9 +1,10 @@
 import React from 'react';
 import { ImageBackground } from 'react-native';
-import { 
-    Text, 
-    View, 
-    FlatList 
+import {
+    Text,
+    View,
+    FlatList,
+    TouchableOpacity
 } from 'react-native';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
@@ -39,18 +40,26 @@ const ActiveServices = (props) => {
                                         style={{ height: "37%" }}
                                         data={reservations.reservations}
                                         keyExtractor={(item, index) => String(index)}
-                                        renderItem={({ item }) => {
+                                        renderItem={({ item, index }) => {
                                             return (
-                                                <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
-                                                    <View style={{ marginBottom: '2%' }} >
-                                                        <Text style={ActiveServicesStyles.textPlaca}>{item.plate}</Text>
-                                                        <Text style={ActiveServicesStyles.textPago}>{item.verificationCode}</Text>
+                                                <TouchableOpacity
+                                                    key={index.toString()}
+                                                    onPress={() => {
+
+                                                    }}
+                                                >
+                                                    <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
+                                                        <View style={{ marginBottom: '2%' }} >
+                                                            <Text style={ActiveServicesStyles.textPlaca}>{item.plate}</Text>
+                                                            <Text style={ActiveServicesStyles.textPago}>{item.verificationCode}</Text>
+                                                        </View>
+                                                        <View style={{ flex: 1, alignItems: 'flex-end' }} >
+                                                            <Text style={ActiveServicesStyles.textMoney}>{moment(item.dateStart).format('L')}  {moment(item.dateStart).format('LT')}</Text>
+                                                            <Text style={ActiveServicesStyles.textPago}>Pago por horas</Text>
+                                                        </View>
                                                     </View>
-                                                    <View style={{ flex: 1, alignItems: 'flex-end' }} >
-                                                        <Text style={ActiveServicesStyles.textMoney}>{moment(item.dateStart).format('L')}  {moment(item.dateStart).format('LT')}</Text>
-                                                        <Text style={ActiveServicesStyles.textPago}>Pago por horas</Text>
-                                                    </View>
-                                                </View>
+                                                </TouchableOpacity>
+
                                             )
                                         }}
                                     />

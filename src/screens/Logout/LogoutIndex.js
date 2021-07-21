@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  StyleSheet,
   View,
   Text,
   FlatList,
   Modal,
-  TouchableHighlight,
-  Dimensions,
+  TouchableOpacity,
   ActivityIndicator,
   Image
 } from 'react-native';
@@ -18,7 +16,7 @@ import styles from '../Logout/LogoutStyles';
 import Header from '../../components/Header/HeaderIndex';
 import { width } from '../../config/constants/screenDimensions';
 import { Icon } from 'react-native-elements';
-import { TextInput, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Button from '../../components/Button/index';
 import FooterIndex from '../../../src/components/Footer/index';
 import moment from 'moment';
@@ -46,68 +44,6 @@ const LogoutIndex = (props) => {
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const startTimeSchedule = officialProps.start ? officialProps.start : "";
   const startTime = startTimeSchedule._seconds ? startTimeSchedule._seconds : ''
-
-  const HomeStyles = StyleSheet.create({
-    plateInput: {
-      borderColor: 'gray',
-      borderWidth: 1,
-      borderRadius: 20,
-    },
-    plateInputText: {
-      fontSize: 35,
-      textAlign: 'center',
-      marginTop: '8%'
-    },
-    centeredView: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      // marginTop: 22,
-      backgroundColor: 'rgba(52, 52, 52, 0.8)',
-    },
-    modalView: {
-      height: normalize(350),
-      width: normalize(400),
-      padding: normalize(20),
-      borderRadius: 50,
-      borderColor: '#707070',
-      borderWidth: 1,
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      backgroundColor: '#FFF',
-      shadowColor: '#FFF',
-      shadowOffset: {
-        width: 50,
-        height: 50,
-      },
-      shadowOpacity: 0,
-      shadowRadius: 50,
-      elevation: 5,
-      flexDirection: 'column'
-    },
-    openButton: {
-      backgroundColor: "#F194FF",
-      borderRadius: 10,
-      borderColor: '#D9D9D9',
-      borderWidth: 1,
-      margin: '5%',
-      width: '20%',
-      height: '40%',
-      alignItems: 'center',
-      alignContent: 'center'
-    },
-    textStyle: {
-      color: "gray",
-      fontWeight: "bold",
-      textAlign: "center"
-    },
-    modalText: {
-      marginBottom: 15,
-      textAlign: "center"
-    },
-
-  });
-
   const [modalVisible, setModalVisible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
@@ -267,7 +203,6 @@ const LogoutIndex = (props) => {
                   delimiter="."
                   separator="."
                   precision={0}
-
                 />
               </View>
             </View>
@@ -281,21 +216,18 @@ const LogoutIndex = (props) => {
                   {"DINERO EN EFECTIVO: "}
                 </Text>
               </View>
-
               <View style={styles.currencyInputContainer}>
                 <CurrencyInput
                   placeholder='$'
                   textAlign='center'
                   keyboardType='numeric'
-                  style={total === inputValue ? styles.textInput : styles.textInputDifTotal}
+                  style={styles.textInput}
                   value={inputValue}
                   onChangeValue={text => { text === null ? setInputValue(0) : setInputValue(text) }}
                   prefix="$"
                   delimiter="."
                   separator="."
                   precision={0}
-                // onChangeText={(formattedValue) => {
-                // }}
                 />
               </View>
             </View>
@@ -314,21 +246,29 @@ const LogoutIndex = (props) => {
                     <FlatList
                       data={shiftRecips}
                       keyExtractor={({ id }) => id}
-                      renderItem={({ item }) => {
+                      renderItem={({ item, index }) => {
                         return (
-                          <View style={styles.flatlist} >
-                            <View style={{ marginBottom: 10 }} >
-                              <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
-                              <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
+                          <TouchableOpacity
+                            key={index.toString()}
+                            onPress={() => {
+
+                            }}
+                          >
+                            <View style={styles.flatlist} >
+                              <View style={{ marginBottom: 10 }} >
+                                <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
+                                <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
+                              </View>
+                              <View style={{ flex: 1, alignItems: 'flex-end' }} >
+                                <Text style={styles.textMoney}>
+                                  {item.cash === 0 && item.change === 0 ? '$0' : ''}
+                                  {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                                  {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                                </Text>
+                              </View>
                             </View>
-                            <View style={{ flex: 1, alignItems: 'flex-end' }} >
-                              <Text style={styles.textMoney}>
-                                {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                                {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                                {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
-                              </Text>
-                            </View>
-                          </View>
+                          </TouchableOpacity>
+
                         )
                       }}
                     />
@@ -347,7 +287,7 @@ const LogoutIndex = (props) => {
               height: '13%',
               justifyContent: 'flex-end'
             }}>
-              <Button onPress={() => { setModalVisible(true);  }}
+              <Button onPress={() => { setModalVisible(true); }}
                 title="C E R R A R  T U R N O"
                 disabled={inputValue.length === 0 || inputBaseValue.length === 0}
                 color="#00A9A0"
@@ -374,8 +314,8 @@ const LogoutIndex = (props) => {
         backdropOpacity={0.3}
         visible={modalVisible}
       >
-        <View style={HomeStyles.centeredView}>
-          <View style={HomeStyles.modalView}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
             <View style={{
               height: '100%',
               width: '100%',
@@ -485,8 +425,8 @@ const LogoutIndex = (props) => {
         backdropOpacity={0.3}
         visible={modal4Visible}
       >
-        <View style={HomeStyles.centeredView}>
-          <View style={HomeStyles.modalView}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
             <View style={{
               height: '100%',
               width: '100%',
@@ -553,7 +493,6 @@ const LogoutIndex = (props) => {
                 </View>
               </View>
             </View>
-
           </View>
         </View>
       </Modal>

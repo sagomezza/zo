@@ -35,6 +35,7 @@ import * as actions from "../../redux/actions";
 
 import { createIdempotency } from '../../utils/idempotency'
 import { StyleProvider } from 'native-base';
+import { firestore } from '../../config/firebase';
 
 const { width, height } = Dimensions.get('window');
 
@@ -164,6 +165,71 @@ const UserInput = (props) => {
     return (/[a-zA-Z]/).test(char)
   }
 
+  // const findUserByPlate = async () => {
+  //   if (plateOne.length === 3 && plateTwo.length >= 2) {
+  //     firestore
+  //       .collection("users")
+  //       .where("plates", "array-contains", plateOne + plateTwo)
+  //       .get()
+  //       .then(snapshot => {
+  //         if (snapshot.empty) {
+  //           setFindUserByPlateInfo([]);
+  //           setExistingUser(false);
+  //           setShowDropdown(false);
+  //           setShowPhoneInput(true);
+  //         }
+  //         firestore
+  //           .collection("blacklist")
+  //           .where("plate", "==", plateOne + plateTwo)
+  //           .where('status', '==', 'active')
+  //           .get()
+  //           .then(snapshot => {
+  //             if (snapshot.empty) {
+  //               // No BL found: does nothing?
+  //             }
+  //             let bl = []
+  //             snapshot.forEach(doc => {
+  //               let data = doc.data()
+  //               data.date = data.date.nanoseconds ? data.date.toDate() : data.date
+  //               data.id = doc.id
+  //               bl.push(data)
+  //             })
+  //             console.log("BLACKLIST FS", bl)
+  //               .then(blRes => {
+  //                 let users = []
+  //                 let fullData = []
+  //                 snapshot.forEach(doc => {
+  //                   let data = doc.data()
+  //                   users.push(data.phone)
+  //                   data.id = doc.id
+  //                   fullData.push(data)
+  //                 });
+  //                 console.log("USERS FS", users)
+  //                 console.log("FULLDATA FS", fullData)
+  //               })
+  //               .catch(err => {
+  //                 if (err.response && err.response === -1) {
+  //                   let users = []
+  //                   let fullData = []
+  //                   snapshot.forEach(doc => {
+  //                     let data = doc.data()
+  //                     users.push(data.phone)
+  //                     data.id = doc.id
+  //                     fullData.push(data)
+  //                   });
+  //                 } else {
+  //                   // how to treat 
+  //                 }
+  //               })
+  //           })
+
+  //       })
+  //       .catch(err => {
+  //         console.log(err)
+  //       })
+  //   }
+  // }
+
   async function findUserByPlate() {
     try {
       if (plateOne.length === 3 && plateTwo.length >= 2) {
@@ -177,7 +243,7 @@ const UserInput = (props) => {
         )
         setFindUserByPlateInfo(response.data);
         setExistingUser(true)
-        setPhone(null);
+        
         setShowPhoneInput(false);
         setShowDropdown(true);
         setBlacklist(response.data.blackList);
@@ -187,14 +253,20 @@ const UserInput = (props) => {
         });
         auxPhones.push({ label: '+ agregar', value: 0 })
         setPhones(auxPhones);
+        if (auxPhones.length === 2) {
+          setPhone(auxPhones[0].label)
+        } else {
+          setPhone(null);
+
+        }
 
         if (response.data.blackList && response.data.blackList.length > 0) {
           setModal3Visible(true)
         }
       }
     } catch (err) {
-      console.log(err)
-      console.log(err?.response)
+      // console.log(err)
+      // console.log(err?.response)
       setFindUserByPlateInfo([]);
       setExistingUser(false);
       setShowDropdown(false);
@@ -381,7 +453,7 @@ const UserInput = (props) => {
         source={require('../../../assets/images/Stripes.png')}>
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={styles.containerOne}>
+          <View style={{ alignContent: 'center', alignItems: 'center', flexDirection: "column" }} >
             <View style={styles.plateContainer}>
               <TextInput
                 ref={refPlateOne}
@@ -440,16 +512,16 @@ const UserInput = (props) => {
               {!showPhoneInput ?
                 <DropDownPicker
                   items={phones}
-                  zIndex={80}
+                  zIndex={150}
                   disabled={!showDropdown}
                   defaultValue={phone === null ? 1 : phone}
-                  placeholder={"Selecciona un número"}
+                  placeholder={phones.length >= 0 ? phones[0].phone : "Selecciona un número"}
                   placeholderStyle={styles.dropdownPlaceholder}
                   selectedLabelStyle={styles.dropdownPlaceholder}
-                  containerStyle={{ height: '23%', width: '100%' }}
+                  containerStyle={{ height: '6%', width: '100%' }}
                   style={styles.phoneDropdown}
                   labelStyle={styles.dropdownLabel}
-                  dropDownMaxHeight={100}
+                  dropDownMaxHeight={300}
                   dropDownStyle={styles.dropdown}
                   arrowColor={'#00A9A0'}
                   arrowStyle={styles.dropdownArrow}
@@ -461,9 +533,11 @@ const UserInput = (props) => {
                       setPhone(item.value)
                     }
                   }}
-                /> :
+                  dropDownContainerStyle={{ position: "relative", top: 0 }}
+                />
+                :
                 <TextInput
-                  placeholder={''}
+                  placeholder={'Ingrese celular'}
                   style={styles.textInput}
                   keyboardType='numeric'
                   textAlign='center'
@@ -492,8 +566,6 @@ const UserInput = (props) => {
                   PASE DIA
                 </Text>
               </View>
-
-
               <View style={styles.startButtonContainer}>
                 {!loadingStart &&
                   <Button onPress={() => {
@@ -513,15 +585,15 @@ const UserInput = (props) => {
                 {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
                 {!loadingStart &&
                   <TouchableOpacity
-                    style={[styles.buttonT, (plateOne + plateTwo).length < 5  ? styles.buttonTDisabled : styles.buttonT]}
+                    style={[styles.buttonT, (plateOne + plateTwo).length < 5 ? styles.buttonTDisabled : styles.buttonT]}
                     onPress={() => {
                       restartSearch();
-                      clearPlateOne(); 
+                      clearPlateOne();
                       clearPlateTwo();
                       store.dispatch(actions.setQr(plateOne + plateTwo));
                       navigation.navigate('QRscanner');
                     }}
-                    disabled={(plateOne + plateTwo).length < 5 }
+                    disabled={(plateOne + plateTwo).length < 5}
                   >
                     <Image
                       style={styles.qrImage}
@@ -530,111 +602,110 @@ const UserInput = (props) => {
                     />
                   </TouchableOpacity>
                 }
+
               </View>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={styles.containerTwo}>
-            <View style={styles.infoContainer}>
-              <View style={{ height: "90%", width: '90%' }}>
-                <View style={{ width: '100%', alignItems: 'center' }}>
-                  {mensualityExists ?
-                    <View style={{
-                      width: '100%',
-                      justifyContent: 'center'
-                    }}>
-                      <Text style={{
-                        fontFamily: 'Montserrat-Bold',
-                        color: '#00A9A0',
-                        fontSize: width * 0.027,
-                        textAlign: 'center'
-                      }}>{mensualityUserName}</Text>
-                      <View style={{
-                        width: '100%',
-                        flexDirection: 'row',
-                        justifyContent: 'center'
-                      }}>
-                        <Text style={styles.infoText}>
-                          Capacidad:
-                        </Text>
+              <View style={styles.containerTwo}>
+                <View style={styles.infoContainer}>
+                  <View style={{ height: "90%", width: '90%' }}>
+                    <View style={{ width: '100%', alignItems: 'center' }}>
+                      {mensualityExists ?
+                        <View style={{
+                          width: '100%',
+                          justifyContent: 'center'
+                        }}>
+                          <Text style={{
+                            fontFamily: 'Montserrat-Bold',
+                            color: '#00A9A0',
+                            fontSize: width * 0.027,
+                            textAlign: 'center'
+                          }}>{mensualityUserName}</Text>
+                          <View style={{
+                            width: '100%',
+                            flexDirection: 'row',
+                            justifyContent: 'center'
+                          }}>
+                            <Text style={styles.infoText}>
+                              Capacidad:
+                            </Text>
 
-                        <Text style={styles.infoText}>
-                          {' ' + mensualityCapacity}
-                        </Text>
-                      </View>
-                      <View style={{
-                        width: '100%',
-                        flexDirection: 'row',
-                        justifyContent: 'center'
-                      }}>
-                        <Text style={styles.infoText}>
-                          Placas parqueadas:
-                        </Text>
+                            <Text style={styles.infoText}>
+                              {' ' + mensualityCapacity}
+                            </Text>
+                          </View>
+                          <View style={{
+                            width: '100%',
+                            flexDirection: 'row',
+                            justifyContent: 'center'
+                          }}>
+                            <Text style={styles.infoText}>
+                              Placas parqueadas:
+                            </Text>
 
-                        <Text style={styles.infoText}>
-                          {' ' + mensualityParkedPlates}
-                        </Text>
-                      </View>
+                            <Text style={styles.infoText}>
+                              {' ' + mensualityParkedPlates}
+                            </Text>
+                          </View>
+                        </View>
+                        :
+                        <View style={{
+                          width: '100%',
+                          flexDirection: 'row',
+                          justifyContent: 'center'
+                        }}>
+                        </View>
+                      }
+                      {prepayDayRecip ?
+                        <View style={{
+                          width: '100%',
+                          flexDirection: 'row',
+                          justifyContent: 'center'
+                        }}>
+                          <Text style={styles.infoText}> Vigencia pase día:   </Text>
+                          <Text style={styles.infoText}>
+                            {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('L') : ''} {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('LT') : ''}
+                          </Text>
+                        </View>
+                        :
+                        <View style={{
+                          width: '100%',
+                          flexDirection: 'row',
+                          justifyContent: 'center'
+                        }}>
+                        </View>
+                      }
                     </View>
-                    :
-                    <View style={{
-                      width: '100%',
-                      flexDirection: 'row',
-                      justifyContent: 'center'
-                    }}>
-                    </View>
-                  }
-                  {prepayDayRecip ?
-                    <View style={{
-                      width: '100%',
-                      flexDirection: 'row',
-                      justifyContent: 'center'
-                    }}>
-                      <Text style={styles.infoText}> Vigencia pase día:   </Text>
-                      <Text style={styles.infoText}>
-                        {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('L') : ''} {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('LT') : ''}
-                      </Text>
-                    </View>
-                    :
-                    <View style={{
-                      width: '100%',
-                      flexDirection: 'row',
-                      justifyContent: 'center'
-                    }}>
-                    </View>
-                  }
+                    {historyExists ?
+                      <Table borderStyle={{ borderColor: '#00A9A0' }}>
+                        <Row
+                          data={tableHead}
+                          style={styles.head}
+                          textStyle={styles.headText}
+                        />
+                        <Rows
+                          data={tableData}
+                          textStyle={styles.text}
+                        />
+                      </Table>
+                      :
+                      <Table borderStyle={{ borderColor: '#00A9A0' }}>
+                        <Row
+                          data={tableHead}
+                          style={styles.head}
+                          textStyle={styles.headText}
+                        />
+
+                      </Table>
+                    }
+                  </View>
                 </View>
-                {historyExists ?
-                  <Table borderStyle={{ borderColor: '#00A9A0' }}>
-                    <Row
-                      data={tableHead}
-                      style={styles.head}
-                      textStyle={styles.headText}
-                    />
-                    <Rows
-                      data={tableData}
-                      textStyle={styles.text}
-                    />
-                  </Table>
-                  :
-                  <Table borderStyle={{ borderColor: '#00A9A0' }}>
-                    <Row
-                      data={tableHead}
-                      style={styles.head}
-                      textStyle={styles.headText}
-                    />
-
-                  </Table>
-                }
               </View>
-            </View>
-            <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end' }}>
-              <FooterIndex navigation={navigation} />
             </View>
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
+      <View style={{ height: '12%', width: '100%', justifyContent: 'flex-end' }}>
+        <FooterIndex navigation={navigation} />
+      </View>
       <Modal
         animationType="fade"
         transparent={true}

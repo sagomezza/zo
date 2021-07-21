@@ -254,13 +254,14 @@ const LoginIndex = (props) => {
                 width: "100%",
                 justifyContent: "space-between",
                 padding: "2%",
+
               }}
             >
               <View
                 style={{
                   margin: "4%",
                   justifyContent: "space-between",
-                  height: " 70%",
+                  height: " 80%",
                   alignItems: "center",
                 }}
               >

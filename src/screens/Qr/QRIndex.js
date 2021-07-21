@@ -50,10 +50,10 @@ const BarcodeScanner = (props) => {
     setScanned(true);
     try {
       const _data = JSON.parse(data);
-      console.log(_data)
+      console.log("DATA QR",_data)
       if ((qr.plate).length === 0) {
         await store.dispatch(actions.setPhone(_data.id))
-        navigation.navigate("UserOut")
+        navigation.replace("UserOut")
       } else {
         let type
         if (isCharacterALetter(qr.plate[5]) || qr.plate.length === 5) type = "bike"

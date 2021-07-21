@@ -7,56 +7,63 @@ const styles = StyleSheet.create({
   imageBackground: {
     flex: 1,
     width: '100%',
-    height: '50%',
-    flexDirection: 'column'
+    height: '52%',
+    flexDirection: 'column',
+    zIndex: -5
   },
   head: {
     height: 40,
     alignContent: 'center',
   },
   containerOne: {
+    position: "relative",
     height: '30%',
     alignContent: 'center',
     alignItems: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column', borderWidth: 1, zIndex: 100000
   },
   plateContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     alignContent: 'center',
-    height: '20%',
+    height: '8%',
     width: '60%',
     marginTop: '2%'
   },
   textContainer: {
     alignItems: 'center',
     alignContent: 'center',
-    height: '10%',
+    justifyContent: 'center',
+    height: '5%',
     width: '100%',
   },
   dropdownContainer: {
     flexDirection: 'column',
     alignItems: 'center',
     alignContent: 'center',
-    zIndex: 10, height: '62%',
-    width: '60%',
+    height: '78%',
+    width: '100%',
+    zIndex: 10000,
   },
   dropdownPlaceholder: {
     color: '#8F8F8F',
     fontSize: width * 0.04,
     textAlign: 'center',
-    fontFamily: 'Montserrat-Bold'
+    fontFamily: 'Montserrat-Bold',
   },
   dropdownSelectedLabel: {
     color: '#8F8F8F',
     fontSize: normalize(30),
     textAlign: 'center',
-    fontFamily: 'Montserrat-Bold'
+    fontFamily: 'Montserrat-Bold',
+    elevation: 999
   },
   dropdown: {
     backgroundColor: '#fafafa',
     borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15
+    borderBottomRightRadius: 15,
+    width: "60%",
+    alignSelf: 'center'
   },
   dropdownArrow: {
     alignItems: 'flex-start',
@@ -64,26 +71,31 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start'
   },
   phoneDropdown: {
-    backgroundColor: '#fafafa',
+    // backgroundColor: '#fafafa',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20
+    borderBottomRightRadius: 20,
+    overflow: "visible", position: "relative", top: 0,
+    width: "60%",
+    alignSelf: 'center'
+
   },
   dropdownLabel: {
     justifyContent: 'center',
     fontFamily: 'Montserrat-Bold',
     color: '#D9D9D9',
-    fontSize: width * 0.035
+    fontSize: width * 0.035,
+
   },
   checkPrepayContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     alignContent: 'center',
-    height: '30%',
+    height: '8%',
     width: '60%',
     justifyContent: 'center',
-    paddingTop: '10%'
+    paddingTop: '3%'
   },
   prepayDayText: {
     color: '#FFF200',
@@ -95,22 +107,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignContent: 'center',
-    height: '40%',
-    width: '100%',
-    justifyContent: 'center'
+    height: '12%',
+    width: '60%',
+    justifyContent: 'center',
   },
   containerTwo: {
-    height: '57%',
-    backgroundColor: '#F8F8F8',
+    height: '75%',
+    width: '100%',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     alignContent: 'center',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    zIndex: -100000,
+    backgroundColor: '#F8F8F8'
   },
   infoContainer: {
-    height: '70%',
-    width: '73%',
+    height: '90%',
+    width: '80%',
     backgroundColor: '#FFFFFF',
     marginTop: '6%',
     borderRadius: 10,
@@ -132,7 +146,7 @@ const styles = StyleSheet.create({
     margin: 6,
     color: '#00A9A0',
     alignSelf: 'center',
-    fontFamily: 'Montserrat-Regular'
+    fontFamily: 'Montserrat-Regular',
   },
   plateInput: {
     width: '46%',
@@ -147,8 +161,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   textInput: {
-    width: '100%',
-    height: '20%',
+    width: '60%',
+    height: '6%',
     fontSize: width * 0.04,
     fontFamily: 'Montserrat-Bold',
     color: '#8F8F8F',

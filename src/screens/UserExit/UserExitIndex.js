@@ -110,9 +110,9 @@ const UserOut = (props) => {
           const splitPlateFive = splitPlate[5] !== undefined ? splitPlate[5] : '';
           setPlateOne(splitPlate[0] + splitPlate[1] + splitPlate[2])
           setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlateFive)
+          
           setPlateOneCall(splitPlate[0] + splitPlate[1] + splitPlate[2])
           setPlateTwoCall(splitPlate[3] + splitPlate[4] + splitPlateFive)
-          checkParkingPlate();
           setIsParanoicUser(true)
         }
       } catch (err) {
@@ -124,7 +124,7 @@ const UserOut = (props) => {
   }, [qr.phone]);
 
   useEffect(() => {
-    if ((plateOneCall + plateTwoCall).length > 5) {
+    if ((plateOneCall + plateTwoCall).length >= 5) {
       checkParkingPlate();
     }
   }, [plateOneCall, plateTwoCall])
@@ -168,9 +168,12 @@ const UserOut = (props) => {
         // console.log('no plate')
       }
     } catch (err) {
-      console.log(err)
-      console.log(err?.response)
-      setModal5Visible(true);
+      console.log("ERR",err)
+      console.log("ERR2", err?.response)
+      if (modal5Visible === false){
+        setModal5Visible(true);
+      }
+
       setLoadingCheckParking(false);
     }
   }
@@ -179,6 +182,7 @@ const UserOut = (props) => {
     try {
       if (inputVerificationCode.length === 5) {
         let reserve = reservations.reservations.filter(reserve => reserve.verificationCode === Number(inputVerificationCode));
+        let idempotencyKey = createIdempotency(uid.uid)
         const response = await instance.post(
           CHECK_PARKING,
           {
@@ -188,7 +192,13 @@ const UserOut = (props) => {
             dateFinished: new Date(),
             prepaidDay: true,
             verificationCode: Number(inputVerificationCode)
-          }, { timeout: TIMEOUT }
+          },
+          { timeout: TIMEOUT },
+          {
+            headers: {
+              "x-idempotence-key": idempotencyKey
+            }, timeout: TIMEOUT
+          }
         )
         setDateFinished(new Date());
         setDateStart(response.data.data.dateStart);
@@ -343,7 +353,7 @@ const UserOut = (props) => {
                   };
                 }}
                 value={plateOne}
-                onFocus={() => { setPlateOne(''); setPlateTwo(''); }}
+                onFocus={() => { restart(); }}
               />
               <TextInput
                 ref={refPlateTwo}
@@ -368,7 +378,7 @@ const UserOut = (props) => {
               />
               <TouchableOpacity
                 style={styles.buttonT}
-                onPress={() => { navigation.navigate('QRscanner') }}>
+                onPress={() => { restart(); navigation.navigate('QRscanner'); }}>
                 <Image
                   style={{ width: '65%', height: '65%', marginTop: '10%' }}
                   resizeMode={"contain"}
@@ -386,7 +396,7 @@ const UserOut = (props) => {
                 textAlign='center'
                 maxLength={5}
                 autoCapitalize={'characters'}
-                onFocus={() => { setInputVerificationCode(''); }}
+                onFocus={() => { restart(); }}
                 onChangeText={text => {
                   if (text.length === 5) { Keyboard.dismiss() }
                   setInputVerificationCode(text.trim());
@@ -630,7 +640,7 @@ const UserOut = (props) => {
 
             }}>
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalTextAlert}> El vehículo no se encuentra estacionado. </Text>
+                <Text style={styles.modalTextAlert}> El vehículo no esta estacionado o el código QR no se encuentra asociado a un vehículo estacionado. </Text>
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
@@ -692,7 +702,7 @@ const UserOut = (props) => {
                 <Text style={styles.modalText}>¡Cobro exitoso! </Text>
                 <Text style={styles.modalText}> Hora: {moment().format('LT')}</Text>
               </View>
-              <View style={{ height: '15%', width: '100%', justifyContent: 'flex-end' }}>
+              <View style={{ height: '19%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
                   restart();
                 }}
@@ -919,7 +929,7 @@ const UserOut = (props) => {
                   />
                 </View>
               </View>
-              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+              <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
 
                   finishParking("parcial-pending", false)

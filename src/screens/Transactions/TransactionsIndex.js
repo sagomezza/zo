@@ -3,7 +3,8 @@ import { ImageBackground } from 'react-native';
 import {
     Text,
     View,
-    FlatList
+    FlatList,
+    TouchableOpacity
 } from 'react-native';
 import Header from '../../components/Header/HeaderIndex';
 import numberWithPoints from '../../config/services/numberWithPoints';
@@ -48,21 +49,29 @@ const Transactions = (props) => {
                                         style={{ height: "37%" }}
                                         data={recips.recips}
                                         keyExtractor={(item, index) => String(index)}
-                                        renderItem={({ item }) => {
+                                        renderItem={({ item, index }) => {
                                             return (
-                                                <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
-                                                    <View style={{ marginBottom: '2%' }} >
-                                                        <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
-                                                        <Text style={styles.textPago}>{`Pago por ${formatHours(item.hours)} horas`}</Text>
+                                                <TouchableOpacity
+                                                    key={index.toString()}
+                                                    onPress={() => {
+
+                                                    }}
+                                                >
+                                                    <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%' }} >
+                                                        <View style={{ marginBottom: '2%' }} >
+                                                            <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
+                                                            <Text style={styles.textPago}>{`Pago por ${formatHours(item.hours)} horas`}</Text>
+                                                        </View>
+                                                        <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
+                                                            <Text style={styles.textMoney}>
+                                                                {item.cash === 0 && item.change === 0 ? '$0' : ''}
+                                                                {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                                                                {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                                                            </Text>
+                                                        </View>
                                                     </View>
-                                                    <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
-                                                        <Text style={styles.textMoney}>
-                                                            {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                                                            {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                                                            {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
-                                                        </Text>
-                                                    </View>
-                                                </View>
+                                                </TouchableOpacity>
+
                                             )
                                         }}
                                     />
