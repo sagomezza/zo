@@ -4,8 +4,12 @@ import {
   Text,
   FlatList,
   Image,
-  ActivityIndicator
+  TouchableOpacity,
+  ActivityIndicator,
+  Modal
 } from 'react-native';
+import Button from '../../components/Button';
+
 import { ImageBackground } from 'react-native';
 import Header from '../../components/Header/HeaderIndex';
 import numberWithPoints from '../../config/services/numberWithPoints';
@@ -14,6 +18,8 @@ import styles from '../Home/HomeStyles';
 import instance from "../../config/axios";
 import moment from 'moment';
 import { firestore } from '../../config/firebase';
+import normalize from '../../config/services/normalizeFontSize';
+
 
 // api
 import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL, EDIT_ADMIN, READ_OFFICIAL } from "../../config/api";
@@ -28,6 +34,13 @@ const HomeIndex = (props) => {
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const [loadingRecips, setLoadingRecips] = useState(true);
   const [loadingReservations, setLoadingReservations] = useState(true);
+  const [showRecipModal, setShowRecipModal] = useState(false);
+  const [showReserveModal, setShowReserveModal] = useState(false);
+  const [plate, setPlate] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
+  const [prepayFullDay, setPrepayFullDay] = useState('');
+  const [mensuality, setMensuality] = useState('');
+  const [isParanoic, setIsParanoic] = useState('');
 
   useEffect(() => {
     const offData = async () => {
@@ -105,7 +118,7 @@ const HomeIndex = (props) => {
                       }
                       if (recips.length === 0) {
                         setLoadingRecips(false);
-                        
+
                       } else {
                         if (officialProps.email) {
                           let filteredRecips = recips.filter((recip) => {
@@ -149,6 +162,8 @@ const HomeIndex = (props) => {
                         });
                         store.dispatch(actions.setRecips(recips));
                         setLoadingRecips(false);
+                        console.log(recips[0])
+
                         // if (parameter.limit) {
                         //   resolve({
                         //     data: {
@@ -213,7 +228,7 @@ const HomeIndex = (props) => {
       }
     }
 
-  
+
 
     const readHq = async () => {
       setLoadingReservations(true);
@@ -240,6 +255,16 @@ const HomeIndex = (props) => {
     getRecipsOfShift();
     // parked(officialHq);
   }, []);
+
+  const infoReservation = (props) => {
+    console.log(props)
+    setPlate(props.plate)
+    setVerificationCode(props.verificationCode)
+    setPrepayFullDay(props.prepayFullDay)
+    setMensuality(props.mensuality)
+    setIsParanoic(props.isParanoic)
+    setShowReserveModal(true)
+  }
 
   const formatHours = (hours) => {
     if (typeof hours === "number" || typeof hours === "double" || typeof hours === "long" || typeof hours === "float") {
@@ -333,26 +358,34 @@ const HomeIndex = (props) => {
                     style={{ height: "37%" }}
                     data={recips.recips}
                     keyExtractor={(item, index) => String(index)}
-                    renderItem={({ item }) => {
+                    renderItem={({ item, index }) => {
                       return (
-                        <View style={styles.list} >
-                          <View style={{ marginBottom: '2%' }} >
-                            <Text style={styles.textPlaca}>
-                              {typeof item.plate === 'string' ? item.plate : item.plate[0]}
-                            </Text>
-                            <Text style={styles.textPago}>
-                              Pago por
-                              {item.hours === '1 month' ? ' mensualidad' : `${formatHours(item.hours)} horas`}
-                            </Text>
+                        // <TouchableOpacity
+                        //   key={index.toString()}
+                        //   onPress={() => {
+                        //     setShowRecipModal(true);
+                        //   }}
+                        // >
+                          <View style={styles.list} >
+                            <View style={{ marginBottom: '2%' }} >
+                              <Text style={styles.textPlaca}>
+                                {typeof item.plate === 'string' ? item.plate : item.plate[0]}
+                              </Text>
+                              <Text style={styles.textPago}>
+                                Pago por
+                                {item.hours === '1 month' ? ' mensualidad' : `${formatHours(item.hours)} horas`}
+                              </Text>
+                            </View>
+                            <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
+                              <Text style={styles.textMoney}>
+                                {item.cash === 0 && item.change === 0 ? '$0' : ''}
+                                {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                                {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                              </Text>
+                            </View>
                           </View>
-                          <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
-                            <Text style={styles.textMoney}>
-                              {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                              {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                              {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
-                            </Text>
-                          </View>
-                        </View>
+                        // </TouchableOpacity>
+
                       )
                     }}
                   />
@@ -381,24 +414,43 @@ const HomeIndex = (props) => {
                     style={{ height: "37%" }}
                     data={reservations.reservations}
                     keyExtractor={(item, index) => String(index)}
-                    renderItem={({ item }) => {
+                    renderItem={({ item, index }) => {
                       return (
-                        <View style={styles.list} >
-                          <View style={{ marginBottom: '2%' }} >
-                            <Text style={styles.textPlaca}>{item.plate}</Text>
-                            <Text style={styles.textPago}>{item.verificationCode}</Text>
+                        // <TouchableOpacity
+                        //   key={index.toString()}
+                        //   onPress={() => {
+                        //     console.log(item)
+                        //     let plate = item.plate
+                        //     let verificationCode = item.verificationCode
+                        //     let prepayFullDay = item.prepayFullDay ? item.prepayFullDay : ''
+                        //     let mensuality = item.mensuality ? item.mensuality : ''
+                        //     let isParanoic = item.isParanoic ? item.isParanoic : ''
+                        //     infoReservation({
+                        //       plate,
+                        //       verificationCode,
+                        //       prepayFullDay,
+                        //       mensuality,
+                        //       isParanoic
+                        //     })
+                        //   }}
+                        // >
+                          <View style={styles.list} >
+                            <View style={{ marginBottom: '2%' }} >
+                              <Text style={styles.textPlaca}>{item.plate}</Text>
+                              <Text style={styles.textPago}>{item.verificationCode}</Text>
+                            </View>
+                            <View style={{ flex: 1, alignItems: 'flex-end' }} >
+                              <Text style={styles.textMoney}>{moment(item.dateStart).format('L')}  {moment(item.dateStart).format('LT')}</Text>
+                              <Text style={styles.textPago}>
+                                Pago por
+                                {item.prepayFullDay === true ? " pase día" : ""}
+                                {item.mensuality === true ? " mensualidad" : ""}
+                                {item.isParanoic === true ? " horas" : ""}
+                                {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? " horas" : ""}
+                              </Text>
+                            </View>
                           </View>
-                          <View style={{ flex: 1, alignItems: 'flex-end' }} >
-                            <Text style={styles.textMoney}>{moment(item.dateStart).format('L')}  {moment(item.dateStart).format('LT')}</Text>
-                            <Text style={styles.textPago}>
-                              Pago por
-                              {item.prepayFullDay === true ? " pase día" : ""}
-                              {item.mensuality === true ? " mensualidad" : ""}
-                              {item.isParanoic === true ? " horas" : ""}
-                              {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? " horas" : ""}
-                            </Text>
-                          </View>
-                        </View>
+                        // </TouchableOpacity>
                       )
                     }}
                   />
@@ -417,8 +469,59 @@ const HomeIndex = (props) => {
             <FooterIndex navigation={navigation} />
           </View>
         </View>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          backdropOpacity={0.3}
+          visible={showReserveModal}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={{
+                height: '100%',
+                width: '100%',
+                justifyContent: 'space-between',
+                padding: '2%'
+              }}>
+                <View style={{
+                  margin: '3%',
+                  justifyContent: 'flex-end',
+                  height: ' 80%',
+                  borderWidth: 1
+
+                }}>
+                  <Text style={{
+                    fontSize: normalize(51),
+                    textAlign: 'center',
+                    color: '#00A9A0',
+                    fontFamily: 'Montserrat-Bold'
+                  }}>
+                    {plate}
+                  </Text>
+                  <Text style={styles.modalTextAlert}>  </Text>
+                </View>
+                <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                  <Button onPress={() => {
+                    setShowReserveModal(false)
+                  }}
+                    title="E N T E N D I D O"
+                    color="#00A9A0"
+                    style={
+                      styles.modalButton
+                    }
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }} />
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
 
       </ImageBackground>
+
     </View>
   );
 };

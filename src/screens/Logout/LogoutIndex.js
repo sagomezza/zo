@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  StyleSheet,
   View,
   Text,
   FlatList,
   Modal,
-  TouchableHighlight,
-  Dimensions,
+  TouchableOpacity,
   ActivityIndicator,
   Image
 } from 'react-native';
@@ -18,7 +16,7 @@ import styles from '../Logout/LogoutStyles';
 import Header from '../../components/Header/HeaderIndex';
 import { width } from '../../config/constants/screenDimensions';
 import { Icon } from 'react-native-elements';
-import { TextInput, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Button from '../../components/Button/index';
 import FooterIndex from '../../../src/components/Footer/index';
 import moment from 'moment';
@@ -223,7 +221,7 @@ const LogoutIndex = (props) => {
                   placeholder='$'
                   textAlign='center'
                   keyboardType='numeric'
-                  style={total === inputValue ? styles.textInput : styles.textInputDifTotal}
+                  style={styles.textInput}
                   value={inputValue}
                   onChangeValue={text => { text === null ? setInputValue(0) : setInputValue(text) }}
                   prefix="$"
@@ -250,19 +248,27 @@ const LogoutIndex = (props) => {
                       keyExtractor={({ id }) => id}
                       renderItem={({ item }) => {
                         return (
-                          <View style={styles.flatlist} >
-                            <View style={{ marginBottom: 10 }} >
-                              <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
-                              <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
+                          <TouchableOpacity
+                            key={index.toString()}
+                            onPress={() => {
+
+                            }}
+                          >
+                            <View style={styles.flatlist} >
+                              <View style={{ marginBottom: 10 }} >
+                                <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
+                                <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
+                              </View>
+                              <View style={{ flex: 1, alignItems: 'flex-end' }} >
+                                <Text style={styles.textMoney}>
+                                  {item.cash === 0 && item.change === 0 ? '$0' : ''}
+                                  {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                                  {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                                </Text>
+                              </View>
                             </View>
-                            <View style={{ flex: 1, alignItems: 'flex-end' }} >
-                              <Text style={styles.textMoney}>
-                                {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                                {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                                {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
-                              </Text>
-                            </View>
-                          </View>
+                          </TouchableOpacity>
+
                         )
                       }}
                     />
@@ -281,7 +287,7 @@ const LogoutIndex = (props) => {
               height: '13%',
               justifyContent: 'flex-end'
             }}>
-              <Button onPress={() => { setModalVisible(true);  }}
+              <Button onPress={() => { setModalVisible(true); }}
                 title="C E R R A R  T U R N O"
                 disabled={inputValue.length === 0 || inputBaseValue.length === 0}
                 color="#00A9A0"
