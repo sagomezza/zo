@@ -211,7 +211,7 @@ const HomeIndex = (props) => {
       try {
         await instance.post(EDIT_OFFICIAL, {
           id: officialProps.id,
-          expoToken: props.expoToken.expoToken
+          expoToken: props.expoToken
         },
           { timeout: TIMEOUT }
         );
@@ -219,7 +219,7 @@ const HomeIndex = (props) => {
         try {
           await instance.post(EDIT_ADMIN, {
             id: officialProps.id,
-            expoToken: props.expoToken.expoToken
+            expoToken: props.expoToken
           });
         } catch (err) {
           // console.log("[updateExpoToken - Home screen]:", err)
