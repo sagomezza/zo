@@ -343,7 +343,7 @@ const MonthlyPayments = (props) => {
             type: "personal",
             monthlyUser: true,
             cash: Number(totalPay),
-            change: totalPay - monthPrice,
+            change: Number(totalPay - monthPrice),
             officialEmail: officialProps.email,
             pending: pendingMensualityPay,
             generateRecip: generateMenRecip,
