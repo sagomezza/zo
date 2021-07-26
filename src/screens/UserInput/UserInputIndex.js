@@ -24,6 +24,8 @@ import { Keyboard } from 'react-native';
 import moment from 'moment';
 import Button from '../../components/Button';
 import numberWithPoints from '../../config/services/numberWithPoints';
+import getTotal from '../../config/services/getTotal';
+
 // api
 import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ, GET_RECIPS_BY_PLATE, FIND_MENSUALITY_PLATE } from "../../config/api";
 import { TIMEOUT } from '../../config/constants/constants';
@@ -101,7 +103,19 @@ const UserInput = (props) => {
   const mensualityCapacity = mensualityInfo.capacity !== undefined ? mensualityInfo.capacity : ' ';
   const mensualityParkedPlates = mensualityInfo.parkedPlatesList !== undefined ? mensualityInfo.parkedPlatesList.length : ' ';
 
-  const priceVehicleType = () => {
+  const priceVehicleType = async () => {
+    // if (isCharacterALetter(plateTwo[2]) || plateTwo.length === 2) {
+    //   let type = "bike"
+    //   let parkingType = 'hours'
+    //   const total =  await getTotal(phone, type, officialHq, parkingType);
+    //   console.log('getTOTAL FN',total)
+    // } else {
+    //   let parkingType = 'hours'
+    //   let type = "car"
+    //   const total = await getTotal(phone, type, officialHq, parkingType);
+    //   console.log('getTOTAL FN',total)
+
+    // }
     if (isCharacterALetter(plateTwo[2]) || plateTwo.length === 2) {
       setPrepayDayValue(hq.dailyBikePrice)
     } else {
@@ -243,7 +257,7 @@ const UserInput = (props) => {
         )
         setFindUserByPlateInfo(response.data);
         setExistingUser(true)
-        
+
         setShowPhoneInput(false);
         setShowDropdown(true);
         setBlacklist(response.data.blackList);

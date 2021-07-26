@@ -316,6 +316,8 @@ export const READ_PARANOIC_USER = "/readParanoicUser";
 PARAMS :
 */
 
+export const GET_USER_COUPONS = "/getUserCoupons"
+
 
 //------------------------STORAGE------------------------
 export const STORAGE_KEY = '@save_lastLoginAt';
