@@ -40,6 +40,8 @@ import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import store from "../../config/store";
 import { createIdempotency } from "../../utils/idempotency";
+import * as Sentry from "@sentry/browser";
+
 
 const { width, height } = Dimensions.get("window");
 
@@ -236,6 +238,7 @@ const MonthlyPayments = (props) => {
           console.log(error);
         });
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err);
       setLoading(false);
     }
@@ -267,6 +270,7 @@ const MonthlyPayments = (props) => {
         setLoading(false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err);
       console.log(err?.response);
       setLoading(false);
@@ -316,6 +320,7 @@ const MonthlyPayments = (props) => {
         setLoading(false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err);
       console.log(err?.response);
       setLoading(false);
@@ -361,6 +366,7 @@ const MonthlyPayments = (props) => {
         setLoading(false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err);
       console.log("ERROR ", err?.response);
       setLoading(false);
@@ -406,6 +412,7 @@ const MonthlyPayments = (props) => {
         setMdlMenAlreadyExists(true);
       }
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err);
       console.log(err?.response);
       setLoading(false);
@@ -433,6 +440,7 @@ const MonthlyPayments = (props) => {
 
       }
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err);
       console.log(err?.response);
       console.log("dentro");
@@ -485,6 +493,7 @@ const MonthlyPayments = (props) => {
         setLoading(false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err);
       console.log(err?.response.data);
       setLoading(false);
@@ -503,6 +512,7 @@ const MonthlyPayments = (props) => {
       );
       store.dispatch(actions.setRecips(response.data.data));
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err?.response);
       console.log(err);
     }

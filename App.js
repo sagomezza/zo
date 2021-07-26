@@ -79,20 +79,17 @@ const App = () => {
 
 
   useEffect(() => {
-    Sentry.Browser.captureException('Starting app.js')
     // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
 
 
     if (officialScheduleStart !== null) {
-      console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
+      // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
 
 
       const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
 
       const checkOfficialHours = setInterval(() => {
         let hours = moment(new Date()).diff(offStart, 'hours', true);
-        console.log(hours)
-        // console.log("new Date() func", new Date())
         if (
           Number(hours) > 7.25 && Number(hours) <= 7.5 ||
           Number(hours) > 7.5 && Number(hours) <= 7.75 ||
@@ -113,20 +110,15 @@ const App = () => {
   });
 
   const readUser = async (userEmail) => {
-    Sentry.Browser.captureException('readUser')
-    //console.log("USER. ", userEmail);
     if (userEmail) {
       try {
-        Sentry.Browser.captureException('userEmail that goes to readOfficial', userEmail)
         const response = await instance.post(READ_OFFICIAL, {
           email: userEmail
         });
         store.dispatch(setOfficial(response.data.data));
-        // console.log(response.data.data)
         setOfficialData(response.data.data)
-
       } catch (err) {
-        Sentry.Browser.captureException('readOfficial catch towards readAdmin err:', err)
+        Sentry.captureException(err)
         try {
           let readOff = await instance.post(
             READ_ADMIN,
@@ -140,25 +132,17 @@ const App = () => {
           store.dispatch(setOfficial(data));
           setOfficialData(data)
         } catch (err) {
-          Sentry.Browser.captureException('readAdmin catch err:', err)
+          Sentry.captureException(err);
           console.log(err)
           console.log(err?.response)
         }
-        //console.log("err: ", error);
       }
     }
     setLoginState(false);
   }
 
   const updateUserState = useCallback((user) => {
-    Sentry.Browser.captureException('[App/updateUserState] ', user)
-
-    // console.log("[App/updateUserState] ", user);
-    // if (user.lastLoginAt !== null ) saveLastLoginAt(user.lastLoginAt);
     if (user) {
-      Sentry.Browser.captureException('updateUserState user: ', user.email)
-      // console.log("[metadata] ", auth.currentUser.metadata);
-      // console.log(user.lastLoginAt)
       setUser(user);
       setInitialRouteName("Home");
       readUser(user.email);
@@ -169,13 +153,10 @@ const App = () => {
       setInitialRouteName("Login");
       setLoginState(false);
     }
-
   }, []);
 
 
   useEffect(() => {
-    Sentry.Browser.captureException('[App] ')
-
     setLoginState(true);
     // const userLastLoginAt =  AsyncStorage.getItem(STORAGE_KEY)
     // if (userLastLoginAt !== null) setLastLoginAt(userLastLoginAt)
@@ -187,7 +168,6 @@ const App = () => {
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
     });
-
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
       console.log(response);
     });
@@ -200,23 +180,15 @@ const App = () => {
   }, []);
 
   async function registerForPushNotificationsAsync() {
-    Sentry.Browser.captureException('[App/registerForPushNotificationsAsync] ')
-
     let token;
     if (Constants.isDevice) {
-      Sentry.Browser.captureException('[App/registerForPushNotificationsAsync/Constants.iseDevice] ')
-
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
       let finalStatus = existingStatus;
       if (existingStatus !== 'granted') {
-        Sentry.Browser.captureException('[App/registerForPushNotificationsAsync/Constants.iseDevice/existingStatusgranted] ')
-
         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
         finalStatus = status;
       }
       if (finalStatus !== 'granted') {
-        Sentry.Browser.captureException('[App/registerForPushNotificationsAsync/Constants.iseDevice/finalStatusgranted] ')
-
         //alert('Failed to get push token for push notification!');
         return;
       }
@@ -227,8 +199,6 @@ const App = () => {
     }
 
     if (Platform.OS === 'android') {
-      Sentry.Browser.captureException('[App/registerForPushNotificationsAsync/platformOSAndroid] ')
-
       Notifications.setNotificationChannelAsync('default', {
         name: 'default',
         importance: Notifications.AndroidImportance.MAX,

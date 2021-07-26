@@ -30,6 +30,8 @@ import numberWithPoints from '../../config/services/numberWithPoints';
 import FooterIndex from '../../components/Footer';
 import Signature from 'react-native-signature-canvas';
 import * as FileSystem from 'expo-file-system';
+import * as Sentry from "@sentry/browser";
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -74,6 +76,7 @@ const txtGenerator = (props) => {
       setDataToday(todayRecips)
       setLoadingTodayRecips(false);
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err)
       setLoadingTodayRecips(false);
     }
@@ -101,6 +104,7 @@ const txtGenerator = (props) => {
 
       })
     }).catch(err => {
+      Sentry.captureException(err);
       console.log("err", err);
     })
   };
@@ -175,11 +179,13 @@ const txtGenerator = (props) => {
           }
           setLoadingBoxGenerator(false);
         } catch (err) {
+          Sentry.captureException(err);
           console.log(err)
         }
 
       })
       .catch(err => {
+        Sentry.captureException(err);
         console.log(err)
         setLoadingBoxGenerator(false);
       })
@@ -196,6 +202,7 @@ const txtGenerator = (props) => {
       setListBox(response.data.data);
       setLoadingReadBoxReport(false);
     } catch (err) {
+      Sentry.captureException(err);
       setLoadingReadBoxReport(false);
       // console.log(err)
       console.log(err?.response)
@@ -219,6 +226,7 @@ const txtGenerator = (props) => {
       setLoadingBoxGenerator(false);
       setModalVisible(!modalVisible);
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err)
       console.log(err?.response)
       setLoadingBoxGenerator(false);
@@ -240,6 +248,7 @@ const txtGenerator = (props) => {
       setBoxStatus(response.data.data.status)
       setLoadingReadBoxReport(false);
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err)
       setLoadingReadBoxReport(false);
       console.log(err?.response)
@@ -274,6 +283,7 @@ const txtGenerator = (props) => {
       setSign(false);
       setLoadingBoxGenerator(false);
     } catch (err) {
+      Sentry.captureException(err);
       setLoadingBoxGenerator(false);
       console.log("in error")
       console.log(err);

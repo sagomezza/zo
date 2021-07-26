@@ -38,6 +38,8 @@ import * as actions from "../../redux/actions";
 import { createIdempotency } from '../../utils/idempotency'
 import { StyleProvider } from 'native-base';
 import { firestore } from '../../config/firebase';
+import * as Sentry from "@sentry/browser";
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -279,6 +281,7 @@ const UserInput = (props) => {
         }
       }
     } catch (err) {
+      Sentry.captureException(err)
       // console.log(err)
       // console.log(err?.response)
       setFindUserByPlateInfo([]);
@@ -306,6 +309,7 @@ const UserInput = (props) => {
         }
       }
     } catch (err) {
+      Sentry.captureException(err)
       setMensualityExists(false);
       // console.log(err)
       // console.log(err?.response)
@@ -343,6 +347,7 @@ const UserInput = (props) => {
         setTableData(auxTable);
       }
     } catch (err) {
+      Sentry.captureException(err)
       // console.log(err)
       // console.log(err?.response)
       setHistoryExists(false);
@@ -366,6 +371,7 @@ const UserInput = (props) => {
           setExistingUser(true);
         }
       } catch (err) {
+        Sentry.captureException(err);
         if (err?.response.data.response === -1) {
           // User already exists 
           setExistingUser(true);
@@ -424,6 +430,7 @@ const UserInput = (props) => {
         readHq();
       }
     } catch (err) {
+      Sentry.captureException(err);
       setLoadingStart(false)
       // response -2 -> already parked
       // response -3 -> car parks full
@@ -453,6 +460,7 @@ const UserInput = (props) => {
       store.dispatch(actions.setReservations(response.data.data.reservations));
       store.dispatch(actions.setHq(response.data.data));
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err)
       console.log(err?.response)
     }

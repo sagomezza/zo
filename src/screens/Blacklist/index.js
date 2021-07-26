@@ -27,6 +27,8 @@ import { TIMEOUT } from '../../config/constants/constants';
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
+import * as Sentry from "@sentry/browser";
+
 
 const Blacklist = (props) => {
     const { navigation, officialProps, reservations, recips, hq } = props;
@@ -95,6 +97,7 @@ const Blacklist = (props) => {
                 
             }
         } catch (err) {
+            Sentry.captureException(err);
             setBlacklistExists(false);
             console.log(err)
             console.log(err?.response)
@@ -119,6 +122,7 @@ const Blacklist = (props) => {
             setListHQDebts(response.data.data)
             setLoadingListHQDebts(false);
         } catch (err) {
+            Sentry.captureException(err);
             console.log(err)
             console.log(err?.response)
             setLoadingListHQDebts(false);
@@ -153,6 +157,7 @@ const Blacklist = (props) => {
                 setModalVisible(true);
             }
         } catch (err) {
+            Sentry.captureException(err);
             console.log(err)
             console.log(err?.response)
             setLoading(false);
