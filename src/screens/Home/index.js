@@ -28,6 +28,8 @@ import { TIMEOUT } from '../../config/constants/constants';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import store from '../../config/store';
+import * as Sentry from "@sentry/browser";
+
 
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
@@ -54,6 +56,7 @@ const HomeIndex = (props) => {
         );
         store.dispatch(actions.setOfficial(response.data.data));
       } catch (err) {
+        Sentry.captureException(err);
         // console.log(err?.response)
       }
     }
@@ -177,11 +180,12 @@ const HomeIndex = (props) => {
                     });
                 });
             } catch (err) {
+              Sentry.captureException(err);
               console.log(err);
             }
           })
           .catch((err) => {
-
+            Sentry.captureException(err);
           });
 
       }
@@ -216,12 +220,14 @@ const HomeIndex = (props) => {
           { timeout: TIMEOUT }
         );
       } catch (err) {
+        Sentry.captureException(err);
         try {
           await instance.post(EDIT_ADMIN, {
             id: officialProps.id,
             expoToken: props.expoToken
           });
         } catch (err) {
+          Sentry.captureException(err);
           // console.log("[updateExpoToken - Home screen]:", err)
           console.log(err?.response)
         }
@@ -242,6 +248,7 @@ const HomeIndex = (props) => {
         store.dispatch(actions.setHq(response.data.data));
         setLoadingReservations(false);
       } catch (err) {
+        Sentry.captureException(err);
         setLoadingReservations(false);
         console.log("err: ", err);
         console.log(err?.response)

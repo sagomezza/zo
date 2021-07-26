@@ -20,7 +20,7 @@ import * as actions from "../../redux/actions";
 import { CREATE_NEWS_REPORT } from "../../config/api";
 import { TIMEOUT } from '../../config/constants/constants';
 import { width } from '../../config/constants/screenDimensions';
-
+import * as Sentry from "@sentry/browser";
 
 const NewsReport = (props) => {
     const { navigation, officialProps, reservations, recips, hq } = props;
@@ -43,6 +43,7 @@ const NewsReport = (props) => {
             setLoadingReport(false);
             setModalVisible(true);
         } catch (err) {
+            Sentry.captureException(err);
             setLoadingReport(false);
             console.log(err)
             console.log(err?.response)

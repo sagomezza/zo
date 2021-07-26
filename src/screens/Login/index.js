@@ -39,6 +39,7 @@ import { ImageBackground } from "react-native";
 import { Dimensions } from "react-native";
 import store from "../../config/store";
 import * as Device from "expo-device";
+import * as Sentry from "@sentry/browser";
 
 const LoginIndex = (props) => {
   const { navigation, officialProps } = props;
@@ -63,6 +64,7 @@ const LoginIndex = (props) => {
       await revokeCurrentSessions(response.user.uid);
     } catch (err) {
       setLoading(false);
+      Sentry.captureException(err);
       setError("El usuario y/o la contraseña que ingresaste son incorrectos.");
     }
   };
@@ -111,6 +113,7 @@ const LoginIndex = (props) => {
       }
 
     } catch (err) {
+      Sentry.captureException(err)
       try {
         let readOff = await instance.post(
           READ_ADMIN,
@@ -133,6 +136,7 @@ const LoginIndex = (props) => {
           })
         );
       } catch (err) {
+        Sentry.captureException(err)
         setLoading(false);
         setError(
           "El usuario y/o la contraseña que ingresaste son incorrectos."
@@ -150,6 +154,7 @@ const LoginIndex = (props) => {
       });
       onLoginPress();
     } catch (err) {
+      Sentry.captureException(err)
       setLoading(false);
       console.log(err);
       console.log(err?.response);
@@ -163,6 +168,7 @@ const LoginIndex = (props) => {
         date: new Date(),
       });
     } catch (err) {
+      Sentry.captureException(err)
       console.log(err);
       console.log(err?.response);
     }

@@ -88,6 +88,7 @@ const LogoutIndex = (props) => {
         setShiftRecips(response.data.data.recips);
         setLoadingShiftRecips(false);
       } catch (err) {
+        Sentry.captureException(err);
         console.log(err?.response)
         setLoadingShiftRecips(false);
       }
@@ -126,7 +127,7 @@ const LogoutIndex = (props) => {
       setLoading(false);
       setModalVisible(!modalVisible);
       setModal3Visible(true);
-      Sentry.captureException('Error in end of shift', err?.response)
+      Sentry.captureException(err)
       // asociar a un evento de sentry, si pasa error intentar de nuevo descartar
     }
   }
@@ -143,7 +144,7 @@ const LogoutIndex = (props) => {
         navigation.navigate('Login');
       }).catch(function (error) {
         // An error happened.
-        Sentry.captureException('Error in logout', error)
+        Sentry.captureException(error)
         setLoading(false);
         setLogoutError(true);
       });

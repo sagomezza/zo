@@ -28,6 +28,8 @@ import { FINISHPARKING, READ_HQ, READ_PARANOIC_USER, GET_RECIPS, CHECK_PARKING }
 import { TIMEOUT } from '../../config/constants/constants';
 import instance from "../../config/axios";
 import store from '../../config/store';
+import * as Sentry from "@sentry/browser";
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -110,12 +112,13 @@ const UserOut = (props) => {
           const splitPlateFive = splitPlate[5] !== undefined ? splitPlate[5] : '';
           setPlateOne(splitPlate[0] + splitPlate[1] + splitPlate[2])
           setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlateFive)
-          
+
           setPlateOneCall(splitPlate[0] + splitPlate[1] + splitPlate[2])
           setPlateTwoCall(splitPlate[3] + splitPlate[4] + splitPlateFive)
           setIsParanoicUser(true)
         }
       } catch (err) {
+        Sentry.captureException(err);
         console.log(err?.response)
         console.log(err)
       }
@@ -168,9 +171,10 @@ const UserOut = (props) => {
         // console.log('no plate')
       }
     } catch (err) {
-      console.log("ERR",err)
+      Sentry.captureException(err);
+      console.log("ERR", err)
       console.log("ERR2", err?.response)
-      if (modal5Visible === false){
+      if (modal5Visible === false) {
         setModal5Visible(true);
       }
 
@@ -210,6 +214,7 @@ const UserOut = (props) => {
         setPlateTwo(response.data.data.plate.substring(3, 6))
       }
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err)
       console.log(err?.response)
       setModal5Visible(true);
@@ -227,6 +232,7 @@ const UserOut = (props) => {
       store.dispatch(actions.setReservations(response.data.data.reservations));
       store.dispatch(actions.setHq(response.data.data));
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err?.response)
       console.log(err)
     }
@@ -242,7 +248,7 @@ const UserOut = (props) => {
       );
       store.dispatch(actions.setRecips(response.data.data));
     } catch (err) {
-      console.log('No recips found')
+      Sentry.captureException(err);
       console.log(err?.response)
       console.log(err)
     }
@@ -287,6 +293,7 @@ const UserOut = (props) => {
       setRecip(response.data.data);
       setIsDisabled(true);
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err?.response)
       console.log(err)
       setLoading(false);
