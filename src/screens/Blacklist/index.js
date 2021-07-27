@@ -27,6 +27,8 @@ import { TIMEOUT } from '../../config/constants/constants';
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
+import * as Sentry from "@sentry/browser";
+
 
 const Blacklist = (props) => {
     const { navigation, officialProps, reservations, recips, hq } = props;
@@ -84,7 +86,6 @@ const Blacklist = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                console.log("------------", response.data)
                 if (response.data.blackList){
                     setFindUserByPlateInfo(response.data);
                     setBlacklist(response.data.blackList);
@@ -92,12 +93,12 @@ const Blacklist = (props) => {
                 } else {
                     setModal3Visible(true);
                 }
-                
             }
         } catch (err) {
+            Sentry.captureException(err);
             setBlacklistExists(false);
-            console.log(err)
-            console.log(err?.response)
+            // console.log(err)
+            // console.log(err?.response)
             if (err?.response.data.response === -1) setModal2Visible(true);
         }
     }
@@ -119,8 +120,9 @@ const Blacklist = (props) => {
             setListHQDebts(response.data.data)
             setLoadingListHQDebts(false);
         } catch (err) {
-            console.log(err)
-            console.log(err?.response)
+            Sentry.captureException(err);
+            // console.log(err)
+            // console.log(err?.response)
             setLoadingListHQDebts(false);
         }
     };
@@ -128,13 +130,6 @@ const Blacklist = (props) => {
     async function payDebts() {
         setLoading(true);
         try {
-            console.log({
-                hqId: officialHq,
-                plate: plateOne + plateTwo,
-                value: Number(blacklistValue),
-                cash: Number(totalPay),
-                change: Number(inputChange)
-            })
             if (plateOne.length === 3 && plateTwo.length >= 2) {
                 const response = await instance.post(
                     PAY_DEBTS,
@@ -153,8 +148,9 @@ const Blacklist = (props) => {
                 setModalVisible(true);
             }
         } catch (err) {
-            console.log(err)
-            console.log(err?.response)
+            Sentry.captureException(err);
+            // console.log(err)
+            // console.log(err?.response)
             setLoading(false);
             if (err?.response.data.response === -2) setModal3Visible(true);
         }

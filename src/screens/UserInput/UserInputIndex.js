@@ -24,6 +24,8 @@ import { Keyboard } from 'react-native';
 import moment from 'moment';
 import Button from '../../components/Button';
 import numberWithPoints from '../../config/services/numberWithPoints';
+import getTotal from '../../config/services/getTotal';
+
 // api
 import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ, GET_RECIPS_BY_PLATE, FIND_MENSUALITY_PLATE } from "../../config/api";
 import { TIMEOUT } from '../../config/constants/constants';
@@ -36,6 +38,8 @@ import * as actions from "../../redux/actions";
 import { createIdempotency } from '../../utils/idempotency'
 import { StyleProvider } from 'native-base';
 import { firestore } from '../../config/firebase';
+import * as Sentry from "@sentry/browser";
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -101,7 +105,19 @@ const UserInput = (props) => {
   const mensualityCapacity = mensualityInfo.capacity !== undefined ? mensualityInfo.capacity : ' ';
   const mensualityParkedPlates = mensualityInfo.parkedPlatesList !== undefined ? mensualityInfo.parkedPlatesList.length : ' ';
 
-  const priceVehicleType = () => {
+  const priceVehicleType = async () => {
+    // if (isCharacterALetter(plateTwo[2]) || plateTwo.length === 2) {
+    //   let type = "bike"
+    //   let parkingType = 'hours'
+    //   const total =  await getTotal(phone, type, officialHq, parkingType);
+    //   console.log('getTOTAL FN',total)
+    // } else {
+    //   let parkingType = 'hours'
+    //   let type = "car"
+    //   const total = await getTotal(phone, type, officialHq, parkingType);
+    //   console.log('getTOTAL FN',total)
+
+    // }
     if (isCharacterALetter(plateTwo[2]) || plateTwo.length === 2) {
       setPrepayDayValue(hq.dailyBikePrice)
     } else {
@@ -243,7 +259,7 @@ const UserInput = (props) => {
         )
         setFindUserByPlateInfo(response.data);
         setExistingUser(true)
-        
+
         setShowPhoneInput(false);
         setShowDropdown(true);
         setBlacklist(response.data.blackList);
@@ -265,6 +281,7 @@ const UserInput = (props) => {
         }
       }
     } catch (err) {
+      Sentry.captureException(err)
       // console.log(err)
       // console.log(err?.response)
       setFindUserByPlateInfo([]);
@@ -292,6 +309,7 @@ const UserInput = (props) => {
         }
       }
     } catch (err) {
+      Sentry.captureException(err)
       setMensualityExists(false);
       // console.log(err)
       // console.log(err?.response)
@@ -329,6 +347,7 @@ const UserInput = (props) => {
         setTableData(auxTable);
       }
     } catch (err) {
+      Sentry.captureException(err)
       // console.log(err)
       // console.log(err?.response)
       setHistoryExists(false);
@@ -352,12 +371,13 @@ const UserInput = (props) => {
           setExistingUser(true);
         }
       } catch (err) {
+        Sentry.captureException(err);
         if (err?.response.data.response === -1) {
           // User already exists 
           setExistingUser(true);
         }
-        console.log(err)
-        console.log(err?.response)
+        // console.log(err)
+        // console.log(err?.response)
       }
     }
     createUser();
@@ -410,6 +430,7 @@ const UserInput = (props) => {
         readHq();
       }
     } catch (err) {
+      Sentry.captureException(err);
       setLoadingStart(false)
       // response -2 -> already parked
       // response -3 -> car parks full
@@ -426,8 +447,8 @@ const UserInput = (props) => {
       } else {
         setErrorModalVisible(true)
       }
-      console.log(err)
-      console.log(err?.response)
+      // console.log(err)
+      // console.log(err?.response)
     }
   };
 
@@ -439,8 +460,9 @@ const UserInput = (props) => {
       store.dispatch(actions.setReservations(response.data.data.reservations));
       store.dispatch(actions.setHq(response.data.data));
     } catch (err) {
-      console.log(err)
-      console.log(err?.response)
+      Sentry.captureException(err);
+      // console.log(err)
+      // console.log(err?.response)
     }
   };
 

@@ -88,7 +88,9 @@ const LogoutIndex = (props) => {
         setShiftRecips(response.data.data.recips);
         setLoadingShiftRecips(false);
       } catch (err) {
-        console.log(err?.response)
+        Sentry.captureException(err);
+        // console.log(err)
+        // console.log(err?.response)
         setLoadingShiftRecips(false);
       }
     }
@@ -122,11 +124,11 @@ const LogoutIndex = (props) => {
       store.dispatch(actions.setOfficial({}));
 
     } catch (err) {
-      console.log(err?.response)
+      // console.log(err?.response)
       setLoading(false);
       setModalVisible(!modalVisible);
       setModal3Visible(true);
-      Sentry.captureException('Error in end of shift', err?.response)
+      Sentry.captureException(err)
       // asociar a un evento de sentry, si pasa error intentar de nuevo descartar
     }
   }
@@ -143,7 +145,7 @@ const LogoutIndex = (props) => {
         navigation.navigate('Login');
       }).catch(function (error) {
         // An error happened.
-        Sentry.captureException('Error in logout', error)
+        Sentry.captureException(error)
         setLoading(false);
         setLogoutError(true);
       });
@@ -262,8 +264,8 @@ const LogoutIndex = (props) => {
                               <View style={{ flex: 1, alignItems: 'flex-end' }} >
                                 <Text style={styles.textMoney}>
                                   {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                                  {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                                  {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                                  {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(Number(item.cash))}` : ''}
+                                  {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(Number(item.total))}` : ''}
                                 </Text>
                               </View>
                             </View>

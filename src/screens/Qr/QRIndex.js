@@ -22,6 +22,7 @@ import * as actions from "../../redux/actions";
 import { TIMEOUT } from '../../config/constants/constants';
 import { READ_HQ, START_PARKING } from '../../config/api';
 import instance from '../../config/axios';
+import * as Sentry from "@sentry/browser";
 
 const BarcodeScanner = (props) => {
   const { navigation, officialProps, qr } = props;
@@ -50,7 +51,7 @@ const BarcodeScanner = (props) => {
     setScanned(true);
     try {
       const _data = JSON.parse(data);
-      console.log("DATA QR",_data)
+      // console.log("DATA QR",_data)
       if ((qr.plate).length === 0) {
         await store.dispatch(actions.setPhone(_data.id))
         navigation.replace("UserOut")
@@ -78,8 +79,9 @@ const BarcodeScanner = (props) => {
       }
     }
     catch (err) {
-      console.log(err);
-      console.log(err?.response);
+      Sentry.captureException(err);
+      // console.log(err);
+      // console.log(err?.response);
       if (err?.response.data.response === -2) setModal2Visible(true)
     }
     store.dispatch(actions.setQr(''))
@@ -93,8 +95,9 @@ const BarcodeScanner = (props) => {
       store.dispatch(actions.setReservations(response.data.data.reservations));
       store.dispatch(actions.setHq(response.data.data));
     } catch (error) {
-      console.log("err: ", error);
-      console.log(err?.response?.data);
+      Sentry.captureException(error);
+      // console.log("err: ", error);
+      // console.log(err?.response?.data);
     }
   };
 

@@ -17,7 +17,6 @@ import FooterIndex from '../../components/Footer';
 import styles from '../Home/HomeStyles';
 import instance from "../../config/axios";
 import moment from 'moment';
-import { firestore } from '../../config/firebase';
 import normalize from '../../config/services/normalizeFontSize';
 
 
@@ -28,6 +27,8 @@ import { TIMEOUT } from '../../config/constants/constants';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import store from '../../config/store';
+import * as Sentry from "@sentry/browser";
+
 
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
@@ -54,158 +55,27 @@ const HomeIndex = (props) => {
         );
         store.dispatch(actions.setOfficial(response.data.data));
       } catch (err) {
+        Sentry.captureException(err);
         // console.log(err?.response)
       }
     }
 
-    const getRecipsOfShift = () => {
+    const getRecips = async () => {
       setLoadingRecips(true);
-      if (officialProps.start) {
-        if (officialProps.schedule.status !== "active") {
-          // ??
-        }
-        let date = moment(new Date(officialProps.start._seconds) * 1000)
-          .tz("America/Bogota")
-          .toDate();
-        firestore
-          .collection("recips")
-          .where("hqId", "==", officialHq)
-          .where("officialEmail", "==", officialProps.email)
-          .where("dateFinished", ">=", date)
-          .orderBy("dateFinished", "desc")
-          .get()
-          .then(async (snapshot) => {
-            try {
-              let recips = [];
-              if (!snapshot.empty) {
-                snapshot.forEach((doc) => {
-                  let recipData = doc.data();
-                  if (!recipData.mensuality && !recipData.prepayFullDay) {
-                    recipData.id = doc.id;
-                    recips.push(recipData);
-                  }
-                });
-              }
-              firestore
-                .collection("recips")
-                .where("hqId", "==", officialHq)
-                .where("prepayFullDay", "==", true)
-                .where("dateFactured", ">=", date)
-                .orderBy("dateFactured", "desc")
-                .get()
-                .then((snapshot) => {
-                  if (!snapshot.empty) {
-                    snapshot.forEach((doc) => {
-                      let recipData = doc.data();
-                      recipData.id = doc.id;
-                      recips.push(recipData);
-                    });
-                  }
-                  firestore
-                    .collection("recips")
-                    .where("hqId", "==", officialHq)
-                    .where("mensuality", "==", true)
-                    .where("dateStart", ">=", date)
-                    .orderBy("dateStart", "desc")
-                    .get()
-                    .then((snapshot) => {
-                      if (!snapshot.empty) {
-                        snapshot.forEach((doc) => {
-                          let recipData = doc.data();
-                          recipData.id = doc.id;
-                          recips.push(recipData);
-                        });
-                      }
-                      if (recips.length === 0) {
-                        setLoadingRecips(false);
-
-                      } else {
-                        if (officialProps.email) {
-                          let filteredRecips = recips.filter((recip) => {
-                            return (
-                              recip.officialEmail === officialProps.email
-                            );
-                          });
-                          recips = [...filteredRecips];
-                        }
-                        recips.map((recip) => {
-                          recip.dateStart = recip.dateStart.nanoseconds
-                            ? recip.dateStart.toDate()
-                            : recip.dateStart;
-                          recip.dateFinished = recip.dateFinished.nanoseconds
-                            ? recip.dateFinished.toDate()
-                            : recip.dateFinished;
-                          if (recip.totalTime)
-                            recip.totalTime = recip.totalTime.nanoseconds
-                              ? recip.totalTime.toDate()
-                              : recip.totalTime;
-                        });
-                        recips.sort((a, b) => {
-                          if (
-                            (a.mensuality || a.prepayFullDay) &&
-                            !b.mensuality
-                          ) {
-                            return b.dateFinished - a.dateStart;
-                          } else if (
-                            (b.mensuality || b.prepayFullDay) &&
-                            !a.mensuality
-                          ) {
-                            return b.dateStart - a.dateFinished;
-                          } else if (
-                            (a.mensuality || a.prepayFullDay) &&
-                            (b.mensuality || b.prepayFullDay)
-                          ) {
-                            return b.dateStart - a.dateStart;
-                          } else {
-                            return b.dateFinished - a.dateFinished;
-                          }
-                        });
-                        store.dispatch(actions.setRecips(recips));
-                        setLoadingRecips(false);
-                        console.log(recips[0])
-
-                        // if (parameter.limit) {
-                        //   resolve({
-                        //     data: {
-                        //       total: recips.slice(0, parameter.limit),
-                        //     },
-                        //   });
-                        // } else {
-
-                        // }
-                      }
-                    });
-                });
-            } catch (err) {
-              console.log(err);
-            }
-          })
-          .catch((err) => {
-
-          });
-
+      try {
+        const response = await instance.post(GET_RECIPS, {
+          hqId: officialHq,
+          officialEmail: officialProps.email
+        },
+          { timeout: TIMEOUT }
+        );
+        store.dispatch(actions.setRecips(response.data.data));
+        setLoadingRecips(false);
+      } catch (err) {
+        setLoadingRecips(false);
+        // console.log(err?.response)
       }
-
-
-    }
-
-
-    // const getRecips = async () => {
-    //   setLoadingRecips(true);
-    //   try {
-    //     const response = await instance.post(GET_RECIPS, {
-    //       hqId: officialHq,
-    //       officialEmail: officialProps.email
-    //     },
-    //       { timeout: TIMEOUT }
-    //     );
-    //     store.dispatch(actions.setRecips(response.data.data));
-    //     setLoadingRecips(false);
-    //   } catch (err) {
-    //     setLoadingRecips(false);
-    //     // console.log(err?.response)
-    //   }
-    // };
+    };
 
     const updateExpoToken = async () => {
       try {
@@ -215,24 +85,24 @@ const HomeIndex = (props) => {
         })
         await instance.post(EDIT_OFFICIAL, {
           id: officialProps.id,
-          expoToken: props.expoToken.expoToken
+          expoToken: props.expoToken
         },
           { timeout: TIMEOUT }
         );
       } catch (err) {
+        Sentry.captureException(err);
         try {
           await instance.post(EDIT_ADMIN, {
             id: officialProps.id,
-            expoToken: props.expoToken.expoToken
+            expoToken: props.expoToken
           });
         } catch (err) {
+          Sentry.captureException(err);
           // console.log("[updateExpoToken - Home screen]:", err)
-          console.log(err?.response)
+          // console.log(err?.response)
         }
       }
     }
-
-
 
     const readHq = async () => {
       setLoadingReservations(true);
@@ -246,9 +116,10 @@ const HomeIndex = (props) => {
         store.dispatch(actions.setHq(response.data.data));
         setLoadingReservations(false);
       } catch (err) {
+        Sentry.captureException(err);
         setLoadingReservations(false);
-        console.log("err: ", err);
-        console.log(err?.response)
+        // console.log("err: ", err);
+        // console.log(err?.response)
       }
     };
 
@@ -256,12 +127,11 @@ const HomeIndex = (props) => {
     readHq();
     updateExpoToken();
     offData();
-    getRecipsOfShift();
+    getRecips();
     // parked(officialHq);
   }, []);
 
   const infoReservation = (props) => {
-    console.log(props)
     setPlate(props.plate)
     setVerificationCode(props.verificationCode)
     setPrepayFullDay(props.prepayFullDay)

@@ -5,6 +5,6 @@ export const createIdempotency = (uid) => {
     let idempotency = uid + "-" + Date.now().toString();
     return idempotency;
   } catch (err) {
-      console.log(err)
+      // console.log(err)
   }
 };
