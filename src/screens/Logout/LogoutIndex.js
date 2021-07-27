@@ -89,7 +89,8 @@ const LogoutIndex = (props) => {
         setLoadingShiftRecips(false);
       } catch (err) {
         Sentry.captureException(err);
-        console.log(err?.response)
+        // console.log(err)
+        // console.log(err?.response)
         setLoadingShiftRecips(false);
       }
     }
@@ -123,7 +124,7 @@ const LogoutIndex = (props) => {
       store.dispatch(actions.setOfficial({}));
 
     } catch (err) {
-      console.log(err?.response)
+      // console.log(err?.response)
       setLoading(false);
       setModalVisible(!modalVisible);
       setModal3Visible(true);

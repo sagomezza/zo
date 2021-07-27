@@ -77,7 +77,7 @@ const txtGenerator = (props) => {
       setLoadingTodayRecips(false);
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err)
+      // console.log(err)
       setLoadingTodayRecips(false);
     }
   }, []);
@@ -87,25 +87,23 @@ const txtGenerator = (props) => {
   }, []);
 
   const handleEmpty = () => {
-    console.log('Empty');
+    // console.log('Empty');
   };
 
   const handleSignature = signature => {
     const path = FileSystem.cacheDirectory + 'sign.png';
     FileSystem.writeAsStringAsync(path, signature.replace('data:image/png;base64,', ''), { encoding: FileSystem.EncodingType.Base64 }).then(res => {
-      console.log(res);
+      // console.log(res);
       FileSystem.getInfoAsync(path, { size: true, md5: true }).then(file => {
-        console.log("-------1-----")
-        console.log(file);
+        // console.log(file);
         setSignatureUri(file.uri);
         setSign(true);
-        console.log(file.uri);
-        console.log("-------2-----")
+        // console.log(file.uri);
 
       })
     }).catch(err => {
       Sentry.captureException(err);
-      console.log("err", err);
+      // console.log("err", err);
     })
   };
 
@@ -180,13 +178,13 @@ const txtGenerator = (props) => {
           setLoadingBoxGenerator(false);
         } catch (err) {
           Sentry.captureException(err);
-          console.log(err)
+          // console.log(err)
         }
 
       })
       .catch(err => {
         Sentry.captureException(err);
-        console.log(err)
+        // console.log(err)
         setLoadingBoxGenerator(false);
       })
   };
@@ -205,7 +203,7 @@ const txtGenerator = (props) => {
       Sentry.captureException(err);
       setLoadingReadBoxReport(false);
       // console.log(err)
-      console.log(err?.response)
+      // console.log(err?.response)
     }
   };
 
@@ -227,8 +225,8 @@ const txtGenerator = (props) => {
       setModalVisible(!modalVisible);
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err)
-      console.log(err?.response)
+      // console.log(err)
+      // console.log(err?.response)
       setLoadingBoxGenerator(false);
     }
   };
@@ -249,14 +247,13 @@ const txtGenerator = (props) => {
       setLoadingReadBoxReport(false);
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err)
+      // console.log(err)
       setLoadingReadBoxReport(false);
-      console.log(err?.response)
+      // console.log(err?.response)
     }
   };
 
   const uploadImageToFirebase = async () => {
-    console.log(boxId)
     try {
       setLoadingBoxGenerator(true);
       const sourceURI = { uri: signatureUri }
@@ -270,8 +267,8 @@ const txtGenerator = (props) => {
         .child("/" + fileName)
         .put(blob);
       const downloadUri = await result.ref.getDownloadURL();
-      console.log(downloadUri)
-      console.log(boxId)
+      // console.log(downloadUri)
+      // console.log(boxId)
       const response2 = await instance.post(SAVE_SIGN_REPORT, {
         id: boxId,
         sign: downloadUri
@@ -285,9 +282,8 @@ const txtGenerator = (props) => {
     } catch (err) {
       Sentry.captureException(err);
       setLoadingBoxGenerator(false);
-      console.log("in error")
-      console.log(err);
-      console.log(err?.response)
+      // console.log(err);
+      // console.log(err?.response)
       Sentry.Native.captureEvent(new Error(err))
       if (err.response) Sentry.Native.captureEvent(new Error(err.response))
       setLoading(false)

@@ -119,8 +119,8 @@ const UserOut = (props) => {
         }
       } catch (err) {
         Sentry.captureException(err);
-        console.log(err?.response)
-        console.log(err)
+        // console.log(err?.response)
+        // console.log(err)
       }
     }
     readParanoicUser()
@@ -172,8 +172,8 @@ const UserOut = (props) => {
       }
     } catch (err) {
       Sentry.captureException(err);
-      console.log("ERR", err)
-      console.log("ERR2", err?.response)
+      // console.log("ERR", err)
+      // console.log("ERR2", err?.response)
       if (modal5Visible === false) {
         setModal5Visible(true);
       }
@@ -215,8 +215,8 @@ const UserOut = (props) => {
       }
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err)
-      console.log(err?.response)
+      // console.log(err)
+      // console.log(err?.response)
       setModal5Visible(true);
     }
   }
@@ -233,8 +233,8 @@ const UserOut = (props) => {
       store.dispatch(actions.setHq(response.data.data));
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err?.response)
-      console.log(err)
+      // console.log(err?.response)
+      // console.log(err)
     }
   };
 
@@ -249,8 +249,8 @@ const UserOut = (props) => {
       store.dispatch(actions.setRecips(response.data.data));
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err?.response)
-      console.log(err)
+      // console.log(err?.response)
+      // console.log(err)
     }
   };
 
@@ -294,8 +294,8 @@ const UserOut = (props) => {
       setIsDisabled(true);
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err?.response)
-      console.log(err)
+      // console.log(err?.response)
+      // console.log(err)
       setLoading(false);
       setIsDisabled(true);
       setModal4Visible(false);

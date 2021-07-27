@@ -36,22 +36,20 @@ const SignatureScreen = () => {
   // };
 
   const handleEmpty = () => {
-    console.log('Empty');
+    // console.log('Empty');
   }
 
   const handleSignature = signature => {
     const path = FileSystem.cacheDirectory + 'sign.png';
     FileSystem.writeAsStringAsync(path, signature.replace('data:image/png;base64,', ''), { encoding: FileSystem.EncodingType.Base64 }).then(res => {
-      console.log(res);
+      // console.log(res);
       FileSystem.getInfoAsync(path, { size: true, md5: true }).then(file => {
-        console.log("-------1-----")
-        console.log(file);
+        // console.log(file);
         setSignatureUri(file.uri)
-        console.log("-------2-----")
 
       })
     }).catch(err => {
-      console.log("err", err);
+      // console.log("err", err);
     })
   };
 

@@ -68,9 +68,9 @@ const App = () => {
   const checkInternetReachable = () => {
     // console.log("-------Connection Information------")
     Network.getNetworkStateAsync().then(state => {
-      console.log('Connection TYPE:', state.type);
-      console.log('Is connected?:', state.isConnected);
-      console.log('Is internet reachable?:', state.isInternetReachable);
+      // console.log('Connection TYPE:', state.type);
+      // console.log('Is connected?:', state.isConnected);
+      // console.log('Is internet reachable?:', state.isInternetReachable);
       state.isConnected === false ? setIsConnected(false) : setIsConnected(true);
     });
   }
@@ -133,8 +133,8 @@ const App = () => {
           setOfficialData(data)
         } catch (err) {
           Sentry.captureException(err);
-          console.log(err)
-          console.log(err?.response)
+          // console.log(err)
+          // console.log(err?.response)
         }
       }
     }
@@ -169,7 +169,7 @@ const App = () => {
       setNotification(notification);
     });
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
+      // console.log(response);
     });
     // unsubscribe to the listener when unmounting
     return () => {

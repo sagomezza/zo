@@ -165,8 +165,6 @@ const HomeIndex = (props) => {
                         });
                         store.dispatch(actions.setRecips(recips));
                         setLoadingRecips(false);
-                        console.log(recips[0])
-
                         // if (parameter.limit) {
                         //   resolve({
                         //     data: {
@@ -181,7 +179,7 @@ const HomeIndex = (props) => {
                 });
             } catch (err) {
               Sentry.captureException(err);
-              console.log(err);
+              // console.log(err);
             }
           })
           .catch((err) => {
@@ -229,7 +227,7 @@ const HomeIndex = (props) => {
         } catch (err) {
           Sentry.captureException(err);
           // console.log("[updateExpoToken - Home screen]:", err)
-          console.log(err?.response)
+          // console.log(err?.response)
         }
       }
     }
@@ -250,8 +248,8 @@ const HomeIndex = (props) => {
       } catch (err) {
         Sentry.captureException(err);
         setLoadingReservations(false);
-        console.log("err: ", err);
-        console.log(err?.response)
+        // console.log("err: ", err);
+        // console.log(err?.response)
       }
     };
 
@@ -264,7 +262,6 @@ const HomeIndex = (props) => {
   }, []);
 
   const infoReservation = (props) => {
-    console.log(props)
     setPlate(props.plate)
     setVerificationCode(props.verificationCode)
     setPrepayFullDay(props.prepayFullDay)

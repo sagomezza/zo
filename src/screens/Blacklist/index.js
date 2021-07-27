@@ -86,7 +86,6 @@ const Blacklist = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                console.log("------------", response.data)
                 if (response.data.blackList){
                     setFindUserByPlateInfo(response.data);
                     setBlacklist(response.data.blackList);
@@ -94,13 +93,12 @@ const Blacklist = (props) => {
                 } else {
                     setModal3Visible(true);
                 }
-                
             }
         } catch (err) {
             Sentry.captureException(err);
             setBlacklistExists(false);
-            console.log(err)
-            console.log(err?.response)
+            // console.log(err)
+            // console.log(err?.response)
             if (err?.response.data.response === -1) setModal2Visible(true);
         }
     }
@@ -123,8 +121,8 @@ const Blacklist = (props) => {
             setLoadingListHQDebts(false);
         } catch (err) {
             Sentry.captureException(err);
-            console.log(err)
-            console.log(err?.response)
+            // console.log(err)
+            // console.log(err?.response)
             setLoadingListHQDebts(false);
         }
     };
@@ -132,13 +130,6 @@ const Blacklist = (props) => {
     async function payDebts() {
         setLoading(true);
         try {
-            console.log({
-                hqId: officialHq,
-                plate: plateOne + plateTwo,
-                value: Number(blacklistValue),
-                cash: Number(totalPay),
-                change: Number(inputChange)
-            })
             if (plateOne.length === 3 && plateTwo.length >= 2) {
                 const response = await instance.post(
                     PAY_DEBTS,
@@ -158,8 +149,8 @@ const Blacklist = (props) => {
             }
         } catch (err) {
             Sentry.captureException(err);
-            console.log(err)
-            console.log(err?.response)
+            // console.log(err)
+            // console.log(err?.response)
             setLoading(false);
             if (err?.response.data.response === -2) setModal3Visible(true);
         }

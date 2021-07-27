@@ -235,11 +235,11 @@ const MonthlyPayments = (props) => {
         })
         .catch((error) => {
           setLoading(false);
-          console.log(error);
+          // console.log(error);
         });
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err);
+      // console.log(err);
       setLoading(false);
     }
   };
@@ -271,8 +271,8 @@ const MonthlyPayments = (props) => {
       }
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err);
-      console.log(err?.response);
+      // console.log(err);
+      // console.log(err?.response);
       setLoading(false);
     }
   }
@@ -321,8 +321,8 @@ const MonthlyPayments = (props) => {
       }
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err);
-      console.log(err?.response);
+      // console.log(err);
+      // console.log(err?.response);
       setLoading(false);
       setModal5Visible(true);
     }
@@ -360,15 +360,15 @@ const MonthlyPayments = (props) => {
             timeout: TIMEOUT,
           }
         );
-        console.log("RESPONSE CREATE MENSUALITY", response.data);
+        // console.log("RESPONSE CREATE MENSUALITY", response.data);
         setModal4Visible(true);
         setModal3Visible(false);
         setLoading(false);
       }
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err);
-      console.log("ERROR ", err?.response);
+      // console.log(err);
+      // console.log("ERROR ", err?.response);
       setLoading(false);
       setModal5Visible(true);
     }
@@ -413,8 +413,8 @@ const MonthlyPayments = (props) => {
       }
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err);
-      console.log(err?.response);
+      // console.log(err);
+      // console.log(err?.response);
       setLoading(false);
       if (firstPlateNewMen.length >= 5) {
         priceMonthVehicleType();
@@ -441,9 +441,8 @@ const MonthlyPayments = (props) => {
       }
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err);
-      console.log(err?.response);
-      console.log("dentro");
+      // console.log(err);
+      // console.log(err?.response);
       setLoading(false);
     }
   }
@@ -494,8 +493,8 @@ const MonthlyPayments = (props) => {
       }
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err);
-      console.log(err?.response.data);
+      // console.log(err);
+      // console.log(err?.response.data);
       setLoading(false);
     }
   }
@@ -513,8 +512,8 @@ const MonthlyPayments = (props) => {
       store.dispatch(actions.setRecips(response.data.data));
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err?.response);
-      console.log(err);
+      // console.log(err?.response);
+      // console.log(err);
     }
   };
 

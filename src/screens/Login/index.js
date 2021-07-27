@@ -154,10 +154,11 @@ const LoginIndex = (props) => {
       });
       onLoginPress();
     } catch (err) {
-      Sentry.captureException(err)
+      Sentry.captureException(err);
+      onLoginPress();
       setLoading(false);
-      console.log(err);
-      console.log(err?.response);
+      // console.log(err);
+      // console.log(err?.response);
     }
   };
 
@@ -169,8 +170,8 @@ const LoginIndex = (props) => {
       });
     } catch (err) {
       Sentry.captureException(err)
-      console.log(err);
-      console.log(err?.response);
+      // console.log(err);
+      // console.log(err?.response);
     }
   };
 

@@ -3,14 +3,14 @@ import instance from "../axios";
 import moment from 'moment-timezone';
 
 const getTotal = async (phone, vehicleType, hqId, parkingType, verificationCode) => {
-    console.log(phone, vehicleType, hqId, parkingType, verificationCode)
+    // console.log(phone, vehicleType, hqId, parkingType, verificationCode)
 
     try {
         const hqInfo = await instance.post(READ_HQ, {
             id: hqId,
         })
     } catch (err) {
-        console.log(err?.response)
+        // console.log(err?.response)
     }
 
     try {
@@ -19,11 +19,11 @@ const getTotal = async (phone, vehicleType, hqId, parkingType, verificationCode)
             promotionType: "discount",
         })
     } catch (err) {
-        console.log(err?.response)
+        // console.log(err?.response)
 
     }
 
-    console.log('HQINFO', hqInfo.data.reservations)
+    // console.log('HQINFO', hqInfo.data.reservations)
     let reservations = hqInfo.data.reservations;
     if (reservations.length === 0) {
         return `The HQ doesn't have any user parked`;

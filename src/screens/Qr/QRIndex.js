@@ -51,7 +51,7 @@ const BarcodeScanner = (props) => {
     setScanned(true);
     try {
       const _data = JSON.parse(data);
-      console.log("DATA QR",_data)
+      // console.log("DATA QR",_data)
       if ((qr.plate).length === 0) {
         await store.dispatch(actions.setPhone(_data.id))
         navigation.replace("UserOut")
@@ -80,8 +80,8 @@ const BarcodeScanner = (props) => {
     }
     catch (err) {
       Sentry.captureException(err);
-      console.log(err);
-      console.log(err?.response);
+      // console.log(err);
+      // console.log(err?.response);
       if (err?.response.data.response === -2) setModal2Visible(true)
     }
     store.dispatch(actions.setQr(''))
@@ -96,8 +96,8 @@ const BarcodeScanner = (props) => {
       store.dispatch(actions.setHq(response.data.data));
     } catch (error) {
       Sentry.captureException(error);
-      console.log("err: ", error);
-      console.log(err?.response?.data);
+      // console.log("err: ", error);
+      // console.log(err?.response?.data);
     }
   };
 

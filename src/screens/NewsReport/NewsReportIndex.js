@@ -45,9 +45,8 @@ const NewsReport = (props) => {
         } catch (err) {
             Sentry.captureException(err);
             setLoadingReport(false);
-            console.log(err)
-            console.log(err?.response)
-
+            // console.log(err)
+            // console.log(err?.response)
         }
     };
 
