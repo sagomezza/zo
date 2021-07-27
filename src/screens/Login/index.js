@@ -156,7 +156,7 @@ const LoginIndex = (props) => {
     } catch (err) {
       Sentry.captureException(err);
       onLoginPress();
-      setLoading(false);
+      // setLoading(false);
       // console.log(err);
       // console.log(err?.response);
     }

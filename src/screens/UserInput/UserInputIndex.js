@@ -282,8 +282,8 @@ const UserInput = (props) => {
       }
     } catch (err) {
       Sentry.captureException(err)
-      console.log(err)
-      console.log(err?.response)
+      // console.log(err)
+      // console.log(err?.response)
       setFindUserByPlateInfo([]);
       setExistingUser(false);
       setShowDropdown(false);
@@ -311,8 +311,8 @@ const UserInput = (props) => {
     } catch (err) {
       Sentry.captureException(err)
       setMensualityExists(false);
-      console.log(err)
-      console.log(err?.response)
+      // console.log(err)
+      // console.log(err?.response)
     }
   }
 
@@ -348,8 +348,8 @@ const UserInput = (props) => {
       }
     } catch (err) {
       Sentry.captureException(err)
-      console.log(err)
-      console.log(err?.response)
+      // console.log(err)
+      // console.log(err?.response)
       setHistoryExists(false);
       setPrepayDayRecip(false);
     }
@@ -376,8 +376,8 @@ const UserInput = (props) => {
           // User already exists 
           setExistingUser(true);
         }
-        console.log(err)
-        console.log(err?.response)
+        // console.log(err)
+        // console.log(err?.response)
       }
     }
     createUser();
@@ -447,8 +447,8 @@ const UserInput = (props) => {
       } else {
         setErrorModalVisible(true)
       }
-      console.log(err)
-      console.log(err?.response)
+      // console.log(err)
+      // console.log(err?.response)
     }
   };
 
@@ -461,8 +461,8 @@ const UserInput = (props) => {
       store.dispatch(actions.setHq(response.data.data));
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err)
-      console.log(err?.response)
+      // console.log(err)
+      // console.log(err?.response)
     }
   };
 

@@ -80,14 +80,9 @@ const App = () => {
 
   useEffect(() => {
     // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
-
-
     if (officialScheduleStart !== null) {
-      // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
-
-
+      console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
       const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
-
       const checkOfficialHours = setInterval(() => {
         let hours = moment(new Date()).diff(offStart, 'hours', true);
         if (
