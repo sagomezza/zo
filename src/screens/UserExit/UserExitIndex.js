@@ -6,9 +6,9 @@ import {
   Keyboard,
   ActivityIndicator,
   Image,
-  Dimensions
+  Dimensions,
+  TextInput
 } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
 import CurrencyInput from 'react-native-currency-input';
 import { Text, TouchableOpacity } from 'react-native';
 import { ImageBackground } from 'react-native';
@@ -134,12 +134,11 @@ const UserOut = (props) => {
   }, [plateOneCall, plateTwoCall])
 
   async function checkParkingPlate() {
-    setLoadingCheckParking(true);
     try {
+      setLoadingCheckParking(true);
       if ((plateOne + plateTwo).length >= 5 || (plateOneCall + plateTwoCall).length >= 5) {
         let reserve = reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
-        console.log(reserve[0])
-        if (reserve[0]) {
+        if (reserve) {
           let idempotencyKey = createIdempotency(uid.uid)
           const response = await instance.post(
             CHECK_PARKING,
@@ -158,9 +157,7 @@ const UserOut = (props) => {
                 "x-idempotence-key": idempotencyKey
               }, timeout: TIMEOUT
             }
-
           )
-          console.log(response.data.data)
           setDateFinished(new Date());
           if (response.data.data.dateStart) setDateStart(response.data.data.dateStart);
           if (response.data.data.total) setTotalAmount(response.data.data.total);
@@ -186,8 +183,8 @@ const UserOut = (props) => {
   }
 
   async function checkParkingCode() {
-    setLoadingCheckParking(true);
     try {
+      setLoadingCheckParking(true);
       if (inputVerificationCode.length === 5) {
         let reserve = reservations.reservations.filter(reserve => reserve.verificationCode === Number(inputVerificationCode));
         let idempotencyKey = createIdempotency(uid.uid)
@@ -209,8 +206,6 @@ const UserOut = (props) => {
           }
         )
         setLoadingCheckParking(false);
-
-
         setDateFinished(new Date());
         if (response.data.data.dateStart) setDateStart(response.data.data.dateStart);
         if (response.data.data.total) setTotalAmount(response.data.data.total);
@@ -221,7 +216,6 @@ const UserOut = (props) => {
           setPlateOne(response.data.data.plate.substring(0, 3))
           setPlateTwo(response.data.data.plate.substring(3, 6))
         }
-
       }
     } catch (err) {
       Sentry.captureException(err);
@@ -268,20 +262,6 @@ const UserOut = (props) => {
 
   const finishParking = async (paymentStatus, showModal) => {
     setLoading(true)
-    console.log({
-      plate: check.plate,
-      hqId: check.hqId,
-      phone: check.phone,
-      paymentType: "cash",
-      total: totalAmount,
-      cash: parseInt(totalPay),
-      change: totalPay - totalAmount,
-      status: paymentStatus,
-      isParanoic: isParanoicUser,
-      officialEmail: officialProps.email,
-      dateFinished: new Date(),
-      dateStart: dateStart
-    })
     try {
       let idempotencyKey = createIdempotency(uid.uid)
       const response = await instance.post(
