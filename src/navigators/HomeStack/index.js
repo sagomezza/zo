@@ -4,7 +4,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 // import { MaterialIcons } from "@expo/vector-icons";
 import HomeIndex from "../../screens/Home/index";
 import QRIndex from "../../screens/Qr/QRIndex";
-import LogoutIndex from "../../screens/Logout/LogoutIndex";
 import UserInput from "../../screens/UserInput/UserInputIndex";
 import UserOut from "../../screens/UserExit/UserExitIndex";
 import Qr from "../../screens/Qr/QRIndex";
@@ -17,6 +16,8 @@ import NewsReport from "../../screens/NewsReport/NewsReportIndex";
 import MonthlyPayments from "../../screens/MonthlyPayments/MonthlyPaymentsIndex";
 import Blacklist from '../../screens/Blacklist/index';
 import FAQs from '../../screens/FAQs';
+import LogoutIndex from '../../screens/Logout/LogoutIndex';
+
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -45,15 +46,6 @@ const HomeStack = ({ navigation }) => {
           headerShown: false,
           headerLeft: null,
           sideMenu: null,
-        }}
-      />
-      
-      <Stack.Screen
-        name="Logout"
-        component={LogoutIndex}
-        options={{
-          headerShown: false,
-          headerLeft: null,
         }}
       />
       <Stack.Screen
@@ -131,6 +123,14 @@ const HomeStack = ({ navigation }) => {
       <Stack.Screen
         name="FAQs"
         component={FAQs}
+        options={{
+          headerShown: false,
+          headerLeft: null,
+        }}
+      />
+      <Stack.Screen
+        name="Logout"
+        component={LogoutIndex}
         options={{
           headerShown: false,
           headerLeft: null,

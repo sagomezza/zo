@@ -20,9 +20,13 @@ import moment from 'moment';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import * as Permissions from "expo-permissions";
-import * as Sentry from 'sentry-expo';
-// import * as Sentry from "@sentry/browser";
+import * as Sentry from "@sentry/browser";
+import { LogBox } from 'react-native';
 
+LogBox.ignoreLogs([
+  'Animated: `useNativeDriver` was not specified.',
+  'Setting a timer'
+]);
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({

@@ -141,7 +141,7 @@ const LoginIndex = (props) => {
         setError(
           "El usuario y/o la contraseña que ingresaste son incorrectos."
         );
-        // console.log(err?.response)
+        console.log(err?.response)
       }
     }
   };

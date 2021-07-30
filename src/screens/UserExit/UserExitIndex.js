@@ -99,6 +99,7 @@ const UserOut = (props) => {
 
   useEffect(() => {
     async function readParanoicUser() {
+
       try {
         if ((qr.plate).length === 0 && (qr.phone).length > 0) {
           const response = await instance.post(
@@ -137,7 +138,8 @@ const UserOut = (props) => {
     try {
       if ((plateOne + plateTwo).length >= 5 || (plateOneCall + plateTwoCall).length >= 5) {
         let reserve = reservations.reservations.filter(reserve => reserve.plate === plateOne + plateTwo);
-        if (reserve) {
+        console.log(reserve[0])
+        if (reserve[0]) {
           let idempotencyKey = createIdempotency(uid.uid)
           const response = await instance.post(
             CHECK_PARKING,
@@ -158,13 +160,14 @@ const UserOut = (props) => {
             }
 
           )
+          console.log(response.data.data)
           setDateFinished(new Date());
-          setDateStart(response.data.data.dateStart);
-          setTotalAmount(response.data.data.total);
+          if (response.data.data.dateStart) setDateStart(response.data.data.dateStart);
+          if (response.data.data.total) setTotalAmount(response.data.data.total);
           setIsDisabled(false)
-          setPendingValue(response.data.data.pendingValue)
-          setCheck(response.data.data)
-          setInputVerificationCode(response.data.data.verificationCode + '')
+          if (response.data.data.pendingValue) setPendingValue(response.data.data.pendingValue)
+          if (response.data.data) setCheck(response.data.data)
+          if (response.data.data.verificationCode) setInputVerificationCode(response.data.data.verificationCode + '')
           setLoadingCheckParking(false);
         }
       } else if ((plateOneCall + plateTwoCall).length === 0) {
@@ -183,6 +186,7 @@ const UserOut = (props) => {
   }
 
   async function checkParkingCode() {
+    setLoadingCheckParking(true);
     try {
       if (inputVerificationCode.length === 5) {
         let reserve = reservations.reservations.filter(reserve => reserve.verificationCode === Number(inputVerificationCode));
@@ -204,20 +208,28 @@ const UserOut = (props) => {
             }, timeout: TIMEOUT
           }
         )
+        setLoadingCheckParking(false);
+
+
         setDateFinished(new Date());
-        setDateStart(response.data.data.dateStart);
-        setTotalAmount(response.data.data.total);
+        if (response.data.data.dateStart) setDateStart(response.data.data.dateStart);
+        if (response.data.data.total) setTotalAmount(response.data.data.total);
         setIsDisabled(false)
-        setPendingValue(response.data.data.pendingValue)
-        setCheck(response.data.data)
-        setPlateOne(response.data.data.plate.substring(0, 3))
-        setPlateTwo(response.data.data.plate.substring(3, 6))
+        if (response.data.data.pendingValue) setPendingValue(response.data.data.pendingValue)
+        if (response.data.data) setCheck(response.data.data)
+        if (response.data.data.plate) {
+          setPlateOne(response.data.data.plate.substring(0, 3))
+          setPlateTwo(response.data.data.plate.substring(3, 6))
+        }
+
       }
     } catch (err) {
       Sentry.captureException(err);
       // console.log(err)
       // console.log(err?.response)
       setModal5Visible(true);
+      setLoadingCheckParking(false);
+
     }
   }
 
@@ -256,6 +268,20 @@ const UserOut = (props) => {
 
   const finishParking = async (paymentStatus, showModal) => {
     setLoading(true)
+    console.log({
+      plate: check.plate,
+      hqId: check.hqId,
+      phone: check.phone,
+      paymentType: "cash",
+      total: totalAmount,
+      cash: parseInt(totalPay),
+      change: totalPay - totalAmount,
+      status: paymentStatus,
+      isParanoic: isParanoicUser,
+      officialEmail: officialProps.email,
+      dateFinished: new Date(),
+      dateStart: dateStart
+    })
     try {
       let idempotencyKey = createIdempotency(uid.uid)
       const response = await instance.post(
@@ -453,9 +479,13 @@ const UserOut = (props) => {
                 alignItems: 'center'
               }}>
                 <View style={styles.payplate}>
-                  <Text style={styles.payText}>
-                    {`$${numberWithPoints(totalAmount)}`}
-                  </Text>
+                  {loadingCheckParking ?
+                    <ActivityIndicator size={"large"} color={'#00A9A0'} />
+                    :
+                    <Text style={styles.payText}>
+                      {`$${numberWithPoints(totalAmount)}`}
+                    </Text>
+                  }
                 </View>
                 <View style={styles.pendingContainer}>
                   <Text style={styles.pendingText}>
