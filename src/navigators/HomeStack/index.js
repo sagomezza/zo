@@ -1,14 +1,10 @@
 import React from "react";
-import { Platform } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-// import { MaterialIcons } from "@expo/vector-icons";
 import HomeIndex from "../../screens/Home/index";
-import QRIndex from "../../screens/Qr/QRIndex";
 import UserInput from "../../screens/UserInput/UserInputIndex";
 import UserOut from "../../screens/UserExit/UserExitIndex";
 import Qr from "../../screens/Qr/QRIndex";
-import { createDrawerNavigator, DrawerContent, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer"; 
-import MainDrawer from "../MainDrawer/MainDrawer";
+import { createDrawerNavigator} from "@react-navigation/drawer"; 
 import CashBalance from "../../screens/CashBalance/PdfIndex";
 import Transactions from "../../screens/Transactions/TransactionsIndex";
 import ActiveServices from "../../screens/ActiveServices/ActiveServicesIndex";
