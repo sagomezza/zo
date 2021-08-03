@@ -120,6 +120,13 @@ const LogoutIndex = (props) => {
       setModal4Visible(true);
       store.dispatch(actions.setRecips([]));
       store.dispatch(actions.setOfficial({}));
+      store.dispatch(actions.setReservations([]));
+      store.dispatch(actions.setHq({}));
+      store.dispatch(actions.setUid({}));
+
+      
+
+
 
     } catch (err) {
       // console.log(err?.response)
