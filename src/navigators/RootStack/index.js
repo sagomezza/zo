@@ -3,11 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import Login from "../../screens/Login";
 
-import HomeStack from "../HomeStack";
 import MainDrawer from "../MainDrawer/MainDrawer";
-import UserInputIndex from "../../screens/UserInput/UserInputIndex";
-import UserExitIndex from "../../screens/UserExit/UserExitIndex";
-// import HeaderTitle from "components/StackHeader";
 
 const Stack = createStackNavigator();
 

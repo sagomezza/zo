@@ -11,11 +11,9 @@ import {
 import { ImageBackground } from 'react-native';
 import { Keyboard } from 'react-native';
 import numberWithPoints from '../../config/services/numberWithPoints';
-import normalize from '../../config/services/normalizeFontSize';
 import styles from '../Logout/LogoutStyles';
 import Header from '../../components/Header/HeaderIndex';
 import { width } from '../../config/constants/screenDimensions';
-import { Icon } from 'react-native-elements';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Button from '../../components/Button/index';
 import FooterIndex from '../../../src/components/Footer/index';

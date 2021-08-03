@@ -1,27 +1,23 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import {
-  StyleSheet,
   Text,
   View,
-  Image,
   Modal,
   ImageBackground,
   Keyboard,
   Dimensions,
   FlatList,
+  TextInput
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
-import { TextInput } from "react-native-gesture-handler";
 import CurrencyInput from "react-native-currency-input";
 import styles from "../MonthlyPayments/MonthlyPaymentsStyles";
 import normalize from "../../config/services/normalizeFontSize";
 import moment from "moment";
-import momenttimezone from "moment-timezone";
 import numberWithPoints from "../../config/services/numberWithPoints";
 import Header from "../../components/Header/HeaderIndex";
 import FooterIndex from "../../components/Footer";
 import Button from "../../components/Button";
-import DropDownPicker from "react-native-dropdown-picker";
 // api
 import {
   FIND_MENSUALITY_PLATE,

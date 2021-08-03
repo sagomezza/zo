@@ -1,15 +1,10 @@
 import React from "react";
-import { Platform } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-// import { MaterialIcons } from "@expo/vector-icons";
 import HomeIndex from "../../screens/Home/index";
-import QRIndex from "../../screens/Qr/QRIndex";
-import LogoutIndex from "../../screens/Logout/LogoutIndex";
 import UserInput from "../../screens/UserInput/UserInputIndex";
 import UserOut from "../../screens/UserExit/UserExitIndex";
 import Qr from "../../screens/Qr/QRIndex";
-import { createDrawerNavigator, DrawerContent, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer"; 
-import MainDrawer from "../MainDrawer/MainDrawer";
+import { createDrawerNavigator} from "@react-navigation/drawer"; 
 import CashBalance from "../../screens/CashBalance/PdfIndex";
 import Transactions from "../../screens/Transactions/TransactionsIndex";
 import ActiveServices from "../../screens/ActiveServices/ActiveServicesIndex";
@@ -17,6 +12,8 @@ import NewsReport from "../../screens/NewsReport/NewsReportIndex";
 import MonthlyPayments from "../../screens/MonthlyPayments/MonthlyPaymentsIndex";
 import Blacklist from '../../screens/Blacklist/index';
 import FAQs from '../../screens/FAQs';
+import LogoutIndex from '../../screens/Logout/LogoutIndex';
+
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -45,15 +42,6 @@ const HomeStack = ({ navigation }) => {
           headerShown: false,
           headerLeft: null,
           sideMenu: null,
-        }}
-      />
-      
-      <Stack.Screen
-        name="Logout"
-        component={LogoutIndex}
-        options={{
-          headerShown: false,
-          headerLeft: null,
         }}
       />
       <Stack.Screen
@@ -131,6 +119,14 @@ const HomeStack = ({ navigation }) => {
       <Stack.Screen
         name="FAQs"
         component={FAQs}
+        options={{
+          headerShown: false,
+          headerLeft: null,
+        }}
+      />
+      <Stack.Screen
+        name="Logout"
+        component={LogoutIndex}
         options={{
           headerShown: false,
           headerLeft: null,

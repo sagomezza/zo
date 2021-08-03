@@ -20,9 +20,13 @@ import moment from 'moment';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import * as Permissions from "expo-permissions";
-import * as Sentry from 'sentry-expo';
-// import * as Sentry from "@sentry/browser";
+import * as Sentry from "@sentry/browser";
+import { LogBox } from 'react-native';
 
+LogBox.ignoreLogs([
+  'Animated: `useNativeDriver` was not specified.',
+  'Setting a timer'
+]);
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -81,7 +85,7 @@ const App = () => {
   useEffect(() => {
     // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
     if (officialScheduleStart !== null) {
-      console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
+      // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
       const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
       const checkOfficialHours = setInterval(() => {
         let hours = moment(new Date()).diff(offStart, 'hours', true);

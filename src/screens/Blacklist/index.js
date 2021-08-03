@@ -1,34 +1,29 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {
-    StyleSheet,
     Text,
     View,
-    Image,
     Modal,
     ImageBackground,
     Keyboard,
     FlatList,
-    ActivityIndicator
-
+    ActivityIndicator,
+    TextInput
 } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
 import styles from '../Blacklist/styles';
 import normalize from '../../config/services/normalizeFontSize';
-import moment from 'moment';
 import numberWithPoints from '../../config/services/numberWithPoints';
 import Header from '../../components/Header/HeaderIndex';
 import FooterIndex from '../../components/Footer';
 import Button from '../../components/Button';
 import CurrencyInput from 'react-native-currency-input';
 // api
-import { CREATE_USER, PAY_DEBTS, FIND_USER_BY_PLATE, LIST_HQ_DEBTS } from "../../config/api";
+import { PAY_DEBTS, FIND_USER_BY_PLATE, LIST_HQ_DEBTS } from "../../config/api";
 import instance from "../../config/axios";
 import { TIMEOUT } from '../../config/constants/constants';
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import * as Sentry from "@sentry/browser";
-
 
 const Blacklist = (props) => {
     const { navigation, officialProps, reservations, recips, hq } = props;

@@ -7,12 +7,11 @@ import {
   TouchableWithoutFeedback,
   Image,
   ActivityIndicator,
-  Dimensions
+  Dimensions,
+  TextInput
 } from 'react-native';
 import { ImageBackground } from 'react-native';
-
 import CheckBox from '@react-native-community/checkbox';
-import { TextInput } from 'react-native-gesture-handler';
 import CurrencyInput from 'react-native-currency-input';
 import styles from './UserInputStyles';
 import FooterIndex from '../../components/Footer/index';
