@@ -34,6 +34,7 @@ const HomeStack = ({ navigation }) => {
         headerTintColor: "white",
         headerBackTitleVisible: false,
       }}
+      detachInactiveScreens={true}
     >
       <Stack.Screen
         name="Home1"

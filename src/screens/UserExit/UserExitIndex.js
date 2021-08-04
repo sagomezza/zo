@@ -71,6 +71,21 @@ const UserOut = (props) => {
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
 
+  // const hoursToDHMS = (seconds) => {
+  //   var numdays = "" + Math.floor(seconds / 86400);
+  //   var numhours = "" + Math.floor((seconds % 86400) / 3600);
+  //   var numminutes = "" + Math.floor(((seconds % 86400) % 3600) / 60);
+  //   var numseconds = "" + ((seconds % 86400) % 3600) % 60;
+
+  //   if (numdays.length < 2) numdays = "0" + numdays;
+  //   if (numhours.length < 2) numhours = "0" + numhours;
+  //   if (numminutes.length < 2) numminutes = "0" + numminutes;
+  //   if (numseconds.length < 2) numseconds = "0" + numseconds;
+
+  //   return [numdays, numhours, numminutes, numseconds].join(":") ;
+  // }
+
+
   const restart = () => {
     store.dispatch(actions.setQr(''));
     store.dispatch(actions.setPhone(''));
@@ -337,7 +352,7 @@ const UserOut = (props) => {
     }
   }
 
-  let phoneNumber = check.phone + ''
+  let phoneNumber = check.phone ? check.phone + '' : '' 
   let phoneNumberLength = phoneNumber.length
   let inputChange = (totalPay - totalAmount) <= 0 ? '' : '' + (totalPay - totalAmount)
 
@@ -422,7 +437,7 @@ const UserOut = (props) => {
             </View>
             <View style={styles.textPhoneCode}>
               <Text style={styles.infoUserText}>
-                {phoneNumberLength > 13 ? '' : check.phone}
+                {phoneNumberLength > 13 ? '' : phoneNumber.slice(3,12)}
               </Text>
             </View>
             <View style={styles.timePlateContainer}>
@@ -707,7 +722,7 @@ const UserOut = (props) => {
               </Text>
 
               <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
-                <Text style={styles.modalPhoneText}>{phoneNumberLength > 13 ? '' : check.phone} </Text>
+                <Text style={styles.modalPhoneText}>{phoneNumberLength > 13 ? '' : phoneNumber.slice(3,12) } </Text>
               </View>
               <View style={{ height: '35%', width: '75%', justifyContent: 'center' }}>
                 <Image

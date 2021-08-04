@@ -728,7 +728,7 @@ const UserInput = (props) => {
         <FooterIndex navigation={navigation} />
       </View>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modal2Visible}
@@ -770,10 +770,13 @@ const UserInput = (props) => {
         </View>
       </Modal>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
       >
         {prepayDay ?
           <View style={styles.centeredView}>
@@ -903,7 +906,7 @@ const UserInput = (props) => {
         }
       </Modal>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modal3Visible}
@@ -943,7 +946,7 @@ const UserInput = (props) => {
         </View>
       </Modal>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={errorModalVisible}
@@ -977,7 +980,7 @@ const UserInput = (props) => {
         </View>
       </Modal>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={maxCapMensuality}
