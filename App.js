@@ -91,12 +91,10 @@ const App = () => {
           await Updates.fetchUpdateAsync();
           // ... notify user of update ...
           await Updates.reloadAsync();
-          Alert.alert('update in')
         }
       } catch (e) {
         // handle or log error
         console.log(e)
-        Alert.alert('update catch')
       }
     };
     updateApp();
