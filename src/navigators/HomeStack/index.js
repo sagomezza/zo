@@ -13,6 +13,8 @@ import MonthlyPayments from "../../screens/MonthlyPayments/MonthlyPaymentsIndex"
 import Blacklist from '../../screens/Blacklist/index';
 import FAQs from '../../screens/FAQs';
 import LogoutIndex from '../../screens/Logout/LogoutIndex';
+import CreateRecip from '../../screens/CreateRecip/index';
+
 
 
 const Stack = createStackNavigator();
@@ -128,6 +130,14 @@ const HomeStack = ({ navigation }) => {
       <Stack.Screen
         name="Logout"
         component={LogoutIndex}
+        options={{
+          headerShown: false,
+          headerLeft: null,
+        }}
+      />
+      <Stack.Screen
+        name="CreateRecip"
+        component={CreateRecip}
         options={{
           headerShown: false,
           headerLeft: null,
