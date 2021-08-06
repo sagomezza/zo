@@ -90,16 +90,16 @@ const styles = StyleSheet.create({
     marginBottom: '7%',
 
   },
+  // showInstructions MODAL
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     // marginTop: 22,
     backgroundColor: 'rgba(52, 52, 52, 0.8)',
-
   },
   modalView: {
-    height: normalize(480),
+    height: normalize(590),
     width: '75%',
     padding: '5%',
     borderRadius: 50,
@@ -120,16 +120,54 @@ const styles = StyleSheet.create({
     borderWidth: 1
 
   },
-  modalTextAlert: {
-    textAlign: "center",
+  modalInfoContainer: {
+    height: "100%",
+    width: "100%",
+    justifyContent: "space-between",
+    padding: "2%",
+  },
+  iconTitleContainer: {
+    height: '25%',
+    width: '100%',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  modalTextTitle: {
+    textAlign: 'left',
     fontFamily: 'Montserrat-Bold',
-    color: 'red',
-    fontSize: width * 0.034,
+    color: '#00A9A0',
+    fontSize: width * 0.047,
+  },
+  stepContainer: {
+    height: '24%',
+    width: '90%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf: 'center'
+  },
+  modalNum: {
+    fontFamily: 'Montserrat-Bold',
+    color: '#00A9A0',
+    fontSize: width * 0.07,
+  },
+
+  modalText: {
+    textAlign: 'left',
+    fontFamily: 'Montserrat-Bold',
+    color: '#8F8F8F',
+    fontSize: width * 0.03,
   },
   modalButton: {
     width: '100%',
     height: '90%',
   },
+  modalButtonText: {
+    color: "#FFFFFF",
+    textAlign: "center",
+    fontFamily: "Montserrat-Bold",
+    fontSize: width * 0.03,
+
+  }
 
 });
 

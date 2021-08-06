@@ -248,36 +248,51 @@ const LoginIndex = (props) => {
         </TouchableWithoutFeedback>
       </ImageBackground>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={showInstructions}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View
-              style={{
-                height: "100%",
-                width: "100%",
-                justifyContent: "space-between",
-                padding: "2%",
-
-              }}
-            >
-              <View
-                style={{
-                  margin: "4%",
-                  justifyContent: "space-between",
-                  height: " 80%",
-                  alignItems: "center",
-                }}
-              >
-                <MaterialIcons name="warning" color="#00A9A0" size={60} />
-                <Text style={styles.modalTextAlert}> Hola, para iniciar: </Text>
-                <Text style={styles.modalTextAlert}> 1. Recuerda revisar la conexión a internet de tu dispositivo </Text>
-                <Text style={styles.modalTextAlert}> 2. Inicia sesión con tu usuario y contraseña. </Text>
-                <Text style={styles.modalTextAlert}> 3. Luego del cierre del día, recuerda cerrar tu sesión </Text>
+            <View style={styles.modalInfoContainer}>
+              <View style={styles.iconTitleContainer}>
+                <Image
+                  style={{ width: '22%', height: "100%", alignSelf: 'flex-end' }}
+                  resizeMode={"contain"}
+                  source={require("../../../assets/images/alert.png")}
+                />
+                <View style={{
+                  height: '100%',
+                  width: '62%',
+                  flexDirection: 'column',
+                  justifyContent: 'center'
+                }}>
+                  <Text style={styles.modalTextTitle}> HOLA, </Text>
+                  <Text style={styles.modalTextTitle}> PARA INICIAR: </Text>
+                </View>
               </View>
+              <View style={{justifyContent: 'space-around',height: '50%', marginBottom: 15 }}>
+                <View style={styles.stepContainer}>
+                  <Text style={styles.modalNum}> 1 </Text>
+                  <View style={{ height: '100%', width: '90%', flexDirection: 'column', justifyContent: 'center' }}>
+                    <Text style={styles.modalText}>Recuerda revisar la conexión a internet de tu dispositivo </Text>
+                  </View>
+                </View>
+                <View style={styles.stepContainer}>
+                  <Text style={styles.modalNum}> 2 </Text>
+                  <View style={{ height: '100%', width: '90%', flexDirection: 'column', justifyContent: 'center' }}>
+                    <Text style={styles.modalText}>Inicia sesión con tu usuario y contraseña</Text>
+                  </View>
+                </View>
+                <View style={styles.stepContainer}>
+                  <Text style={styles.modalNum}> 3 </Text>
+                  <View style={{ height: '100%', width: '90%', flexDirection: 'column', justifyContent: 'center' }}>
+                    <Text style={styles.modalText}>Luego del cierre del día, recuerda cerrar tu sesión</Text>
+                  </View>
+                </View>
+              </View>
+
               <View
                 style={{
                   height: "12%",
@@ -292,11 +307,7 @@ const LoginIndex = (props) => {
                   title="E N T E N D I D O"
                   color="#00A9A0"
                   style={styles.modalButton}
-                  textStyle={{
-                    color: "#FFFFFF",
-                    textAlign: "center",
-                    fontFamily: "Montserrat-Bold",
-                  }}
+                  textStyle={styles.modalButtonText}
                 />
               </View>
             </View>
