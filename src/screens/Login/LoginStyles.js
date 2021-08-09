@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   },
   inputsContainer: {
     width: "100%",
-    height: "25%",
+    height: "15%",
     alignContent: "center",
     alignItems: "center",
   },
@@ -59,13 +59,13 @@ const styles = StyleSheet.create({
     borderWidth: normalize(1),
     borderColor: "#707070",
     alignSelf: "center",
-    width: "80%",
-    height: "60%",
+    width: "100%",
+    height: "70%",
   },
   buttonText: {
     color: "#00A9A0",
     fontFamily: "Montserrat-Bold",
-    fontSize: width * 0.032,
+    fontSize: width * 0.03,
   },
   restoreText: {
     color: 'white',
@@ -76,16 +76,15 @@ const styles = StyleSheet.create({
     fontSize: width * 0.03,
     color: 'black',
     flex: 1,
-    fontFamily: 'Montserrat-Regular'
+    fontFamily: 'Montserrat-Medium'
   },
   textInputContainer: {
     backgroundColor: "#F0EEEE",
-    height: normalize(35),
+    height: normalize(50),
     width: "55%",
-    borderRadius: normalize(18),
+    borderRadius: normalize(30),
     flexDirection: "row",
     paddingHorizontal: '3%',
-    borderWidth: 1,
     borderColor: "#707070",
     marginBottom: '7%',
 

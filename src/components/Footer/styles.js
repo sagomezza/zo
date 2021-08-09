@@ -8,13 +8,13 @@ const FooterStyles = StyleSheet.create({
       textAlign: 'center',
       color: '#FFFFFF',
       fontSize: width * 0.03,
-      fontFamily: 'Montserrat-Bold'
+      fontFamily: 'Montserrat-Medium'
     },
     footerTextI: {
       textAlign: 'center',
       color: '#00A9A0',
       fontSize: width * 0.03,
-      fontFamily: 'Montserrat-Bold'
+      fontFamily: 'Montserrat-Medium'
     },
     
     buttonI: {

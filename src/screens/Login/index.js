@@ -49,6 +49,11 @@ const LoginIndex = (props) => {
   const [loading, setLoading] = useState("");
   const [showInstructions, setShowInstructions] = useState(true);
 
+  const handleEmail = (text) => {
+    let email = text.trim()
+    setEmail(email)
+  }
+
   const firstLogin = async () => {
     try {
       if (email === "" || password === "") {
@@ -199,26 +204,24 @@ const LoginIndex = (props) => {
             </View>
             <View style={styles.inputsContainer}>
               <View>
-                <Text style={styles.titleInputText}>Correo</Text>
                 <View style={styles.textInputContainer}>
                   <TextInput
                     style={styles.textInput}
-                    placeholder={"Ingresa tu correo"}
-                    placeholderTextColor="#C9C1C1"
+                    placeholder={"Email"}
+                    placeholderTextColor="#8F8F8F"
                     autoCapitalize={"none"}
                     autoCorrect={false}
                     value={email}
-                    onChangeText={(text) => setEmail(text.trim())}
+                    onChangeText={handleEmail}
                   />
                 </View>
               </View>
               <View>
-                <Text style={styles.titleInputText}>Contraseña</Text>
                 <View style={styles.textInputContainer}>
                   <TextInput
                     style={styles.textInput}
-                    placeholder={"Ingresa tu contraseña"}
-                    placeholderTextColor="#C9C1C1"
+                    placeholder={"Contraseña"}
+                    placeholderTextColor="#8F8F8F"
                     autoCapitalize={"none"}
                     autoCorrect={false}
                     value={password}
@@ -233,9 +236,9 @@ const LoginIndex = (props) => {
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                onPress={() => firstLogin()}
-                title="I N G R E S A R"
-                color="#FFE828"
+                onPress={firstLogin}
+                title="E N T R A R"
+                color="#FFF200"
                 style={styles.button}
                 textStyle={styles.buttonText}
                 activityIndicatorStatus={loading}
@@ -248,7 +251,7 @@ const LoginIndex = (props) => {
         </TouchableWithoutFeedback>
       </ImageBackground>
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         backdropOpacity={0.3}
         visible={showInstructions}
@@ -272,7 +275,7 @@ const LoginIndex = (props) => {
                   <Text style={styles.modalTextTitle}> PARA INICIAR: </Text>
                 </View>
               </View>
-              <View style={{justifyContent: 'space-around',height: '50%', marginBottom: 15 }}>
+              <View style={{ justifyContent: 'space-around', height: '50%', marginBottom: 15 }}>
                 <View style={styles.stepContainer}>
                   <Text style={styles.modalNum}> 1 </Text>
                   <View style={{ height: '100%', width: '90%', flexDirection: 'column', justifyContent: 'center' }}>

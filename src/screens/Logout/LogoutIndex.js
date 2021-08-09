@@ -156,7 +156,7 @@ const LogoutIndex = (props) => {
     <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
       <ImageBackground
         style={styles.imageBackground}
-        source={require('../../../assets/images/Stripes.png')}>
+        source={require('../../../assets/images/logoutStripes.png')}>
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={styles.topContainer} >
@@ -168,33 +168,83 @@ const LogoutIndex = (props) => {
             </View>
             <View style={styles.timePlatesContainer}>
               <View style={styles.timePlate}>
-                <Image
-                  style={{ width: '18%' }}
-                  resizeMode={"contain"}
-                  source={require('../../../assets/images/Inicio.png')} />
-                <View style={{}} >
-                  <Text style={styles.timePlateTitle}>Tiempo de inicio:</Text>
-                  <Text style={styles.timePlateInfo}>{moment(startTime * 1000).subtract(5, 'hours').format('L')} {moment(startTime * 1000).subtract(5, 'hours').format('LT')} </Text>
+                <Text style={styles.timePlateTitle}>Tiempo de inicio</Text>
+                <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'flex-start', marginLeft: '14%' }} >
+                  <Image
+                    style={{ width: '17%', marginRight: 10, height: '90%' }}
+                    resizeMode={"contain"}
+                    source={require('../../../assets/images/logoutInTime.png')} />
+                  <View style={{ width: '45%', flexDirection: 'column' }} >
+                    <Text style={styles.timePlateDate}>{moment(startTime * 1000).subtract(5, 'hours').format('L')}</Text>
+                    <Text style={styles.timePlateHour}>{moment(startTime * 1000).subtract(5, 'hours').format('LT')}</Text>
+                  </View>
                 </View>
               </View>
               <View style={styles.timePlate}>
-                <Image
-                  style={{ width: '17%' }}
-                  resizeMode={"contain"}
-                  source={require('../../../assets/images/Salida.png')} />
-                <View style={{}} >
-                  <Text style={styles.timePlateTitle}>Tiempo de salida:</Text>
-                  <Text style={styles.timePlateInfo}>{moment().format('L')} {moment().format('LT')}</Text>
+                <Text style={styles.timePlateTitle}>Tiempo de salida</Text>
+                <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'flex-start', marginLeft: '15%' }} >
+                  <Image
+                    style={{ width: '17%', marginRight: 10 }}
+                    resizeMode={"contain"}
+                    source={require('../../../assets/images/logoutOutTime.png')} />
+                  <View style={{ width: '45%', flexDirection: 'column' }} >
+                    <Text style={styles.timePlateDate}>{moment().format('L')}</Text>
+                    <Text style={styles.timePlateHour}>{moment().format('LT')}</Text>
+                  </View>
                 </View>
               </View>
             </View>
-
-            <View style={styles.cashContainer}>
-              <View style={{ width: '30%' }}>
-                <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.030 }}>
-                  {"BASE: "}
-                </Text>
+            <View style={styles.timePlatesContainer}>
+              <View style={styles.timePlate}>
+                <Text style={styles.timePlateTitle}>Base</Text>
+                <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }} >
+                  <Image
+                    style={{ width: '17%', marginRight: 3 }}
+                    resizeMode={"contain"}
+                    source={require('../../../assets/images/logoutBase.png')} />
+                  <View style={{ width: '70%', justifyContent: 'center'}} >
+                    <CurrencyInput
+                      placeholder='$'
+                      textAlign='center'
+                      style={styles.textInput}
+                      value={inputBaseValue}
+                      onChangeValue={text => { text === null ? setInputBaseValue(0) : setInputBaseValue(text) }}
+                      prefix="$"
+                      delimiter="."
+                      separator="."
+                      precision={0}
+                    />
+                  </View>
+                </View>
               </View>
+              <View style={styles.timePlate}>
+                <Text style={styles.timePlateTitle}>Efectivo</Text>
+                <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }} >
+                  <Image
+                    style={{ width: '17%', marginRight: 3 }}
+                    resizeMode={"contain"}
+                    source={require('../../../assets/images/logoutCash.png')} />
+                  <View style={{ width: '70%',justifyContent: 'center' }} >
+                    <CurrencyInput
+                      placeholder='$'
+                      textAlign='center'
+                      keyboardType='numeric'
+                      style={styles.textInput}
+                      value={inputValue}
+                      onChangeValue={text => { text === null ? setInputValue(0) : setInputValue(text) }}
+                      prefix="$"
+                      delimiter="."
+                      separator="."
+                      precision={0}
+                    />
+                  </View>
+                </View>
+              </View>
+
+            </View>
+
+            {/* <View style={styles.cashContainer}>
+              
               <View style={styles.currencyInputContainer}>
                 <CurrencyInput
                   placeholder='$'
@@ -233,7 +283,7 @@ const LogoutIndex = (props) => {
                   precision={0}
                 />
               </View>
-            </View>
+            </View> */}
           </View>
           <View style={styles.bottomContainer}>
             {loadingShiftRecips ?
@@ -245,7 +295,7 @@ const LogoutIndex = (props) => {
               :
               <View style={styles.listContainer}>
                 {shiftRecips.length > 0 ?
-                  <View style={{ paddingBottom: 10, height: "95%" }}>
+                  <View style={{ paddingBottom: 10, height: "100%" }}>
                     <FlatList
                       data={shiftRecips}
                       keyExtractor={({ id }) => id}
@@ -258,11 +308,11 @@ const LogoutIndex = (props) => {
                             }}
                           >
                             <View style={styles.flatlist} >
-                              <View style={{ marginBottom: 10 }} >
+                              <View style={{ marginLeft: 20, marginTop: 10, marginBottom: 10 }} >
                                 <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
                                 <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
                               </View>
-                              <View style={{ flex: 1, alignItems: 'flex-end' }} >
+                              <View style={{ flex: 1, alignItems: 'flex-end', marginRight: 20, marginTop: 20 }} >
                                 <Text style={styles.textMoney}>
                                   {item.cash === 0 && item.change === 0 ? '$0' : ''}
                                   {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(Number(item.cash))}` : ''}
@@ -286,31 +336,32 @@ const LogoutIndex = (props) => {
               </View>
             }
             <View style={{
-              width: '75%',
-              height: '13%',
-              justifyContent: 'flex-end'
+              width: '45%',
+              height: '15%',
+              justifyContent: 'flex-end',
             }}>
               <Button onPress={() => { setModalVisible(true); }}
                 title="C E R R A R  T U R N O"
                 disabled={inputValue.length === 0 || inputBaseValue.length === 0}
-                color="#00A9A0"
                 style={[inputValue.length === 0 || inputBaseValue.length === 0 ? styles.shiftButtonDisabled : styles.shiftButton]}
                 textStyle={{
-                  color: "#FFFFFF",
+                  color: "#00A9A0",
+                  fontSize: width * 0.025,
                   textAlign: "center",
-                  fontFamily: 'Montserrat-Bold'
+                  fontFamily: 'Montserrat-Medium'
                 }} />
             </View>
-            <View style={{
-              height: '22%',
-              width: '100%',
-              justifyContent: 'flex-end'
-            }}>
-              <FooterIndex navigation={navigation} />
-            </View>
+
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
+      <View style={{
+        height: '10%',
+        width: '100%',
+        justifyContent: 'flex-end'
+      }}>
+        <FooterIndex navigation={navigation} />
+      </View>
       <Modal
         animationType="fade"
         transparent={true}
