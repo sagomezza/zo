@@ -23,7 +23,6 @@ import { Keyboard } from 'react-native';
 import moment from 'moment';
 import Button from '../../components/Button';
 import numberWithPoints from '../../config/services/numberWithPoints';
-import getTotal from '../../config/services/getTotal';
 
 // api
 import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ, GET_RECIPS_BY_PLATE, FIND_MENSUALITY_PLATE } from "../../config/api";
@@ -86,7 +85,7 @@ const UserInput = (props) => {
 
   const refPhone = useRef(null);
 
-  const [tableHead, setTableHead] = useState(['Vehículos', 'Fecha', 'Últimos pagos']);
+  const [tableHead, setTableHead] = useState(['VEHÍCULOS', 'FECHA', 'ÚLTIMOS PAGOS']);
   const [tableData, setTableData] = useState();
 
   const [historyInfo, setHistoryInfo] = useState([]);
@@ -264,7 +263,7 @@ const UserInput = (props) => {
         setBlacklist(response.data.blackList);
         const auxPhones = []
         response.data.data.forEach(phone => {
-          auxPhones.push({ label: phone, value: phone })
+          auxPhones.push({ label: phone.slice(3, 13), value: phone.slice(3, 13) })
         });
         auxPhones.push({ label: '+ agregar', value: 0 })
         setPhones(auxPhones);
@@ -471,7 +470,7 @@ const UserInput = (props) => {
     <View style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
       <ImageBackground
         style={styles.imageBackground}
-        source={require('../../../assets/images/Stripes.png')}>
+        source={require('../../../assets/images/logoutStripes.png')}>
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={{ alignContent: 'center', alignItems: 'center', flexDirection: "column" }} >
@@ -524,9 +523,10 @@ const UserInput = (props) => {
               <Text style={{
                 fontFamily: 'Montserrat-Bold',
                 color: '#FFFFFF',
-                fontSize: width * 0.03
+                fontSize: width * 0.03,
+                letterSpacing: 5
               }}>
-                I  N  G  R  E  S  E     C  E  L  U  L  A  R
+                INGRESE CELULAR
               </Text>
             </View>
             <View style={styles.dropdownContainer}>
@@ -589,16 +589,10 @@ const UserInput = (props) => {
               </View>
               <View style={styles.startButtonContainer}>
                 {!loadingStart &&
-                  <Button onPress={() => {
-                    priceVehicleType();
-                  }}
-                    title="I N I C I A R"
+                  <Button onPress={() => { priceVehicleType(); }}
+                    title="INICIAR"
                     color='#FFF200'
-                    style={[!existingUser || plateOne === "" || plateTwo === "" ?
-                      styles.buttonIDisabled
-                      :
-                      styles.buttonI
-                    ]}
+                    style={[!existingUser || plateOne === "" || plateTwo === "" ? styles.buttonIDisabled : styles.buttonI]}
                     textStyle={styles.buttonText}
                     disabled={!existingUser || plateOne === "" || plateTwo === ""}
                   />
@@ -616,108 +610,102 @@ const UserInput = (props) => {
                     }}
                     disabled={(plateOne + plateTwo).length < 5}
                   >
-                    <Image
-                      style={styles.qrImage}
-                      resizeMode={"contain"}
-                      source={require('../../../assets/images/qr.png')}
-                    />
+                    <Image style={styles.qrImage} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
                   </TouchableOpacity>
                 }
 
               </View>
               <View style={styles.containerTwo}>
-                <View style={styles.infoContainer}>
-                  <View style={{ height: "90%", width: '90%' }}>
-                    <View style={{ width: '100%', alignItems: 'center' }}>
-                      {mensualityExists ?
-                        <View style={{
-                          width: '100%',
-                          justifyContent: 'center'
-                        }}>
-                          <Text style={{
-                            fontFamily: 'Montserrat-Bold',
-                            color: '#00A9A0',
-                            fontSize: width * 0.027,
-                            textAlign: 'center'
-                          }}>{mensualityUserName}</Text>
-                          <View style={{
-                            width: '100%',
-                            flexDirection: 'row',
-                            justifyContent: 'center'
-                          }}>
-                            <Text style={styles.infoText}>
-                              Capacidad:
-                            </Text>
-
-                            <Text style={styles.infoText}>
-                              {' ' + mensualityCapacity}
-                            </Text>
-                          </View>
-                          <View style={{
-                            width: '100%',
-                            flexDirection: 'row',
-                            justifyContent: 'center'
-                          }}>
-                            <Text style={styles.infoText}>
-                              Placas parqueadas:
-                            </Text>
-
-                            <Text style={styles.infoText}>
-                              {' ' + mensualityParkedPlates}
-                            </Text>
-                          </View>
-                        </View>
-                        :
+                <View style={{ height: "90%", width: '90%', marginTop: '9%' }}>
+                  <View style={{ width: '100%', alignItems: 'center' }}>
+                    {mensualityExists ?
+                      <View style={{
+                        width: '100%',
+                        justifyContent: 'center'
+                      }}>
+                        <Text style={{
+                          fontFamily: 'Montserrat-Bold',
+                          color: '#00A9A0',
+                          fontSize: width * 0.027,
+                          textAlign: 'center'
+                        }}>{mensualityUserName}</Text>
                         <View style={{
                           width: '100%',
                           flexDirection: 'row',
                           justifyContent: 'center'
                         }}>
-                        </View>
-                      }
-                      {prepayDayRecip ?
-                        <View style={{
-                          width: '100%',
-                          flexDirection: 'row',
-                          justifyContent: 'center'
-                        }}>
-                          <Text style={styles.infoText}> Vigencia pase día:   </Text>
                           <Text style={styles.infoText}>
-                            {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('L') : ''} {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('LT') : ''}
+                            Capacidad:
+                          </Text>
+
+                          <Text style={styles.infoText}>
+                            {' ' + mensualityCapacity}
                           </Text>
                         </View>
-                        :
                         <View style={{
                           width: '100%',
                           flexDirection: 'row',
                           justifyContent: 'center'
                         }}>
-                        </View>
-                      }
-                    </View>
-                    {historyExists ?
-                      <Table borderStyle={{ borderColor: '#00A9A0' }}>
-                        <Row
-                          data={tableHead}
-                          style={styles.head}
-                          textStyle={styles.headText}
-                        />
-                        <Rows
-                          data={tableData}
-                          textStyle={styles.text}
-                        />
-                      </Table>
-                      :
-                      <Table borderStyle={{ borderColor: '#00A9A0' }}>
-                        <Row
-                          data={tableHead}
-                          style={styles.head}
-                          textStyle={styles.headText}
-                        />
+                          <Text style={styles.infoText}>
+                            Placas parqueadas:
+                          </Text>
 
-                      </Table>
+                          <Text style={styles.infoText}>
+                            {' ' + mensualityParkedPlates}
+                          </Text>
+                        </View>
+                      </View>
+                      :
+                      <View style={{
+                        width: '100%',
+                        flexDirection: 'row',
+                        justifyContent: 'center'
+                      }}>
+                      </View>
+                    }
+                    {prepayDayRecip ?
+                      <View style={{
+                        width: '100%',
+                        flexDirection: 'row',
+                        justifyContent: 'center'
+                      }}>
+                        <Text style={styles.infoText}> Vigencia pase día:   </Text>
+                        <Text style={styles.infoText}>
+                          {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('L') : ''} {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('LT') : ''}
+                        </Text>
+                      </View>
+                      :
+                      <View style={{
+                        width: '100%',
+                        flexDirection: 'row',
+                        justifyContent: 'center'
+                      }}>
+                      </View>
                     }
                   </View>
+                  {historyExists ?
+                    <Table borderStyle={{ borderColor: '#00A9A0' }}>
+                      <Row
+                        data={tableHead}
+                        style={styles.head}
+                        textStyle={styles.headText}
+                      />
+                      <Rows
+                        data={tableData}
+                        textStyle={styles.text}
+                        style={styles.head}
+                      />
+                    </Table>
+                    :
+                    <Table borderStyle={{ borderColor: '#00A9A0' }}>
+                      {/* <Row
+                          data={tableHead}
+                          style={styles.head}
+                          textStyle={styles.headText}
+                        /> */}
+                    </Table>
+                  }
                 </View>
               </View>
             </View>
@@ -774,36 +762,48 @@ const UserInput = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(false);
-        }}
+        onRequestClose={() => { setModalVisible(false); }}
       >
         {prepayDay ?
           <View style={styles.centeredView}>
-            <View style={styles.modalView}>
+            <View style={styles.modalViewPrepay}>
               <View style={{
                 height: '100%',
                 width: '100%',
                 justifyContent: 'space-between',
-                padding: '2%'
-
               }}>
-                <View style={{ margin: '4%', justifyContent: 'center', height: ' 30%' }}>
-                  <Text style={styles.modalTextAlert}>
-                    Cobrar pase día
+                <View style={{ height: '25%', width: '100%', justifyContent: 'center' }}>
+                  <Image
+                    style={{ alignSelf: 'center', width: '60%', height: '85%' }}
+                    resizeMode={'contain'}
+                    source={require('../../../assets/images/prepayFullday.png')} />
+                </View>
+                <View style={{ height: '20%', width: '100%', justifyContent: 'center' }}>
+                  <Text style={{
+                    fontSize: normalize(30),
+                    textAlign: 'center',
+                    color: '#00A9A0',
+                    fontFamily: 'Montserrat-Bold'
+                  }}>
+                    COBRAR PASE DÍA
                   </Text>
-                  <Text style={styles.modalTextAlert}>
+                  <Text style={{
+                    fontSize: normalize(30),
+                    textAlign: 'center',
+                    color: '#68696C',
+                    fontFamily: 'Montserrat-Bold'
+                  }}>
                     {`$${numberWithPoints(prepayDayValue)}`}
                   </Text>
                 </View>
                 <View style={{
-                  justifyContent: 'space-between',
+                  justifyContent: 'space-around',
                   height: '40%',
                   flexDirection: 'column',
-                  paddingBottom: '6%'
+                  paddingBottom: '6%',
                 }}>
-                  <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
-                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Pago:  </Text>
+                  <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold', marginTop: '3%'  }}>Pago  </Text>
                     <CurrencyInput
                       placeholder='$'
                       textAlign='center'
@@ -821,8 +821,8 @@ const UserInput = (props) => {
                       }}
                     />
                   </View>
-                  <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
-                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}> A devolver:  </Text>
+                  <View style={{ flexDirection: "row", justifyContent: 'space-between'}}>
+                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold', marginTop: '3%'}}>A devolver  </Text>
                     <TextInput
                       style={styles.currencyInput}
                       keyboardType='numeric'
@@ -833,16 +833,17 @@ const UserInput = (props) => {
                     />
                   </View>
                 </View>
-                <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                <View style={{ height: '15%', width: '100%', justifyContent: 'flex-end' }}>
                   <Button onPress={() => {
                     startPark();
                   }}
-                    title="G U A R D A R"
+                    title="GUARDAR"
                     color="#00A9A0"
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
+                      fontFamily: 'Montserrat-Bold',
+                      letterSpacing: 5
                     }}
                     style={[totalPay - prepayDayValue < 0 ? styles.modalButtonDisabled : styles.modalButton]}
                     disabled={totalPay - prepayDayValue < 0}
@@ -860,35 +861,36 @@ const UserInput = (props) => {
                 width: '100%',
                 alignContent: 'center',
                 alignItems: 'center',
-                padding: '2%'
+                padding: '4%',
               }}>
-                <Text style={{
-                  fontSize: normalize(51),
-                  textAlign: 'center',
-                  color: '#00A9A0',
-                  fontFamily: 'Montserrat-Bold'
-                }}>
-                  {plateOne + ' ' + plateTwo}
-                </Text>
-
-                <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
-                  <Text style={styles.modalPhoneText}> {newPhone ? '+' + newPhone : phone} </Text>
-                </View>
                 <View style={{ height: '35%', width: '75%', justifyContent: 'center' }}>
                   <Image
-                    style={{ alignSelf: 'center', width: '50%', height: '50%' }}
+                    style={{ alignSelf: 'center', width: '60%', height: '85%' }}
                     resizeMode={'contain'}
-                    source={require('../../../assets/images/Clock.png')} />
+                    source={require('../../../assets/images/startParking.png')} />
                 </View>
+                <View style={{ height: '22%', width: '75%', justifyContent: 'center' }}>
+                  <Text style={{
+                    fontSize: normalize(30),
+                    textAlign: 'center',
+                    color: '#00A9A0',
+                    fontFamily: 'Montserrat-Bold'
+                  }}>
+                    HA INICIADO EL PARQUEO
+                  </Text>
+                </View>
+                <View style={{ height: '15%', width: '55%', backgroundColor: '#00A9A0', borderRadius: 25, justifyContent: 'center', marginTop: '3%' }}>
+                  <Text style={styles.modalPhoneText}> {plateOne + ' ' + plateTwo}</Text>
+                </View>
+
                 <View style={{ height: '15%', width: '76%', justifyContent: 'center' }}>
-                  <Text style={styles.modalText}>Ha iniciado el parqueo </Text>
-                  <Text style={styles.modalText}> Hora: {moment().format('LT')}</Text>
+                  <Text style={styles.modalText}>{newPhone ? newPhone : phone} </Text>
                 </View>
                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                   <Button onPress={() => {
                     restart();
                   }}
-                    title="E N T E N D I D O"
+                    title="ENTENDIDO"
                     color="#00A9A0"
                     style={
                       styles.modalButton
@@ -896,7 +898,8 @@ const UserInput = (props) => {
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
+                      fontFamily: 'Montserrat-Bold',
+                      letterSpacing: 5
                     }} />
                 </View>
 

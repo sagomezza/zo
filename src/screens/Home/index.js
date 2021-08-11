@@ -174,7 +174,7 @@ const HomeIndex = (props) => {
             </View>
             <View style={styles.bikeCounter} >
               <Text style={styles.plateInputTextBig2}>
-                {`${hq.occupiedCars}`}
+                {`${hq.availableCars}`}
               </Text>
               <View style={{ width: '70%' }}>
                 <Text style={styles.plateInputTextSmall} >
@@ -208,7 +208,7 @@ const HomeIndex = (props) => {
             </View>
             <View style={styles.bikeCounter} >
               <Text style={styles.plateInputTextBig2}>
-                {`${hq.occupiedBikes}`}
+                {`${hq.availableBikes}`}
               </Text>
               <View style={{width: '70%'  }}>
                 <Text style={styles.plateInputTextSmall} >
