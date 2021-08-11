@@ -7,21 +7,13 @@ const styles = StyleSheet.create({
     container: {
         height: '71%',
         backgroundColor: '#F8F8F8',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
+        borderTopLeftRadius: 15,
+        borderTopRightRadius: 15,
         alignContent: 'center',
-        alignItems: 'center'
-    },
-    listContainer: {
-        height: '76%',
-        width: '80%',
-        backgroundColor: '#FFFFFF',
-        marginTop: '5%',
-        borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center'
     },
-    infoButtonsContainer:{
+    infoButtonsContainer: {
         height: '97%',
         width: '87%',
         marginTop: '2%',
@@ -29,7 +21,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
     },
-    plateListContainer:{
+    plateListContainer: {
         flexDirection: 'column',
         width: '60%',
         justifyContent: 'flex-end',
@@ -42,7 +34,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     },
     topContainer: {
-        height: '17%',
+        height: '20%',
         alignContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
@@ -53,7 +45,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         height: '30%',
         width: '60%',
-        marginTop: '2%'
+        marginBottom: '1%'
     },
     plateInput: {
         width: '46%',
@@ -65,15 +57,18 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         color: '#00A9A0'
     },
-    buttonContainer:{
+    buttonContainer: {
         height: '30%',
-        width: '57%',
-        justifyContent: 'flex-end'
+        width: '45%',
+        justifyContent: 'flex-end',
     },
     searchButton: {
         borderRadius: 30,
         height: '80%',
-        width: '100%'
+        width: '100%',
+        marginTop: '2%',
+        borderWidth: 1,
+        borderColor: '#FFFFFF'
     },
     buttonRe: {
         borderRadius: 30,
@@ -92,13 +87,23 @@ const styles = StyleSheet.create({
         paddingHorizontal: '24%',
         opacity: 0.5
     },
+    buttonCreate: {
+        borderRadius: 30,
+        height: normalize(40),
+        width: '55%',
+        margin: '1%',
+        alignSelf: 'center',
+        borderWidth: 1,
+        borderColor: '#00A9A0'
+    },
     buttonEd: {
         borderRadius: 30,
         height: normalize(30),
-        width: '100%',
-        marginLeft: '0%',
+        width: '70%',
         margin: '1%',
-        paddingHorizontal: '28%',
+        alignSelf: 'center',
+        borderWidth: 1,
+        borderColor: '#00A9A0'
     },
     buttonEdDisabled: {
         borderRadius: 30,
@@ -112,15 +117,15 @@ const styles = StyleSheet.create({
     buttonTextSearch: {
         color: '#00A9A0',
         fontSize: width * 0.03,
-        fontFamily: 'Montserrat-Bold'
+        fontFamily: 'Montserrat-Medium'
     },
     buttonTextClear: {
         color: '#FFFFFF',
         fontSize: width * 0.03,
-        fontFamily: 'Montserrat-Bold'
+        fontFamily: 'Montserrat-Medium'
     },
     buttonTextRenew: {
-        color: '#FFFFFF',
+        color: '#00A9A0',
         fontSize: width * 0.025,
         fontFamily: 'Montserrat-Bold',
     },
@@ -133,17 +138,25 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         height: '80%',
         width: '100%',
-        opacity: 0.5
+        opacity: 0.5,
+        marginTop: '2%'
+    },
+    infoTextNameTitle: {
+        fontFamily: 'Montserrat-Bold',
+        fontSize: width * 0.03,
+        color: '#00A9A0',
     },
     infoTextTitle: {
         fontFamily: 'Montserrat-Bold',
         fontSize: width * 0.027,
-        color: '#00A9A0'
+        color: '#00A9A0',
+        margin: '2%'
     },
     infoText: {
-        fontFamily: 'Montserrat-Regular',
+        fontFamily: 'Montserrat-Bold',
         fontSize: width * 0.025,
-        color: '#00A9A0'
+        color: '#8F8F8F',
+        margin: '3%'
     },
     // modals
     centeredView: {
@@ -174,12 +187,11 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     },
     modalViewNewMensuality: {
-        height: normalize(550),
-        width: '70%',
+        height: normalize(650),
+        width: '80%',
         padding: '4%',
-        borderRadius: 50,
+        borderRadius: 30,
         borderColor: '#707070',
-        borderWidth: 1,
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#FFF',
@@ -195,8 +207,8 @@ const styles = StyleSheet.create({
     },
     modalText: {
         textAlign: "center",
-        fontFamily: 'Montserrat-Regular',
-        color: '#B7B7B7',
+        fontFamily: 'Montserrat-Bold',
+        color: '#8F8F8F',
         fontSize: normalize(20)
     },
     modalTextAlert: {
@@ -209,24 +221,46 @@ const styles = StyleSheet.create({
     modalButton: {
         width: '100%',
         height: '80%',
+        borderWidth: 1,
+        borderColor: '#00A9A0'
     },
     modalButtonDisabled: {
         width: '100%',
         height: '80%',
         opacity: 0.5
     },
-    mensualityInfo: {
+    mensualityName: {
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
         marginBottom: '4%',
     },
-    mensualityInfoContainer: {
-        height: '78%',
+    mensualityInfo: {
+        flexDirection: 'row',
         width: '100%',
+        height: '13%',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 7,
         justifyContent: 'space-between',
+        marginBottom: '2%'
+    },
+    mensualityInfoPlates: {
+        flexDirection: 'row',
+        width: '100%',
+        height: '26%',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 7,
+        justifyContent: 'space-between',
+        marginBottom: '2%'
+    },
+    mensualityInfoContainer: {
+        height: '67%',
+        width: '100%',
+        marginTop: '5%',
+        marginLeft: '4%',
+        marginRight: '4%',
         alignContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     mensualityInfoButtonsContainer: {
         height: '16%',
@@ -242,7 +276,7 @@ const styles = StyleSheet.create({
         height: '70%',
         width: '100%',
         flexDirection: 'column',
-        paddingBottom: '8%'
+        paddingBottom: '8%',
     },
     createMensualityRowContainer: {
         flexDirection: "row",
@@ -250,16 +284,16 @@ const styles = StyleSheet.create({
         margin: '1%'
     },
     createMensualityRowInput: {
-        borderWidth: 1,
-        borderColor: '#00A9A0',
-        fontSize: normalize(20),
+        fontSize: normalize(25),
         fontFamily: 'Montserrat-Bold',
-        width: '60%',
-        borderRadius: 10,
-        color: '#00A9A0'
+        width: '70%',
+        borderRadius: 7,
+        color: '#00A9A0',
+        backgroundColor: '#ECEDEF',
+        padding: '1%'
     },
-    footer:{
-        height: '18%',
+    footer: {
+        height: '10%',
         width: '100%',
         justifyContent: 'flex-end'
     }

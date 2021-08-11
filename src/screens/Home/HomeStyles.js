@@ -6,35 +6,35 @@ const styles = StyleSheet.create({
   topImage: {
     flex: 1,
     width: '100%',
-    height: '40%',
+    height: '43%',
     flexDirection: 'column'
   },
   bottomContainer: {
-    height: '66%',
+    height: '64.5%',
     backgroundColor: '#F8F8F8',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     alignContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   bikeCounter: {
-    height: '70%',
-    width: '70%',
-    flexDirection: 'column',
-    alignItems: 'center',
-    alignContent: 'center',
-    marginTop: '13%',
-    marginLeft: '4%'
+    height: '25%',
+    width: '90%',
+    flexDirection: 'row',
+    marginTop: '5%',
+    marginLeft: '5%',
+    marginRight: '5%',
+    justifyContent: 'center'
   },
   bikeImage: {
-    width: "40%",
-    height: "40%",
-    marginTop: '10%'
+    width: "30%",
+    height: "80%",
+    marginLeft: '1%',
   },
   carImage: {
-    width: "38%",
-    height: "38%",
-    marginTop: '10%'
+    width: "30%",
+    height: "80%",
+    marginLeft: '1%',
   },
   listContainer: {
     height: '38%',
@@ -57,25 +57,49 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     width: '100%',
-    height: '23%',
-    justifyContent: 'center'
+    height: '26%',
+    justifyContent: 'center',
+  },
+  cellContainer: {
+    height: '25%',
+    width: '90%',
+    flexDirection: 'row',
+    marginTop: '5%',
+    marginLeft: '5%',
+    marginRight: '5%',
   },
   plateInput: {
-    width: '45%',
-    height: '90%',
-
+    width: '35%',
+    height: '78%',
+    margin: '4%',
+    backgroundColor: '#19A9A0',
+    borderRadius: 15
   },
   plateInputTextBig: {
+    fontSize: width * 0.055,
+    color: '#FFF200',
+    fontFamily: 'Montserrat-Bold',
+  },
+  plateInputTextBig2: {
     fontSize: width * 0.055,
     color: '#FFFFFF',
     fontFamily: 'Montserrat-Bold'
   },
-  plateInputTextSmall: {
-    fontSize: width * 0.045,
-    textAlign: 'center',
-    marginTop: '6%',
+  totalCellsText: {
+    fontSize: width * 0.025,
     color: '#FFFFFF',
-    fontFamily: 'Montserrat-Regular'
+    fontFamily: 'Montserrat-Bold',
+    textAlign: 'left',
+    marginTop: '12%',
+    marginLeft: '3%'
+  },
+  plateInputTextSmall: {
+    fontSize: width * 0.025,
+    color: '#FFFFFF',
+    fontFamily: 'Montserrat-Bold',
+    textAlign: 'left',
+    paddingLeft: '12%',
+    marginTop: '2%'
   },
   textPlaca: {
     fontSize: width * 0.03,
@@ -98,7 +122,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular'
   },
   footerContainer: {
-    height: '17%',
+    height: '10%',
     width: '100%',
     justifyContent: 'flex-end'
   },

@@ -242,48 +242,6 @@ const LogoutIndex = (props) => {
               </View>
 
             </View>
-
-            {/* <View style={styles.cashContainer}>
-              
-              <View style={styles.currencyInputContainer}>
-                <CurrencyInput
-                  placeholder='$'
-                  textAlign='center'
-                  style={styles.textInput}
-                  value={inputBaseValue}
-                  onChangeValue={text => { text === null ? setInputBaseValue(0) : setInputBaseValue(text) }}
-                  prefix="$"
-                  delimiter="."
-                  separator="."
-                  precision={0}
-                />
-              </View>
-            </View>
-            <View style={styles.cashContainer}>
-              <View style={{ width: '30%' }}>
-                <Text style={{
-                  fontFamily: 'Montserrat-Bold',
-                  color: '#FFFFFF',
-                  fontSize: width * 0.030
-                }}>
-                  {"DINERO EN EFECTIVO: "}
-                </Text>
-              </View>
-              <View style={styles.currencyInputContainer}>
-                <CurrencyInput
-                  placeholder='$'
-                  textAlign='center'
-                  keyboardType='numeric'
-                  style={styles.textInput}
-                  value={inputValue}
-                  onChangeValue={text => { text === null ? setInputValue(0) : setInputValue(text) }}
-                  prefix="$"
-                  delimiter="."
-                  separator="."
-                  precision={0}
-                />
-              </View>
-            </View> */}
           </View>
           <View style={styles.bottomContainer}>
             {loadingShiftRecips ?

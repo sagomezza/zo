@@ -315,8 +315,9 @@ const UserOut = (props) => {
       setIsDisabled(true);
     } catch (err) {
       Sentry.captureException(err);
-      // console.log(err?.response)
-      // console.log(err)
+      Sentry.captureMessage(err?.response);
+      console.log(err?.response)
+      console.log(err)
       setLoading(false);
       setIsDisabled(true);
       setModal4Visible(false);

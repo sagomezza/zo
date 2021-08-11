@@ -518,10 +518,10 @@ const MonthlyPayments = (props) => {
     totalPay - monthPrice <= 0 ? "" : "" + (totalPay - monthPrice);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#00A9A0'  }}>
       <ImageBackground
         style={styles.imageStyle}
-        source={require("../../../assets/images/Home.png")}
+        source={require("../../../assets/images/logoutStripes.png")}
       >
         <Header navigation={navigation} />
         <View style={styles.topContainer}>
@@ -591,7 +591,7 @@ const MonthlyPayments = (props) => {
                 clearPageInfo();
               }}
               title=" L I M P I A R"
-              color="gray"
+              color="transparent"
               style={styles.searchButton}
               textStyle={styles.buttonTextClear}
             // activityIndicatorStatus={loading}
@@ -599,127 +599,118 @@ const MonthlyPayments = (props) => {
           </View>
         </View>
         <View style={styles.container}>
-          <View style={styles.listContainer}>
-            {mensualityExists ? (
-              <View style={styles.infoButtonsContainer}>
-                <View style={styles.mensualityInfoContainer}>
-                  <View style={styles.mensualityInfo}>
-                    <Text style={styles.infoTextTitle}>Nombre de usuario:</Text>
-                  </View>
-                  <View
-                    style={{
-                      ...styles.mensualityInfo,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text style={styles.infoText}>{mensualityUserName}</Text>
-                  </View>
-                  <View style={styles.mensualityInfo}>
-                    <Text style={styles.infoTextTitle}>Número de celular:</Text>
-                    <Text style={styles.infoText}>{mensualityUserPhone}</Text>
-                  </View>
-                  <View style={styles.mensualityInfo}>
-                    <Text style={styles.infoTextTitle}>Valor:</Text>
-                    <Text style={styles.infoText}>
-                      {`$${numberWithPoints(monthPrice)}`}
-                    </Text>
-                  </View>
-                  <View style={styles.mensualityInfo}>
-                    <Text style={styles.infoTextTitle}>Estado:</Text>
-                    <Text style={styles.infoText}>
-                      {mensualityInfo.status === "active" ? "Activa" : ""}
-                      {mensualityInfo.status === "due" ? "Vencida" : ""}
-                      {mensualityInfo.status === "pending" ? "Pendiente" : ""}
-                    </Text>
-                  </View>
-                  <View style={styles.mensualityInfo}>
-                    <Text style={styles.infoTextTitle}>Vigencia hasta:</Text>
-                    <Text style={styles.infoText}>{validityDateMenHours}</Text>
-                  </View>
-
-                  <View style={styles.mensualityInfo}>
-                    <Text style={styles.infoTextTitle}>Placas asociadas:</Text>
-                    <View style={styles.plateListContainer}>
-                      <FlatList
-                        style={{ height: "30%" }}
-                        data={newMensualityPlates}
-                        keExtractor={(item, index) => String(index)}
-                        renderItem={({ item }) => {
-                          return (
-                            <View
-                              style={{
-                                flexDirection: "row",
-                                marginBottom: "2%",
-                                marginLeft: "10%",
-                                marginRight: "10%",
-                              }}
-                            >
-                              <Text style={styles.infoText}>{item.plate}</Text>
-                            </View>
-                          );
-                        }}
-                      />
-                    </View>
-                  </View>
+          {mensualityExists ? (
+            <View style={styles.infoButtonsContainer}>
+              <View style={styles.mensualityInfoContainer}>
+                <View style={styles.mensualityName}>
+                  <Text style={styles.infoTextNameTitle}>{mensualityUserName}</Text>
                 </View>
-                <View style={styles.mensualityInfoButtonsContainer}>
-                  <Button
-                    onPress={() => setModal2Visible(true)}
-                    title="Pagar / Renovar"
-                    color="gray"
-                    style={[
-                      plateOne === "" || plateTwo === ""
-                        ? styles.buttonReDisabled
-                        : styles.buttonRe,
-                    ]}
-                    textStyle={styles.buttonTextRenew}
-                    disabled={plateOne === "" || plateTwo === ""}
-                  />
-                  <Button
-                    onPress={editMenButton}
-                    title="  E D I T A R  "
-                    color="gray"
-                    style={[
-                      plateOne === "" || plateTwo === ""
-                        ? styles.buttonEdDisabled
-                        : styles.buttonEd,
-                    ]}
-                    textStyle={styles.buttonTextRenew}
-                    disabled={plateOne === "" || plateTwo === ""}
-                  />
+                <View style={styles.mensualityInfo}>
+                  <Text style={styles.infoTextTitle}>Número de celular</Text>
+                  <Text style={styles.infoText}>{mensualityUserPhone}</Text>
+                </View>
+                <View style={styles.mensualityInfo}>
+                  <Text style={styles.infoTextTitle}>Valor</Text>
+                  <Text style={styles.infoText}>
+                    {`$${numberWithPoints(monthPrice)}`}
+                  </Text>
+                </View>
+                <View style={styles.mensualityInfo}>
+                  <Text style={styles.infoTextTitle}>Estado</Text>
+                  <Text style={styles.infoText}>
+                    {mensualityInfo.status === "active" ? "Activa" : ""}
+                    {mensualityInfo.status === "due" ? "Vencida" : ""}
+                    {mensualityInfo.status === "pending" ? "Pendiente" : ""}
+                  </Text>
+                </View>
+                <View style={styles.mensualityInfo}>
+                  <Text style={styles.infoTextTitle}>Vigencia hasta</Text>
+                  <Text style={styles.infoText}>{validityDateMenHours}</Text>
+                </View>
+
+                <View style={styles.mensualityInfoPlates}>
+                  <Text style={styles.infoTextTitle}>Placas asociadas</Text>
+                  <View style={styles.plateListContainer}>
+                    <FlatList
+                      style={{ height: "30%" }}
+                      data={newMensualityPlates}
+                      keExtractor={(item, index) => String(index)}
+                      renderItem={({ item }) => {
+                        return (
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              marginBottom: "2%",
+                              marginLeft: "10%",
+                              marginRight: "10%",
+                            }}
+                          >
+                            <Text style={styles.infoText}>{item.plate}</Text>
+                          </View>
+                        );
+                      }}
+                    />
+                  </View>
                 </View>
               </View>
-            ) : (
-              <View
-                style={{
-                  height: "30%",
-                  justifyContent: "space-between",
-                  width: "80%",
-                }}
-              >
-                {mensualityExists === false ? (
-                  <Text style={styles.notFoundText}>
-                    No se encuentra mensualidad asociada.
-                  </Text>
-                ) : (
-                  <Text style={styles.notFoundText}></Text>
-                )}
+              <View style={styles.mensualityInfoButtonsContainer}>
                 <Button
-                  onPress={() => setModal3Visible(true)}
-                  title="C R E A R"
-                  color="gray"
-                  style={styles.buttonEd}
+                  onPress={() => setModal2Visible(true)}
+                  title="Pagar / Renovar"
+                  color="transparent"
+                  style={[
+                    plateOne === "" || plateTwo === ""
+                      ? styles.buttonReDisabled
+                      : styles.buttonRe,
+                  ]}
                   textStyle={styles.buttonTextRenew}
-                // disabled={!(plateOne.length === 3 && plateTwo.length === 3) || !mensualityExists}
+                  disabled={plateOne === "" || plateTwo === ""}
+                />
+                <Button
+                  onPress={editMenButton}
+                  title="  E D I T A R  "
+                  color="gray"
+                  style={[
+                    plateOne === "" || plateTwo === ""
+                      ? styles.buttonEdDisabled
+                      : styles.buttonEd,
+                  ]}
+                  textStyle={styles.buttonTextRenew}
+                  disabled={plateOne === "" || plateTwo === ""}
                 />
               </View>
-            )}
-          </View>
-          <View style={styles.footer}>
-            <FooterIndex navigation={navigation} />
-          </View>
+            </View>
+          ) : (
+            <View
+              style={{
+                height: "30%",
+                justifyContent: "space-between",
+                width: "80%",
+              }}
+            >
+              {mensualityExists === false ? (
+                <Text style={styles.notFoundText}>
+                  No se encuentra mensualidad asociada.
+                </Text>
+              ) : (
+                <Text style={styles.notFoundText}></Text>
+              )}
+              <Button
+                onPress={() => setModal3Visible(true)}
+                title="C R E A R"
+                color="transparent"
+                style={styles.buttonCreate}
+                textStyle={styles.buttonTextRenew}
+              // disabled={!(plateOne.length === 3 && plateTwo.length === 3) || !mensualityExists}
+              />
+            </View>
+          )}
+
         </View>
       </ImageBackground>
+      <View style={styles.footer}>
+        <FooterIndex navigation={navigation} />
+      </View>
       <Modal
         animationType="fade"
         transparent={true}
@@ -1548,8 +1539,7 @@ const MonthlyPayments = (props) => {
                       color: "#00A9A0",
                     }}
                   >
-                    {" "}
-                    Ingrese la siguiente información:{" "}
+                    INGRESE LA SIGUIENTE INFORMACIÓN
                   </Text>
                 </View>
                 <View style={styles.createMensualityContainer}>
@@ -1695,7 +1685,7 @@ const MonthlyPayments = (props) => {
                       textStyle={{
                         color: "#FFFFFF",
                         textAlign: "center",
-                        fontFamily: "Montserrat-Bold",
+                        fontFamily: "Montserrat-Medium",
                       }}
                       activityIndicatorStatus={loading}
                     />
@@ -1712,12 +1702,12 @@ const MonthlyPayments = (props) => {
                         setModal3Visible(false);
                       }}
                       title="V O L V E R"
-                      color="gray"
+                      color="transparent"
                       style={styles.modalButton}
                       textStyle={{
-                        color: "#FFFFFF",
+                        color: "#00A9A0",
                         textAlign: "center",
-                        fontFamily: "Montserrat-Bold",
+                        fontFamily: "Montserrat-Medium",
                       }}
                     />
                   </View>

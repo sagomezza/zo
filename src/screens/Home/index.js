@@ -146,64 +146,76 @@ const HomeIndex = (props) => {
     <View style={{ flex: 1 }}>
       <ImageBackground
         style={styles.topImage}
-        source={require('../../../assets/images/Home.png')}>
+        source={require('../../../assets/images/logoutStripes.png')}>
         <Header navigation={navigation} />
         <View style={styles.plateContainer}>
-          <View style={{
-            ...styles.plateInput,
-            alignItems: 'center',
-            alignContent: 'center'
-          }}>
-            <ImageBackground
-              style={{
-                width: '78%',
-                height: '98%',
-                marginLeft: '42%'
-              }}
-              resizeMode={"contain"}
-              source={require('../../../assets/images/Circulo.png')}>
-              <View style={styles.bikeCounter} >
-                <Image
-                  style={styles.bikeImage}
-                  resizeMode={"contain"}
-                  source={require('../../../assets/images/TrazadoM.png')}
-                />
-                <View style={{ flexDirection: 'row', height: '30%' }}>
-                  <Text style={styles.plateInputTextBig}>
-                    {`${hq.occupiedBikes}`}
-                  </Text>
-                  <Text style={styles.plateInputTextSmall} >
-                    {`/${hq.totalBikes}`}
-                  </Text>
-                </View>
+          <View style={styles.plateInput}>
+            <View style={styles.cellContainer} >
+              <Image
+                style={styles.bikeImage}
+                resizeMode={"contain"}
+                source={require('../../../assets/images/homeCar.png')}
+              />
+              <View style={{ width: '70%'}}>
+                <Text style={styles.totalCellsText} >
+                  {`${hq.totalCars}`} CELDAS
+                </Text>
               </View>
-            </ImageBackground>
+            </View>
+            <View style={styles.bikeCounter} >
+              <Text style={styles.plateInputTextBig}>
+                {`${hq.occupiedCars}`}
+              </Text>
+              <View style={{ width: '70%' }}>
+                <Text style={styles.plateInputTextSmall} >
+                  VEHÍCULOS PARQUEADOS
+                </Text>
+              </View>
+            </View>
+            <View style={styles.bikeCounter} >
+              <Text style={styles.plateInputTextBig2}>
+                {`${hq.occupiedCars}`}
+              </Text>
+              <View style={{ width: '70%' }}>
+                <Text style={styles.plateInputTextSmall} >
+                  CELDAS DISPONIBLES
+                </Text>
+              </View>
+            </View>
           </View>
           <View style={styles.plateInput}>
-            <ImageBackground
-              style={{
-                width: '78%',
-                height: '98%',
-                marginLeft: '10%'
-              }}
-              resizeMode={"contain"}
-              source={require('../../../assets/images/Circulo.png')}>
-              <View style={styles.bikeCounter} >
-                <Image
-                  style={styles.carImage}
-                  resizeMode={"contain"}
-                  source={require('../../../assets/images/TrazadoC.png')}
-                />
-                <View style={{ flexDirection: 'row', height: '30%' }}>
-                  <Text style={styles.plateInputTextBig}>
-                    {`${hq.occupiedCars}`}
-                  </Text>
-                  <Text style={styles.plateInputTextSmall} >
-                    {`/${hq.totalCars}`}
-                  </Text>
-                </View>
+            <View style={styles.cellContainer} >
+              <Image
+                style={styles.carImage}
+                resizeMode={"contain"}
+                source={require('../../../assets/images/homeBike.png')}
+              />
+              <View style={{ width: '70%' }}>
+                <Text style={styles.totalCellsText} >
+                  {`${hq.totalBikes}`} CELDAS
+                </Text>
               </View>
-            </ImageBackground>
+            </View>
+            <View style={styles.bikeCounter} >
+              <Text style={styles.plateInputTextBig}>
+                {`${hq.occupiedBikes}`}
+              </Text>
+              <View style={{width: '70%' }}>
+                <Text style={styles.plateInputTextSmall} >
+                  VEHÍCULOS PARQUEADOS
+                </Text>
+              </View>
+            </View>
+            <View style={styles.bikeCounter} >
+              <Text style={styles.plateInputTextBig2}>
+                {`${hq.occupiedBikes}`}
+              </Text>
+              <View style={{width: '70%'  }}>
+                <Text style={styles.plateInputTextSmall} >
+                  CELDAS DISPONIBLES
+                </Text>
+              </View>
+            </View>
           </View>
         </View>
         <View style={styles.bottomContainer}>
@@ -236,24 +248,24 @@ const HomeIndex = (props) => {
                         //     setShowRecipModal(true);
                         //   }}
                         // >
-                          <View style={styles.list} >
-                            <View style={{ marginBottom: '2%' }} >
-                              <Text style={styles.textPlaca}>
-                                {typeof item.plate === 'string' ? item.plate : item.plate[0]}
-                              </Text>
-                              <Text style={styles.textPago}>
-                                Pago por
-                                {item.hours === '1 month' ? ' mensualidad' : `${formatHours(item.hours)} horas`}
-                              </Text>
-                            </View>
-                            <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
-                              <Text style={styles.textMoney}>
-                                {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                                {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                                {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
-                              </Text>
-                            </View>
+                        <View style={styles.list} >
+                          <View style={{ marginBottom: '2%' }} >
+                            <Text style={styles.textPlaca}>
+                              {typeof item.plate === 'string' ? item.plate : item.plate[0]}
+                            </Text>
+                            <Text style={styles.textPago}>
+                              Pago por
+                              {item.hours === '1 month' ? ' mensualidad' : `${formatHours(item.hours)} horas`}
+                            </Text>
                           </View>
+                          <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
+                            <Text style={styles.textMoney}>
+                              {item.cash === 0 && item.change === 0 ? '$0' : ''}
+                              {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                              {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                            </Text>
+                          </View>
+                        </View>
                         // </TouchableOpacity>
 
                       )
@@ -304,22 +316,22 @@ const HomeIndex = (props) => {
                         //     })
                         //   }}
                         // >
-                          <View style={styles.list} >
-                            <View style={{ marginBottom: '2%' }} >
-                              <Text style={styles.textPlaca}>{item.plate}</Text>
-                              <Text style={styles.textPago}>{item.verificationCode}</Text>
-                            </View>
-                            <View style={{ flex: 1, alignItems: 'flex-end' }} >
-                              <Text style={styles.textMoney}>{moment(item.dateStart).format('L')}  {moment(item.dateStart).format('LT')}</Text>
-                              <Text style={styles.textPago}>
-                                Pago por
-                                {item.prepayFullDay === true ? " pase día" : ""}
-                                {item.mensuality === true ? " mensualidad" : ""}
-                                {item.isParanoic === true ? " horas" : ""}
-                                {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? " horas" : ""}
-                              </Text>
-                            </View>
+                        <View style={styles.list} >
+                          <View style={{ marginBottom: '2%' }} >
+                            <Text style={styles.textPlaca}>{item.plate}</Text>
+                            <Text style={styles.textPago}>{item.verificationCode}</Text>
                           </View>
+                          <View style={{ flex: 1, alignItems: 'flex-end' }} >
+                            <Text style={styles.textMoney}>{moment(item.dateStart).format('L')}  {moment(item.dateStart).format('LT')}</Text>
+                            <Text style={styles.textPago}>
+                              Pago por
+                              {item.prepayFullDay === true ? " pase día" : ""}
+                              {item.mensuality === true ? " mensualidad" : ""}
+                              {item.isParanoic === true ? " horas" : ""}
+                              {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? " horas" : ""}
+                            </Text>
+                          </View>
+                        </View>
                         // </TouchableOpacity>
                       )
                     }}
@@ -335,62 +347,12 @@ const HomeIndex = (props) => {
             }
 
           </View>
-          <View style={styles.footerContainer}>
-            <FooterIndex navigation={navigation} />
-          </View>
+
         </View>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          backdropOpacity={0.3}
-          visible={showReserveModal}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <View style={{
-                height: '100%',
-                width: '100%',
-                justifyContent: 'space-between',
-                padding: '2%'
-              }}>
-                <View style={{
-                  margin: '3%',
-                  justifyContent: 'flex-end',
-                  height: ' 80%',
-                  borderWidth: 1
-
-                }}>
-                  <Text style={{
-                    fontSize: normalize(51),
-                    textAlign: 'center',
-                    color: '#00A9A0',
-                    fontFamily: 'Montserrat-Bold'
-                  }}>
-                    {plate}
-                  </Text>
-                  <Text style={styles.modalTextAlert}>  </Text>
-                </View>
-                <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                  <Button onPress={() => {
-                    setShowReserveModal(false)
-                  }}
-                    title="E N T E N D I D O"
-                    color="#00A9A0"
-                    style={
-                      styles.modalButton
-                    }
-                    textStyle={{
-                      color: "#FFFFFF",
-                      textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
-                    }} />
-                </View>
-              </View>
-            </View>
-          </View>
-        </Modal>
-
       </ImageBackground>
+      <View style={styles.footerContainer}>
+        <FooterIndex navigation={navigation} />
+      </View>
 
     </View>
   );
