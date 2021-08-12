@@ -230,11 +230,12 @@ const LoginIndex = (props) => {
                   />
                 </View>
               </View>
+
+            </View>
+            <View style={styles.buttonContainer}>
               <View>
                 {error !== "" && <Text style={styles.alertText}>{error}</Text>}
               </View>
-            </View>
-            <View style={styles.buttonContainer}>
               <Button
                 onPress={firstLogin}
                 title="E N T R A R"

@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     height: "15%",
     alignContent: "center",
     alignItems: "center",
+    borderWidth: 1
   },
   titleInputText: {
     color: 'white',
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular'
   },
   buttonContainer: {
-    width: "55%",
+    width: "60%",
     height: "10%",
     justifyContent: "center",
     alignContent: "center",
@@ -59,8 +60,9 @@ const styles = StyleSheet.create({
     borderWidth: normalize(1),
     borderColor: "#707070",
     alignSelf: "center",
-    width: "100%",
-    height: "70%",
+    width: "90%",
+    height: "65%",
+    marginTop: '4%'
   },
   buttonText: {
     color: "#00A9A0",
