@@ -353,7 +353,7 @@ const UserOut = (props) => {
     }
   }
 
-  let phoneNumber = check.phone ? check.phone + '' : '' 
+  let phoneNumber = check.phone ? check.phone + '' : ''
   let phoneNumberLength = phoneNumber.length
   let inputChange = (totalPay - totalAmount) <= 0 ? '' : '' + (totalPay - totalAmount)
 
@@ -361,7 +361,7 @@ const UserOut = (props) => {
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <ImageBackground
         style={styles.imageBackground}
-        source={require('../../../assets/images/Stripes.png')}>
+        source={require('../../../assets/images/logoutStripes.png')}>
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={styles.topContainer} >
@@ -415,81 +415,89 @@ const UserOut = (props) => {
                 />
               </TouchableOpacity>
             </View>
-            <View style={styles.codeContainer}>
-              <TextInput
-                style={styles.codeText}
-                placeholder={'Ingrese código'}
-                placeholderTextColor={'#D9D9D9'}
-                value={inputVerificationCode}
-                // style={styles.plateInput}
-                textAlign='center'
-                maxLength={5}
-                autoCapitalize={'characters'}
-                onFocus={() => { restart(); }}
-                onChangeText={text => {
-                  if (text.length === 5) { Keyboard.dismiss() }
-                  setInputVerificationCode(text.trim());
-                  setVerificationCodeCall(text.trim());
-                }}
-                onEndEditing={() => {
-                  checkParkingCode();
-                }}
-              />
-            </View>
-            <View style={styles.textPhoneCode}>
-              <Text style={styles.infoUserText}>
-                {phoneNumberLength > 13 ? '' : phoneNumber.slice(3,12)}
-              </Text>
+            <View style={{ width: '79%', height: '13%', flexDirection: 'row' }}>
+              <View style={styles.codeContainer}>
+                <TextInput
+                  style={styles.codeText}
+                  placeholder={'Ingrese código'}
+                  placeholderTextColor={'#FFFFFF'}
+                  value={inputVerificationCode}
+                  // style={styles.plateInput}
+                  textAlign='center'
+                  maxLength={5}
+                  autoCapitalize={'characters'}
+                  onFocus={() => { restart(); }}
+                  onChangeText={text => {
+                    if (text.length === 5) { Keyboard.dismiss() }
+                    setInputVerificationCode(text.trim());
+                    setVerificationCodeCall(text.trim());
+                  }}
+                  onEndEditing={() => {
+                    checkParkingCode();
+                  }}
+                />
+              </View>
+              <View style={styles.textPhoneCode}>
+                <Text style={styles.infoUserText}>
+                  {phoneNumberLength > 13 ? '' : phoneNumber.slice(3, 12)}
+                </Text>
+              </View>
             </View>
             <View style={styles.timePlateContainer}>
               <View style={styles.timePlate}>
-                <Image
-                  style={{ width: '18%' }}
-                  resizeMode={"contain"}
-                  source={require('../../../assets/images/Inicio.png')} />
-                <View style={{}} >
-                  <Text style={styles.timePlateTitle}>Tiempo de inicio:</Text>
-                  <Text style={styles.timePlateInfo}>{dateStartDate()}  {dateStartHour()}</Text>
+                <Text style={styles.timePlateTitle}>TIEMPO DE INICIO</Text>
+                <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                  <Image
+                    style={{ width: '25%' }}
+                    resizeMode={"contain"}
+                    source={require('../../../assets/images/startTime.png')} />
+                  <View style={{ flexDirection: 'column', marginLeft: '5%', marginTop: '5%', width: '65%' }}>
+                    <Text style={styles.timePlateInfo}>{dateStartDate()}</Text>
+                    <Text style={styles.timePlateInfo}>{dateStartHour()}</Text>
+                  </View>
                 </View>
               </View>
+              <View style={{ height: '80%', borderWidth: 0.4, borderColor: '#FFFFFF' }}></View>
               <View style={styles.timePlate}>
-                <Image
-                  style={{ width: '17%' }}
-                  resizeMode={"contain"}
-                  source={require('../../../assets/images/Salida.png')} />
-                <View style={{}}>
-                  <Text style={styles.timePlateTitle}>Tiempo de salida:</Text>
-                  <Text style={styles.timePlateInfo}>{dateFinishedDate()}  {dateFinishedHour()}</Text>
+                <Text style={styles.timePlateTitle}>TIEMPO DE SALIDA</Text>
+                <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                  <Image
+                    style={{ width: '25%', marginTop: '5%' }}
+                    resizeMode={"contain"}
+                    source={require('../../../assets/images/endTime.png')} />
+                  <View style={{ flexDirection: 'column', marginLeft: '5%', marginTop: '5%', width: '65%' }}>
+                    <Text style={styles.timePlateInfo}>{dateFinishedDate()}</Text>
+                    <Text style={styles.timePlateInfo}>{dateFinishedHour()}</Text>
+                  </View>
                 </View>
-
               </View>
-            </View>
-            <View style={styles.textPhoneCode}>
-              <Text style={styles.infoUserText}> TOTAL HORAS:  {Object.keys(check).length === 0 ? '' : Math.round(check.hours)}</Text>
+              <View style={{ height: '80%', borderWidth: 0.4, borderColor: '#FFFFFF' }}></View>
+              <View style={styles.timePlate}>
+                <Text style={styles.timePlateTitle}>TOTAL HORAS</Text>
+                <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                  <Image
+                    style={{ width: '25%' }}
+                    resizeMode={"contain"}
+                    source={require('../../../assets/images/totalHours.png')} />
+                  <View style={{ flexDirection: 'column', margin: '5%', width: '60%' }}>
+                    <Text style={styles.timePlateInfo}>{Object.keys(check).length === 0 ? '' : Math.round(check.hours)} horas</Text>
+                  </View>
+                </View>
+              </View>
             </View>
             <View style={styles.totalPayContainer}>
-              <Text style={styles.infoUserText}>{"TOTAL A PAGAR"}</Text>
-              <View style={{
-                justifyContent: 'center',
-                alignContent: 'center',
-                alignItems: 'center'
-              }}>
-                <View style={styles.payplate}>
-                  {loadingCheckParking ?
-                    <ActivityIndicator size={"large"} color={'#00A9A0'} />
-                    :
-                    <Text style={styles.payText}>
-                      {`$${numberWithPoints(totalAmount)}`}
-                    </Text>
-                  }
-                </View>
-                <View style={styles.pendingContainer}>
-                  <Text style={styles.pendingText}>
-                    {"Saldo pendiente: "}</Text>
-                  <Text style={styles.pendingText}>
-                    {pendingValueNum}</Text>
-                </View>
+              <Text style={styles.pendingText}>Total a pagar</Text>
+              <View style={styles.payplate}>
+                {loadingCheckParking ?
+                  <ActivityIndicator size={"large"} color={'#00A9A0'} />
+                  :
+                  <Text style={styles.payText}>
+                    {`$${numberWithPoints(totalAmount)}`}
+                  </Text>
+                }
               </View>
+              <Text style={styles.pendingText}>
+                {"Saldo pendiente: "} {pendingValueNum}</Text>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -504,27 +512,45 @@ const UserOut = (props) => {
           }}>
             <View style={{
               flexDirection: 'row',
-              marginTop: '0%',
+              marginTop: '5%',
               width: '80%',
-              justifyContent: 'space-between',
-              alignContent: 'center',
-              alignItems: 'center',
-              height: '20%'
+              justifyContent: 'space-around',
+              height: '8%',
             }}>
               <View style={{ width: '32%' }}>
                 <Text style={{
                   fontFamily: 'Montserrat-Bold',
-                  fontSize: width * 0.034,
+                  fontSize: width * 0.03,
                   color: '#8F8F8F'
                 }} >
-                  {"Valor ingresado"}
+                  Valor ingresado
                 </Text>
               </View>
+              <View style={{ width: '33%', paddingRight: '2%' }}>
+                <Text style={{
+                  fontFamily: 'Montserrat-Bold',
+                  fontSize: width * 0.03,
+                  color: '#8F8F8F',
+                  textAlign: 'right'
+                }}>
+                  A devolver
+                </Text>
+              </View>
+              {/*  */}
+            </View>
+            <View style={{
+              flexDirection: 'row',
+              marginTop: '2%',
+              width: '90%',
+              justifyContent: 'space-around',
+              height: '18%',
+              borderRadius: 10,
+              backgroundColor: '#00A9A0',
+              padding: '1%',
+            }}>
               <View style={{
-                alignContent: 'center',
-                alignItems: 'center',
-                width: '67%',
-                height: '62%'
+                width: '45%',
+                height: '100%',
               }}>
                 <CurrencyInput
                   placeholder='$'
@@ -541,58 +567,10 @@ const UserOut = (props) => {
                 // }}
                 />
               </View>
-            </View>
-            <View style={{
-              width: '80%',
-              height: '10%',
-              alignContent: 'flex-end',
-              alignItems: 'flex-end',
-              justifyContent: 'center'
-            }}>
+              <View style={{ height: '100%', borderWidth: 0.4, borderColor: '#FFFFFF' }}></View>
               <View style={{
-                flexDirection: 'row',
-                width: '67%',
-                justifyContent: 'space-between',
-                height: '70%'
-              }}>
-                <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(5000)}>
-                  <Text style={styles.miniButtonMoneyText}>$5.000</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(10000)}>
-                  <Text style={styles.miniButtonMoneyText}>$10.000</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(20000)}>
-                  <Text style={styles.miniButtonMoneyText}>$20.000</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(50000)}>
-                  <Text style={styles.miniButtonMoneyText}>$50.000</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={{
-              flexDirection: 'row',
-              width: '80%',
-              height: '20%',
-              justifyContent: 'flex-end',
-              alignContent: 'center',
-              alignItems: 'center'
-            }}>
-              <View style={{ width: '33%', paddingRight: '2%' }}>
-                <Text style={{
-                  fontFamily: 'Montserrat-Bold',
-                  fontSize: width * 0.034,
-                  color: '#8F8F8F',
-                  textAlign: 'right'
-                }}>
-                  {"A devolver"}
-                </Text>
-              </View>
-              <View style={{
-                alignContent: 'center',
-                alignItems: 'center',
-                width: '67%',
-                height: '62%'
+                width: '45%',
+                height: '100%',
               }}>
                 <TextInput
                   style={styles.inputMoney}
@@ -602,10 +580,28 @@ const UserOut = (props) => {
                   value={`$${numberWithPoints(inputChange)}`}
                 />
               </View>
-
             </View>
-
-            <View style={{ height: '24%', width: '80%', justifyContent: 'flex-end' }}>
+            <View style={{
+              flexDirection: 'row',
+              width: '90%',
+              justifyContent: 'space-between',
+              height: '12%',
+              marginTop: '3%'
+            }}>
+              <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(5000)}>
+                <Text style={styles.miniButtonMoneyText}>$5.000</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(10000)}>
+                <Text style={styles.miniButtonMoneyText}>$10.000</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(20000)}>
+                <Text style={styles.miniButtonMoneyText}>$20.000</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.miniButtonMoney} underlayColor={'#00A9A0'} onPress={() => setTotalPay(50000)}>
+                <Text style={styles.miniButtonMoneyText}>$50.000</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ height: '30%', width: '80%', justifyContent: 'flex-end', marginTop: '3%' }}>
               {err !== "" &&
                 <Text style={{
                   color: "red",
@@ -616,14 +612,14 @@ const UserOut = (props) => {
                 </Text>
               }
               {!loading &&
-                <View style={{ width: '100%', height: ' 35%', marginTop: '2%' }}>
+                <View style={{ width: '60%', height: ' 36%', marginTop: '2%', alignSelf: 'center' }}>
                   <Button
                     title="C O B R A R"
-                    color='#00A9A0'
+                    color='transparent'
                     disabled={totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0 || inputVerificationCode !== verification}
                     style={[totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0 || inputVerificationCode !== verification ? styles.buttonStyleDisabled : styles.buttonStyle]}
                     textStyle={{
-                      color: '#FFFFFF',
+                      color: '#00A9A0',
                       fontFamily: 'Montserrat-Bold',
                       fontSize: width * 0.028
                     }}
@@ -638,27 +634,26 @@ const UserOut = (props) => {
                 <View style={{ width: '100%', height: ' 35%', marginTop: '2%' }}>
                   <Button
                     title="P A G O   P E N D I E N T E"
-                    color='#FFFFFF'
+                    color='transparent'
                     disabled={isDisabled}
                     style={[isDisabled ? styles.buttonStylePPDisabled : styles.buttonStylePP]}
-                    textStyle={{ color: '#8F8F8F', fontFamily: 'Montserrat-Bold', fontSize: width * 0.028 }}
+                    textStyle={{ color: '#00A9A0', fontFamily: 'Montserrat-Bold', fontSize: width * 0.028 }}
                     onPress={() => {
                       setModal2Visible(true);
                       setTotalPay(0)
-                      // finishParking("pending") 
                     }}
                   />
                 </View>
               }
             </View>
-            <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end' }}>
-              <FooterIndex navigation={navigation} />
-            </View>
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
+      <View style={{ height: '10%', width: '100%', justifyContent: 'flex-end' }}>
+        <FooterIndex navigation={navigation} />
+      </View>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modal5Visible}
@@ -670,7 +665,6 @@ const UserOut = (props) => {
               width: '100%',
               justifyContent: 'space-between',
               padding: '2%'
-
             }}>
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
                 <Text style={styles.modalTextAlert}> El vehículo no esta estacionado o el código QR no se encuentra asociado a un vehículo estacionado. </Text>
@@ -680,7 +674,7 @@ const UserOut = (props) => {
                   setModal5Visible(false);
                   restart();
                 }}
-                  title="E N T E N D I D O"
+                  title="ENTENDIDO"
                   color="#00A9A0"
                   style={
                     styles.modalButton
@@ -688,16 +682,16 @@ const UserOut = (props) => {
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
+                    fontFamily: 'Montserrat-Bold',
+                    letterSpacing: 5
                   }} />
               </View>
             </View>
           </View>
         </View>
       </Modal>
-
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modalVisible}
@@ -708,38 +702,29 @@ const UserOut = (props) => {
               flexDirection: 'column',
               height: '100%',
               width: '100%',
-              justifyContent: 'space-between',
               alignContent: 'center',
               alignItems: 'center',
-              padding: '3%'
             }}>
-              <Text style={{
-                fontSize: width * 0.05,
-                textAlign: 'center',
-                color: '#00A9A0',
-                fontFamily: 'Montserrat-Bold'
-              }}>
-                {check.plate}
-              </Text>
-
-              <View style={{ height: '10%', width: '75%', backgroundColor: '#FFF200', borderRadius: 20, justifyContent: 'center' }}>
-                <Text style={styles.modalPhoneText}>{phoneNumberLength > 13 ? '' : phoneNumber.slice(3,12) } </Text>
-              </View>
-              <View style={{ height: '35%', width: '75%', justifyContent: 'center' }}>
+              <View style={{ height: '25%', width: '65%', justifyContent: 'center', marginTop:'5%' }}>
                 <Image
-                  style={{ alignSelf: 'center', width: '50%', height: '50%' }}
+                  style={{ alignSelf: 'center', width: '60%', height: '80%' }}
                   resizeMode={'contain'}
-                  source={require('../../../assets/images/Clock.png')} />
+                  source={require('../../../assets/images/paySuccess.png')} />
               </View>
-              <View style={{ height: '15%', width: '76%', justifyContent: 'center' }}>
-                <Text style={styles.modalText}>¡Cobro exitoso! </Text>
-                <Text style={styles.modalText}> Hora: {moment().format('LT')}</Text>
+              <View style={{ justifyContent: 'space-between', height: '45%', width: '100%'}}>
+                <Text style={styles.modalTitle}>COBRO EXITOSO</Text>
+                <Text style={styles.modalSubTitle}>{moment().format('LT')}</Text>
+                <View style={{ height: '30%', width: '50%', backgroundColor: '#00A9A0', borderRadius: 25, justifyContent: 'center', marginTop: '2%', alignSelf: 'center' }}>
+                  <Text style={styles.modalPlateText}>{check.plate}</Text>
+                </View>
+                <Text style={styles.modalPhoneText}>{phoneNumberLength > 13 ? '' : phoneNumber.slice(3, 12)}</Text>
               </View>
-              <View style={{ height: '19%', width: '100%', justifyContent: 'flex-end' }}>
+
+              <View style={{ height: '30%', width: '80%', justifyContent: 'flex-end', flexDirection: 'column', alignContent: 'flex-end'}}>
                 <Button onPress={() => {
                   restart();
                 }}
-                  title="E N T E N D I D O"
+                  title="ENTENDIDO"
                   color="#00A9A0"
                   style={
                     styles.modalButton
@@ -747,7 +732,9 @@ const UserOut = (props) => {
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
+                    fontFamily: 'Montserrat-Bold',
+                    letterSpacing: 5,
+                    fontSize: normalize(20)
                   }} />
               </View>
 
@@ -882,7 +869,6 @@ const UserOut = (props) => {
           </View>
         </View>
       </Modal>
-
       <Modal
         animationType="fade"
         transparent={true}
