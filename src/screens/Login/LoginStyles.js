@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
     height: "15%",
     alignContent: "center",
     alignItems: "center",
-    borderWidth: 1
   },
   titleInputText: {
     color: 'white',

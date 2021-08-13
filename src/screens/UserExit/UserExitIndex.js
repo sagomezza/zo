@@ -480,7 +480,7 @@ const UserOut = (props) => {
                     resizeMode={"contain"}
                     source={require('../../../assets/images/totalHours.png')} />
                   <View style={{ flexDirection: 'column', margin: '5%', width: '60%' }}>
-                    <Text style={styles.timePlateInfo}>{Object.keys(check).length === 0 ? '' : Math.round(check.hours)} horas</Text>
+                    <Text style={styles.timePlateInfo}>{Object.keys(check).length === 0 ? '' : Math.round(check.hours) + ' horas'} </Text>
                   </View>
                 </View>
               </View>
@@ -573,7 +573,7 @@ const UserOut = (props) => {
                 height: '100%',
               }}>
                 <TextInput
-                  style={styles.inputMoney}
+                  style={{...styles.inputMoney, color: '#04746E'}}
                   keyboardType='numeric'
                   placeholder='$'
                   editable={false}
@@ -588,7 +588,7 @@ const UserOut = (props) => {
               height: '12%',
               marginTop: '3%'
             }}>
-              <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(5000)}>
+              <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(5000)} >
                 <Text style={styles.miniButtonMoneyText}>$5.000</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(10000)}>
@@ -705,13 +705,13 @@ const UserOut = (props) => {
               alignContent: 'center',
               alignItems: 'center',
             }}>
-              <View style={{ height: '25%', width: '65%', justifyContent: 'center', marginTop:'5%' }}>
+              <View style={{ height: '25%', width: '65%', justifyContent: 'center', marginTop: '5%' }}>
                 <Image
                   style={{ alignSelf: 'center', width: '60%', height: '80%' }}
                   resizeMode={'contain'}
                   source={require('../../../assets/images/paySuccess.png')} />
               </View>
-              <View style={{ justifyContent: 'space-between', height: '45%', width: '100%'}}>
+              <View style={{ justifyContent: 'space-between', height: '45%', width: '100%' }}>
                 <Text style={styles.modalTitle}>COBRO EXITOSO</Text>
                 <Text style={styles.modalSubTitle}>{moment().format('LT')}</Text>
                 <View style={{ height: '30%', width: '50%', backgroundColor: '#00A9A0', borderRadius: 25, justifyContent: 'center', marginTop: '2%', alignSelf: 'center' }}>
@@ -720,7 +720,7 @@ const UserOut = (props) => {
                 <Text style={styles.modalPhoneText}>{phoneNumberLength > 13 ? '' : phoneNumber.slice(3, 12)}</Text>
               </View>
 
-              <View style={{ height: '30%', width: '80%', justifyContent: 'flex-end', flexDirection: 'column', alignContent: 'flex-end'}}>
+              <View style={{ height: '30%', width: '80%', justifyContent: 'flex-end', flexDirection: 'column', alignContent: 'flex-end' }}>
                 <Button onPress={() => {
                   restart();
                 }}
@@ -743,7 +743,7 @@ const UserOut = (props) => {
         </View>
       </Modal>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modal2Visible}
@@ -774,7 +774,7 @@ const UserOut = (props) => {
                     setModal2Visible(!modal2Visible);
                     setModal3Visible(!modal3Visible);
                   }}
-                    title="S I"
+                    title="SI"
                     color="#00A9A0"
                     style={
                       styles.modal2Button
@@ -782,7 +782,8 @@ const UserOut = (props) => {
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
+                      fontFamily: 'Montserrat-Bold',
+                      letterSpacing: 5
                     }} />
                 </View>
                 <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
@@ -790,7 +791,7 @@ const UserOut = (props) => {
                     setModal2Visible(!modal2Visible);
 
                   }}
-                    title="N O"
+                    title="NO"
                     color="#00A9A0"
                     style={
                       styles.modal2Button
@@ -798,7 +799,8 @@ const UserOut = (props) => {
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
+                      fontFamily: 'Montserrat-Bold',
+                      letterSpacing: 5
                     }} />
                 </View>
               </View>
@@ -807,7 +809,7 @@ const UserOut = (props) => {
         </View>
       </Modal>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modal3Visible}
@@ -836,7 +838,7 @@ const UserOut = (props) => {
                     setModal3Visible(!modal3Visible);
                     finishParking("pending", true);
                   }}
-                    title="T O T A L"
+                    title="TOTAL"
                     color="#00A9A0"
                     style={
                       styles.modal2Button
@@ -844,7 +846,8 @@ const UserOut = (props) => {
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
+                      fontFamily: 'Montserrat-Bold',
+                      letterSpacing: 5
                     }} />
                 </View>
                 <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
@@ -853,7 +856,7 @@ const UserOut = (props) => {
                     setModal4Visible(true);
 
                   }}
-                    title="P A R C I A L"
+                    title="PARCIAL"
                     color="#00A9A0"
                     style={
                       styles.modal2Button
@@ -861,7 +864,8 @@ const UserOut = (props) => {
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
+                      fontFamily: 'Montserrat-Bold',
+                      letterSpacing: 5
                     }} />
                 </View>
               </View>
@@ -870,7 +874,7 @@ const UserOut = (props) => {
         </View>
       </Modal>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modal4Visible}
@@ -881,43 +885,49 @@ const UserOut = (props) => {
               height: '100%',
               width: '100%',
               justifyContent: 'space-between',
-              padding: '3%'
+              padding: '3%',
+              alignContent: 'center',
+              alignItems: 'center',
             }}>
-              <View style={{ margin: '4%', justifyContent: 'center', height: ' 30%' }}>
+              <View style={{ height: '25%', width: '65%', justifyContent: 'center', marginTop: '5%' }}>
+                <Image
+                  style={{ alignSelf: 'center', width: '60%', height: '80%' }}
+                  resizeMode={'contain'}
+                  source={require('../../../assets/images/pending.png')} />
+              </View>
+              <View style={{ margin: '4%', justifyContent: 'center', height: ' 20%'}}>
                 <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>
-                  Ingresa el valor exacto de pago:
+                  Ingresa el valor exacto de pago
                 </Text>
                 <Text style={{
                   ...styles.modalText,
-                  fontSize: normalize(20),
-                  fontFamily: 'Montserrat-Bold'
+                  fontSize: normalize(30),
+                  fontFamily: 'Montserrat-Bold',
+                  color: '#00A9A0'
                 }}>
-                  Total a pagar: {`$${numberWithPoints(totalAmount)}`}
+                  TOTAL A PAGAR
                 </Text>
               </View>
               <View style={{
                 justifyContent: 'space-between',
-                height: '40%',
+                height: '25%',
+                width:'100%',
                 flexDirection: 'column',
-                paddingBottom: '6%'
+                paddingBottom: '6%',
               }}>
-                <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
-                  <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>
-                    Pago parcial:
-                  </Text>
                   <CurrencyInput
                     placeholder='$'
                     textAlign='center'
                     keyboardType='numeric'
                     style={{
-                      borderWidth: 1,
-                      borderColor: '#F8F8F8',
-                      fontSize: normalize(20),
+                      fontSize: normalize(30),
                       fontFamily: 'Montserrat-Bold',
-                      backgroundColor: '#FFF200',
-                      width: '60%',
-                      borderRadius: 10,
-                      color: '#00A9A0'
+                      backgroundColor: '#00A9A0',
+                      width: '70%',
+                      borderRadius: 30,
+                      color: '#FFF200',
+                      height: '70%',
+                      alignSelf: 'center'
                     }}
                     value={totalPay}
                     onChangeValue={text => setTotalPay(text)}
@@ -925,35 +935,29 @@ const UserOut = (props) => {
                     delimiter="."
                     separator="."
                     precision={0}
-                    onChangeText={(formattedValue) => {
-                      // console.log(formattedValue);
-                      // $2,310.46
-                    }}
                   />
-                </View>
-                <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
-                  <Text style={{ ...styles.modalText, fontSize: normalize(20) }}> Deuda:  </Text>
+                <View style={{ flexDirection: "row", justifyContent: 'center', width: '70%', alignItems: 'center', alignSelf: 'center'}}>
+                  <Text style={{color: '#ED8E20', fontSize: normalize(20), fontFamily: 'Montserrat-Bold'}}>Deuda  </Text>
                   <TextInput
                     style={{
                       fontSize: normalize(20),
                       fontFamily: 'Montserrat-Bold',
-                      width: '60%',
-                      borderRadius: 10,
-                      backgroundColor: '#FFF200',
-                      color: '#00A9A0'
+                      color: '#ED8E20',
+                      alignSelf: 'center'
+
                     }}
-                    textAlign='center'
+                    textAlign='left'
                     editable={false}
-                    value={(totalAmount - totalPay) < 0 ? '0' : `$${numberWithPoints(totalAmount - totalPay)}`}
+                    value={(totalAmount - totalPay) < 0 ? '$0' : `$${numberWithPoints(totalAmount - totalPay)}`}
                   />
                 </View>
               </View>
-              <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end' }}>
+              <View style={{ height: '24%', width: '80%', justifyContent: 'center'}}>
                 <Button onPress={() => {
 
                   finishParking("parcial-pending", false)
                 }}
-                  title="G U A R D A R"
+                  title="GUARDAR"
                   color="#00A9A0"
                   style={
                     styles.modalButton
@@ -961,7 +965,8 @@ const UserOut = (props) => {
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
+                    fontFamily: 'Montserrat-Bold',
+                    letterSpacing: 5
                   }}
                   activityIndicatorStatus={loading} />
               </View>

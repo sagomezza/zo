@@ -148,9 +148,9 @@ const styles = StyleSheet.create({
 
   inputMoney: {
     width: '100%',
-    height: 50,
+    height: 60,
     fontFamily: 'Montserrat-Bold',
-    fontSize: width * 0.055,
+    fontSize: width * 0.050,
     borderRadius: 30,
     textAlign: 'center',
     color: '#FFFFFF'
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   modalText: {
     textAlign: "center",
     fontFamily: 'Montserrat-Regular',
-    color: '#B7B7B7',
+    color: '#68696C',
     fontSize: width * 0.034
   },
   modalTitle: {
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   },
   modalButton: {
     width: '100%',
-    height: '58%',
+    height: '60%',
   },
   modalButtonDisabled: {
     width: '100%',

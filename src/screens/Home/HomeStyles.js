@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     marginTop: '2%',
     borderRadius: 10,
+    borderWidth: 1
   },
   list: {
     flexDirection: "row",
@@ -107,9 +108,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold'
   },
   textListTitle: {
-    fontSize: width * 0.025,
+    fontSize: width * 0.023,
     color: '#00A9A0',
-    fontFamily: 'Montserrat-Bold'
+    fontFamily: 'Montserrat-Bold',
+    textAlign: 'left'
+  },
+  textListTitleInact: {
+    fontSize: width * 0.023,
+    color: '#B0B1B7',
+    fontFamily: 'Montserrat-Bold',
+    textAlign: 'left'
   },
   textPago: {
     fontSize: width * 0.02,
@@ -166,6 +174,18 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '70%',
   },
+  flatlistButton: {
+    width: '49%',
+    justifyContent: 'center',
+    height: '100%'
+  },
+  flatlistButtonSelected: {
+    width: '49%',
+    justifyContent: 'center',
+    height: '100%',
+    borderBottomWidth: 2,
+    borderColor: '#D1D0D0'
+  }
 });
 
 export default styles;
