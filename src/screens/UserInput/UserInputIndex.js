@@ -8,7 +8,8 @@ import {
   Image,
   ActivityIndicator,
   Dimensions,
-  TextInput
+  TextInput,
+  FlatList
 } from 'react-native';
 import { ImageBackground } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
@@ -84,10 +85,7 @@ const UserInput = (props) => {
   const [newPhone, setNewPhone] = useState('');
 
   const refPhone = useRef(null);
-
-  const [tableHead, setTableHead] = useState(['VEHÍCULOS', 'FECHA', 'ÚLTIMOS PAGOS']);
   const [tableData, setTableData] = useState();
-
   const [historyInfo, setHistoryInfo] = useState([]);
   const [prepayDayDateFinished, setPrepayDayDateFinished] = useState('');
   const [prepayDayRecip, setPrepayDayRecip] = useState(false);
@@ -179,71 +177,6 @@ const UserInput = (props) => {
     return (/[a-zA-Z]/).test(char)
   }
 
-  // const findUserByPlate = async () => {
-  //   if (plateOne.length === 3 && plateTwo.length >= 2) {
-  //     firestore
-  //       .collection("users")
-  //       .where("plates", "array-contains", plateOne + plateTwo)
-  //       .get()
-  //       .then(snapshot => {
-  //         if (snapshot.empty) {
-  //           setFindUserByPlateInfo([]);
-  //           setExistingUser(false);
-  //           setShowDropdown(false);
-  //           setShowPhoneInput(true);
-  //         }
-  //         firestore
-  //           .collection("blacklist")
-  //           .where("plate", "==", plateOne + plateTwo)
-  //           .where('status', '==', 'active')
-  //           .get()
-  //           .then(snapshot => {
-  //             if (snapshot.empty) {
-  //               // No BL found: does nothing?
-  //             }
-  //             let bl = []
-  //             snapshot.forEach(doc => {
-  //               let data = doc.data()
-  //               data.date = data.date.nanoseconds ? data.date.toDate() : data.date
-  //               data.id = doc.id
-  //               bl.push(data)
-  //             })
-  //             console.log("BLACKLIST FS", bl)
-  //               .then(blRes => {
-  //                 let users = []
-  //                 let fullData = []
-  //                 snapshot.forEach(doc => {
-  //                   let data = doc.data()
-  //                   users.push(data.phone)
-  //                   data.id = doc.id
-  //                   fullData.push(data)
-  //                 });
-  //                 console.log("USERS FS", users)
-  //                 console.log("FULLDATA FS", fullData)
-  //               })
-  //               .catch(err => {
-  //                 if (err.response && err.response === -1) {
-  //                   let users = []
-  //                   let fullData = []
-  //                   snapshot.forEach(doc => {
-  //                     let data = doc.data()
-  //                     users.push(data.phone)
-  //                     data.id = doc.id
-  //                     fullData.push(data)
-  //                   });
-  //                 } else {
-  //                   // how to treat 
-  //                 }
-  //               })
-  //           })
-
-  //       })
-  //       .catch(err => {
-  //         console.log(err)
-  //       })
-  //   }
-  // }
-
   async function findUserByPlate() {
     try {
       if (plateOne.length === 3 && plateTwo.length >= 2) {
@@ -334,15 +267,7 @@ const UserInput = (props) => {
           setPrepayDayDateFinished('');
           setPrepayDayRecip(false);
         }
-        const auxTable = []
-        response.data.data.forEach(element => {
-          const auxElement = []
-          auxElement.push(element.plate)
-          auxElement.push(moment(element.dateFinished).format('L'))
-          auxElement.push(`$${numberWithPoints(element.total)}`)
-          auxTable.push(auxElement)
-        });
-        setTableData(auxTable);
+        setTableData(response.data.data);
       }
     } catch (err) {
       Sentry.captureException(err)
@@ -621,7 +546,7 @@ const UserInput = (props) => {
                     {mensualityExists ?
                       <View style={{
                         width: '100%',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
                       }}>
                         <Text style={{
                           fontFamily: 'Montserrat-Bold',
@@ -634,11 +559,11 @@ const UserInput = (props) => {
                           flexDirection: 'row',
                           justifyContent: 'center'
                         }}>
-                          <Text style={styles.infoText}>
+                          <Text style={styles.menText}>
                             Capacidad:
                           </Text>
 
-                          <Text style={styles.infoText}>
+                          <Text style={styles.menText}>
                             {' ' + mensualityCapacity}
                           </Text>
                         </View>
@@ -647,11 +572,11 @@ const UserInput = (props) => {
                           flexDirection: 'row',
                           justifyContent: 'center'
                         }}>
-                          <Text style={styles.infoText}>
+                          <Text style={styles.menText}>
                             Placas parqueadas:
                           </Text>
 
-                          <Text style={styles.infoText}>
+                          <Text style={styles.menText}>
                             {' ' + mensualityParkedPlates}
                           </Text>
                         </View>
@@ -670,8 +595,8 @@ const UserInput = (props) => {
                         flexDirection: 'row',
                         justifyContent: 'center'
                       }}>
-                        <Text style={styles.infoText}> Vigencia pase día:   </Text>
-                        <Text style={styles.infoText}>
+                        <Text style={styles.menText}> Vigencia pase día:   </Text>
+                        <Text style={styles.menText}>
                           {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('L') : ''} {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('LT') : ''}
                         </Text>
                       </View>
@@ -685,26 +610,65 @@ const UserInput = (props) => {
                     }
                   </View>
                   {historyExists ?
-                    <Table borderStyle={{ borderColor: '#00A9A0' }}>
-                      <Row
-                        data={tableHead}
-                        style={styles.head}
-                        textStyle={styles.headText}
-                      />
-                      <Rows
+                    <View >
+                      <View style={{ width: '96%', height: '10%', flexDirection: 'row', alignSelf: 'center', marginTop: '5%' }}>
+                        <Text style={{ ...styles.titleText, marginLeft: '7%' }}>VEHÍCULOS</Text>
+                        <Text style={{ ...styles.titleText, marginLeft: '20%' }}>FECHA</Text>
+                        <Text style={{ ...styles.titleText, marginLeft: '20%' }}>ÚLTIMOS PAGOS</Text>
+                      </View>
+                      <FlatList
+                        style={{ height: "70%" }}
                         data={tableData}
-                        textStyle={styles.text}
-                        style={styles.head}
+                        keyExtractor={(item, index) => String(index)}
+                        renderItem={({ item, index }) => {
+                          if (index % 2 == 0) {
+                            return (
+                              // <TouchableOpacity
+                              //   key={index.toString()}
+                              //   onPress={() => {
+                              //     setShowRecipModal(true);
+                              //   }}
+                              // >
+                              <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '2%' }} >
+                                <Text style={{ ...styles.infoText}}>{item.plate}</Text>
+                                <Text style={{ ...styles.infoText}}>{moment(item.dateFinished).format('L')}</Text>
+                                <Text style={{ ...styles.infoText}}>
+                                  {item.cash === 0 && item.change === 0 ? '$0' : ''}
+                                  {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                                  {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                                </Text>
+                              </View>
+                              // </TouchableOpacity>
+
+                            )
+                          } else if (index % 2 !== 0) {
+                            return (
+                              // <TouchableOpacity
+                              //   key={index.toString()}
+                              //   onPress={() => {
+                              //     setShowRecipModal(true);
+                              //   }}
+                              // >
+                              <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '2%', backgroundColor: 'transparent' }} >
+                                <Text style={{ ...styles.infoText}}>{item.plate}</Text>
+                                <Text style={{ ...styles.infoText}}>{moment(item.dateFinished).format('L')}</Text>
+                                <Text style={{ ...styles.infoText}}>
+                                  {item.cash === 0 && item.change === 0 ? '$0' : ''}
+                                  {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                                  {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                                </Text>
+                              </View>
+                              // </TouchableOpacity>
+
+                            )
+                          }
+                        }}
                       />
-                    </Table>
+                    </View>
                     :
-                    <Table borderStyle={{ borderColor: '#00A9A0' }}>
-                      {/* <Row
-                          data={tableHead}
-                          style={styles.head}
-                          textStyle={styles.headText}
-                        /> */}
-                    </Table>
+                    <View >
+
+                    </View>
                   }
                 </View>
               </View>
@@ -803,7 +767,7 @@ const UserInput = (props) => {
                   paddingBottom: '6%',
                 }}>
                   <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
-                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold', marginTop: '3%'  }}>Pago  </Text>
+                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold', marginTop: '3%' }}>Pago  </Text>
                     <CurrencyInput
                       placeholder='$'
                       textAlign='center'
@@ -821,8 +785,8 @@ const UserInput = (props) => {
                       }}
                     />
                   </View>
-                  <View style={{ flexDirection: "row", justifyContent: 'space-between'}}>
-                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold', marginTop: '3%'}}>A devolver  </Text>
+                  <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold', marginTop: '3%' }}>A devolver  </Text>
                     <TextInput
                       style={styles.currencyInput}
                       keyboardType='numeric'

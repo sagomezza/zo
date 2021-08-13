@@ -17,8 +17,6 @@ import styles from '../Home/HomeStyles';
 import instance from "../../config/axios";
 import moment from 'moment';
 import normalize from '../../config/services/normalizeFontSize';
-
-
 // api
 import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL, EDIT_ADMIN, READ_OFFICIAL } from "../../config/api";
 import { TIMEOUT } from '../../config/constants/constants';

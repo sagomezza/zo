@@ -15,6 +15,11 @@ const styles = StyleSheet.create({
     height: normalize(50),
     alignContent: 'center',
   },
+  row: {
+    height: normalize(50),
+    alignContent: 'center',
+    backgroundColor: '#FFFFFF'
+  },
   containerOne: {
     position: "relative",
     height: '30%',
@@ -330,6 +335,33 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
     color: '#8F8F8F',
     fontSize: normalize(20)
+  },
+  list: {
+    flexDirection: "row",
+    backgroundColor: '#FFFFFF',
+    borderRadius: 7,
+    justifyContent: 'space-around',
+    paddingTop: '3%',
+    paddingBottom: '3%',
+    
+  },
+  titleText:{
+    fontSize: width * 0.023,
+    color: '#00A9A0',
+    fontFamily: 'Montserrat-Bold',
+  },
+  infoText:{
+    fontSize: width * 0.023,
+    color: '#6F6F7B',
+    fontFamily: 'Montserrat-Bold',
+    width: '30%',
+    textAlign: 'center'
+  },
+  menText:{
+    fontSize: width * 0.023,
+    color: '#00A9A0',
+    fontFamily: 'Montserrat-Bold',
+    textAlign: 'center'
   },
 });
 
