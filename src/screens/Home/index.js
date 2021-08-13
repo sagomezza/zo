@@ -141,6 +141,12 @@ const HomeIndex = (props) => {
       return Math.round(hours)
     } else return hours
   }
+  const formatDateDays = (date) => {
+    return moment(date).format('L')
+  }
+  const formatDateHours = (date) => {
+    return moment(date).format('LT')
+  }
 
 
 
@@ -149,7 +155,7 @@ const HomeIndex = (props) => {
   }
 
   const renderList = () => {
-    if (activeList === 0) {
+    if (activeList === 1) {
       return (
         <View style={styles.listContainer}>
           {loadingRecips ?
@@ -159,7 +165,15 @@ const HomeIndex = (props) => {
               </View>
             </View>
             :
-            <View style={{ height: "72%" }}>
+            <View style={{ height: "97%" }}>
+              <View style={{ width: '96%', height: '5%', flexDirection: 'row', alignSelf: 'center', marginTop: '3%' }}>
+                <Text style={{ ...styles.titleText, marginLeft: '2%' }}>Placa</Text>
+                <Text style={{ ...styles.titleText, marginLeft: '7%' }}>Fecha</Text>
+                <Text style={{ ...styles.titleText, marginLeft: '15%' }}>Tiempo</Text>
+                <Text style={{ ...styles.titleText, marginLeft: '13%' }}>Total horas</Text>
+                <Text style={{ ...styles.titleText, marginLeft: '8%' }}>Total</Text>
+
+              </View>
               {recips.recips.length > 0 ?
                 <FlatList
                   style={{ height: "37%" }}
@@ -173,23 +187,47 @@ const HomeIndex = (props) => {
                       //     setShowRecipModal(true);
                       //   }}
                       // >
-                      <View style={styles.list} >
-                        <View style={{ marginBottom: '2%' }} >
-                          <Text style={styles.textPlaca}>
-                            {typeof item.plate === 'string' ? item.plate : item.plate[0]}
+                      <View style={{...styles.list, paddingTop: '3%', paddingBottom: '4%'}} >
+                        <Text style={styles.textPlaca}>
+                          {typeof item.plate === 'string' ? item.plate : item.plate[0]}
+                        </Text>
+                        <Text style={styles.dateDaysText}>
+                          {item.prepayFullDay === true ? `${formatDateDays(item.dateFactured)}` : ""}
+                          {item.mensuality === true ? `${formatDateDays(item.dateStart)}` : ""}
+                          {item.isParanoic === true ? `${formatDateDays(item.dateFinished)}` : ""}
+                          {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateDays(item.dateFinished)}` : ""}
+                        </Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', width: '30%', height: '100%' }}>
+                          <Text style={styles.dateDaysText}>
+                            {item.prepayFullDay === true ? `${formatDateHours(item.dateFactured)}` : ""}
+                            {item.mensuality === true ? `${formatDateHours(item.dateStart)}` : ""}
+                            {item.isParanoic === true ? `${formatDateHours(item.dateStart)}` : ""}
+                            {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateHours(item.dateStart)}` : ""}
                           </Text>
-                          <Text style={styles.textPago}>
-                            Pago por
-                            {item.hours === '1 month' ? ' mensualidad' : `${formatHours(item.hours)} horas`}
+                          <Image
+                            style={{ width: '20%' }}
+                            resizeMode={"contain"}
+                            source={require('../../../assets/images/arrow.png')} />
+                          <Text style={styles.dateDaysText}>
+                            {item.prepayFullDay === true ? `${formatDateHours(item.dateFinished)}` : ""}
+                            {item.mensuality === true ? `${formatDateHours(item.dateFinished)}` : ""}
+                            {item.isParanoic === true ? `${formatDateHours(item.dateFinished)}` : ""}
+                            {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateHours(item.dateFinished)}` : ""}
                           </Text>
                         </View>
-                        <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
-                          <Text style={styles.textMoney}>
+
+                        <Text style={styles.totalHours}>
+                          {item.prepayFullDay === true ? " Pase día" : ""}
+                          {item.mensuality === true ? " Mensualidad" : ""}
+                          {item.isParanoic === true ? `${formatHours(item.hours)} Horas` : ""}
+                          {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatHours(item.hours)} Horas` : ""}
+                        </Text>
+
+                          <Text style={styles.textPlaca}>
                             {item.cash === 0 && item.change === 0 ? '$0' : ''}
                             {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
                             {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
                           </Text>
-                        </View>
                       </View>
                       // </TouchableOpacity>
 
@@ -205,17 +243,23 @@ const HomeIndex = (props) => {
             </View>}
         </View>
       );
-    } else if (activeList === 1) {
+    } else if (activeList === 0) {
       return (
         <View style={styles.listContainer}>
-          {loadingReservations ?
+          {loadingReservations === 'hi' ?
             <View style={{ height: "72%" }}>
               <View style={{ justifyContent: 'center', height: '100%' }}>
                 <ActivityIndicator size={"large"} color={'#00A9A0'} />
               </View>
             </View>
             :
-            <View style={{ height: "72%" }}>
+            <View style={{ height: "97%" }}>
+              <View style={{ width: '96%', height: '5%', flexDirection: 'row', alignSelf: 'center', marginTop: '3%' }}>
+                <Text style={{ ...styles.titleText, marginLeft: '6%' }}>Placa</Text>
+                <Text style={{ ...styles.titleText, marginLeft: '15%' }}>Código</Text>
+                <Text style={{ ...styles.titleText, marginLeft: '15%' }}>Fecha</Text>
+                <Text style={{ ...styles.titleText, marginLeft: '14%' }}>Modo de pago</Text>
+              </View>
               {reservations.reservations.length > 0 ?
                 <FlatList
                   style={{ height: "37%" }}
@@ -242,20 +286,18 @@ const HomeIndex = (props) => {
                       //   }}
                       // >
                       <View style={styles.list} >
-                        <View style={{ marginBottom: '2%' }} >
-                          <Text style={styles.textPlaca}>{item.plate}</Text>
-                          <Text style={styles.textPago}>{item.verificationCode}</Text>
+                        <Text style={styles.textPlaca}>{item.plate}</Text>
+                        <Text style={styles.dateDaysText}>{item.verificationCode}</Text>
+                        <View style={{ flexDirection: 'column' }}>
+                          <Text style={styles.dateDaysText}>{moment(item.dateStart).format('L')}</Text>
+                          <Text style={styles.dateHourText}>{moment(item.dateStart).format('LT')}</Text>
                         </View>
-                        <View style={{ flex: 1, alignItems: 'flex-end' }} >
-                          <Text style={styles.textMoney}>{moment(item.dateStart).format('L')}  {moment(item.dateStart).format('LT')}</Text>
-                          <Text style={styles.textPago}>
-                            Pago por
-                            {item.prepayFullDay === true ? " pase día" : ""}
-                            {item.mensuality === true ? " mensualidad" : ""}
-                            {item.isParanoic === true ? " horas" : ""}
-                            {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? " horas" : ""}
-                          </Text>
-                        </View>
+                        <Text style={styles.dateDaysText}>
+                          {item.prepayFullDay === true ? " Pase día" : ""}
+                          {item.mensuality === true ? " Mensualidad" : ""}
+                          {item.isParanoic === true ? " Por horas" : ""}
+                          {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? " Por horas" : ""}
+                        </Text>
                       </View>
                       // </TouchableOpacity>
                     )
@@ -356,8 +398,8 @@ const HomeIndex = (props) => {
             width: '85%',
             height: '10%',
             flexDirection: 'row',
-            marginTop: '3%',
-            justifyContent: 'space-between'
+            marginTop: '6%',
+            justifyContent: 'space-between',
           }}>
             <Button
               transparent
@@ -384,7 +426,6 @@ const HomeIndex = (props) => {
                 resizeMode={"contain"}
                 source={require('../../../assets/images/history.png')} />
               <Text style={activeList === 1 ? styles.textListTitle : styles.textListTitleInact}  >HISTORIAL DE PAGOS</Text>
-
             </Button>
           </View>
           {renderList()}

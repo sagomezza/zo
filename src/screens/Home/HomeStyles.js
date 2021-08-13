@@ -37,21 +37,18 @@ const styles = StyleSheet.create({
     marginLeft: '1%',
   },
   listContainer: {
-    height: '38%',
-    width: '73%',
-    backgroundColor: '#FFFFFF',
+    height: '75%',
+    width: '87%',
     marginTop: '2%',
-    borderRadius: 10,
-    borderWidth: 1
   },
   list: {
     flexDirection: "row",
-    borderBottomWidth: 1,
-    borderColor: "#E9E9E9",
-    marginBottom: '2%',
-    marginLeft: '10%',
-    marginRight: '10%',
-    marginTop: '0%'
+    backgroundColor: '#FFFFFF',
+    marginTop: '3%',
+    borderRadius: 7,
+    justifyContent: 'space-around',
+    paddingTop: '2%',
+    paddingBottom: '2%'
   },
   plateContainer: {
     flexDirection: "row",
@@ -103,9 +100,18 @@ const styles = StyleSheet.create({
     marginTop: '2%'
   },
   textPlaca: {
-    fontSize: width * 0.03,
-    color: '#5D5D5D',
-    fontFamily: 'Montserrat-Bold'
+    fontSize: width * 0.023,
+    color: '#00A9A0',
+    fontFamily: 'Montserrat-Bold',
+    marginTop: '0%',
+    width: '15%',
+    height: '100%',
+    textAlign: 'center'
+  },
+  titleText:{
+    fontSize: width * 0.023,
+    color: '#6F6F7B',
+    fontFamily: 'Montserrat-Bold',
   },
   textListTitle: {
     fontSize: width * 0.023,
@@ -119,15 +125,27 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
     textAlign: 'left'
   },
-  textPago: {
+  dateDaysText: {
     fontSize: width * 0.02,
-    color: '#5D5D5D',
-    fontFamily: 'Montserrat-Regular'
+    color: '#6F6F7B',
+    fontFamily: 'Montserrat-Medium'
+  },
+  totalHours: {
+    fontSize: width * 0.02,
+    color: '#6F6F7B',
+    fontFamily: 'Montserrat-Medium',
+    width: '20%',
+    textAlign: 'center'
+  },
+  dateHourText: {
+    fontSize: width * 0.02,
+    color: '#19A9A0',
+    fontFamily: 'Montserrat-Medium'
   },
   textMoney: {
-    fontSize: width * 0.034,
-    color: '#5D5D5D',
-    fontFamily: 'Montserrat-Regular'
+    fontSize: width * 0.02,
+    color: '#6F6F7B',
+    fontFamily: 'Montserrat-Medium'
   },
   footerContainer: {
     height: '10%',
