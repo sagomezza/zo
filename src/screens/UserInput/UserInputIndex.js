@@ -52,7 +52,6 @@ const UserInput = (props) => {
   const [plateTwo, setPlateTwo] = useState('');
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
-
   const [prepayDay, setPrepayDay] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
@@ -60,40 +59,23 @@ const UserInput = (props) => {
   const [bikeParksFull, setBikeParksFull] = useState(false);
   const [alreadyParked, setAlreadyParked] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
-  const [modal4Visible, setModal4Visible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [maxCapMensuality, setMaxCapMensuality] = useState(false);
-
-  const [findUserByPlateInfo, setFindUserByPlateInfo] = useState([]);
-
-  const userData = findUserByPlateInfo.fullData !== undefined ? findUserByPlateInfo.fullData[0] : "";
   const [blacklist, setBlacklist] = useState([]);
   let blacklistValue = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].value : 0;
   let blacklistDate = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].date : '';
-  const [blacklistExists, setBlacklistExists] = useState(false);
-
-  const [startParking, setStartParking] = useState({});
   const [existingUser, setExistingUser] = useState(false)
-  const [debtBlacklist, setDebtBlacklist] = useState(0)
-
   const [showPhoneInput, setShowPhoneInput] = useState(false)
-  const [codeError, setErrorText] = useState(false);
-
   const [phone, setPhone] = useState(null);
   const [phones, setPhones] = useState([{ label: 'Selecciona un número', value: 1 }]);
   const [showDropdown, setShowDropdown] = useState(false)
   const [newPhone, setNewPhone] = useState('');
-
-  const refPhone = useRef(null);
   const [tableData, setTableData] = useState();
-  const [historyInfo, setHistoryInfo] = useState([]);
   const [prepayDayDateFinished, setPrepayDayDateFinished] = useState('');
   const [prepayDayRecip, setPrepayDayRecip] = useState(false);
   const [historyExists, setHistoryExists] = useState(false);
-
   const [prepayDayValue, setPrepayDayValue] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
-  const [totalAmount, setTotalAmount] = useState(0);
   const [mensuality, setMensuality] = useState({});
   const [mensualityExists, setMensualityExists] = useState(false);
   const mensualityInfo = mensuality.data !== undefined ? mensuality.data[0] : "";
@@ -259,7 +241,6 @@ const UserInput = (props) => {
           { timeout: TIMEOUT }
         )
         setHistoryExists(true)
-        setHistoryInfo(response.data.data)
         if (response.data.data[0].prepayFullDay) {
           setPrepayDayDateFinished(response.data.data[0].dateFinished)
           setPrepayDayRecip(true);
@@ -342,9 +323,7 @@ const UserInput = (props) => {
             }, timeout: TIMEOUT
           }
         )
-        setStartParking(response?.data?.data);
         setPhones([{ label: 'Selecciona un número', value: 1 }]);
-        setBlacklistExists(false);
         setLoadingStart(false);
         setPrepayDay(false);
         setPrepayDayValue(0);
@@ -389,6 +368,20 @@ const UserInput = (props) => {
     }
   };
 
+  const qrHandler = () => {
+    restartSearch();
+    clearPlateOne();
+    clearPlateTwo();
+    store.dispatch(actions.setQr(plateOne + plateTwo));
+    navigation.navigate('QRscanner');
+  }
+
+  const plateHandler = () => {
+    getRecipsByPlate();
+    findUserByPlate();
+    findMensualityPlate();
+  }
+
   let inputChange = (totalPay - prepayDayValue) <= 0 ? '' : '' + (totalPay - prepayDayValue)
 
   return (
@@ -415,7 +408,6 @@ const UserInput = (props) => {
                   };
                 }}
                 value={plateOne}
-
                 onFocus={() => { clearPlateOne(); clearPlateTwo(); restartSearch(); }}
               />
               <TextInput
@@ -427,8 +419,6 @@ const UserInput = (props) => {
                 maxLength={3}
                 autoCapitalize={"characters"}
                 keyboardType='default'
-
-
                 onFocus={() => { clearPlateTwo(); restartSearch(); }}
                 onChangeText={text => {
                   setPlateTwo(text.trim());
@@ -437,20 +427,11 @@ const UserInput = (props) => {
                   };
                 }}
                 value={plateTwo}
-                onEndEditing={() => {
-                  getRecipsByPlate();
-                  findUserByPlate();
-                  findMensualityPlate();
-                }}
+                onEndEditing={plateHandler}
               />
             </View>
             <View style={styles.textContainer}>
-              <Text style={{
-                fontFamily: 'Montserrat-Bold',
-                color: '#FFFFFF',
-                fontSize: width * 0.03,
-                letterSpacing: 5
-              }}>
+              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.03, letterSpacing: 5 }}>
                 INGRESE CELULAR
               </Text>
             </View>
@@ -497,20 +478,14 @@ const UserInput = (props) => {
                   }}
                   value={newPhone}
                 />}
-              {codeError && <Text>{codeError}</Text>}
               <View style={styles.checkPrepayContainer}>
                 <CheckBox
                   value={prepayDay}
                   onValueChange={() => setPrepayDay(!prepayDay)}
                   style={{ alignSelf: 'center' }}
-                  tintColors={{
-                    true: '#FFF200',
-                    false: '#FFF200'
-                  }}
+                  tintColors={{ true: '#FFF200', false: '#FFF200' }}
                 />
-                <Text style={styles.prepayDayText}>
-                  PASE DIA
-                </Text>
+                <Text style={styles.prepayDayText}>PASE DIA</Text>
               </View>
               <View style={styles.startButtonContainer}>
                 {!loadingStart &&
@@ -526,13 +501,7 @@ const UserInput = (props) => {
                 {!loadingStart &&
                   <TouchableOpacity
                     style={[styles.buttonT, (plateOne + plateTwo).length < 5 ? styles.buttonTDisabled : styles.buttonT]}
-                    onPress={() => {
-                      restartSearch();
-                      clearPlateOne();
-                      clearPlateTwo();
-                      store.dispatch(actions.setQr(plateOne + plateTwo));
-                      navigation.navigate('QRscanner');
-                    }}
+                    onPress={qrHandler}
                     disabled={(plateOne + plateTwo).length < 5}
                   >
                     <Image style={styles.qrImage} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
@@ -544,68 +513,35 @@ const UserInput = (props) => {
                 <View style={{ height: "90%", width: '90%', marginTop: '9%' }}>
                   <View style={{ width: '100%', alignItems: 'center' }}>
                     {mensualityExists ?
-                      <View style={{
-                        width: '100%',
-                        justifyContent: 'center',
-                      }}>
+                      <View style={{ width: '100%', justifyContent: 'center' }}>
                         <Text style={{
                           fontFamily: 'Montserrat-Bold',
                           color: '#00A9A0',
                           fontSize: width * 0.027,
                           textAlign: 'center'
                         }}>{mensualityUserName}</Text>
-                        <View style={{
-                          width: '100%',
-                          flexDirection: 'row',
-                          justifyContent: 'center'
-                        }}>
-                          <Text style={styles.menText}>
-                            Capacidad:
-                          </Text>
-
-                          <Text style={styles.menText}>
-                            {' ' + mensualityCapacity}
-                          </Text>
+                        <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
+                          <Text style={styles.menText}>Capacidad:</Text>
+                          <Text style={styles.menText}>{' ' + mensualityCapacity}</Text>
                         </View>
-                        <View style={{
-                          width: '100%',
-                          flexDirection: 'row',
-                          justifyContent: 'center'
-                        }}>
-                          <Text style={styles.menText}>
-                            Placas parqueadas:
-                          </Text>
-
-                          <Text style={styles.menText}>
-                            {' ' + mensualityParkedPlates}
-                          </Text>
+                        <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
+                          <Text style={styles.menText}>Placas parqueadas:</Text>
+                          <Text style={styles.menText}>{' ' + mensualityParkedPlates}</Text>
                         </View>
                       </View>
                       :
-                      <View style={{
-                        width: '100%',
-                        flexDirection: 'row',
-                        justifyContent: 'center'
-                      }}>
+                      <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
                       </View>
                     }
                     {prepayDayRecip ?
-                      <View style={{
-                        width: '100%',
-                        flexDirection: 'row',
-                        justifyContent: 'center'
-                      }}>
+                      <View style={{ width: '100%', flexDirection: 'row', ustifyContent: 'center' }}>
                         <Text style={styles.menText}> Vigencia pase día:   </Text>
                         <Text style={styles.menText}>
                           {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('L') : ''} {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('LT') : ''}
                         </Text>
                       </View>
                       :
-                      <View style={{
-                        width: '100%',
-                        flexDirection: 'row',
-                        justifyContent: 'center'
-                      }}>
+                      <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
                       </View>
                     }
                   </View>
@@ -630,9 +566,9 @@ const UserInput = (props) => {
                               //   }}
                               // >
                               <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '2%' }} >
-                                <Text style={{ ...styles.infoText}}>{item.plate}</Text>
-                                <Text style={{ ...styles.infoText}}>{moment(item.dateFinished).format('L')}</Text>
-                                <Text style={{ ...styles.infoText}}>
+                                <Text style={{ ...styles.infoText }}>{item.plate}</Text>
+                                <Text style={{ ...styles.infoText }}>{moment(item.dateFinished).format('L')}</Text>
+                                <Text style={{ ...styles.infoText }}>
                                   {item.cash === 0 && item.change === 0 ? '$0' : ''}
                                   {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
                                   {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
@@ -650,9 +586,9 @@ const UserInput = (props) => {
                               //   }}
                               // >
                               <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '2%', backgroundColor: 'transparent' }} >
-                                <Text style={{ ...styles.infoText}}>{item.plate}</Text>
-                                <Text style={{ ...styles.infoText}}>{moment(item.dateFinished).format('L')}</Text>
-                                <Text style={{ ...styles.infoText}}>
+                                <Text style={{ ...styles.infoText }}>{item.plate}</Text>
+                                <Text style={{ ...styles.infoText }}>{moment(item.dateFinished).format('L')}</Text>
+                                <Text style={{ ...styles.infoText }}>
                                   {item.cash === 0 && item.change === 0 ? '$0' : ''}
                                   {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
                                   {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
@@ -667,7 +603,6 @@ const UserInput = (props) => {
                     </View>
                     :
                     <View >
-
                     </View>
                   }
                 </View>
