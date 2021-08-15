@@ -35,7 +35,7 @@ const Transactions = (props) => {
                     height: '40%',
                     flexDirection: 'column'
                 }}
-                source={require('../../../assets/images/Home.png')}>
+                source={require('../../../assets/images/logoutStripes.png')}>
                 <Header navigation={navigation} />
                 <View style={styles.container}>
                     <View style={styles.listContainer}>

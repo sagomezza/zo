@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: width * 0.029,
     marginBottom: '20%',
-    fontFamily: 'Montserrat-Bold'
+    fontFamily: 'Montserrat-Bold',
+    letterSpacing: 3
   },
   inputsContainer: {
     width: "100%",
@@ -65,8 +66,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#00A9A0",
-    fontFamily: "Montserrat-Bold",
+    fontFamily: "Montserrat-Medium",
     fontSize: width * 0.03,
+    letterSpacing: 5
   },
   restoreText: {
     color: 'white',
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
     height: normalize(590),
     width: '75%',
     padding: '5%',
-    borderRadius: 50,
+    borderRadius: 30,
     borderColor: '#707070',
     borderWidth: 1,
     justifyContent: 'space-between',

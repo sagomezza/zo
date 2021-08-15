@@ -170,7 +170,6 @@ const UserInput = (props) => {
           },
           { timeout: TIMEOUT }
         )
-        setFindUserByPlateInfo(response.data);
         setExistingUser(true)
 
         setShowPhoneInput(false);
@@ -197,7 +196,6 @@ const UserInput = (props) => {
       Sentry.captureException(err)
       // console.log(err)
       // console.log(err?.response)
-      setFindUserByPlateInfo([]);
       setExistingUser(false);
       setShowDropdown(false);
       setShowPhoneInput(true);
@@ -534,7 +532,7 @@ const UserInput = (props) => {
                       </View>
                     }
                     {prepayDayRecip ?
-                      <View style={{ width: '100%', flexDirection: 'row', ustifyContent: 'center' }}>
+                      <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
                         <Text style={styles.menText}> Vigencia pase día:   </Text>
                         <Text style={styles.menText}>
                           {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('L') : ''} {prepayDayDateFinished != '' ? moment(prepayDayDateFinished).format('LT') : ''}
@@ -572,6 +570,8 @@ const UserInput = (props) => {
                                   {item.cash === 0 && item.change === 0 ? '$0' : ''}
                                   {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
                                   {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                                  {!item.cash && !item.change ? `$${numberWithPoints(item.total)}` : ''}
+
                                 </Text>
                               </View>
                               // </TouchableOpacity>
@@ -822,9 +822,9 @@ const UserInput = (props) => {
               padding: '2%'
             }}>
               <View style={{ margin: '4%', justifyContent: 'center', height: ' 60%' }}>
-                <Text style={styles.modalTextAlert}> Este usuario se encuentra en lista negra:  </Text>
-                <Text style={styles.modalTextAlert}>Deuda: {`$${numberWithPoints(blacklistValue)}`}</Text>
-                <Text style={styles.modalTextAlert}>Fecha: {moment(blacklistDate).format('L')} {moment(blacklistDate).format('LT')}</Text>
+                <Text style={styles.modalText}> Este usuario se encuentra en lista negra:  </Text>
+                <Text style={styles.modalText}>Deuda: {`$${numberWithPoints(blacklistValue)}`}</Text>
+                <Text style={styles.modalText}>Fecha: {moment(blacklistDate).format('L')} {moment(blacklistDate).format('LT')}</Text>
 
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
@@ -891,9 +891,9 @@ const UserInput = (props) => {
           <View style={styles.modalView}>
             <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
               <View style={{ margin: '4%', justifyContent: 'space-between', height: ' 65%' }}>
-                <Text style={{ ...styles.modalTextAlert, fontFamily: 'Montserrat-Bold' }}> Alerta </Text>
-                <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#8F8F8F' }}> Las celdas disponibles para esta mensualidad ya están ocupadas. Al hacer el ingreso del vehículo se hará el cobro por horas. </Text>
-                <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#8F8F8F' }}> ¿ Desea continuar ? </Text>
+                <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#00A9A0' }}> Alerta </Text>
+                <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Medium', color: '#8F8F8F' }}> Las celdas disponibles para esta mensualidad ya están ocupadas. Al hacer el ingreso del vehículo se hará el cobro por horas. </Text>
+                <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Medium', color: '#8F8F8F' }}> ¿ Desea continuar ? </Text>
               </View>
               <View style={{ height: '25%', width: '100%', justifyContent: 'flex-start', flexDirection: 'column' }}>
                 <Button onPress={() => {
@@ -929,7 +929,6 @@ const UserInput = (props) => {
           </View>
         </View>
       </Modal>
-
     </View >
   );
 

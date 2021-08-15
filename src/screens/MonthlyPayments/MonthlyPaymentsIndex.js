@@ -514,8 +514,7 @@ const MonthlyPayments = (props) => {
   };
 
   let textinputMoney = totalPay === 0 ? "" : "" + totalPay;
-  let inputChange =
-    totalPay - monthPrice <= 0 ? "" : "" + (totalPay - monthPrice);
+  let inputChange = totalPay - monthPrice <= 0 ? "" : "" + (totalPay - monthPrice);
 
   return (
     <View style={{ flex: 1, backgroundColor: '#00A9A0'  }}>
@@ -627,7 +626,6 @@ const MonthlyPayments = (props) => {
                   <Text style={styles.infoTextTitle}>Vigencia hasta</Text>
                   <Text style={styles.infoText}>{validityDateMenHours}</Text>
                 </View>
-
                 <View style={styles.mensualityInfoPlates}>
                   <Text style={styles.infoTextTitle}>Placas asociadas</Text>
                   <View style={styles.plateListContainer}>
@@ -681,10 +679,7 @@ const MonthlyPayments = (props) => {
               </View>
             </View>
           ) : (
-            <View
-              style={{
-                height: "30%",
-                justifyContent: "space-between",
+            <View style={{ height: "30%", justifyContent: "space-between",
                 width: "80%",
               }}
             >

@@ -199,7 +199,7 @@ const LoginIndex = (props) => {
             </View>
             <View style={styles.loginTextContainer} >
               <Text style={styles.loginText}>
-                I N I C I O   D E   S E S I Ó N
+                INICIO DE SESIÓN
               </Text>
             </View>
             <View style={styles.inputsContainer}>
@@ -238,7 +238,7 @@ const LoginIndex = (props) => {
               </View>
               <Button
                 onPress={firstLogin}
-                title="E N T R A R"
+                title="ENTRAR"
                 color="#FFF200"
                 style={styles.button}
                 textStyle={styles.buttonText}
