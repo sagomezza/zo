@@ -185,7 +185,7 @@ const HomeIndex = (props) => {
                       //     setShowRecipModal(true);
                       //   }}
                       // >
-                      <View style={{...styles.list, paddingTop: '3%', paddingBottom: '4%'}} >
+                      <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%' }} >
                         <Text style={styles.textPlaca}>
                           {typeof item.plate === 'string' ? item.plate : item.plate[0]}
                         </Text>
@@ -221,11 +221,11 @@ const HomeIndex = (props) => {
                           {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatHours(item.hours)} Horas` : ""}
                         </Text>
 
-                          <Text style={styles.textPlaca}>
-                            {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                            {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                            {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
-                          </Text>
+                        <Text style={styles.textPlaca}>
+                          {item.cash === 0 && item.change === 0 ? '$0' : ''}
+                          {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                          {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                        </Text>
                       </View>
                       // </TouchableOpacity>
 
@@ -330,29 +330,19 @@ const HomeIndex = (props) => {
                 source={require('../../../assets/images/homeCar.png')}
               />
               <View style={{ width: '70%' }}>
-                <Text style={styles.totalCellsText} >
-                  {`${hq.totalCars}`} CELDAS
-                </Text>
+                <Text style={styles.totalCellsText} >{`${hq.totalCars}`} CELDAS</Text>
               </View>
             </View>
             <View style={styles.bikeCounter} >
-              <Text style={styles.plateInputTextBig}>
-                {`${hq.occupiedCars}`}
-              </Text>
+              <Text style={styles.plateInputTextBig}>{`${hq.occupiedCars}`}</Text>
               <View style={{ width: '70%' }}>
-                <Text style={styles.plateInputTextSmall} >
-                  VEHÍCULOS PARQUEADOS
-                </Text>
+                <Text style={styles.plateInputTextSmall} >VEHÍCULOS PARQUEADOS</Text>
               </View>
             </View>
             <View style={styles.bikeCounter} >
-              <Text style={styles.plateInputTextBig2}>
-                {`${hq.availableCars}`}
-              </Text>
+              <Text style={styles.plateInputTextBig2}>{`${hq.availableCars}`}</Text>
               <View style={{ width: '70%' }}>
-                <Text style={styles.plateInputTextSmall} >
-                  CELDAS DISPONIBLES
-                </Text>
+                <Text style={styles.plateInputTextSmall} >CELDAS DISPONIBLES</Text>
               </View>
             </View>
           </View>
@@ -364,41 +354,25 @@ const HomeIndex = (props) => {
                 source={require('../../../assets/images/homeBike.png')}
               />
               <View style={{ width: '70%' }}>
-                <Text style={styles.totalCellsText} >
-                  {`${hq.totalBikes}`} CELDAS
-                </Text>
+                <Text style={styles.totalCellsText} >{`${hq.totalBikes}`} CELDAS</Text>
               </View>
             </View>
             <View style={styles.bikeCounter} >
-              <Text style={styles.plateInputTextBig}>
-                {`${hq.occupiedBikes}`}
-              </Text>
+              <Text style={styles.plateInputTextBig}>{`${hq.occupiedBikes}`}</Text>
               <View style={{ width: '70%' }}>
-                <Text style={styles.plateInputTextSmall} >
-                  VEHÍCULOS PARQUEADOS
-                </Text>
+                <Text style={styles.plateInputTextSmall} >VEHÍCULOS PARQUEADOS</Text>
               </View>
             </View>
             <View style={styles.bikeCounter} >
-              <Text style={styles.plateInputTextBig2}>
-                {`${hq.availableBikes}`}
-              </Text>
+              <Text style={styles.plateInputTextBig2}>{`${hq.availableBikes}`}</Text>
               <View style={{ width: '70%' }}>
-                <Text style={styles.plateInputTextSmall} >
-                  CELDAS DISPONIBLES
-                </Text>
+                <Text style={styles.plateInputTextSmall} >CELDAS DISPONIBLES</Text>
               </View>
             </View>
           </View>
         </View>
         <View style={styles.bottomContainer}>
-          <View style={{
-            width: '85%',
-            height: '10%',
-            flexDirection: 'row',
-            marginTop: '6%',
-            justifyContent: 'space-between',
-          }}>
+          <View style={styles.buttonContainer}>
             <Button
               transparent
               style={activeList === 0 ? styles.flatlistButtonSelected : styles.flatlistButton}
@@ -410,14 +384,12 @@ const HomeIndex = (props) => {
                 resizeMode={"contain"}
                 source={require('../../../assets/images/parked.png')} />
               <Text style={activeList === 0 ? styles.textListTitle : styles.textListTitleInact} >VEHÍCULOS PARQUEADOS</Text>
-
             </Button>
             <Button
               transparent
               style={activeList === 1 ? styles.flatlistButtonSelected : styles.flatlistButton}
               onPress={() => segmentClicked(1)}
               active={activeList === 1}
-
             >
               <Image
                 style={{ width: '20%' }}
@@ -432,7 +404,6 @@ const HomeIndex = (props) => {
       <View style={styles.footerContainer}>
         <FooterIndex navigation={navigation} />
       </View>
-
     </View>
   );
 };

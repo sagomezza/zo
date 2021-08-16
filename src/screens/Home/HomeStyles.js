@@ -17,6 +17,13 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
   },
+  buttonContainer: {
+    width: '85%',
+    height: '10%',
+    flexDirection: 'row',
+    marginTop: '6%',
+    justifyContent: 'space-between',
+  },
   bikeCounter: {
     height: '25%',
     width: '90%',

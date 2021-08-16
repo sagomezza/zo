@@ -23,6 +23,7 @@ import normalize from '../../config/services/normalizeFontSize';
 import { Keyboard } from 'react-native';
 import moment from 'moment';
 import Button from '../../components/Button';
+import CustomModal from '../../components/CustomModal';
 import numberWithPoints from '../../config/services/numberWithPoints';
 
 // api

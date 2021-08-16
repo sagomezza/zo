@@ -35,6 +35,8 @@ import { TIMEOUT } from "../../config/constants/constants";
 import styles from "./LoginStyles";
 import normalize from "../../config/services/normalizeFontSize";
 import Button from "../../components/Button";
+import CustomModal from "../../components/CustomModal";
+
 import { ImageBackground } from "react-native";
 import { Dimensions } from "react-native";
 import store from "../../config/store";
@@ -251,73 +253,13 @@ const LoginIndex = (props) => {
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        backdropOpacity={0.3}
+      <CustomModal
         visible={showInstructions}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.modalInfoContainer}>
-              <View style={styles.iconTitleContainer}>
-                <Image
-                  style={{ width: '22%', height: "100%", alignSelf: 'flex-end' }}
-                  resizeMode={"contain"}
-                  source={require("../../../assets/images/alert.png")}
-                />
-                <View style={{
-                  height: '100%',
-                  width: '62%',
-                  flexDirection: 'column',
-                  justifyContent: 'center'
-                }}>
-                  <Text style={styles.modalTextTitle}> HOLA, </Text>
-                  <Text style={styles.modalTextTitle}> PARA INICIAR: </Text>
-                </View>
-              </View>
-              <View style={{ justifyContent: 'space-around', height: '50%', marginBottom: 15 }}>
-                <View style={styles.stepContainer}>
-                  <Text style={styles.modalNum}> 1 </Text>
-                  <View style={{ height: '100%', width: '90%', flexDirection: 'column', justifyContent: 'center' }}>
-                    <Text style={styles.modalText}>Recuerda revisar la conexión a internet de tu dispositivo </Text>
-                  </View>
-                </View>
-                <View style={styles.stepContainer}>
-                  <Text style={styles.modalNum}> 2 </Text>
-                  <View style={{ height: '100%', width: '90%', flexDirection: 'column', justifyContent: 'center' }}>
-                    <Text style={styles.modalText}>Inicia sesión con tu usuario y contraseña</Text>
-                  </View>
-                </View>
-                <View style={styles.stepContainer}>
-                  <Text style={styles.modalNum}> 3 </Text>
-                  <View style={{ height: '100%', width: '90%', flexDirection: 'column', justifyContent: 'center' }}>
-                    <Text style={styles.modalText}>Luego del cierre del día, recuerda cerrar tu sesión</Text>
-                  </View>
-                </View>
-              </View>
-
-              <View
-                style={{
-                  height: "12%",
-                  width: "100%",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <Button
-                  onPress={() => {
-                    setShowInstructions(false);
-                  }}
-                  title="E N T E N D I D O"
-                  color="#00A9A0"
-                  style={styles.modalButton}
-                  textStyle={styles.modalButtonText}
-                />
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
+        type='workerInstructions'
+        onClose={() => {
+          setShowInstructions(false);
+        }}
+      />
     </View>
   );
 };
