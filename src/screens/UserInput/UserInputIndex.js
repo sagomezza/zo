@@ -665,12 +665,12 @@ const UserInput = (props) => {
         plateOne={plateOne}
         plateTwo={plateTwo}
         phone={newPhone ? newPhone : phone}
-        onClose={() => {restart();}}
+        onClose={() => { restart(); }}
         onChangeTotalPay={text => setTotalPay(text)}
         totalPay={totalPay}
         prepayDayValue={prepayDayValue}
         change={`$${numberWithPoints(inputChange)}`}
-        onStartPark={() => {startPark();}}
+        onStartPark={() => { startPark(); }}
         activityStatus={loadingStart}
       />
       <Modal
@@ -723,25 +723,23 @@ const UserInput = (props) => {
           <View style={styles.modalView}>
             <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalTextAlert}> Algo malo pasó, inténtalo más tarde.  </Text>
+                <Text style={styles.modalText}> Algo malo pasó, inténtalo más tarde.  </Text>
               </View>
-              <View style={{ height: '30%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
-                <View style={{ width: '75%', height: '50%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
-                  <Button onPress={() => {
-                    restart();
+              <View style={{ height: '20%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center'}}>
+                <Button onPress={() => {
+                  restart();
+                }}
+                  title="E N T E N D I D O"
+                  color="#00A9A0"
+                  style={{
+                    width: normalize(250),
+                    height: '85%'
                   }}
-                    title="E N T E N D I D O"
-                    color="#00A9A0"
-                    style={{
-                      width: normalize(250),
-                      height: '85%'
-                    }}
-                    textStyle={{
-                      color: "#FFFFFF",
-                      textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
-                    }} />
-                </View>
+                  textStyle={{
+                    color: "#FFFFFF",
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Bold'
+                  }} />
               </View>
             </View>
           </View>
