@@ -669,7 +669,7 @@ const UserOut = (props) => {
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
                 <Text style={styles.modalTextAlert}> El vehículo no esta estacionado o el código QR no se encuentra asociado a un vehículo estacionado. </Text>
               </View>
-              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+              <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
                   setModal5Visible(false);
                   restart();

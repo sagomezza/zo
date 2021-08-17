@@ -321,7 +321,7 @@ const LogoutIndex = (props) => {
         <FooterIndex navigation={navigation} />
       </View>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modalVisible}
@@ -398,7 +398,7 @@ const LogoutIndex = (props) => {
         </View>
       </Modal>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modal3Visible}
@@ -432,7 +432,7 @@ const LogoutIndex = (props) => {
         </View>
       </Modal>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modal4Visible}
