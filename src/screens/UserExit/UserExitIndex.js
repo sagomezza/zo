@@ -439,7 +439,7 @@ const UserOut = (props) => {
               </View>
               <View style={styles.textPhoneCode}>
                 <Text style={styles.infoUserText}>
-                  {phoneNumberLength > 13 ? '' : phoneNumber.slice(3, 12)}
+                  {phoneNumberLength > 13 ? '' : phoneNumber.slice(3, 13)}
                 </Text>
               </View>
             </View>
@@ -717,7 +717,7 @@ const UserOut = (props) => {
                 <View style={{ height: '30%', width: '50%', backgroundColor: '#00A9A0', borderRadius: 25, justifyContent: 'center', marginTop: '2%', alignSelf: 'center' }}>
                   <Text style={styles.modalPlateText}>{check.plate}</Text>
                 </View>
-                <Text style={styles.modalPhoneText}>{phoneNumberLength > 13 ? '' : phoneNumber.slice(3, 12)}</Text>
+                <Text style={styles.modalPhoneText}>{phoneNumberLength > 13 ? '' : phoneNumber.slice(3, 13)}</Text>
               </View>
 
               <View style={{ height: '30%', width: '80%', justifyContent: 'flex-end', flexDirection: 'column', alignContent: 'flex-end' }}>
