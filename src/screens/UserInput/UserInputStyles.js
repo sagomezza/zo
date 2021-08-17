@@ -52,9 +52,10 @@ const styles = StyleSheet.create({
   },
   dropdownPlaceholder: {
     color: '#8F8F8F',
-    fontSize: width * 0.04,
+    fontSize: width * 0.03,
     textAlign: 'center',
     fontFamily: 'Montserrat-Bold',
+
   },
   dropdownSelectedLabel: {
     color: '#8F8F8F',
@@ -91,6 +92,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
     color: '#8F8F8F',
     fontSize: width * 0.035,
+    letterSpacing: 4
 
   },
   checkPrepayContainer: {

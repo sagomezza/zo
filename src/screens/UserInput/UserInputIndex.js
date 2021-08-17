@@ -135,7 +135,7 @@ const UserInput = (props) => {
   }
 
   const restartSearch = () => {
-    setPhones([{ label: 'Selecciona un número', value: 1 }]);
+    setPhones([{ label: 'SELECCIONA UN NÚMERO', value: 1 }]);
     setPhone(null);
     setShowDropdown(false);
     setNewPhone("");
@@ -441,7 +441,7 @@ const UserInput = (props) => {
                   zIndex={150}
                   disabled={!showDropdown}
                   defaultValue={phone === null ? 1 : phone}
-                  placeholder={phones.length >= 0 ? phones[0].phone : "Selecciona un número"}
+                  placeholder={phones.length >= 0 ? phones[0].phone : "SELECCIONA UN NÚMERO"}
                   placeholderStyle={styles.dropdownPlaceholder}
                   selectedLabelStyle={styles.dropdownPlaceholder}
                   containerStyle={{ height: '6%', width: '100%' }}
