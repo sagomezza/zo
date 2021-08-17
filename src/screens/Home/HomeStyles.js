@@ -6,99 +6,156 @@ const styles = StyleSheet.create({
   topImage: {
     flex: 1,
     width: '100%',
-    height: '40%',
+    height: '43%',
     flexDirection: 'column'
   },
   bottomContainer: {
-    height: '66%',
+    height: '64.5%',
     backgroundColor: '#F8F8F8',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     alignContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    width: '85%',
+    height: '10%',
+    flexDirection: 'row',
+    marginTop: '6%',
+    justifyContent: 'space-between',
   },
   bikeCounter: {
-    height: '70%',
-    width: '70%',
-    flexDirection: 'column',
-    alignItems: 'center',
-    alignContent: 'center',
-    marginTop: '13%',
-    marginLeft: '4%'
+    height: '25%',
+    width: '90%',
+    flexDirection: 'row',
+    marginTop: '5%',
+    marginLeft: '5%',
+    marginRight: '5%',
+    justifyContent: 'center'
   },
   bikeImage: {
-    width: "40%",
-    height: "40%",
-    marginTop: '10%'
+    width: "30%",
+    height: "80%",
+    marginLeft: '1%',
   },
   carImage: {
-    width: "38%",
-    height: "38%",
-    marginTop: '10%'
+    width: "30%",
+    height: "80%",
+    marginLeft: '1%',
   },
   listContainer: {
-    height: '38%',
-    width: '73%',
-    backgroundColor: '#FFFFFF',
+    height: '75%',
+    width: '87%',
     marginTop: '2%',
-    borderRadius: 10,
   },
   list: {
     flexDirection: "row",
-    borderBottomWidth: 1,
-    borderColor: "#E9E9E9",
-    marginBottom: '2%',
-    marginLeft: '10%',
-    marginRight: '10%',
-    marginTop: '0%'
+    backgroundColor: '#FFFFFF',
+    marginTop: '3%',
+    borderRadius: 7,
+    justifyContent: 'space-around',
+    paddingTop: '2%',
+    paddingBottom: '2%'
   },
   plateContainer: {
     flexDirection: "row",
     alignContent: 'center',
     alignItems: 'center',
     width: '100%',
-    height: '23%',
-    justifyContent: 'center'
+    height: '26%',
+    justifyContent: 'center',
+  },
+  cellContainer: {
+    height: '25%',
+    width: '90%',
+    flexDirection: 'row',
+    marginTop: '5%',
+    marginLeft: '5%',
+    marginRight: '5%',
   },
   plateInput: {
-    width: '45%',
-    height: '90%',
-
+    width: '35%',
+    height: '78%',
+    margin: '4%',
+    backgroundColor: '#19A9A0',
+    borderRadius: 15
   },
   plateInputTextBig: {
+    fontSize: width * 0.055,
+    color: '#FFF200',
+    fontFamily: 'Montserrat-Bold',
+  },
+  plateInputTextBig2: {
     fontSize: width * 0.055,
     color: '#FFFFFF',
     fontFamily: 'Montserrat-Bold'
   },
-  plateInputTextSmall: {
-    fontSize: width * 0.045,
-    textAlign: 'center',
-    marginTop: '6%',
+  totalCellsText: {
+    fontSize: width * 0.025,
     color: '#FFFFFF',
-    fontFamily: 'Montserrat-Regular'
+    fontFamily: 'Montserrat-Bold',
+    textAlign: 'left',
+    marginTop: '12%',
+    marginLeft: '3%'
+  },
+  plateInputTextSmall: {
+    fontSize: width * 0.025,
+    color: '#FFFFFF',
+    fontFamily: 'Montserrat-Bold',
+    textAlign: 'left',
+    paddingLeft: '12%',
+    marginTop: '2%'
   },
   textPlaca: {
-    fontSize: width * 0.03,
-    color: '#5D5D5D',
-    fontFamily: 'Montserrat-Bold'
+    fontSize: width * 0.023,
+    color: '#00A9A0',
+    fontFamily: 'Montserrat-Bold',
+    marginTop: '0%',
+    width: '15%',
+    height: '100%',
+    textAlign: 'center'
+  },
+  titleText:{
+    fontSize: width * 0.023,
+    color: '#6F6F7B',
+    fontFamily: 'Montserrat-Bold',
   },
   textListTitle: {
-    fontSize: width * 0.025,
+    fontSize: width * 0.023,
     color: '#00A9A0',
-    fontFamily: 'Montserrat-Bold'
+    fontFamily: 'Montserrat-Bold',
+    textAlign: 'left'
   },
-  textPago: {
+  textListTitleInact: {
+    fontSize: width * 0.023,
+    color: '#B0B1B7',
+    fontFamily: 'Montserrat-Bold',
+    textAlign: 'left'
+  },
+  dateDaysText: {
     fontSize: width * 0.02,
-    color: '#5D5D5D',
-    fontFamily: 'Montserrat-Regular'
+    color: '#6F6F7B',
+    fontFamily: 'Montserrat-Medium'
+  },
+  totalHours: {
+    fontSize: width * 0.02,
+    color: '#6F6F7B',
+    fontFamily: 'Montserrat-Medium',
+    width: '20%',
+    textAlign: 'center'
+  },
+  dateHourText: {
+    fontSize: width * 0.02,
+    color: '#19A9A0',
+    fontFamily: 'Montserrat-Medium'
   },
   textMoney: {
-    fontSize: width * 0.034,
-    color: '#5D5D5D',
-    fontFamily: 'Montserrat-Regular'
+    fontSize: width * 0.02,
+    color: '#6F6F7B',
+    fontFamily: 'Montserrat-Medium'
   },
   footerContainer: {
-    height: '17%',
+    height: '10%',
     width: '100%',
     justifyContent: 'flex-end'
   },
@@ -142,6 +199,18 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '70%',
   },
+  flatlistButton: {
+    width: '49%',
+    justifyContent: 'center',
+    height: '100%'
+  },
+  flatlistButtonSelected: {
+    width: '49%',
+    justifyContent: 'center',
+    height: '100%',
+    borderBottomWidth: 2,
+    borderColor: '#D1D0D0'
+  }
 });
 
 export default styles;

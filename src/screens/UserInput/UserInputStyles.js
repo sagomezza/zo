@@ -12,8 +12,13 @@ const styles = StyleSheet.create({
     zIndex: -5
   },
   head: {
-    height: 40,
+    height: normalize(50),
     alignContent: 'center',
+  },
+  row: {
+    height: normalize(50),
+    alignContent: 'center',
+    backgroundColor: '#FFFFFF'
   },
   containerOne: {
     position: "relative",
@@ -84,7 +89,7 @@ const styles = StyleSheet.create({
   dropdownLabel: {
     justifyContent: 'center',
     fontFamily: 'Montserrat-Bold',
-    color: '#D9D9D9',
+    color: '#8F8F8F',
     fontSize: width * 0.035,
 
   },
@@ -129,7 +134,8 @@ const styles = StyleSheet.create({
     marginTop: '6%',
     borderRadius: 10,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderWidth: 1
   },
   infoText: {
     fontFamily: 'Montserrat-Bold',
@@ -138,15 +144,16 @@ const styles = StyleSheet.create({
   },
   text: {
     margin: 6,
-    color: '#8F8F8F',
+    color: '#6F6F7B',
     alignSelf: 'center',
-    fontFamily: 'Montserrat-Regular'
+    fontFamily: 'Montserrat-Medium'
   },
   headText: {
     margin: 6,
     color: '#00A9A0',
     alignSelf: 'center',
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: 'Montserrat-Bold',
+    
   },
   plateInput: {
     width: '46%',
@@ -219,7 +226,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#00A9A0',
     fontSize: width * 0.03,
-    fontFamily: 'Montserrat-Bold'
+    fontFamily: 'Montserrat-Bold',
+    letterSpacing: 5
   },
   buttonTextNew: {
     color: '#FFFFFF',
@@ -248,10 +256,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(52, 52, 52, 0.8)',
   },
   modalView: {
-    height: normalize(400),
+    height: normalize(450),
     width: '60%',
     padding: '5%',
-    borderRadius: 50,
+    borderRadius: 30,
     borderColor: '#707070',
     borderWidth: 1,
     justifyContent: 'space-between',
@@ -267,7 +275,27 @@ const styles = StyleSheet.create({
     elevation: 5,
     flexDirection: 'column',
     borderWidth: 1
-
+  },
+  modalViewPrepay: {
+    height: normalize(550),
+    width: '70%',
+    padding: '5%',
+    borderRadius: 30,
+    borderColor: '#707070',
+    borderWidth: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    shadowColor: '#FFF',
+    shadowOffset: {
+      width: 50,
+      height: 50,
+    },
+    shadowOpacity: 0,
+    shadowRadius: 50,
+    elevation: 5,
+    flexDirection: 'column',
+    borderWidth: 1
   },
   // modal2
   modalTextAlert: {
@@ -279,18 +307,17 @@ const styles = StyleSheet.create({
   },
   modalButton: {
     width: '100%',
-    height: '70%',
+    height: '75%',
   },
   // modal
   currencyInput: {
-    borderWidth: 1,
-    borderColor: '#00A9A0',
     fontSize: normalize(20),
     fontFamily: 'Montserrat-Bold',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#E7E7EA',
     width: '60%',
+    padding:'5%',
     borderRadius: 10,
-    color: '#00A9A0'
+    color: '#8F8F8F'
   },
   modalButtonDisabled: {
     width: '100%',
@@ -300,14 +327,41 @@ const styles = StyleSheet.create({
   modalPhoneText: {
     textAlign: "center",
     fontFamily: 'Montserrat-Bold',
-    color: '#00A9A0',
-    fontSize: normalize(25)
+    color: '#FFFFFF',
+    fontSize: normalize(30)
   },
   modalText: {
     textAlign: "center",
-    fontFamily: 'Montserrat-Regular',
-    color: '#B7B7B7',
+    fontFamily: 'Montserrat-Medium',
+    color: '#8F8F8F',
     fontSize: normalize(20)
+  },
+  list: {
+    flexDirection: "row",
+    backgroundColor: '#FFFFFF',
+    borderRadius: 7,
+    justifyContent: 'space-around',
+    paddingTop: '3%',
+    paddingBottom: '3%',
+    
+  },
+  titleText:{
+    fontSize: width * 0.023,
+    color: '#00A9A0',
+    fontFamily: 'Montserrat-Bold',
+  },
+  infoText:{
+    fontSize: width * 0.023,
+    color: '#6F6F7B',
+    fontFamily: 'Montserrat-Bold',
+    width: '30%',
+    textAlign: 'center'
+  },
+  menText:{
+    fontSize: width * 0.023,
+    color: '#00A9A0',
+    fontFamily: 'Montserrat-Bold',
+    textAlign: 'center'
   },
 });
 

@@ -1,10 +1,10 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 import HomeIndex from "../../screens/Home/index";
 import UserInput from "../../screens/UserInput/UserInputIndex";
 import UserOut from "../../screens/UserExit/UserExitIndex";
 import Qr from "../../screens/Qr/QRIndex";
-import { createDrawerNavigator} from "@react-navigation/drawer"; 
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import CashBalance from "../../screens/CashBalance/PdfIndex";
 import Transactions from "../../screens/Transactions/TransactionsIndex";
 import ActiveServices from "../../screens/ActiveServices/ActiveServicesIndex";
@@ -13,6 +13,8 @@ import MonthlyPayments from "../../screens/MonthlyPayments/MonthlyPaymentsIndex"
 import Blacklist from '../../screens/Blacklist/index';
 import FAQs from '../../screens/FAQs';
 import LogoutIndex from '../../screens/Logout/LogoutIndex';
+import CreateRecip from '../../screens/CreateRecip/index';
+
 
 
 const Stack = createStackNavigator();
@@ -21,11 +23,12 @@ const Drawer = createDrawerNavigator();
 const HomeStack = ({ navigation }) => {
   return (
     <Stack.Navigator
+
       initialRouteName={"Home"}
       screenOptions={{
         headerStyle: {
-          backgroundColor: "#2DD47F",
-          height: 100 ,
+          backgroundColor: "#F8F8F8",
+          height: 100,
         },
         headerTitleAlign: "center",
         headerTitleStyle: {
@@ -33,7 +36,11 @@ const HomeStack = ({ navigation }) => {
         },
         headerTintColor: "white",
         headerBackTitleVisible: false,
+
+        // ...TransitionPresets.SlideFromRightIOS, // This is where the transition happens
+
       }}
+      detachInactiveScreens={true}
     >
       <Stack.Screen
         name="Home1"
@@ -132,7 +139,15 @@ const HomeStack = ({ navigation }) => {
           headerLeft: null,
         }}
       />
-      
+      <Stack.Screen
+        name="CreateRecip"
+        component={CreateRecip}
+        options={{
+          headerShown: false,
+          headerLeft: null,
+        }}
+      />
+
     </Stack.Navigator>
   );
 };

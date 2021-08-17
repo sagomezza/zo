@@ -35,6 +35,8 @@ import { TIMEOUT } from "../../config/constants/constants";
 import styles from "./LoginStyles";
 import normalize from "../../config/services/normalizeFontSize";
 import Button from "../../components/Button";
+import CustomModal from "../../components/CustomModal";
+
 import { ImageBackground } from "react-native";
 import { Dimensions } from "react-native";
 import store from "../../config/store";
@@ -48,6 +50,11 @@ const LoginIndex = (props) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState("");
   const [showInstructions, setShowInstructions] = useState(true);
+
+  const handleEmail = (text) => {
+    let email = text.trim()
+    setEmail(email)
+  }
 
   const firstLogin = async () => {
     try {
@@ -194,31 +201,29 @@ const LoginIndex = (props) => {
             </View>
             <View style={styles.loginTextContainer} >
               <Text style={styles.loginText}>
-                I N I C I O   D E   S E S I Ó N
+                INICIO DE SESIÓN
               </Text>
             </View>
             <View style={styles.inputsContainer}>
               <View>
-                <Text style={styles.titleInputText}>Correo</Text>
                 <View style={styles.textInputContainer}>
                   <TextInput
                     style={styles.textInput}
-                    placeholder={"Ingresa tu correo"}
-                    placeholderTextColor="#C9C1C1"
+                    placeholder={"Email"}
+                    placeholderTextColor="#8F8F8F"
                     autoCapitalize={"none"}
                     autoCorrect={false}
                     value={email}
-                    onChangeText={(text) => setEmail(text.trim())}
+                    onChangeText={handleEmail}
                   />
                 </View>
               </View>
               <View>
-                <Text style={styles.titleInputText}>Contraseña</Text>
                 <View style={styles.textInputContainer}>
                   <TextInput
                     style={styles.textInput}
-                    placeholder={"Ingresa tu contraseña"}
-                    placeholderTextColor="#C9C1C1"
+                    placeholder={"Contraseña"}
+                    placeholderTextColor="#8F8F8F"
                     autoCapitalize={"none"}
                     autoCorrect={false}
                     value={password}
@@ -227,15 +232,16 @@ const LoginIndex = (props) => {
                   />
                 </View>
               </View>
+
+            </View>
+            <View style={styles.buttonContainer}>
               <View>
                 {error !== "" && <Text style={styles.alertText}>{error}</Text>}
               </View>
-            </View>
-            <View style={styles.buttonContainer}>
               <Button
-                onPress={() => firstLogin()}
-                title="I N G R E S A R"
-                color="#FFE828"
+                onPress={firstLogin}
+                title="ENTRAR"
+                color="#FFF200"
                 style={styles.button}
                 textStyle={styles.buttonText}
                 activityIndicatorStatus={loading}
@@ -247,62 +253,13 @@ const LoginIndex = (props) => {
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        backdropOpacity={0.3}
+      <CustomModal
         visible={showInstructions}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View
-              style={{
-                height: "100%",
-                width: "100%",
-                justifyContent: "space-between",
-                padding: "2%",
-
-              }}
-            >
-              <View
-                style={{
-                  margin: "4%",
-                  justifyContent: "space-between",
-                  height: " 80%",
-                  alignItems: "center",
-                }}
-              >
-                <MaterialIcons name="warning" color="#00A9A0" size={60} />
-                <Text style={styles.modalTextAlert}> Hola, para iniciar: </Text>
-                <Text style={styles.modalTextAlert}> 1. Recuerda revisar la conexión a internet de tu dispositivo </Text>
-                <Text style={styles.modalTextAlert}> 2. Inicia sesión con tu usuario y contraseña. </Text>
-                <Text style={styles.modalTextAlert}> 3. Luego del cierre del día, recuerda cerrar tu sesión </Text>
-              </View>
-              <View
-                style={{
-                  height: "12%",
-                  width: "100%",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <Button
-                  onPress={() => {
-                    setShowInstructions(false);
-                  }}
-                  title="E N T E N D I D O"
-                  color="#00A9A0"
-                  style={styles.modalButton}
-                  textStyle={{
-                    color: "#FFFFFF",
-                    textAlign: "center",
-                    fontFamily: "Montserrat-Bold",
-                  }}
-                />
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
+        type='workerInstructions'
+        onClose={() => {
+          setShowInstructions(false);
+        }}
+      />
     </View>
   );
 };

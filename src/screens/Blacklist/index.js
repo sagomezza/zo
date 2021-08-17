@@ -133,7 +133,8 @@ const Blacklist = (props) => {
                         plate: plateOne + plateTwo,
                         value: Number(blacklistValue),
                         cash: Number(totalPay),
-                        change: Number(inputChange)
+                        change: Number(inputChange),
+                        generateRecip: true
                     },
                     { timeout: TIMEOUT }
                 )

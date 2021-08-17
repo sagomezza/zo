@@ -22,6 +22,8 @@ import Constants from 'expo-constants';
 import * as Permissions from "expo-permissions";
 import * as Sentry from "@sentry/browser";
 import { LogBox } from 'react-native';
+import * as Updates from 'expo-updates';
+import { Alert } from "react-native";
 
 LogBox.ignoreLogs([
   'Animated: `useNativeDriver` was not specified.',
@@ -41,6 +43,8 @@ const fetchFont = () => {
     'Montserrat-Regular': require('./assets/fonts/Montserrat-Regular.ttf'),
     'Montserrat-Bold': require('./assets/fonts/Montserrat-Bold.ttf'),
     'Montserrat-Light': require('./assets/fonts/Montserrat-Light.ttf'),
+    'Montserrat-Medium': require('./assets/fonts/Montserrat-Medium.ttf'),
+
   })
 }
 
@@ -54,7 +58,6 @@ const App = () => {
   const notificationListener = useRef();
   const responseListener = useRef();
   const [isConnected, setIsConnected] = useState(false);
-  const [lastLoginAt, setLastLoginAt] = useState('');
   const [logoutSnackbar, setLogoutSnackbar] = useState(false)
   const [officialData, setOfficialData] = useState({});
   const officialScheduleStart = officialData.start !== undefined ? officialData.start : null;
@@ -62,6 +65,7 @@ const App = () => {
   // useEffect(() => {
   //   throw new Error("Zona P first Sentry error")
   // }, [])
+
   Network.getNetworkStateAsync().then(state => {
     // console.log('Connection type:', state.type);
     // console.log('Is connected?:', state.isConnected);
@@ -70,7 +74,6 @@ const App = () => {
   });
 
   const checkInternetReachable = () => {
-    // console.log("-------Connection Information------")
     Network.getNetworkStateAsync().then(state => {
       // console.log('Connection TYPE:', state.type);
       // console.log('Is connected?:', state.isConnected);
@@ -81,8 +84,23 @@ const App = () => {
 
   const MINUTE_MS = 60000;
 
-
   useEffect(() => {
+    const updateApp = async () => {
+      try {
+        const update = await Updates.checkForUpdateAsync();
+        console.log(update)
+        if (update.isAvailable) {
+          await Updates.fetchUpdateAsync();
+          // ... notify user of update ...
+          await Updates.reloadAsync();
+        }
+      } catch (e) {
+        // handle or log error
+        console.log(e)
+      }
+    };
+    updateApp();
+
     // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
     if (officialScheduleStart !== null) {
       // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
@@ -157,13 +175,10 @@ const App = () => {
 
   useEffect(() => {
     setLoginState(true);
-    // const userLastLoginAt =  AsyncStorage.getItem(STORAGE_KEY)
-    // if (userLastLoginAt !== null) setLastLoginAt(userLastLoginAt)
     // listen for auth state changes
     const unsubscribe = auth.onAuthStateChanged(updateUserState);
     // unsubscribe to the listener when unmounting
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
-
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
     });

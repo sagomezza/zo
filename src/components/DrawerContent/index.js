@@ -121,6 +121,23 @@ const DrawerContent = (props) => {
                         label="Preguntas frecuentes"
                         onPress={() => { props.navigation.navigate('FAQs') }}
                     />
+                    {/* <DrawerItem
+                        // icon={({ color, size }) => (
+                        //     <Image
+                        //         style={{ width: normalize(25), height: normalize(25) }}
+                        //         resizeMode={"contain"}
+                        //         source={require('../../../assets/images/MenuMensualidades.png')} />
+                        // )}
+                        icon={({ color, size }) => (
+                            <MaterialIcons
+                                name="list-alt"
+                                color="#00A9A0"
+                                size={27}
+                            />
+                        )}
+                        label="Crear recibo"
+                        onPress={() => { props.navigation.navigate('CreateRecip') }}
+                    /> */}
                       <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '4%', marginLeft: '4%', marginRight: '4%', marginTop: '4%' }} ></View>
 
                     <DrawerItem

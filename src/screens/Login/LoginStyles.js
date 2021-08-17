@@ -28,11 +28,12 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: width * 0.029,
     marginBottom: '20%',
-    fontFamily: 'Montserrat-Bold'
+    fontFamily: 'Montserrat-Bold',
+    letterSpacing: 3
   },
   inputsContainer: {
     width: "100%",
-    height: "25%",
+    height: "15%",
     alignContent: "center",
     alignItems: "center",
   },
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular'
   },
   buttonContainer: {
-    width: "55%",
+    width: "60%",
     height: "10%",
     justifyContent: "center",
     alignContent: "center",
@@ -59,13 +60,15 @@ const styles = StyleSheet.create({
     borderWidth: normalize(1),
     borderColor: "#707070",
     alignSelf: "center",
-    width: "80%",
-    height: "60%",
+    width: "90%",
+    height: "65%",
+    marginTop: '4%'
   },
   buttonText: {
     color: "#00A9A0",
-    fontFamily: "Montserrat-Bold",
-    fontSize: width * 0.032,
+    fontFamily: "Montserrat-Medium",
+    fontSize: width * 0.03,
+    letterSpacing: 5
   },
   restoreText: {
     color: 'white',
@@ -76,33 +79,32 @@ const styles = StyleSheet.create({
     fontSize: width * 0.03,
     color: 'black',
     flex: 1,
-    fontFamily: 'Montserrat-Regular'
+    fontFamily: 'Montserrat-Medium'
   },
   textInputContainer: {
     backgroundColor: "#F0EEEE",
-    height: normalize(35),
+    height: normalize(50),
     width: "55%",
-    borderRadius: normalize(18),
+    borderRadius: normalize(30),
     flexDirection: "row",
     paddingHorizontal: '3%',
-    borderWidth: 1,
     borderColor: "#707070",
     marginBottom: '7%',
 
   },
+  // showInstructions MODAL
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     // marginTop: 22,
     backgroundColor: 'rgba(52, 52, 52, 0.8)',
-
   },
   modalView: {
-    height: normalize(480),
+    height: normalize(590),
     width: '75%',
     padding: '5%',
-    borderRadius: 50,
+    borderRadius: 30,
     borderColor: '#707070',
     borderWidth: 1,
     justifyContent: 'space-between',
@@ -120,16 +122,54 @@ const styles = StyleSheet.create({
     borderWidth: 1
 
   },
-  modalTextAlert: {
-    textAlign: "center",
+  modalInfoContainer: {
+    height: "100%",
+    width: "100%",
+    justifyContent: "space-between",
+    padding: "2%",
+  },
+  iconTitleContainer: {
+    height: '25%',
+    width: '100%',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  modalTextTitle: {
+    textAlign: 'left',
     fontFamily: 'Montserrat-Bold',
-    color: 'red',
-    fontSize: width * 0.034,
+    color: '#00A9A0',
+    fontSize: width * 0.047,
+  },
+  stepContainer: {
+    height: '24%',
+    width: '90%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf: 'center'
+  },
+  modalNum: {
+    fontFamily: 'Montserrat-Bold',
+    color: '#00A9A0',
+    fontSize: width * 0.07,
+  },
+
+  modalText: {
+    textAlign: 'left',
+    fontFamily: 'Montserrat-Bold',
+    color: '#8F8F8F',
+    fontSize: width * 0.03,
   },
   modalButton: {
     width: '100%',
     height: '90%',
   },
+  modalButtonText: {
+    color: "#FFFFFF",
+    textAlign: "center",
+    fontFamily: "Montserrat-Bold",
+    fontSize: width * 0.03,
+
+  }
 
 });
 
