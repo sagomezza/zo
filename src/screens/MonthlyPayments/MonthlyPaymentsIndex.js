@@ -654,7 +654,7 @@ const MonthlyPayments = (props) => {
               <View style={styles.mensualityInfoButtonsContainer}>
                 <Button
                   onPress={() => setModal2Visible(true)}
-                  title="Pagar / Renovar"
+                  title="PAGAR / RENOVAR"
                   color="transparent"
                   style={[
                     plateOne === "" || plateTwo === ""
@@ -666,8 +666,8 @@ const MonthlyPayments = (props) => {
                 />
                 <Button
                   onPress={editMenButton}
-                  title="  E D I T A R  "
-                  color="gray"
+                  title="EDITAR"
+                  color="transparent"
                   style={[
                     plateOne === "" || plateTwo === ""
                       ? styles.buttonEdDisabled

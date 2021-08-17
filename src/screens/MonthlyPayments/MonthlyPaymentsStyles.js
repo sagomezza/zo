@@ -72,19 +72,21 @@ const styles = StyleSheet.create({
     },
     buttonRe: {
         borderRadius: 30,
-        height: normalize(30),
+        borderWidth: 1,
+        borderColor: '#00A9A0',
+        height: normalize(40),
         width: '100%',
         marginLeft: '0%',
         margin: '1%',
-        paddingHorizontal: '24%',
     },
     buttonReDisabled: {
         borderRadius: 30,
+        borderWidth: 1,
+        borderColor: '#00A9A0',
         height: normalize(30),
         width: '100%',
         marginLeft: '0%',
         margin: '1%',
-        paddingHorizontal: '24%',
         opacity: 0.5
     },
     buttonCreate: {
@@ -97,21 +99,16 @@ const styles = StyleSheet.create({
         borderColor: '#00A9A0'
     },
     buttonEd: {
-        borderRadius: 30,
         height: normalize(30),
         width: '70%',
         margin: '1%',
         alignSelf: 'center',
-        borderWidth: 1,
-        borderColor: '#00A9A0'
     },
     buttonEdDisabled: {
-        borderRadius: 30,
         height: normalize(30),
         width: '100%',
         marginLeft: '0%',
         margin: '1%',
-        paddingHorizontal: '28%',
         opacity: 0.5
     },
     buttonTextSearch: {
@@ -128,6 +125,7 @@ const styles = StyleSheet.create({
         color: '#00A9A0',
         fontSize: width * 0.025,
         fontFamily: 'Montserrat-Bold',
+        letterSpacing: 4
     },
     notFoundText: {
         fontSize: width * 0.034,

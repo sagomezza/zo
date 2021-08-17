@@ -135,7 +135,7 @@ const UserInput = (props) => {
   }
 
   const restartSearch = () => {
-    setPhones([{ label: 'Selecciona un número', value: 1 }]);
+    setPhones([{ label: 'SELECCIONA UN NÚMERO', value: 1 }]);
     setPhone(null);
     setShowDropdown(false);
     setNewPhone("");
@@ -302,14 +302,14 @@ const UserInput = (props) => {
           change = 0
         } else {
           change = totalPay - prepayDayValue
-        }
+        } 
         const response = await instance.post(
           START_PARKING,
           {
             plate: plateOne + plateTwo,
             hqId: officialHq,
             dateStart: new Date(),
-            phone: !showPhoneInput ? phone : '+57' + newPhone,
+            phone: !showPhoneInput ? '+57' + phone : '+57' + newPhone,
             prepayFullDay: prepayDay,
             officialEmail: officialEmail,
             type,
@@ -441,7 +441,7 @@ const UserInput = (props) => {
                   zIndex={150}
                   disabled={!showDropdown}
                   defaultValue={phone === null ? 1 : phone}
-                  placeholder={phones.length >= 0 ? phones[0].phone : "Selecciona un número"}
+                  placeholder={phones.length >= 0 ? phones[0].phone : "SELECCIONA UN NÚMERO"}
                   placeholderStyle={styles.dropdownPlaceholder}
                   selectedLabelStyle={styles.dropdownPlaceholder}
                   containerStyle={{ height: '6%', width: '100%' }}
@@ -725,7 +725,7 @@ const UserInput = (props) => {
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
                 <Text style={styles.modalText}> Algo malo pasó, inténtalo más tarde.  </Text>
               </View>
-              <View style={{ height: '20%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center'}}>
+              <View style={{ height: '20%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
                 <Button onPress={() => {
                   restart();
                 }}
