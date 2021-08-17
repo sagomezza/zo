@@ -121,7 +121,7 @@ const DrawerContent = (props) => {
                         label="Preguntas frecuentes"
                         onPress={() => { props.navigation.navigate('FAQs') }}
                     />
-                    <DrawerItem
+                    {/* <DrawerItem
                         // icon={({ color, size }) => (
                         //     <Image
                         //         style={{ width: normalize(25), height: normalize(25) }}
@@ -137,7 +137,7 @@ const DrawerContent = (props) => {
                         )}
                         label="Crear recibo"
                         onPress={() => { props.navigation.navigate('CreateRecip') }}
-                    />
+                    /> */}
                       <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '4%', marginLeft: '4%', marginRight: '4%', marginTop: '4%' }} ></View>
 
                     <DrawerItem

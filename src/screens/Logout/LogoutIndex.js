@@ -407,7 +407,7 @@ const LogoutIndex = (props) => {
           <View style={styles.modalView}>
             <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
               <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalTextAlert}> Algo malo pasó, inténtalo más tarde.  </Text>
+                <Text style={styles.modalText}> Algo malo pasó, inténtalo más tarde.  </Text>
               </View>
               <View style={{ height: '30%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
                 <View style={{ width: '75%', height: '50%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>

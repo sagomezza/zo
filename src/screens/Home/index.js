@@ -146,8 +146,6 @@ const HomeIndex = (props) => {
     return moment(date).format('LT')
   }
 
-
-
   const segmentClicked = (index) => {
     setActiveList(index)
   }
