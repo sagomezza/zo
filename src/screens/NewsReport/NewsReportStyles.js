@@ -5,7 +5,7 @@ const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     container: {
-        height: '88%',
+        height: '91%',
         backgroundColor: '#F8F8F8',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
@@ -19,17 +19,24 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         marginTop: '8%',
         borderRadius: 10,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        borderWidth: 1
     },
     textListTitle: {
-        fontSize: width * 0.034,
+        fontSize: width * 0.04,
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },
+    textListSubTitle: {
+        fontSize: width * 0.025,
+        color: '#6F6F7B',
+        fontFamily: 'Montserrat-Bold'
+    },
     buttonTextRenew: {
-        color: '#FFFFFF',
+        color: '#00A9A0',
         fontSize: normalize(15),
         fontFamily: 'Montserrat-Bold',
+        letterSpacing: 5
     },
     buttonEd: {
         borderRadius: 30,
@@ -40,6 +47,8 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         height: width * 0.06,
         width: '100%',
+        borderWidth: 1,
+        borderColor: '#00A9A0',
         opacity: 0.5
     },
     centeredView: {
@@ -81,6 +90,19 @@ const styles = StyleSheet.create({
     modalButton: {
         width: '100%',
         height: '70%',
+    },
+    footer: {
+        height: '10%',
+        width: '100%',
+        justifyContent: 'flex-end'
+    },
+    option: {
+        backgroundColor: '#ECEDEF',
+        height: '25%',
+        width: '100%',
+        borderRadius: 7,
+        flexDirection: 'row',
+        margin: '2%'
     },
 });
 

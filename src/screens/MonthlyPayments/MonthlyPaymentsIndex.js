@@ -96,41 +96,22 @@ const MonthlyPayments = (props) => {
   const [fourthPlateNewMen, setFourthPlateNewMen] = useState("");
   const [fifthPlateNewMen, setFifthPlateNewMen] = useState("");
   // Editing mensuality
-  const firstPlateData =
-    mensualityInfo.plates !== undefined ? mensualityInfo.plates[0] + "" : "";
-  const secondPlateData =
-    mensualityInfo.plates !== undefined ? mensualityInfo.plates[1] + "" : "";
-  const thirdPlateData =
-    mensualityInfo.plates !== undefined ? mensualityInfo.plates[2] + "" : "";
-  const fourthPlateData =
-    mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + "" : "";
-  const fifthPlateData =
-    mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + "" : "";
-  const userNameData =
-    mensualityInfo.userName !== undefined ? mensualityInfo.userName + "" : "";
-  const userEmailData =
-    mensualityInfo.email !== undefined ? mensualityInfo.email + "" : "";
+  const firstPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[0] + "" : "";
+  const secondPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[1] + "" : "";
+  const thirdPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[2] + "" : "";
+  const fourthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[3] + "" : "";
+  const fifthPlateData = mensualityInfo.plates !== undefined ? mensualityInfo.plates[4] + "" : "";
+  const userNameData = mensualityInfo.userName !== undefined ? mensualityInfo.userName + "" : "";
+  const userEmailData = mensualityInfo.email !== undefined ? mensualityInfo.email + "" : "";
   const userPhoneData =
     mensualityInfo.userPhone !== undefined
       ? mensualityInfo.userPhone.substring(3, 14) + ""
       : "";
-  const userIdToEdit =
-    mensualityInfo.userId !== undefined ? mensualityInfo.userId : "";
-
+  const userIdToEdit = mensualityInfo.userId !== undefined ? mensualityInfo.userId : "";
   let plates = [firstPlate, secondPlate, thirdPlate, fourthPlate, fifthPlate];
-  let newPlates = plates.filter(
-    (plate) => plate != undefined && plate != "" && plate != "undefined"
-  );
-  let platesNewMen = [
-    firstPlateNewMen,
-    secondPlateNewMen,
-    thirdPlateNewMen,
-    fourthPlateNewMen,
-    fifthPlateNewMen,
-  ];
-  let platesNewMensuality = platesNewMen.filter(
-    (plate) => plate != undefined && plate != ""
-  );
+  let newPlates = plates.filter((plate) => plate != undefined && plate != "" && plate != "undefined");
+  let platesNewMen = [ firstPlateNewMen, secondPlateNewMen, thirdPlateNewMen, fourthPlateNewMen, fifthPlateNewMen,];
+  let platesNewMensuality = platesNewMen.filter((plate) => plate != undefined && plate != "");
   let validityDateMen = moment(mensualityInfo.validity).tz("America/Bogota");
   let validityDateMenHours =
     "" + validityDateMen.format("L") + " - " + validityDateMen.format("LT");
