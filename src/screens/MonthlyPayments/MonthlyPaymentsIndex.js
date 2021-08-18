@@ -998,13 +998,13 @@ const MonthlyPayments = (props) => {
         </View>
       </Modal>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modal2Visible}
       >
         <View style={styles.centeredView}>
-          <View style={styles.modalView}>
+          <View style={styles.modalPayMensuality}>
             {alreadyRenewed === false ? (
               <View
                 style={{
@@ -1014,26 +1014,15 @@ const MonthlyPayments = (props) => {
                   padding: "2%",
                 }}
               >
-                <View
-                  style={{
-                    justifyContent: "center",
-                    height: "20%",
-                  }}
-                >
-                  <Text
-                    style={{
-                      ...styles.modalText,
-                      fontSize: width * 0.05,
-                      color: "#00A9A0",
-                    }}
-                  >
-                    Reclame {`$${numberWithPoints(monthPrice)}`}
+                <View style={{justifyContent: "center",height: "20%"}}>
+                  <Text style={{...styles.modalText,fontSize: width * 0.05,color: "#00A9A0"}}>
+                    RECLAME {`$${numberWithPoints(monthPrice)}`}
                   </Text>
                 </View>
                 <View
                   style={{
                     justifyContent: "space-between",
-                    height: "30%",
+                    height: "45%",
                     flexDirection: "column",
                     paddingBottom: "6%",
                   }}
@@ -1041,7 +1030,7 @@ const MonthlyPayments = (props) => {
                   <View
                     style={{
                       flexDirection: "row",
-                      justifyContent: "flex-end",
+                      justifyContent: "space-between",
                     }}
                   >
                     <Text
@@ -1057,16 +1046,7 @@ const MonthlyPayments = (props) => {
                       placeholder="$ 0"
                       textAlign="center"
                       keyboardType="numeric"
-                      style={{
-                        borderWidth: 1,
-                        borderColor: "#00A9A0",
-                        fontSize: width * 0.04,
-                        fontFamily: "Montserrat-Bold",
-                        backgroundColor: "#FFFFFF",
-                        width: "60%",
-                        borderRadius: 10,
-                        color: "#00A9A0",
-                      }}
+                      style={styles.currencyInput}
                       value={totalPay}
                       onChangeValue={(text) => setTotalPay(text)}
                       prefix="$"
@@ -1082,7 +1062,7 @@ const MonthlyPayments = (props) => {
                   <View
                     style={{
                       flexDirection: "row",
-                      justifyContent: "flex-end",
+                      justifyContent: "space-between",
                     }}
                   >
                     <Text
@@ -1092,20 +1072,10 @@ const MonthlyPayments = (props) => {
                         fontFamily: "Montserrat-Bold",
                       }}
                     >
-                      {" "}
-                      A devolver:{" "}
+                      A devolver:
                     </Text>
                     <TextInput
-                      style={{
-                        borderWidth: 1,
-                        borderColor: "#00A9A0",
-                        fontSize: width * 0.04,
-                        fontFamily: "Montserrat-Bold",
-                        backgroundColor: "#FFFFFF",
-                        width: "60%",
-                        borderRadius: 10,
-                        color: "#00A9A0",
-                      }}
+                      style={styles.currencyInput}
                       keyboardType="numeric"
                       placeholder="$"
                       textAlign="center"
@@ -1116,14 +1086,14 @@ const MonthlyPayments = (props) => {
                 </View>
                 <View
                   style={{
-                    height: "25%",
+                    height: "27%",
                     justifyContent: "space-between",
                     flexDirection: "column",
                   }}
                 >
                   <View
                     style={{
-                      height: "50%",
+                      height: "54%",
                       width: "100%",
                       justifyContent: "flex-end",
                     }}
@@ -1132,7 +1102,7 @@ const MonthlyPayments = (props) => {
                       onPress={() => {
                         renewMensuality();
                       }}
-                      title="R E N O V A R"
+                      title="RENOVAR"
                       color="#00A9A0"
                       style={
                         totalPay - monthPrice < 0
@@ -1143,29 +1113,25 @@ const MonthlyPayments = (props) => {
                         color: "#FFFFFF",
                         textAlign: "center",
                         fontFamily: "Montserrat-Bold",
+                        letterSpacing: 5
                       }}
                       disabled={totalPay - monthPrice < 0}
                       activityIndicatorStatus={loading}
                     />
                   </View>
-                  <View
-                    style={{
-                      height: "50%",
-                      width: "100%",
-                      justifyContent: "flex-end",
-                    }}
-                  >
+                  <View style={{height: "54%", width: "100%",justifyContent: "flex-end"}}>
                     <Button
                       onPress={() => {
                         setModal2Visible(!modal2Visible);
                       }}
-                      title="V O L V E R"
-                      color="gray"
+                      title="VOLVER"
+                      color="transparent"
                       style={styles.modalButton}
                       textStyle={{
-                        color: "#FFFFFF",
+                        color: "#00A9A0",
                         textAlign: "center",
                         fontFamily: "Montserrat-Bold",
+                        letterSpacing: 5
                       }}
                     />
                   </View>
@@ -1225,14 +1191,14 @@ const MonthlyPayments = (props) => {
         </View>
       </Modal>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modal3Visible}
       >
         {showInputsCashChange ? (
           <View style={styles.centeredView}>
-            <View style={styles.modalView}>
+            <View style={styles.modalPayMensuality}>
               <View
                 style={{
                   height: "100%",
@@ -1241,24 +1207,16 @@ const MonthlyPayments = (props) => {
                   padding: "2%",
                 }}
               >
-                <View
-                  style={{
-                    margin: "4%",
-                    justifyContent: "center",
-                    height: " 30%",
-                  }}
-                >
-                  <Text style={styles.modalTextAlert}>Cobrar mensualidad </Text>
-                  <Text style={styles.modalTextAlert}>{`$${numberWithPoints(
-                    monthPrice
-                  )}`}</Text>
+                <View style={{ justifyContent: "center", height: " 30%" }}>
+                  <Text style={styles.infoTextNameTitle}>COBRAR MENSUALIDAD</Text>
+                  <Text style={styles.modalText}>{`$${numberWithPoints(monthPrice)}`}</Text>
                 </View>
                 <View
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
                     alignContent: "center",
-                    height: "20%",
+                    height: "10%",
                     width: "60%",
                     alignSelf: "center",
                     justifyContent: "center",
@@ -1293,15 +1251,16 @@ const MonthlyPayments = (props) => {
                 <View
                   style={{
                     justifyContent: "space-between",
-                    height: "30%",
+                    height: "45%",
                     flexDirection: "column",
                     paddingBottom: "6%",
+                    paddingTop: "4%",
                   }}
                 >
                   <View
                     style={{
                       flexDirection: "row",
-                      justifyContent: "flex-end",
+                      justifyContent: "space-between",
                     }}
                   >
                     <Text
@@ -1309,24 +1268,16 @@ const MonthlyPayments = (props) => {
                         ...styles.modalText,
                         fontSize: width * 0.03,
                         fontFamily: "Montserrat-Bold",
+                        marginTop: '2%'
                       }}
                     >
-                      Pago:{" "}
+                      Pago:
                     </Text>
                     <CurrencyInput
                       placeholder="$"
                       textAlign="center"
                       keyboardType="numeric"
-                      style={{
-                        borderWidth: 1,
-                        borderColor: "#00A9A0",
-                        fontSize: normalize(20),
-                        fontFamily: "Montserrat-Bold",
-                        backgroundColor: "#FFFFFF",
-                        width: "60%",
-                        borderRadius: 10,
-                        color: "#00A9A0",
-                      }}
+                      style={styles.currencyInput}
                       value={totalPay}
                       onChangeValue={(text) => setTotalPay(text)}
                       prefix="$"
@@ -1336,33 +1287,19 @@ const MonthlyPayments = (props) => {
                       editable={pendingMensualityPay === false}
                     />
                   </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "flex-end",
-                    }}
-                  >
+                  <View style={{ flexDirection: "row", justifyContent: "space-between"}} >
                     <Text
                       style={{
                         ...styles.modalText,
                         fontSize: width * 0.03,
                         fontFamily: "Montserrat-Bold",
+                        marginTop: '2%'
                       }}
                     >
-                      {" "}
-                      A devolver:{" "}
+                      A devolver:
                     </Text>
                     <TextInput
-                      style={{
-                        borderWidth: 1,
-                        borderColor: "#00A9A0",
-                        fontSize: normalize(20),
-                        fontFamily: "Montserrat-Bold",
-                        backgroundColor: "#FFFFFF",
-                        width: "60%",
-                        borderRadius: 10,
-                        color: "#00A9A0",
-                      }}
+                      style={styles.currencyInput}
                       keyboardType="numeric"
                       placeholder="$"
                       textAlign="center"
@@ -1371,32 +1308,23 @@ const MonthlyPayments = (props) => {
                     />
                   </View>
                 </View>
-                <View
-                  style={{
-                    height: "18%",
-                    width: "100%",
-                    justifyContent: "flex-end",
-                  }}
-                >
+                <View style={{height: "18%",width: "100%",justifyContent: "flex-end"}}>
                   <Button
-                    onPress={() => {
-                      user();
-                    }}
-                    title="G U A R D A R"
+                    onPress={() => user()}
+                    title="GUARDAR"
                     color="#00A9A0"
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
                       fontFamily: "Montserrat-Bold",
+                      letterSpacing: 5
                     }}
                     style={[
                       totalPay - monthPrice < 0 && !pendingMensualityPay
                         ? styles.modalButtonDisabled
                         : styles.modalButton,
                     ]}
-                    disabled={
-                      totalPay - monthPrice < 0 && !pendingMensualityPay
-                    }
+                    disabled={totalPay - monthPrice < 0 && !pendingMensualityPay}
                     activityIndicatorStatus={loading}
                   />
                 </View>
@@ -1610,7 +1538,7 @@ const MonthlyPayments = (props) => {
         )}
       </Modal>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modal4Visible}
@@ -1633,11 +1561,9 @@ const MonthlyPayments = (props) => {
                     color: "#00A9A0",
                   }}
                 >
-                  {" "}
                   La mensualidad fue creada con éxito.
                 </Text>
               </View>
-
               <View
                 style={{
                   height: "30%",
@@ -1657,13 +1583,14 @@ const MonthlyPayments = (props) => {
                     onPress={() => {
                       mensualityCreatedModal();
                     }}
-                    title="E N T E N D I D O"
+                    title="ENTENDIDO"
                     color="#00A9A0"
                     style={styles.modalButton}
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
                       fontFamily: "Montserrat-Bold",
+                      letterSpacing: 5
                     }}
                     activityIndicatorStatus={loading}
                   />
@@ -1674,7 +1601,7 @@ const MonthlyPayments = (props) => {
         </View>
       </Modal>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={mdlMenAlreadyExists}
@@ -1690,18 +1617,8 @@ const MonthlyPayments = (props) => {
               }}
             >
               <View style={{ justifyContent: "center", height: "30%" }}>
-                <Text
-                  style={{
-                    ...styles.modalText,
-                    fontSize: normalize(25),
-                    color: "gray",
-                  }}
-                >
-                  {" "}
-                  La mensualidad ya existe{" "}
-                </Text>
+                <Text style={{ ...styles.modalText, fontSize: normalize(25) }}>La mensualidad ya existe</Text>
               </View>
-
               <View
                 style={{
                   height: "30%",
@@ -1719,15 +1636,16 @@ const MonthlyPayments = (props) => {
                 >
                   <Button
                     onPress={() => {
-                      mensualityCreatedModal();
+                      mensualityCreatedModal()
                     }}
-                    title="E N T E N D I D O"
+                    title="ENTENDIDO"
                     color="#00A9A0"
                     style={styles.modalButton}
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
                       fontFamily: "Montserrat-Bold",
+                      letterSpacing: 5
                     }}
                     activityIndicatorStatus={loading}
                   />
@@ -1738,10 +1656,11 @@ const MonthlyPayments = (props) => {
         </View>
       </Modal>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modal5Visible}
+
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -1755,17 +1674,10 @@ const MonthlyPayments = (props) => {
             >
               <View style={{ justifyContent: "center", height: "30%" }}>
                 <Text
-                  style={{
-                    ...styles.modalText,
-                    fontSize: normalize(20),
-                    color: "red",
-                  }}
-                >
-                  {" "}
-                  Algo malo pasó, inténtalo de nuevo más tarde.{" "}
+                  style={styles.modalText}>
+                  Algo malo pasó, inténtalo de nuevo más tarde.
                 </Text>
               </View>
-
               <View
                 style={{
                   height: "30%",
@@ -1785,13 +1697,14 @@ const MonthlyPayments = (props) => {
                     onPress={() => {
                       mensualityCreatedModal();
                     }}
-                    title="E N T E N D I D O"
+                    title="ENTENDIDO"
                     color="#00A9A0"
                     style={styles.modalButton}
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
                       fontFamily: "Montserrat-Bold",
+                      letterSpacing: 5
                     }}
                     activityIndicatorStatus={loading}
                   />
