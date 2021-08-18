@@ -67,6 +67,12 @@ const styles = StyleSheet.create({
         height: '80%',
         width: '100%',
         marginTop: '2%',
+    },
+    cleanButton: {
+        borderRadius: 30,
+        height: '80%',
+        width: '100%',
+        marginTop: '2%',
         borderWidth: 1,
         borderColor: '#FFFFFF'
     },
@@ -114,18 +120,21 @@ const styles = StyleSheet.create({
     buttonTextSearch: {
         color: '#00A9A0',
         fontSize: width * 0.03,
-        fontFamily: 'Montserrat-Medium'
+        fontFamily: 'Montserrat-Medium',
+        letterSpacing: 5
     },
     buttonTextClear: {
         color: '#FFFFFF',
         fontSize: width * 0.03,
-        fontFamily: 'Montserrat-Medium'
+        fontFamily: 'Montserrat-Medium',
+        letterSpacing: 5
+
     },
     buttonTextRenew: {
         color: '#00A9A0',
         fontSize: width * 0.025,
         fontFamily: 'Montserrat-Bold',
-        letterSpacing: 4
+        letterSpacing: 5
     },
     notFoundText: {
         fontSize: width * 0.034,
@@ -282,13 +291,13 @@ const styles = StyleSheet.create({
         margin: '1%'
     },
     createMensualityRowInput: {
-        fontSize: normalize(25),
+        fontSize: normalize(20),
         fontFamily: 'Montserrat-Bold',
         width: '70%',
         borderRadius: 7,
         color: '#00A9A0',
         backgroundColor: '#ECEDEF',
-        padding: '1%'
+        padding: '2%'
     },
     footer: {
         height: '10%',
