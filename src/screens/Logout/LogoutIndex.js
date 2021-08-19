@@ -202,7 +202,7 @@ const LogoutIndex = (props) => {
                     style={{ width: '17%', marginRight: 3 }}
                     resizeMode={"contain"}
                     source={require('../../../assets/images/logoutBase.png')} />
-                  <View style={{ width: '70%', justifyContent: 'center'}} >
+                  <View style={{ width: '70%', justifyContent: 'center' }} >
                     <CurrencyInput
                       placeholder='$'
                       textAlign='center'
@@ -224,7 +224,7 @@ const LogoutIndex = (props) => {
                     style={{ width: '17%', marginRight: 3 }}
                     resizeMode={"contain"}
                     source={require('../../../assets/images/logoutCash.png')} />
-                  <View style={{ width: '70%',justifyContent: 'center' }} >
+                  <View style={{ width: '70%', justifyContent: 'center' }} >
                     <CurrencyInput
                       placeholder='$'
                       textAlign='center'
@@ -415,7 +415,7 @@ const LogoutIndex = (props) => {
                     setModal3Visible(false);
                     setIsDisabled(false)
                   }}
-                    title="E N T E N D I D O"
+                    title="ENTENDIDO"
                     color="#00A9A0"
                     style={
                       styles.modal2Button
@@ -423,7 +423,8 @@ const LogoutIndex = (props) => {
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
+                      fontFamily: 'Montserrat-Bold',
+                      letterSpacing: 5
                     }} />
                 </View>
               </View>
@@ -438,7 +439,7 @@ const LogoutIndex = (props) => {
         visible={modal4Visible}
       >
         <View style={styles.centeredView}>
-          <View style={styles.modalView}>
+          <View style={styles.logoutModalView}>
             <View style={{
               height: '100%',
               width: '100%',
@@ -453,23 +454,27 @@ const LogoutIndex = (props) => {
                 </View>
                 :
                 <View style={{ margin: '2%', justifyContent: 'space-between', height: ' 80%' }}>
+                  <View style={{ height: '24%', width: '100%', justifyContent: 'center' }}>
+                    <Image
+                      style={{ alignSelf: 'center', width: '60%', height: '85%' }}
+                      resizeMode={'contain'}
+                      source={require('../../../assets/images/logoutCar.png')} />
+                  </View>
                   <View style={{ justifyContent: 'center', height: '20%' }}>
-                    <Text style={styles.modalText}> ¡ Se cerró el turno con éxito ! </Text>
+                    <Text style={styles.modalTextTitle}>SE CERRÓ EL TURNO CON ÉXITO</Text>
                   </View>
-                  <Text style={styles.modalTextAlert}>
-                    {"TOTAL CALCULADO: "}{`$${numberWithPoints(Number(total))}`}
-                  </Text>
-                  <Text style={styles.modalTextAlert}>
-                    {"TOTAL REPORTADO: "}{`$${numberWithPoints(Number(inputValue))}`}
-                  </Text>
-                  <Text style={styles.modalTextAlert}>
-                    Tiene una diferencia de {`$${numberWithPoints(Number(total) - Number(inputValue))}`}
-                  </Text>
-                  <View style={{ justifyContent: 'center', height: '25%' }}>
-
-                    <Text style={styles.modalText}> Dale en el botón para realizar el cierre de sesión </Text>
+                  <View style={styles.logoutModalReport}>
+                    <Text style={styles.modalText}>Total calculado:</Text>
+                    <Text style={styles.modalTextBlue}> {`$${numberWithPoints(Number(total))}`}</Text>
                   </View>
-
+                  <View style={styles.logoutModalReport}>
+                    <Text style={styles.modalText}>Total reportado:</Text>
+                    <Text style={styles.modalTextBlue}> {`$${numberWithPoints(Number(inputValue))}`}</Text>
+                  </View>
+                  <View style={styles.logoutModalReport}>
+                    <Text style={styles.modalText}>Diferencia</Text>
+                    <Text style={styles.modalTextBlue}>{`$${numberWithPoints(Number(total) - Number(inputValue))}`}</Text>
+                  </View>
                 </View>
               }
               <View style={{
@@ -489,7 +494,7 @@ const LogoutIndex = (props) => {
                     setLoading(true);
                     logoutFromFirebase();
                   }}
-                    title=" C E R R A R  S E S I Ó N "
+                    title="CERRAR SESIÓN"
                     color="#00A9A0"
                     style={
                       styles.modal2Button
@@ -499,7 +504,8 @@ const LogoutIndex = (props) => {
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
+                      fontFamily: 'Montserrat-Medium',
+                      letterSpacing: 5
                     }}
                   />
                 </View>

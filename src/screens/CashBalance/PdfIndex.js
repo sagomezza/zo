@@ -160,7 +160,7 @@ const txtGenerator = (props) => {
             .set("milliseconds", 59)
 
           const dailyReports = reports.filter((report) => {
-            return report.dateStart >= dateStart && report.dateStart <= dateEnd 
+            return report.dateStart >= dateStart && report.dateStart <= dateEnd
           })
           // console.log('DAILY REPORTS', dailyReports)
           if (dailyReports.length === 0 || dailyReports.length < 3) {
@@ -306,470 +306,463 @@ const txtGenerator = (props) => {
           <View style={{ marginTop: '3%' }}>
             <Text style={styles.screenTitle} >CIERRE DE CAJA</Text>
           </View>
-          <View style={styles.listContainer}>
-            <View style={styles.listOne}>
-              <View style={{
-                marginLeft: '10%',
-                marginBottom: '3%',
-                marginTop: '3%'
-              }}>
-                <Text style={styles.textListTitle} >TRANSACCIONES DEL DÍA</Text>
-              </View>
-              {loadingTodayRecips ?
-                <View style={{ height: "72%" }}>
-                  <View style={{ justifyContent: 'center', height: '100%' }}>
-                    <ActivityIndicator size={"large"} color={'#00A9A0'} />
-                  </View>
+          <View style={styles.listOne}>
+            <View style={{
+              width: '80%',
+              borderWidth: 1
+            }}>
+              <Text style={styles.textListTitle} >TRANSACCIONES DEL DÍA</Text>
+            </View>
+            {loadingTodayRecips ?
+              <View style={{ height: "72%" }}>
+                <View style={{ justifyContent: 'center', height: '100%' }}>
+                  <ActivityIndicator size={"large"} color={'#00A9A0'} />
                 </View>
-                :
-                <View style={{ height: "72%" }}>
-                  {dataToday.length > 0 ?
-                    <FlatList
-                      style={{ height: "37%" }}
-                      data={dataToday}
-                      keyExtractor={(item, index) => String(index)}
-                      renderItem={({ item }) => {
-                        return (
-                          <View style={{
-                            flexDirection: "row",
-                            borderBottomWidth: 1,
-                            borderColor: "#E9E9E9",
-                            marginBottom: '2%',
-                            marginLeft: '10%',
-                            marginRight: '10%',
-                            marginTop: '0%'
-                          }} >
-                            <View style={{ marginBottom: '2%' }} >
-                              <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
-                              <Text style={styles.textPago}>Pago por ${formatHours(item.hours)} horas</Text>
-                            </View>
-                            <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
-                              <Text style={styles.textMoney}>
-                                {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                                {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                                {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
-                              </Text>
-                            </View>
+              </View>
+              :
+              <View style={{ height: "72%" }}>
+                {dataToday.length > 0 ?
+                  <FlatList
+                    style={{ height: "37%" }}
+                    data={dataToday}
+                    keyExtractor={(item, index) => String(index)}
+                    renderItem={({ item }) => {
+                      return (
+                        <View style={{
+                          flexDirection: "row",
+                          borderBottomWidth: 1,
+                          borderColor: "#E9E9E9",
+                          marginBottom: '2%',
+                          marginLeft: '10%',
+                          marginRight: '10%',
+                          marginTop: '0%'
+                        }} >
+                          <View style={{ marginBottom: '2%' }} >
+                            <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
+                            <Text style={styles.textPago}>Pago por ${formatHours(item.hours)} horas</Text>
                           </View>
+                          <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
+                            <Text style={styles.textMoney}>
+                              {item.cash === 0 && item.change === 0 ? '$0' : ''}
+                              {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                              {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                            </Text>
+                          </View>
+                        </View>
+                      )
+                    }}
+                  />
+                  :
+                  <View style={{ marginLeft: '13%', padding: '10%' }}>
+                    <Text style={styles.textPago}>
+                      No se encuentran registros en el historial
+                    </Text>
+                  </View>
+                }
+
+              </View>
+            }
+
+          </View>
+          <View style={{ height: '10%', width: '85%', alignSelf: 'center' }}>
+            <Button
+              onPress={() => {
+
+                getBoxTotal();
+              }}
+              title="Generar cierre de caja"
+              color='#00A9A0'
+              style={{
+                borderWidth: normalize(1),
+                borderColor: "#707070",
+                alignSelf: 'center',
+                width: '100%',
+                height: '60%',
+                margin: '2%',
+              }}
+              textStyle={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold', fontSize: width * 0.03, }}
+              activityIndicatorStatus={loadingBoxGenerator}
+            />
+          </View>
+          <View style={styles.listTwo}>
+            <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
+              <Text style={styles.textListTitle} >CIERRES DE CAJA ANTERIORES</Text>
+            </View>
+            {!loadingReadBoxReport ?
+              <View style={{ height: "70%" }}>
+                {
+                  listBox.length > 0 ?
+                    <FlatList
+                      style={{ height: "40%" }}
+                      data={listBox}
+                      keyExtractor={(item, index) => String(index)}
+                      renderItem={({ item, index }) => {
+                        return (
+                          <TouchableOpacity
+                            key={index.toString()}
+                            onPress={() => {
+                              readBoxReport(item.id);
+
+                            }}
+                          >
+
+                            <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%', justifyContent: 'space-between' }} >
+                              <View style={{ marginBottom: '0%' }} >
+                                <Text style={styles.textPago}> </Text>
+
+                                <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')} {moment(item.dateFinished).format('LT')}</Text>
+                              </View>
+                              <View style={{ alignItems: 'flex-end', marginTop: '3%', width: '49%' }} >
+                                {item.status === 'active' ?
+                                  <Button
+                                    // onPress={onShare}
+                                    title="Abierto"
+                                    color='#FFFFFF'
+                                    style={{
+                                      borderColor: "#00A9A0",
+                                      borderWidth: 1,
+                                      width: '90%'
+                                    }}
+                                    textStyle={{
+                                      color: "#00A9A0",
+                                      fontFamily: 'Montserrat-Bold',
+                                      fontSize: width * 0.02
+                                    }}
+                                    disabled={true}
+                                  />
+                                  :
+                                  <Button
+                                    // onPress={onShare}
+                                    title="Cerrado"
+                                    color='#00A9A0'
+                                    style={{
+                                      borderColor: "#707070",
+                                      width: '90%'
+                                    }}
+                                    textStyle={{
+                                      color: "#FFFFFF",
+                                      fontFamily: 'Montserrat-Bold',
+                                      fontSize: width * 0.02
+                                    }}
+                                    disabled={true}
+                                  />
+                                }
+                              </View>
+                            </View>
+                          </TouchableOpacity>
                         )
                       }}
                     />
                     :
-                    <View style={{ marginLeft: '13%', padding: '10%' }}>
-                      <Text style={styles.textPago}>
-                        No se encuentran registros en el historial
-                      </Text>
-                    </View>
-                  }
+                    <View style={{ height: "70%" }}>
 
-                </View>
-              }
-
-            </View>
-            <View style={{ height: '10%', width: '85%', alignSelf: 'center' }}>
-              <Button
-                onPress={() => {
-
-                  getBoxTotal();
-                }}
-                title="Generar cierre de caja"
-                color='#00A9A0'
-                style={{
-                  borderWidth: normalize(1),
-                  borderColor: "#707070",
-                  alignSelf: 'center',
-                  width: '100%',
-                  height: '60%',
-                  margin: '2%',
-                }}
-                textStyle={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold', fontSize: width * 0.03, }}
-                activityIndicatorStatus={loadingBoxGenerator}
-              />
-            </View>
-
-            <View style={styles.listTwo}>
-              <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
-                <Text style={styles.textListTitle} >CIERRES DE CAJA ANTERIORES</Text>
-              </View>
-              {!loadingReadBoxReport ?
-                <View style={{ height: "70%" }}>
-                  {
-                    listBox.length > 0 ?
-                      <FlatList
-                        style={{ height: "40%" }}
-                        data={listBox}
-                        keyExtractor={(item, index) => String(index)}
-                        renderItem={({ item, index }) => {
-                          return (
-                            <TouchableOpacity
-                              key={index.toString()}
-                              onPress={() => {
-                                readBoxReport(item.id);
-
-                              }}
-                            >
-
-                              <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%', justifyContent: 'space-between' }} >
-                                <View style={{ marginBottom: '0%' }} >
-                                  <Text style={styles.textPago}> </Text>
-
-                                  <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')} {moment(item.dateFinished).format('LT')}</Text>
-                                </View>
-                                <View style={{ alignItems: 'flex-end', marginTop: '3%', width: '49%' }} >
-                                  {item.status === 'active' ?
-                                    <Button
-                                      // onPress={onShare}
-                                      title="Abierto"
-                                      color='#FFFFFF'
-                                      style={{
-                                        borderColor: "#00A9A0",
-                                        borderWidth: 1,
-                                        width: '90%'
-                                      }}
-                                      textStyle={{
-                                        color: "#00A9A0",
-                                        fontFamily: 'Montserrat-Bold',
-                                        fontSize: width * 0.02
-                                      }}
-                                      disabled={true}
-                                    />
-                                    :
-                                    <Button
-                                      // onPress={onShare}
-                                      title="Cerrado"
-                                      color='#00A9A0'
-                                      style={{
-                                        borderColor: "#707070",
-                                        width: '90%'
-                                      }}
-                                      textStyle={{
-                                        color: "#FFFFFF",
-                                        fontFamily: 'Montserrat-Bold',
-                                        fontSize: width * 0.02
-                                      }}
-                                      disabled={true}
-                                    />
-                                  }
-                                </View>
-                              </View>
-                            </TouchableOpacity>
-                          )
-                        }}
-                      />
-                      :
-                      <View style={{ height: "70%" }}>
-
-                        <View style={{ marginLeft: '13%', padding: '10%' }}>
-                          <Text style={styles.textPago}>
-                            No se encuentran registros en el historial
-                          </Text>
-                        </View>
-                      </View>
-
-                  }
-                </View>
-                :
-                <View style={{ justifyContent: 'center', height: '100%' }}>
-                  <ActivityIndicator size={"large"} color={'#00A9A0'} />
-                </View>
-              }
-            </View>
-            <Modal
-              animationType="fade"
-              transparent={true}
-              backdropOpacity={0.3}
-              visible={modalVisible}
-            >
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  <View style={{
-                    height: '100%',
-                    width: '100%',
-                    justifyContent: 'space-between',
-                    padding: '3%'
-                  }}>
-                    <View style={{
-                      margin: '2%',
-                      justifyContent: 'center',
-                      height: ' 40%'
-                    }}>
-                      <Text style={{
-                        ...styles.modalText,
-                        fontSize: normalize(20),
-                        fontFamily: 'Montserrat-Bold'
-                      }}>
-                        Ingrese el valor exacto:
-                      </Text>
-                      <Text style={{
-                        ...styles.modalText,
-                        fontSize: normalize(20),
-                        fontFamily: 'Montserrat-Bold'
-                      }}>
-                        Total: {shiftsOfBoxNum}
-                      </Text>
-                    </View>
-                    <View style={{
-                      justifyContent: 'space-around',
-                      height: '40%',
-                      flexDirection: 'column',
-                      paddingBottom: '6%',
-                      width: '95%'
-                    }}>
-                      <View style={{
-                        flexDirection: "row",
-                        justifyContent: 'flex-end'
-                      }}>
-                        <Text style={{
-                          ...styles.modalText,
-                          fontSize: normalize(20)
-                        }}>Base:  </Text>
-                        <CurrencyInput
-                          placeholder='$'
-                          textAlign='center'
-                          keyboardType='numeric'
-                          style={{
-                            borderWidth: 1,
-                            fontSize: normalize(20),
-                            fontFamily: 'Montserrat-Bold',
-                            backgroundColor: '#FFFFFF',
-                            width: '60%',
-                            borderRadius: 10,
-                            borderColor: '#00A9A0',
-                            color: '#00A9A0'
-                          }}
-                          value={base}
-                          onChangeValue={text => setBase(text)}
-                          prefix="$"
-                          delimiter="."
-                          separator="."
-                          precision={0}
-                          onChangeText={(formattedValue) => {
-                            // console.log(formattedValue);
-                            // $2,310.46
-                          }}
-                        />
-
-                      </View>
-                      <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
-                        <Text style={{ ...styles.modalText, fontSize: normalize(20) }}> Producido :  </Text>
-                        <CurrencyInput
-                          placeholder='$'
-                          textAlign='center'
-                          keyboardType='numeric'
-                          style={{
-                            borderWidth: 1,
-                            fontSize: normalize(20),
-                            fontFamily: 'Montserrat-Bold',
-                            backgroundColor: '#FFFFFF',
-                            width: '60%',
-                            borderRadius: 10,
-                            borderColor: '#00A9A0',
-                            color: '#00A9A0'
-                          }}
-                          value={totalReported}
-                          onChangeValue={text => settoTalReported(text)}
-                          prefix="$"
-                          delimiter="."
-                          separator="."
-                          precision={0}
-                          onChangeText={(formattedValue) => {
-                            // console.log(formattedValue);
-                            // $2,310.46
-                          }}
-                        />
-                      </View>
-                    </View>
-                    <View style={{
-                      height: '20%',
-                      width: '100%',
-                      justifyContent: 'space-between'
-                    }}>
-                      <Button
-                        onPress={() => {
-                          createBoxReport();
-                        }}
-                        title="G U A R D A R"
-                        color="#00A9A0"
-                        style={
-                          styles.modalButton
-                        }
-                        textStyle={{
-                          color: "#FFFFFF",
-                          textAlign: "center",
-                          fontFamily: 'Montserrat-Bold'
-                        }}
-                        activityIndicatorStatus={loadingBoxGenerator}
-                      />
-                      <Button
-                        onPress={() => {
-                          setModalVisible(false);
-                        }}
-                        title="V O L V E R"
-                        color="gray"
-                        style={
-                          styles.modalButton
-                        }
-                        textStyle={{
-                          color: "#FFFFFF",
-                          textAlign: "center",
-                          fontFamily: 'Montserrat-Bold'
-                        }} />
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </Modal>
-            <Modal
-              animationType="fade"
-              transparent={true}
-              backdropOpacity={0.3}
-              visible={modal2Visible}
-            >
-              <View style={styles.centeredView}>
-                <View style={styles.modalViewSign}>
-                  <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-                    <View style={{ margin: '0%', justifyContent: 'center', height: ' 75%' }}>
-                      <View style={{ margin: '2%', justifyContent: 'center', height: ' 30%' }}>
-                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Cierre de Caja:</Text>
-                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>
-                          {moment(readBoxReportInfo.dateFinished).format('L')} {moment(readBoxReportInfo.dateFinished).format('LT')}
-                        </Text>
-                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>
-                          {`$${numberWithPoints(Number(readBoxReportInfo.totalReported))}`}
+                      <View style={{ marginLeft: '13%', padding: '10%' }}>
+                        <Text style={styles.textPago}>
+                          No se encuentran registros en el historial
                         </Text>
                       </View>
-                      {boxStatus === "active" ?
-
-
-                        <Signature
-                          onOK={handleSignature}
-                          onEmpty={handleEmpty}
-                          descriptionText=""
-                          clearText="Clear"
-                          confirmText="Save"
-                          webStyle={style}
-                        />
-
-                        :
-                        <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Firma guardada</Text>
-
-                      }
                     </View>
-                    {signature ?
-                      <View style={{ margin: '0%', justifyContent: 'center', height: ' 10%' }}>
-                        <Text style={{ ...styles.modalText, fontSize: normalize(15), fontFamily: 'Montserrat-Bold', color: 'red' }}>¡ Firma guardada !</Text>
-                      </View>
-                      :
-                      <View style={{ margin: '0%', justifyContent: 'center', height: ' 10%' }}>
-                      </View>
-                    }
 
-
-                    {boxStatus === "active" ?
-
-                      <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginTop: '5%' }}>
-
-                        <Button
-                          onPress={uploadImageToFirebase}
-                          title="G U A R D A R"
-                          color="#00A9A0"
-                          style={
-                            styles.modalButtonSign
-                          }
-                          textStyle={{
-                            color: "#FFFFFF",
-                            textAlign: "center",
-                            fontFamily: 'Montserrat-Bold'
-                          }}
-                          activityIndicatorStatus={loadingBoxGenerator}
-                        />
-                        <Button
-                          onPress={() => {
-                            setModal2Visible(!modal2Visible);
-                          }}
-                          title="V O L V E R"
-                          color="gray"
-                          style={
-                            styles.modalButtonSign
-                          }
-                          textStyle={{
-                            color: "#FFFFFF",
-                            textAlign: "center",
-                            fontFamily: 'Montserrat-Bold'
-                          }} />
-                      </View>
-                      :
-                      <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginTop: '5%' }}>
-                        <Button
-                          onPress={() => {
-                            setModal2Visible(!modal2Visible);
-                          }}
-                          title="V O L V E R"
-                          color="gray"
-                          style={
-                            styles.modalButtonSign
-                          }
-                          textStyle={{
-                            color: "#FFFFFF",
-                            textAlign: "center",
-                            fontFamily: 'Montserrat-Bold'
-                          }} />
-                      </View>
-                    }
-                  </View>
-                </View>
+                }
               </View>
-            </Modal>
-            <Modal
-              animationType="fade"
-              transparent={true}
-              backdropOpacity={0.3}
-              visible={modal3Visible}
-            >
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '5%' }}>
-                    <View style={{ justifyContent: 'center', height: '30%' }}>
-                      <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> No se han realizado los cierres de turno necesarios para generar un cierre de caja. </Text>
-                    </View>
-
-                    <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
-                      <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end' }}>
-                        <Button onPress={() => {
-                          setModal3Visible(false);
-                        }}
-                          title="E N T E N D I D O"
-                          color="#00A9A0"
-                          style={
-                            styles.modalButton
-                          }
-                          textStyle={{
-                            color: "#FFFFFF",
-                            textAlign: "center",
-                            fontFamily: 'Montserrat-Bold'
-                          }}
-                        // activityIndicatorStatus={loading}
-                        />
-                      </View>
-                    </View>
-
-                  </View>
-                </View>
+              :
+              <View style={{ justifyContent: 'center', height: '100%' }}>
+                <ActivityIndicator size={"large"} color={'#00A9A0'} />
               </View>
-            </Modal>
-
+            }
           </View>
-          <View style={{
-            height: '13%',
-            width: '100%',
-            justifyContent: 'flex-end'
-          }}>
-            <FooterIndex navigation={navigation} />
-          </View>
-
         </View>
       </ImageBackground>
+      <View style={{
+        height: '10%',
+        width: '100%',
+        justifyContent: 'flex-end'
+      }}>
+        <FooterIndex navigation={navigation} />
+      </View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={modalVisible}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{
+              height: '100%',
+              width: '100%',
+              justifyContent: 'space-between',
+              padding: '3%'
+            }}>
+              <View style={{
+                margin: '2%',
+                justifyContent: 'center',
+                height: ' 40%'
+              }}>
+                <Text style={{
+                  ...styles.modalText,
+                  fontSize: normalize(20),
+                  fontFamily: 'Montserrat-Bold'
+                }}>
+                  Ingrese el valor exacto:
+                </Text>
+                <Text style={{
+                  ...styles.modalText,
+                  fontSize: normalize(20),
+                  fontFamily: 'Montserrat-Bold'
+                }}>
+                  Total: {shiftsOfBoxNum}
+                </Text>
+              </View>
+              <View style={{
+                justifyContent: 'space-around',
+                height: '40%',
+                flexDirection: 'column',
+                paddingBottom: '6%',
+                width: '95%'
+              }}>
+                <View style={{
+                  flexDirection: "row",
+                  justifyContent: 'flex-end'
+                }}>
+                  <Text style={{
+                    ...styles.modalText,
+                    fontSize: normalize(20)
+                  }}>Base:  </Text>
+                  <CurrencyInput
+                    placeholder='$'
+                    textAlign='center'
+                    keyboardType='numeric'
+                    style={{
+                      borderWidth: 1,
+                      fontSize: normalize(20),
+                      fontFamily: 'Montserrat-Bold',
+                      backgroundColor: '#FFFFFF',
+                      width: '60%',
+                      borderRadius: 10,
+                      borderColor: '#00A9A0',
+                      color: '#00A9A0'
+                    }}
+                    value={base}
+                    onChangeValue={text => setBase(text)}
+                    prefix="$"
+                    delimiter="."
+                    separator="."
+                    precision={0}
+                    onChangeText={(formattedValue) => {
+                      // console.log(formattedValue);
+                      // $2,310.46
+                    }}
+                  />
 
+                </View>
+                <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
+                  <Text style={{ ...styles.modalText, fontSize: normalize(20) }}> Producido :  </Text>
+                  <CurrencyInput
+                    placeholder='$'
+                    textAlign='center'
+                    keyboardType='numeric'
+                    style={{
+                      borderWidth: 1,
+                      fontSize: normalize(20),
+                      fontFamily: 'Montserrat-Bold',
+                      backgroundColor: '#FFFFFF',
+                      width: '60%',
+                      borderRadius: 10,
+                      borderColor: '#00A9A0',
+                      color: '#00A9A0'
+                    }}
+                    value={totalReported}
+                    onChangeValue={text => settoTalReported(text)}
+                    prefix="$"
+                    delimiter="."
+                    separator="."
+                    precision={0}
+                    onChangeText={(formattedValue) => {
+                      // console.log(formattedValue);
+                      // $2,310.46
+                    }}
+                  />
+                </View>
+              </View>
+              <View style={{
+                height: '20%',
+                width: '100%',
+                justifyContent: 'space-between'
+              }}>
+                <Button
+                  onPress={() => {
+                    createBoxReport();
+                  }}
+                  title="G U A R D A R"
+                  color="#00A9A0"
+                  style={
+                    styles.modalButton
+                  }
+                  textStyle={{
+                    color: "#FFFFFF",
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Bold'
+                  }}
+                  activityIndicatorStatus={loadingBoxGenerator}
+                />
+                <Button
+                  onPress={() => {
+                    setModalVisible(false);
+                  }}
+                  title="V O L V E R"
+                  color="gray"
+                  style={
+                    styles.modalButton
+                  }
+                  textStyle={{
+                    color: "#FFFFFF",
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Bold'
+                  }} />
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={modal2Visible}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalViewSign}>
+            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
+              <View style={{ margin: '0%', justifyContent: 'center', height: ' 75%' }}>
+                <View style={{ margin: '2%', justifyContent: 'center', height: ' 30%' }}>
+                  <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Cierre de Caja:</Text>
+                  <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>
+                    {moment(readBoxReportInfo.dateFinished).format('L')} {moment(readBoxReportInfo.dateFinished).format('LT')}
+                  </Text>
+                  <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>
+                    {`$${numberWithPoints(Number(readBoxReportInfo.totalReported))}`}
+                  </Text>
+                </View>
+                {boxStatus === "active" ?
+
+
+                  <Signature
+                    onOK={handleSignature}
+                    onEmpty={handleEmpty}
+                    descriptionText=""
+                    clearText="Clear"
+                    confirmText="Save"
+                    webStyle={style}
+                  />
+
+                  :
+                  <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Firma guardada</Text>
+
+                }
+              </View>
+              {signature ?
+                <View style={{ margin: '0%', justifyContent: 'center', height: ' 10%' }}>
+                  <Text style={{ ...styles.modalText, fontSize: normalize(15), fontFamily: 'Montserrat-Bold', color: 'red' }}>¡ Firma guardada !</Text>
+                </View>
+                :
+                <View style={{ margin: '0%', justifyContent: 'center', height: ' 10%' }}>
+                </View>
+              }
+
+
+              {boxStatus === "active" ?
+
+                <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginTop: '5%' }}>
+
+                  <Button
+                    onPress={uploadImageToFirebase}
+                    title="G U A R D A R"
+                    color="#00A9A0"
+                    style={
+                      styles.modalButtonSign
+                    }
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }}
+                    activityIndicatorStatus={loadingBoxGenerator}
+                  />
+                  <Button
+                    onPress={() => {
+                      setModal2Visible(!modal2Visible);
+                    }}
+                    title="V O L V E R"
+                    color="gray"
+                    style={
+                      styles.modalButtonSign
+                    }
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }} />
+                </View>
+                :
+                <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginTop: '5%' }}>
+                  <Button
+                    onPress={() => {
+                      setModal2Visible(!modal2Visible);
+                    }}
+                    title="V O L V E R"
+                    color="gray"
+                    style={
+                      styles.modalButtonSign
+                    }
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }} />
+                </View>
+              }
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        backdropOpacity={0.3}
+        visible={modal3Visible}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '5%' }}>
+              <View style={{ justifyContent: 'center', height: '30%' }}>
+                <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> No se han realizado los cierres de turno necesarios para generar un cierre de caja. </Text>
+              </View>
+
+              <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
+                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end' }}>
+                  <Button onPress={() => {
+                    setModal3Visible(false);
+                  }}
+                    title="E N T E N D I D O"
+                    color="#00A9A0"
+                    style={
+                      styles.modalButton
+                    }
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Bold'
+                    }}
+                  // activityIndicatorStatus={loading}
+                  />
+                </View>
+              </View>
+
+            </View>
+          </View>
+        </View>
+      </Modal>
 
     </View>
 

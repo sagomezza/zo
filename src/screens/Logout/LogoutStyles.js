@@ -172,9 +172,21 @@ const styles = StyleSheet.create({
     // modal
     modalText: {
         textAlign: "center",
-        fontFamily: 'Montserrat-Regular',
+        fontFamily: 'Montserrat-Bold',
         color: '#A9A9A9',
         fontSize: normalize(20)
+    },
+    modalTextBlue: {
+        textAlign: "center",
+        fontFamily: 'Montserrat-Bold',
+        color: '#00A9A0',
+        fontSize: normalize(20)
+    },
+    modalTextTitle: {
+        textAlign: "center",
+        fontFamily: 'Montserrat-Bold',
+        color: '#00A9A0',
+        fontSize: normalize(28)
     },
     modalTextAlert: {
         textAlign: "center",
@@ -199,7 +211,7 @@ const styles = StyleSheet.create({
         height: normalize(350),
         width: normalize(400),
         padding: normalize(20),
-        borderRadius: 50,
+        borderRadius: 30,
         borderColor: '#707070',
         borderWidth: 1,
         justifyContent: 'space-between',
@@ -215,6 +227,38 @@ const styles = StyleSheet.create({
         elevation: 5,
         flexDirection: 'column'
     },
+    logoutModalView: {
+        height: normalize(500),
+        width: normalize(400),
+        padding: normalize(20),
+        borderRadius: 30,
+        borderColor: '#707070',
+        borderWidth: 1,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        shadowColor: '#FFF',
+        shadowOffset: {
+            width: 50,
+            height: 50,
+        },
+        shadowOpacity: 0,
+        shadowRadius: 50,
+        elevation: 5,
+        flexDirection: 'column'
+    },
+    logoutModalReport:{
+        height: '13%',
+        width: '100%',
+        backgroundColor: '#ECEDEF',
+        borderRadius: 7,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingTop: '3%',
+        paddingBottom: '2%',
+        paddingRight: '8%',
+        paddingLeft: '8%'
+      }
 
 })
 export default styles;

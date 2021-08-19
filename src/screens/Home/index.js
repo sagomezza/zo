@@ -242,7 +242,7 @@ const HomeIndex = (props) => {
     } else if (activeList === 0) {
       return (
         <View style={styles.listContainer}>
-          {loadingReservations === 'hi' ?
+          {loadingReservations ?
             <View style={{ height: "72%" }}>
               <View style={{ justifyContent: 'center', height: '100%' }}>
                 <ActivityIndicator size={"large"} color={'#00A9A0'} />

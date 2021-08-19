@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 30,
         alignContent: 'center',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     listContainer: {
         height: '76%',
@@ -19,10 +19,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         marginTop: '2%',
         borderRadius: 10,
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        borderWidth: 1
     },
     listOne: {
-        height: '40%'
+        height: '40%',
+        width: '80%',
+        borderWidth: 1
     },
     listTwo: {
         height: '50%'
@@ -39,7 +42,7 @@ const styles = StyleSheet.create({
     },
     screenTitle: {
         fontSize: width * 0.034,
-        color: 'gray',
+        color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },
     textPago: {
