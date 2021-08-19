@@ -309,7 +309,6 @@ const txtGenerator = (props) => {
           <View style={styles.listOne}>
             <View style={{
               width: '80%',
-              borderWidth: 1
             }}>
               <Text style={styles.textListTitle} >TRANSACCIONES DEL DÍA</Text>
             </View>
@@ -330,18 +329,15 @@ const txtGenerator = (props) => {
                       return (
                         <View style={{
                           flexDirection: "row",
-                          borderBottomWidth: 1,
-                          borderColor: "#E9E9E9",
                           marginBottom: '2%',
-                          marginLeft: '10%',
-                          marginRight: '10%',
-                          marginTop: '0%'
+                          backgroundColor: '#FFFFFF',
+                          borderRadius: 7,
+                          
                         }} >
-                          <View style={{ marginBottom: '2%' }} >
+                          <View style={{ borderWidth: 1, margin: '2%'}} >
                             <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
-                            <Text style={styles.textPago}>Pago por ${formatHours(item.hours)} horas</Text>
                           </View>
-                          <View style={{ flex: 1, alignItems: 'flex-end', marginTop: '3%' }} >
+                          <View style={{ flex: 1, alignItems: 'flex-end', margin: '3%' }} >
                             <Text style={styles.textMoney}>
                               {item.cash === 0 && item.change === 0 ? '$0' : ''}
                               {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}

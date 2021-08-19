@@ -29,6 +29,7 @@ import { TIMEOUT } from '../../config/constants/constants';
 import instance from "../../config/axios";
 import store from '../../config/store';
 import * as Sentry from "@sentry/browser";
+import secondsToString from '../../config/services/secondsToString';
 
 
 const { width, height } = Dimensions.get('window');
@@ -220,7 +221,6 @@ const UserOut = (props) => {
             }, timeout: TIMEOUT
           }
         )
-        setLoadingCheckParking(false);
         setDateFinished(new Date());
         if (response.data.data.dateStart) setDateStart(response.data.data.dateStart);
         if (response.data.data.total) setTotalAmount(response.data.data.total);
@@ -231,6 +231,8 @@ const UserOut = (props) => {
           setPlateOne(response.data.data.plate.substring(0, 3))
           setPlateTwo(response.data.data.plate.substring(3, 6))
         }
+        setLoadingCheckParking(false);
+
       }
     } catch (err) {
       Sentry.captureException(err);
@@ -479,8 +481,8 @@ const UserOut = (props) => {
                     style={{ width: '25%' }}
                     resizeMode={"contain"}
                     source={require('../../../assets/images/totalHours.png')} />
-                  <View style={{ flexDirection: 'column', margin: '5%', width: '60%' }}>
-                    <Text style={styles.timePlateInfo}>{Object.keys(check).length === 0 ? '' : Math.round(check.hours) + ' horas'} </Text>
+                  <View style={{ flexDirection: 'column', margin: '5%', width: '68%' }}>
+                    <Text style={styles.timePlateInfo}>{Object.keys(check).length === 0 ? '' : secondsToString((check.hours)*3600)} </Text>
                   </View>
                 </View>
               </View>

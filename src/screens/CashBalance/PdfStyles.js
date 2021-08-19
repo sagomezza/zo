@@ -24,15 +24,14 @@ const styles = StyleSheet.create({
     },
     listOne: {
         height: '40%',
-        width: '80%',
-        borderWidth: 1
+        width: '85%',
     },
     listTwo: {
         height: '50%'
     },
     textPlaca: {
         fontSize: width * 0.03,
-        color: '#5D5D5D',
+        color: '#8F8F8F',
         fontFamily: 'Montserrat-Bold'
     },
     textListTitle: {
@@ -46,14 +45,14 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Bold'
     },
     textPago: {
-        fontSize: width * 0.02,
+        fontSize: width * 0.03,
         color: '#5D5D5D',
         fontFamily: 'Montserrat-Regular'
     },
     textMoney: {
         fontSize: width * 0.035,
-        color: '#5D5D5D',
-        fontFamily: 'Montserrat-Regular'
+        color: '#8F8F8F',
+        fontFamily: 'Montserrat-Bold'
     },
     openCashBalanceButton: {
         borderWidth: normalize(1),
