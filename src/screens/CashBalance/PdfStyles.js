@@ -27,13 +27,25 @@ const styles = StyleSheet.create({
         marginTop: '4%',
     },
     listTwo: {
-        height: '50%',
-        borderWidth: 1
+        height: '30%',
+        width: '85%',
+        marginTop: '5%'
     },
     textPlaca: {
         fontSize: width * 0.03,
         color: '#8F8F8F',
         fontFamily: 'Montserrat-Bold'
+    },
+    textPlacaDate: {
+        fontSize: width * 0.03,
+        color: '#8F8F8F',
+        fontFamily: 'Montserrat-Bold',
+    },
+    textPlacaHour: {
+        fontSize: width * 0.03,
+        color: '#8F8F8F',
+        fontFamily: 'Montserrat-Bold',
+
     },
     textListTitle: {
         fontSize: width * 0.025,
@@ -81,10 +93,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(52, 52, 52, 0.8)',
     },
     modalView: {
-        height: normalize(450),
+        height: normalize(500),
         width: '70%',
         padding: '4%',
-        borderRadius: 50,
+        borderRadius: 30,
         borderColor: '#707070',
         borderWidth: 1,
         justifyContent: 'space-between',
@@ -128,8 +140,15 @@ const styles = StyleSheet.create({
     },
     modalButton: {
         width: '100%',
-        height: '60%',
-        alignSelf: 'flex-end'
+        height: '70%',
+        alignSelf: 'flex-end',
+    },
+    modalButtonBack: {
+        width: '100%',
+        height: '70%',
+        alignSelf: 'flex-end',
+        borderColor: '#00A9A0',
+        borderWidth: 1
     },
     modalButtonSign: {
         width: '100%',
@@ -155,7 +174,16 @@ const styles = StyleSheet.create({
         width: 120,
         textAlign: "center",
         marginTop: 10
-    }
+    },
+    currencyInput: {
+        fontSize: normalize(20),
+        fontFamily: 'Montserrat-Bold',
+        backgroundColor: '#E7E7EA',
+        width: '60%',
+        padding:'5%',
+        borderRadius: 10,
+        color: '#8F8F8F'
+      },
 });
 
 export default styles;

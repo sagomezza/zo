@@ -357,7 +357,7 @@ const txtGenerator = (props) => {
             }
 
           </View>
-          <View style={{ height: '10%', width: '85%', alignSelf: 'center', borderWidth: 1 }}>
+          <View style={{ height: '10%', width: '85%', alignSelf: 'center'}}>
             <Button
               onPress={() => {getBoxTotal();}}
               title="GENERAR CIERRE DE CAJA"
@@ -367,7 +367,7 @@ const txtGenerator = (props) => {
                 borderColor: "#00A9A0",
                 borderWidth: 1,
                 alignSelf: 'center',
-                width: '100%',
+                width: '83%',
                 height: '60%',
                 margin: '2%',
               }}
@@ -376,7 +376,7 @@ const txtGenerator = (props) => {
             />
           </View>
           <View style={styles.listTwo}>
-            <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
+            <View style={{ marginBottom: '3%', marginTop: '3%'}}>
               <Text style={styles.textListTitle} >CIERRES DE CAJA ANTERIORES</Text>
             </View>
             {!loadingReadBoxReport ?
@@ -384,26 +384,17 @@ const txtGenerator = (props) => {
                 {
                   listBox.length > 0 ?
                     <FlatList
-                      style={{ height: "40%" }}
+                      style={{ height: "70%" }}
                       data={listBox}
                       keyExtractor={(item, index) => String(index)}
                       renderItem={({ item, index }) => {
                         return (
-                          <TouchableOpacity
-                            key={index.toString()}
-                            onPress={() => {
-                              readBoxReport(item.id);
-
-                            }}
-                          >
-
-                            <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '2%', marginLeft: '10%', marginRight: '10%', marginTop: '0%', justifyContent: 'space-between' }} >
-                              <View style={{ marginBottom: '0%' }} >
-                                <Text style={styles.textPago}> </Text>
-
-                                <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')} {moment(item.dateFinished).format('LT')}</Text>
+                            <View style={{ flexDirection: "row",marginBottom: '2%',justifyContent: 'space-around' }} >
+                              <View style={{ margin: '1%' }} >
+                                <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')}     {moment(item.dateFinished).format('LT')}</Text>
                               </View>
-                              <View style={{ alignItems: 'flex-end', marginTop: '3%', width: '49%' }} >
+                              <View style={{height: '50%', width: '25%', borderBottomWidth: 0.5, borderColor: '#707070', marginLeft: '2%', marginRight: '3%'}}></View>
+                              <View style={{ width: '30%', marginRight: '2%', justifyContent: 'flex-end', alignItems: 'flex-end' }} >
                                 {item.status === 'active' ?
                                   <Button
                                     // onPress={onShare}
@@ -424,23 +415,24 @@ const txtGenerator = (props) => {
                                   :
                                   <Button
                                     // onPress={onShare}
-                                    title="Cerrado"
+                                    title="CERRADO"
                                     color='#00A9A0'
                                     style={{
                                       borderColor: "#707070",
-                                      width: '90%'
+                                      width: '100%',
+                                      padding: '5%'
                                     }}
                                     textStyle={{
                                       color: "#FFFFFF",
-                                      fontFamily: 'Montserrat-Bold',
-                                      fontSize: width * 0.02
+                                      fontFamily: 'Montserrat-Medium',
+                                      fontSize: width * 0.02,
+                                      letterSpacing: 5
                                     }}
                                     disabled={true}
                                   />
                                 }
                               </View>
                             </View>
-                          </TouchableOpacity>
                         )
                       }}
                     />
@@ -475,31 +467,35 @@ const txtGenerator = (props) => {
         animationType="fade"
         transparent={true}
         backdropOpacity={0.3}
-        visible={modalVisible}
+        // visible={modalVisible}
+        visible={true}
+
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={{
               height: '100%',
               width: '100%',
-              justifyContent: 'space-between',
-              padding: '3%'
+              justifyContent: 'center',
+              padding: '2%',
+              flexDirection: 'column'
             }}>
               <View style={{
-                margin: '2%',
                 justifyContent: 'center',
-                height: ' 40%'
+                height: ' 30%',
               }}>
                 <Text style={{
-                  ...styles.modalText,
-                  fontSize: normalize(20),
-                  fontFamily: 'Montserrat-Bold'
+                   fontSize: normalize(30),
+                   textAlign: 'center',
+                   color: '#00A9A0',
+                   fontFamily: 'Montserrat-Bold'
                 }}>
-                  Ingrese el valor exacto:
+                  INGRESE EL VALOR EXACTO:
                 </Text>
                 <Text style={{
-                  ...styles.modalText,
-                  fontSize: normalize(20),
+                  fontSize: normalize(30),
+                  textAlign: 'center',
+                  color: '#8F8F8F',
                   fontFamily: 'Montserrat-Bold'
                 }}>
                   Total: {shiftsOfBoxNum}
@@ -510,11 +506,11 @@ const txtGenerator = (props) => {
                 height: '40%',
                 flexDirection: 'column',
                 paddingBottom: '6%',
-                width: '95%'
+                width: '95%',
               }}>
                 <View style={{
                   flexDirection: "row",
-                  justifyContent: 'flex-end'
+                  justifyContent: 'space-between'
                 }}>
                   <Text style={{
                     ...styles.modalText,
@@ -524,55 +520,29 @@ const txtGenerator = (props) => {
                     placeholder='$'
                     textAlign='center'
                     keyboardType='numeric'
-                    style={{
-                      borderWidth: 1,
-                      fontSize: normalize(20),
-                      fontFamily: 'Montserrat-Bold',
-                      backgroundColor: '#FFFFFF',
-                      width: '60%',
-                      borderRadius: 10,
-                      borderColor: '#00A9A0',
-                      color: '#00A9A0'
-                    }}
+                    style={styles.currencyInput}
                     value={base}
                     onChangeValue={text => setBase(text)}
                     prefix="$"
                     delimiter="."
                     separator="."
                     precision={0}
-                    onChangeText={(formattedValue) => {
-                      // console.log(formattedValue);
-                      // $2,310.46
-                    }}
                   />
 
                 </View>
-                <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
+                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
                   <Text style={{ ...styles.modalText, fontSize: normalize(20) }}> Producido :  </Text>
                   <CurrencyInput
                     placeholder='$'
                     textAlign='center'
                     keyboardType='numeric'
-                    style={{
-                      borderWidth: 1,
-                      fontSize: normalize(20),
-                      fontFamily: 'Montserrat-Bold',
-                      backgroundColor: '#FFFFFF',
-                      width: '60%',
-                      borderRadius: 10,
-                      borderColor: '#00A9A0',
-                      color: '#00A9A0'
-                    }}
+                    style={styles.currencyInput}
                     value={totalReported}
                     onChangeValue={text => settoTalReported(text)}
                     prefix="$"
                     delimiter="."
                     separator="."
                     precision={0}
-                    onChangeText={(formattedValue) => {
-                      // console.log(formattedValue);
-                      // $2,310.46
-                    }}
                   />
                 </View>
               </View>
@@ -582,18 +552,15 @@ const txtGenerator = (props) => {
                 justifyContent: 'space-between'
               }}>
                 <Button
-                  onPress={() => {
-                    createBoxReport();
-                  }}
-                  title="G U A R D A R"
+                  onPress={() => {createBoxReport()}}
+                  title="GUARDAR"
                   color="#00A9A0"
-                  style={
-                    styles.modalButton
-                  }
+                  style={styles.modalButton}
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
+                    fontFamily: 'Montserrat-Bold',
+                    letterSpacing: 5
                   }}
                   activityIndicatorStatus={loadingBoxGenerator}
                 />
@@ -601,15 +568,17 @@ const txtGenerator = (props) => {
                   onPress={() => {
                     setModalVisible(false);
                   }}
-                  title="V O L V E R"
-                  color="gray"
+                  title="VOLVER"
+                  color="transparent"
                   style={
-                    styles.modalButton
+                    styles.modalButtonBack
                   }
                   textStyle={{
-                    color: "#FFFFFF",
+                    color: "#00A9A0",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
+                    fontFamily: 'Montserrat-Bold',
+                    letterSpacing: 5
+
                   }} />
               </View>
             </View>
