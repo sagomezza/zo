@@ -5,13 +5,12 @@ const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#F8F8F8',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         alignContent: 'center',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        height: '91%'
     },
     listContainer: {
         height: '76%',
@@ -23,11 +22,13 @@ const styles = StyleSheet.create({
         borderWidth: 1
     },
     listOne: {
-        height: '40%',
+        height: '35%',
         width: '85%',
+        marginTop: '4%',
     },
     listTwo: {
-        height: '50%'
+        height: '50%',
+        borderWidth: 1
     },
     textPlaca: {
         fontSize: width * 0.03,
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Bold'
     },
     textListTitle: {
-        fontSize: width * 0.02,
+        fontSize: width * 0.025,
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },

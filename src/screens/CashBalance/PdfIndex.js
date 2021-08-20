@@ -57,7 +57,7 @@ const txtGenerator = (props) => {
   const [boxStatus, setBoxStatus] = useState("");
   const [boxId, setBoxId] = useState("");
   const [reports, setReports] = useState([]);
-  const [date2, setDate2] = useState(moment().subtract(5, 'hours'));
+  const [date2, setDate2] = useState(moment());
   const [date1, setDate1] = useState(moment(date2).subtract(1, 'days'));
   const [loadingTodayRecips, setLoadingTodayRecips] = useState(true);
   const [signature, setSign] = useState(false);
@@ -65,14 +65,13 @@ const txtGenerator = (props) => {
 
   useEffect(() => {
     setLoadingTodayRecips(true);
-    // console.log('RECIP TOTAL', recips.recips)
-
+    console.log(recips.recips)
     try {
       const todayRecips = totalRecips.filter(recip =>
-        recip.dateFactured ?
-          moment(moment(new Date(recip.dateFactured._seconds * 1000)).subtract(5, 'hours')).isBetween(date1, date2)
+        !recip.dateFactured ?
+          moment(recip.dateFinished).isBetween(date1, date2)
           :
-          moment(recip.dateFinished).isBetween(date1, date2))
+          moment(moment(((recip.dateFactured)._seconds * 1000))).isBetween(date1, date2))
       setDataToday(todayRecips)
       setLoadingTodayRecips(false);
     } catch (err) {
@@ -297,29 +296,27 @@ const txtGenerator = (props) => {
           flex: 1,
           width: '100%',
           height: '40%',
-          flexDirection: 'column'
+          flexDirection: 'column',
         }}
         source={require('../../../assets/images/Home.png')}>
         <Header navigation={navigation} />
 
         <View style={styles.container}>
-          <View style={{ marginTop: '3%' }}>
+          <View style={{ marginTop: '5%' }}>
             <Text style={styles.screenTitle} >CIERRE DE CAJA</Text>
           </View>
           <View style={styles.listOne}>
-            <View style={{
-              width: '80%',
-            }}>
+            <View style={{ width: '80%', marginBottom: '2%' }}>
               <Text style={styles.textListTitle} >TRANSACCIONES DEL DÍA</Text>
             </View>
             {loadingTodayRecips ?
-              <View style={{ height: "72%" }}>
+              <View style={{ height: "83%" }}>
                 <View style={{ justifyContent: 'center', height: '100%' }}>
                   <ActivityIndicator size={"large"} color={'#00A9A0'} />
                 </View>
               </View>
               :
-              <View style={{ height: "72%" }}>
+              <View style={{ height: "83%"}}>
                 {dataToday.length > 0 ?
                   <FlatList
                     style={{ height: "37%" }}
@@ -332,9 +329,9 @@ const txtGenerator = (props) => {
                           marginBottom: '2%',
                           backgroundColor: '#FFFFFF',
                           borderRadius: 7,
-                          
+
                         }} >
-                          <View style={{ borderWidth: 1, margin: '2%'}} >
+                          <View style={{ margin: '2%' }} >
                             <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
                           </View>
                           <View style={{ flex: 1, alignItems: 'flex-end', margin: '3%' }} >
@@ -360,23 +357,21 @@ const txtGenerator = (props) => {
             }
 
           </View>
-          <View style={{ height: '10%', width: '85%', alignSelf: 'center' }}>
+          <View style={{ height: '10%', width: '85%', alignSelf: 'center', borderWidth: 1 }}>
             <Button
-              onPress={() => {
-
-                getBoxTotal();
-              }}
-              title="Generar cierre de caja"
-              color='#00A9A0'
+              onPress={() => {getBoxTotal();}}
+              title="GENERAR CIERRE DE CAJA"
+              color='transparent'
               style={{
                 borderWidth: normalize(1),
-                borderColor: "#707070",
+                borderColor: "#00A9A0",
+                borderWidth: 1,
                 alignSelf: 'center',
                 width: '100%',
                 height: '60%',
                 margin: '2%',
               }}
-              textStyle={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold', fontSize: width * 0.03, }}
+              textStyle={{ color: "#00A9A0", fontFamily: 'Montserrat-Bold', fontSize: width * 0.03, letterSpacing: 5}}
               activityIndicatorStatus={loadingBoxGenerator}
             />
           </View>

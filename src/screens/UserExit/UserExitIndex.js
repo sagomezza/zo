@@ -327,10 +327,6 @@ const UserOut = (props) => {
     }
   }
 
-  function isCharacterALetter(char) {
-    return (/[a-zA-Z]/).test(char)
-  }
-
   function dateStartDate() {
     if (dateStart) {
       return (moment(dateStart).format('L'))
