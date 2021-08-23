@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 30,
         alignContent: 'center',
         alignItems: 'center',
-        justifyContent: 'space-around',
         height: '91%',
     },
     listContainer: {
@@ -40,7 +39,6 @@ const styles = StyleSheet.create({
         fontSize: width * 0.023,
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold',
-        marginTop: '0%',
         width: '15%',
         height: '100%',
         textAlign: 'center'

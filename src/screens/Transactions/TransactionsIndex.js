@@ -48,10 +48,10 @@ const Transactions = (props) => {
                 source={require('../../../assets/images/logoutStripes.png')}>
                 <Header navigation={navigation} />
                 <View style={styles.container}>
-                        <View style={{  marginTop: '3%'}}>
+                        <View style={{  marginTop: '8%'}}>
                             <Text style={styles.textListTitle} >TRANSACCIONES</Text>
                         </View>
-                        <View style={{ height: "80%"}}>
+                        <View style={{ height: "71%", marginTop: '8%'}}>
                             <View style={{ width: '96%', height: '5%', flexDirection: 'row'}}>
                                 <Text style={{ ...styles.titleText, marginLeft: '3%' }}>Placa</Text>
                                 <Text style={{ ...styles.titleText, marginLeft: '6%' }}>Fecha</Text>
