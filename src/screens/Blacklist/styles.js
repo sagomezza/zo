@@ -5,10 +5,10 @@ const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     container: {
-        height: '72%',
+        height: '76%',
         backgroundColor: '#F8F8F8',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
         alignContent: 'center',
         alignItems: 'center',
         justifyContent: 'space-between'
@@ -20,7 +20,8 @@ const styles = StyleSheet.create({
         marginTop: '5%',
         borderRadius: 10,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        borderWidth: 1
     },
     plateInput: {
         width: '46%',
@@ -73,8 +74,9 @@ const styles = StyleSheet.create({
     },
     buttonTextSearch: {
         color: '#00A9A0',
-        fontSize: normalize(16),
-        fontFamily: 'Montserrat-Bold'
+        fontSize: normalize(20),
+        fontFamily: 'Montserrat-Medium',
+        letterSpacing: 5
     },
     buttonTextRenew: {
         color: '#FFFFFF',
@@ -84,7 +86,8 @@ const styles = StyleSheet.create({
     buttonIDisabled: {
         borderRadius: 30,
         height: width * 0.06,
-        width: '100%',
+        width: '70%',
+        alignSelf: 'center',
         opacity: 0.5
     },
     infoTextTitle: {
@@ -116,16 +119,16 @@ const styles = StyleSheet.create({
     },
     modalTextAlert: {
         textAlign: "center",
-        fontFamily: 'Montserrat-Regular',
-        color: '#B7B7B7',
+        fontFamily: 'Montserrat-Medium',
+        color: '#6F6F7B',
         fontSize: normalize(20),
         margin: '2%'
     },
     modalView: {
-        height: normalize(350),
+        height: normalize(400),
         width: normalize(350),
         padding: normalize(20),
-        borderRadius: 50,
+        borderRadius: 30,
         borderColor: '#707070',
         borderWidth: 1,
         justifyContent: 'space-between',
@@ -143,26 +146,6 @@ const styles = StyleSheet.create({
         borderWidth: 1
 
     },
-    modalViewNewMensuality: {
-        height: normalize(550),
-        width: normalize(450),
-        padding: normalize(20),
-        borderRadius: 50,
-        borderColor: '#707070',
-        borderWidth: 1,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: '#FFF',
-        shadowColor: '#FFF',
-        shadowOffset: {
-            width: 50,
-            height: 50,
-        },
-        shadowOpacity: 0,
-        shadowRadius: 50,
-        elevation: 5,
-        flexDirection: 'column'
-    },
     modalText: {
         textAlign: "center",
         fontFamily: 'Montserrat-Regular',
@@ -172,16 +155,25 @@ const styles = StyleSheet.create({
     modalButton: {
         width: '100%',
         height: '80%',
+        alignSelf: 'flex-end',
     },
     modalButtonDisabled: {
         width: '100%',
         height: '80%',
         opacity: 0.5
     },
+    modalButtonBack: {
+        width: '100%',
+        height: '80%',
+        alignSelf: 'flex-end',
+        borderColor: '#00A9A0',
+        borderWidth: 1
+    },
     textPlaca: {
         fontSize: normalize(20),
-        color: '#5D5D5D',
-        fontFamily: 'Montserrat-Bold'
+        color: '#00A9A0',
+        fontFamily: 'Montserrat-Bold',
+        width: '15%'
     },
     textPago: {
         fontSize: width * 0.02,
@@ -194,21 +186,50 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Regular'
     },
     textListTitle: {
-        fontSize: width * 0.025,
+        fontSize: width * 0.04,
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },
+    titleText: {
+        fontSize: width * 0.023,
+        color: '#6F6F7B',
+        fontFamily: 'Montserrat-Bold',
+    },
+    modalTitleText: {
+        fontSize: width * 0.037,
+        color: '#00A9A0',
+        fontFamily: 'Montserrat-Bold',
+        alignSelf: 'center'
+    },
+    modalTitleTextGray: {
+        fontSize: width * 0.035,
+        color: '#8F8F8F',
+        fontFamily: 'Montserrat-Bold',
+        alignSelf: 'center'
+    },
+    list: {
+        flexDirection: "row",
+        backgroundColor: '#FFFFFF',
+        marginTop: '3%',
+        borderRadius: 7,
+        justifyContent: 'space-around',
+        paddingTop: '2%',
+        paddingBottom: '2%'
+    },
+    dateDaysText: {
+        fontSize: width * 0.025,
+        color: '#6F6F7B',
+        fontFamily: 'Montserrat-Medium',
+    },
     currencyInput: {
-        borderWidth: 1,
-        borderColor: '#00A9A0',
         fontSize: normalize(20),
         fontFamily: 'Montserrat-Bold',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#E7E7EA',
         width: '60%',
+        padding:'5%',
         borderRadius: 10,
-        color: '#00A9A0'
+        color: '#8F8F8F'
       },
-
 });
 
 export default styles;

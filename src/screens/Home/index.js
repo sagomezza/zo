@@ -162,7 +162,7 @@ const HomeIndex = (props) => {
               </View>
             </View>
             :
-            <View style={{ height: "97%" }}>
+            <View style={{ height: "97%"}}>
               <View style={{ width: '96%', height: '5%', flexDirection: 'row', alignSelf: 'center', marginTop: '3%' }}>
                 <Text style={{ ...styles.titleText, marginLeft: '2%' }}>Placa</Text>
                 <Text style={{ ...styles.titleText, marginLeft: '7%' }}>Fecha</Text>

@@ -3,6 +3,7 @@ import {
     Text,
     View,
     Modal,
+    Image,
     ImageBackground,
     Keyboard,
     FlatList,
@@ -24,6 +25,8 @@ import { TIMEOUT } from '../../config/constants/constants';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import * as Sentry from "@sentry/browser";
+import moment from 'moment';
+
 
 const Blacklist = (props) => {
     const { navigation, officialProps, reservations, recips, hq } = props;
@@ -81,7 +84,7 @@ const Blacklist = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
-                if (response.data.blackList){
+                if (response.data.blackList) {
                     setFindUserByPlateInfo(response.data);
                     setBlacklist(response.data.blackList);
                     setBlacklistExists(true);
@@ -157,8 +160,15 @@ const Blacklist = (props) => {
             return Math.round(hours)
         } else return hours
     }
+
     let inputChange = (totalPay - blacklistValue) <= 0 ? 0 : '' + (totalPay - blacklistValue)
 
+    const formatDateDays = (date) => {
+        return moment(date).format('L')
+    }
+    const formatDateHours = (date) => {
+        return moment(date).format('LT')
+    }
 
     return (
         <View style={{ flex: 1 }}>
@@ -169,7 +179,7 @@ const Blacklist = (props) => {
                     height: '35%',
                     flexDirection: 'column'
                 }}
-                source={require('../../../assets/images/Home.png')}>
+                source={require('../../../assets/images/logoutStripes.png')}>
                 <Header navigation={navigation} />
                 <View style={{ height: '15%', alignContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', alignContent: 'center', height: '35%', width: '60%', marginTop: '2%' }}>
@@ -213,11 +223,11 @@ const Blacklist = (props) => {
                             }}
                         />
                     </View>
-                    <View style={{ height: '40%', width: '57%', justifyContent: 'center' }}>
+                    <View style={{ height: '42%', width: '57%', justifyContent: 'center', marginTop: '2%' }}>
                         <Button onPress={() => {
                             setModalVisible(true);
                         }}
-                            title="P A G A R"
+                            title="PAGAR"
                             color='#FFF200'
                             style={[plateOne === "" || plateTwo === "" ? styles.buttonIDisabled : styles.buttonI]}
                             textStyle={styles.buttonTextSearch}
@@ -227,57 +237,79 @@ const Blacklist = (props) => {
                     </View>
                 </View>
                 <View style={styles.container}>
-                    <View style={styles.listContainer}>
-                        <View style={{ height: '95%', width: '95%', backgroundColor: '#FFFFFF', marginTop: '0%', borderRadius: 10 }}>
-                            <View style={{ marginLeft: '10%', marginBottom: '3%', marginTop: '3%' }}>
-                                <Text style={styles.textListTitle} >LISTA NEGRA</Text>
-                            </View>
-                            {loadingListHQDebts ?
-                                <View style={{ height: "90%" }}>
-                                    <View style={{ justifyContent: 'center', height: '100%' }}>
-                                        <ActivityIndicator size={"large"} color={'#00A9A0'} />
-                                    </View>
-                                </View>
-                                :
-                                <View style={{ height: "90%" }}>
-                                    {listHQDebts.length > 0 ?
-                                        <FlatList
-                                            style={{ height: "37%" }}
-                                            data={listHQDebts}
-                                            keyExtractor={({ id }) => id}
-                                            renderItem={({ item }) => {
-                                                return (
-                                                    <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '4%', marginLeft: '10%', marginRight: '10%', marginTop: '2%', alignItems: 'center' }} >
-                                                        <View style={{ marginBottom: '2%' }} >
-                                                            <Text style={styles.textPlaca}>{item.plate}</Text>
-                                                        </View>
-                                                        <View style={{ flex: 1, alignItems: 'flex-end', marginBottom: '2%' }} >
-                                                            <Text style={styles.textMoney}>{`$${numberWithPoints(item.value)}`}</Text>
-                                                        </View>
-                                                    </View>
-                                                )
-                                            }}
-                                        />
-                                        :
-                                        <View style={{ marginLeft: '13%', padding: '10%' }}>
-                                            <Text style={styles.textPago}> No se encuentran registros en el historial </Text>
-                                        </View>
-                                    }
-                                </View>
-                            }
+                    <View style={{ height: '90%', width: '90%', borderRadius: 10}}>
+                        <View style={{ marginBottom: '3%', marginTop: '10%', justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={styles.textListTitle} >LISTA NEGRA</Text>
                         </View>
+                        {loadingListHQDebts ?
+                            <View style={{ height: "90%" }}>
+                                <View style={{ justifyContent: 'center', height: '100%' }}>
+                                    <ActivityIndicator size={"large"} color={'#00A9A0'} />
+                                </View>
+                            </View>
+                            :
+                            <View style={{ height: "95%" }}>
+                                <View style={{ width: '100%', height: '5%', flexDirection: 'row', alignSelf: 'center', marginTop: '3%'}}>
+                                    <Text style={{ ...styles.titleText, marginLeft: '5%' }}>Placa</Text>
+                                    <Text style={{ ...styles.titleText, marginLeft: '16%' }}>Fecha</Text>
+                                    <Text style={{ ...styles.titleText, marginLeft: '18%' }}>Hora</Text>
+                                    <Text style={{ ...styles.titleText, marginLeft: '19%' }}>Deuda</Text>
+                                </View>
+                                {listHQDebts.length > 0 ?
+                                    <FlatList
+                                        style={{ height: "37%" }}
+                                        data={listHQDebts}
+                                        keyExtractor={({ id }) => id}
+                                        renderItem={({ item }) => {
+                                            return (
+                                                // <TouchableOpacity
+                                                //   key={index.toString()}
+                                                //   onPress={() => {
+                                                //     setShowRecipModal(true);
+                                                //   }}
+                                                // >
+                                                <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%'}} >
+                                                    <Text style={styles.textPlaca}>
+                                                        {item.plate !== undefined ? item.plate : ''}
+                                                    </Text>
+                                                    <Text style={styles.dateDaysText}>
+                                                        {item.date ? formatDateDays(item.date) : ''}
+                                                    </Text>
+                                                    <View style={{ flexDirection: 'row', justifyContent: 'center', width: '20%', height: '100%'}}>
+                                                        <Text style={styles.dateDaysText}>
+                                                            {item.date ? formatDateHours(item.date) : ''}
+                                                        </Text>
+                                                        
+                                                    </View>
+                                                    <Text style={{...styles.textPlaca, textAlign: 'right', marginRight: '3%'}}>
+                                                        {item.value ? `$${numberWithPoints(item.value)}` : ''}
+                                                    </Text>
+                                                </View>
+                                                // </TouchableOpacity>
+
+                                            )
+                                        }}
+                                    />
+                                    :
+                                    <View style={{ marginLeft: '13%', padding: '10%' }}>
+                                        <Text style={styles.textPago}> No se encuentran registros en el historial </Text>
+                                    </View>
+                                }
+                            </View>
+                        }
                     </View>
-                    <View style={{
-                        height: '17%',
-                        width: '100%',
-                        justifyContent: 'flex-end'
-                    }}>
-                        <FooterIndex navigation={navigation} />
-                    </View>
+
                 </View>
             </ImageBackground>
+            <View style={{
+                height: '10%',
+                width: '100%',
+                justifyContent: 'flex-end'
+            }}>
+                <FooterIndex navigation={navigation} />
+            </View>
             <Modal
-                animationType="fade"
+                animationType="slide"
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modalVisible}
@@ -293,19 +325,19 @@ const Blacklist = (props) => {
                                 padding: '2%'
 
                             }}>
-                                <View style={{ margin: '4%', justifyContent: 'center', height: ' 20%' }}>
-                                    <Text style={styles.modalTextAlert}>
-                                        Cobrar deuda:
+                                <View style={{ justifyContent: 'center', height: ' 20%'}}>
+                                    <Text style={styles.modalTitleText}>
+                                        COBRAR DEUDA
                                     </Text>
-                                    <Text style={styles.modalTextAlert}>
+                                    <Text style={styles.modalTitleTextGray}>
                                         {`$${numberWithPoints(blacklistValue)}`}
                                     </Text>
                                 </View>
                                 <View style={{
                                     justifyContent: 'space-between',
-                                    height: '40%',
+                                    height: '45%',
                                     flexDirection: 'column',
-                                    paddingBottom: '6%'
+                                    paddingBottom: '7%',
                                 }}>
                                     <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
                                         <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Pago:  </Text>
@@ -339,11 +371,11 @@ const Blacklist = (props) => {
                                     </View>
 
                                 </View>
-                                <View style={{ height: '15%', width: '100%', justifyContent: 'flex-end' }}>
+                                <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginBottom: '3%'}}>
                                     <Button onPress={() => {
                                         payDebts();
                                     }}
-                                        title="P A G A R "
+                                        title="PAGAR"
                                         color="#00A9A0"
                                         style={totalPay - blacklistValue < 0
                                             ? styles.modalButtonDisabled : styles.modalButton
@@ -351,13 +383,12 @@ const Blacklist = (props) => {
                                         textStyle={{
                                             color: "#FFFFFF",
                                             textAlign: "center",
-                                            fontFamily: 'Montserrat-Bold'
+                                            fontFamily: 'Montserrat-Bold',
+                                            letterSpacing: 5
                                         }}
                                         activityIndicatorStatus={loading}
                                         disabled={totalPay - blacklistValue < 0}
                                     />
-                                </View>
-                                <View style={{ height: '15%', width: '100%', justifyContent: 'flex-end' }}>
                                     <Button onPress={() => {
                                         setBlacklistExists(false);
                                         setModalVisible(false);
@@ -366,15 +397,16 @@ const Blacklist = (props) => {
                                         setTotalPay(0);
 
                                     }}
-                                        title="D E V O L V E R"
-                                        color="gray"
+                                        title="DEVOLVER"
+                                        color="transparent"
                                         style={
-                                            styles.modalButton
+                                            styles.modalButtonBack
                                         }
                                         textStyle={{
-                                            color: "#FFFFFF",
+                                            color: "#00A9A0",
                                             textAlign: "center",
-                                            fontFamily: 'Montserrat-Bold'
+                                            fontFamily: 'Montserrat-Bold',
+                                            letterSpacing: 5
                                         }} />
                                 </View>
 
