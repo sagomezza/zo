@@ -298,7 +298,7 @@ const txtGenerator = (props) => {
           height: '40%',
           flexDirection: 'column',
         }}
-        source={require('../../../assets/images/Home.png')}>
+        source={require('../../../assets/images/logoutStripes.png')}>
         <Header navigation={navigation} />
 
         <View style={styles.container}>
@@ -329,9 +329,8 @@ const txtGenerator = (props) => {
                           marginBottom: '2%',
                           backgroundColor: '#FFFFFF',
                           borderRadius: 7,
-
                         }} >
-                          <View style={{ margin: '2%' }} >
+                          <View style={{ margin: '3%' }} >
                             <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
                           </View>
                           <View style={{ flex: 1, alignItems: 'flex-end', margin: '3%' }} >

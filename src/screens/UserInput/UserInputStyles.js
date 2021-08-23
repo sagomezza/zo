@@ -278,6 +278,27 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     borderWidth: 1
   },
+  modalViewFullMen: {
+    height: normalize(550),
+    width: '70%',
+    padding: '5%',
+    borderRadius: 30,
+    borderColor: '#707070',
+    borderWidth: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    shadowColor: '#FFF',
+    shadowOffset: {
+      width: 50,
+      height: 50,
+    },
+    shadowOpacity: 0,
+    shadowRadius: 50,
+    elevation: 5,
+    flexDirection: 'column',
+    borderWidth: 1
+  },
   modalViewPrepay: {
     height: normalize(550),
     width: '70%',

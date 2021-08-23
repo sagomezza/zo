@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         marginTop: '5%'
     },
     textPlaca: {
-        fontSize: width * 0.03,
+        fontSize: width * 0.025,
         color: '#8F8F8F',
         fontFamily: 'Montserrat-Bold'
     },
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Regular'
     },
     textMoney: {
-        fontSize: width * 0.035,
+        fontSize: width * 0.030,
         color: '#8F8F8F',
         fontFamily: 'Montserrat-Bold'
     },

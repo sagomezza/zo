@@ -238,7 +238,7 @@ const Blacklist = (props) => {
                 </View>
                 <View style={styles.container}>
                     <View style={{ height: '90%', width: '90%', borderRadius: 10}}>
-                        <View style={{ marginBottom: '3%', marginTop: '10%', justifyContent: 'center', alignItems: 'center' }}>
+                        <View style={{ marginBottom: '5%', marginTop: '5%', justifyContent: 'center', alignItems: 'center' }}>
                             <Text style={styles.textListTitle} >LISTA NEGRA</Text>
                         </View>
                         {loadingListHQDebts ?
@@ -313,11 +313,15 @@ const Blacklist = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modalVisible}
+                // visible={true}
+
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
 
+                        {/* {blackListExists ? */}
                         {blackListExists ?
+
                             <View style={{
                                 height: '100%',
                                 width: '100%',
@@ -419,8 +423,11 @@ const Blacklist = (props) => {
                                 padding: '2%'
 
                             }}>
-                                <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                                    <Text style={styles.modalTextAlert}> La deuda ya fue retirada. </Text>
+                                <View>
+
+                                </View>
+                                <View style={{ margin: '4%', justifyContent: 'center', height: ' 40%' }}>
+                                    <Text style={{...styles.textListTitle, textAlign: 'center'}}>LA DEUDA YA FUE RETIRADA</Text>
                                 </View>
                                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                                     <Button onPress={() => {

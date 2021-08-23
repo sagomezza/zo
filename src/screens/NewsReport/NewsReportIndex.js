@@ -65,7 +65,7 @@ const NewsReport = (props) => {
                 <Header navigation={navigation} />
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                     <View style={styles.container}>
-                        <View style={{ height: '15%', justifyContent: 'center', alignItems: 'center', marginTop: '5%' }}>
+                        <View style={{ height: '15%', justifyContent: 'center', alignItems: 'center', marginTop: '3%'}}>
                             <Text style={styles.textListTitle}> REPORTAR NOVEDAD </Text>
                             <Text style={styles.textListSubTitle}> Ingrese su novedad aquí </Text>
                         </View>

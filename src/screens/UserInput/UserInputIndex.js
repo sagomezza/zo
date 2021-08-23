@@ -302,7 +302,7 @@ const UserInput = (props) => {
           change = 0
         } else {
           change = totalPay - prepayDayValue
-        } 
+        }
         const response = await instance.post(
           START_PARKING,
           {
@@ -678,6 +678,7 @@ const UserInput = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modal3Visible}
+
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -687,7 +688,13 @@ const UserInput = (props) => {
               justifyContent: 'space-between',
               padding: '2%'
             }}>
+
               <View style={{ margin: '4%', justifyContent: 'center', height: ' 60%' }}>
+                <Image
+                  style={{ width: '30%', alignSelf: 'center', marginBottom: '10%' }}
+                  resizeMode={"contain"}
+                  source={require("../../../assets/images/alert.png")}
+                />
                 <Text style={styles.modalText}> Este usuario se encuentra en lista negra:  </Text>
                 <Text style={styles.modalText}>Deuda: {`$${numberWithPoints(blacklistValue)}`}</Text>
                 <Text style={styles.modalText}>Fecha: {moment(blacklistDate).format('L')} {moment(blacklistDate).format('LT')}</Text>
@@ -721,24 +728,30 @@ const UserInput = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between' }}>
+              <Image
+                style={{ width: '30%', alignSelf: 'center' }}
+                resizeMode={"contain"}
+                source={require("../../../assets/images/alert.png")}
+              />
+              <View style={{ margin: '4%', justifyContent: 'center', height: ' 40%' }}>
                 <Text style={styles.modalText}> Algo malo pasó, inténtalo más tarde.  </Text>
               </View>
-              <View style={{ height: '20%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
+              <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end', flexDirection: 'column', alignContent: 'flex-end', alignItems: 'flex-end' }}>
                 <Button onPress={() => {
                   restart();
                 }}
-                  title="E N T E N D I D O"
+                  title="ENTENDIDO"
                   color="#00A9A0"
                   style={{
-                    width: normalize(250),
-                    height: '85%'
+                    width: normalize(300),
+                    height: '75%'
                   }}
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
+                    fontFamily: 'Montserrat-Bold',
+                    letterSpacing: 5
                   }} />
               </View>
             </View>
@@ -749,12 +762,19 @@ const UserInput = (props) => {
         animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
-        visible={maxCapMensuality}
+        // visible={maxCapMensuality}
+        visible={true}
+
       >
         <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-              <View style={{ margin: '4%', justifyContent: 'space-between', height: ' 65%' }}>
+          <View style={styles.modalViewFullMen}>
+            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%', borderWidth: 1 }}>
+              <Image
+                style={{ width: '30%', alignSelf: 'center', marginBottom: '10%' }}
+                resizeMode={"contain"}
+                source={require("../../../assets/images/alert.png")}
+              />
+              <View style={{ margin: '4%', justifyContent: 'space-around', height: ' 65%', borderWidth: 1 }}>
                 <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#00A9A0' }}> Alerta </Text>
                 <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Medium', color: '#8F8F8F' }}> Las celdas disponibles para esta mensualidad ya están ocupadas. Al hacer el ingreso del vehículo se hará el cobro por horas. </Text>
                 <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Medium', color: '#8F8F8F' }}> ¿ Desea continuar ? </Text>

@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Regular'
     },
     textListTitle: {
-        fontSize: width * 0.04,
+        fontSize: width * 0.035,
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },
