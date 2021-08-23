@@ -113,10 +113,10 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     },
     modalViewSign: {
-        height: '55%',
+        height: '57%',
         width: '70%',
         padding: normalize(20),
-        borderRadius: 50,
+        borderRadius: 30,
         borderColor: '#707070',
         borderWidth: 1,
         justifyContent: 'space-between',
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     modalText: {
         textAlign: "center",
         fontFamily: 'Montserrat-Regular',
-        color: '#B7B7B7',
+        color: '#8F8F8F',
         fontSize: normalize(20)
     },
     modalButton: {
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     },
     modalButtonSign: {
         width: '100%',
-        height: '60%',
+        height: '70%',
         alignSelf: 'flex-end'
     },
     preview: {

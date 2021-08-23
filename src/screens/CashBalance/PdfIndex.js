@@ -65,7 +65,6 @@ const txtGenerator = (props) => {
 
   useEffect(() => {
     setLoadingTodayRecips(true);
-    console.log(recips.recips)
     try {
       const todayRecips = totalRecips.filter(recip =>
         !recip.dateFactured ?
@@ -108,8 +107,9 @@ const txtGenerator = (props) => {
 
   const style = `.m-signature-pad--footer
     .button {
-      background-color: gray;
-      color: #FFF;
+      background-color: transparent;
+      color: gray;
+      border-color: gray;
     }`;
 
   const formatHours = (hours) => {
@@ -346,7 +346,7 @@ const txtGenerator = (props) => {
                     }}
                   />
                   :
-                  <View style={{ marginLeft: '13%', padding: '10%' }}>
+                  <View style={{ padding: '10%' }}>
                     <Text style={styles.textPago}>
                       No se encuentran registros en el historial
                     </Text>
@@ -439,7 +439,7 @@ const txtGenerator = (props) => {
                     :
                     <View style={{ height: "70%" }}>
 
-                      <View style={{ marginLeft: '13%', padding: '10%' }}>
+                      <View style={{ padding: '10%' }}>
                         <Text style={styles.textPago}>
                           No se encuentran registros en el historial
                         </Text>
@@ -464,12 +464,10 @@ const txtGenerator = (props) => {
         <FooterIndex navigation={navigation} />
       </View>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
-        // visible={modalVisible}
-        visible={true}
-
+        visible={modalVisible}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -480,10 +478,7 @@ const txtGenerator = (props) => {
               padding: '2%',
               flexDirection: 'column'
             }}>
-              <View style={{
-                justifyContent: 'center',
-                height: ' 30%',
-              }}>
+              <View style={{justifyContent: 'center', height: ' 30%'}}>
                 <Text style={{
                    fontSize: normalize(30),
                    textAlign: 'center',
@@ -508,14 +503,8 @@ const txtGenerator = (props) => {
                 paddingBottom: '6%',
                 width: '95%',
               }}>
-                <View style={{
-                  flexDirection: "row",
-                  justifyContent: 'space-between'
-                }}>
-                  <Text style={{
-                    ...styles.modalText,
-                    fontSize: normalize(20)
-                  }}>Base:  </Text>
+                <View style={{flexDirection: "row", justifyContent: 'space-between'}}>
+                  <Text style={{...styles.modalText, fontSize: normalize(20)}}>Base:  </Text>
                   <CurrencyInput
                     placeholder='$'
                     textAlign='center'
@@ -528,7 +517,6 @@ const txtGenerator = (props) => {
                     separator="."
                     precision={0}
                   />
-
                 </View>
                 <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
                   <Text style={{ ...styles.modalText, fontSize: normalize(20) }}> Producido :  </Text>
@@ -546,11 +534,7 @@ const txtGenerator = (props) => {
                   />
                 </View>
               </View>
-              <View style={{
-                height: '20%',
-                width: '100%',
-                justifyContent: 'space-between'
-              }}>
+              <View style={{height: '20%', width: '100%', justifyContent: 'space-between'}}>
                 <Button
                   onPress={() => {createBoxReport()}}
                   title="GUARDAR"
@@ -578,7 +562,6 @@ const txtGenerator = (props) => {
                     textAlign: "center",
                     fontFamily: 'Montserrat-Bold',
                     letterSpacing: 5
-
                   }} />
               </View>
             </View>
@@ -586,7 +569,7 @@ const txtGenerator = (props) => {
         </View>
       </Modal>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
         visible={modal2Visible}
@@ -594,9 +577,9 @@ const txtGenerator = (props) => {
         <View style={styles.centeredView}>
           <View style={styles.modalViewSign}>
             <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-              <View style={{ margin: '0%', justifyContent: 'center', height: ' 75%' }}>
-                <View style={{ margin: '2%', justifyContent: 'center', height: ' 30%' }}>
-                  <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Cierre de Caja:</Text>
+              <View style={{ justifyContent: 'center', height: ' 75%' }}>
+                <View style={{justifyContent: 'center', height: ' 30%'}}>
+                  <Text style={{ ...styles.modalText, fontSize: normalize(25), fontFamily: 'Montserrat-Bold', color: '#00A9A0' }}>CIERRE DE CAJA</Text>
                   <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>
                     {moment(readBoxReportInfo.dateFinished).format('L')} {moment(readBoxReportInfo.dateFinished).format('LT')}
                   </Text>
@@ -605,8 +588,6 @@ const txtGenerator = (props) => {
                   </Text>
                 </View>
                 {boxStatus === "active" ?
-
-
                   <Signature
                     onOK={handleSignature}
                     onEmpty={handleEmpty}
@@ -615,7 +596,6 @@ const txtGenerator = (props) => {
                     confirmText="Save"
                     webStyle={style}
                   />
-
                   :
                   <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Firma guardada</Text>
 
@@ -653,32 +633,30 @@ const txtGenerator = (props) => {
                     onPress={() => {
                       setModal2Visible(!modal2Visible);
                     }}
-                    title="V O L V E R"
-                    color="gray"
+                    title="VOLVER"
+                    color="transparent"
                     style={
-                      styles.modalButtonSign
+                      styles.modalButtonBack
                     }
                     textStyle={{
-                      color: "#FFFFFF",
+                      color: "#00A9A0",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
+                      fontFamily: 'Montserrat-Bold',
+                      letterSpacing: 5
                     }} />
                 </View>
                 :
                 <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginTop: '5%' }}>
                   <Button
-                    onPress={() => {
-                      setModal2Visible(!modal2Visible);
-                    }}
-                    title="V O L V E R"
-                    color="gray"
-                    style={
-                      styles.modalButtonSign
-                    }
+                    onPress={() => {setModal2Visible(!modal2Visible);}}
+                    title="VOLVER"
+                    color="transparent"
+                    style={styles.modalButtonBack}
                     textStyle={{
-                      color: "#FFFFFF",
+                      color: "#00A9A0",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
+                      fontFamily: 'Montserrat-Bold', 
+                      letterSpacing: 5
                     }} />
                 </View>
               }
@@ -694,27 +672,22 @@ const txtGenerator = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '5%' }}>
+            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '0%' }}>
               <View style={{ justifyContent: 'center', height: '30%' }}>
-                <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#00A9A0' }}> No se han realizado los cierres de turno necesarios para generar un cierre de caja. </Text>
+                <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#8F8F8F', fontFamily: 'Montserrat-Bold' }}> No se han realizado los cierres de turno necesarios para generar un cierre de caja. </Text>
               </View>
-
               <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
-                <View style={{ height: '55%', width: '100%', justifyContent: 'flex-end' }}>
-                  <Button onPress={() => {
-                    setModal3Visible(false);
-                  }}
-                    title="E N T E N D I D O"
+                <View style={{ height: '57%', width: '100%', justifyContent: 'flex-end'}}>
+                  <Button onPress={() => {setModal3Visible(false);}}
+                    title="ENTENDIDO"
                     color="#00A9A0"
-                    style={
-                      styles.modalButton
-                    }
+                    style={styles.modalButton}
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
+                      fontFamily: 'Montserrat-Bold',
+                      letterSpacing: 5
                     }}
-                  // activityIndicatorStatus={loading}
                   />
                 </View>
               </View>
