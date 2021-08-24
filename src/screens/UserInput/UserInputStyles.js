@@ -332,6 +332,13 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '75%',
   },
+  modalButtonBack: {
+    width: '100%',
+    height: '60%',
+    alignSelf: 'flex-end',
+    borderColor: '#00A9A0',
+    borderWidth: 1
+},
   // modal
   currencyInput: {
     fontSize: normalize(20),

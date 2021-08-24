@@ -678,7 +678,6 @@ const UserInput = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modal3Visible}
-
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -704,7 +703,7 @@ const UserInput = (props) => {
                 <Button onPress={() => {
                   setModal3Visible(false);
                 }}
-                  title="E N T E N D I D O"
+                  title="ENTENDIDO"
                   color="#00A9A0"
                   activityIndicatorStatus={loadingStart}
                   style={
@@ -713,7 +712,9 @@ const UserInput = (props) => {
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
+                    fontFamily: 'Montserrat-Medium',
+                    letterSpacing: 5,
+                    fontSize: normalize(20)
                   }} />
               </View>
             </View>
@@ -730,12 +731,12 @@ const UserInput = (props) => {
           <View style={styles.modalView}>
             <View style={{ height: '100%', width: '100%', justifyContent: 'space-between' }}>
               <Image
-                style={{ width: '30%', alignSelf: 'center' }}
+                style={{ width: '30%', alignSelf: 'center', marginTop: '8%' }}
                 resizeMode={"contain"}
                 source={require("../../../assets/images/alert.png")}
               />
-              <View style={{ margin: '4%', justifyContent: 'center', height: ' 40%' }}>
-                <Text style={styles.modalText}> Algo malo pasó, inténtalo más tarde.  </Text>
+              <View style={{ margin: '4%', justifyContent: 'center', height: ' 30%' }}>
+                <Text style={{...styles.modalText, fontFamily: 'Montserrat-Bold'}}> Algo malo pasó, inténtalo más tarde.  </Text>
               </View>
               <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end', flexDirection: 'column', alignContent: 'flex-end', alignItems: 'flex-end' }}>
                 <Button onPress={() => {
@@ -750,8 +751,9 @@ const UserInput = (props) => {
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold',
-                    letterSpacing: 5
+                    fontFamily: 'Montserrat-Medium',
+                    letterSpacing: 5,
+                    fontSize: normalize(20)
                   }} />
               </View>
             </View>
@@ -762,28 +764,26 @@ const UserInput = (props) => {
         animationType="slide"
         transparent={true}
         backdropOpacity={0.3}
-        // visible={maxCapMensuality}
-        visible={true}
-
+        visible={maxCapMensuality}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalViewFullMen}>
-            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%', borderWidth: 1 }}>
+            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%'}}>
               <Image
-                style={{ width: '30%', alignSelf: 'center', marginBottom: '10%' }}
+                style={{ width: '30%', alignSelf: 'center'}}
                 resizeMode={"contain"}
                 source={require("../../../assets/images/alert.png")}
               />
-              <View style={{ margin: '4%', justifyContent: 'space-around', height: ' 65%', borderWidth: 1 }}>
+              <View style={{ justifyContent: 'space-between', height: '40%', marginBottom: '3%' }}>
                 <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#00A9A0' }}> Alerta </Text>
                 <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Medium', color: '#8F8F8F' }}> Las celdas disponibles para esta mensualidad ya están ocupadas. Al hacer el ingreso del vehículo se hará el cobro por horas. </Text>
                 <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Medium', color: '#8F8F8F' }}> ¿ Desea continuar ? </Text>
               </View>
-              <View style={{ height: '25%', width: '100%', justifyContent: 'flex-start', flexDirection: 'column' }}>
+              <View style={{ height: '20%', width: '100%', justifyContent: 'flex-start', flexDirection: 'column'}}>
                 <Button onPress={() => {
                   setMaxCapMensuality(false);
                 }}
-                  title="S I"
+                  title="SI"
                   color="#00A9A0"
                   style={{
                     width: '100%',
@@ -792,21 +792,23 @@ const UserInput = (props) => {
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
+                    fontFamily: 'Montserrat-Medium',
+                    letterSpacing: 5,
+                    fontSize: normalize(20)
                   }} />
                 <Button onPress={() => {
                   restart();
                 }}
-                  title="N O"
-                  color="gray"
-                  style={{
-                    width: '100%',
-                    height: '60%'
-                  }}
+                  title="NO"
+                  color="transparent"
+                  style={styles.modalButtonBack}
                   textStyle={{
-                    color: "#FFFFFF",
+                    color: "#00A9A0",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
+                    fontFamily: 'Montserrat-Medium',
+                    letterSpacing: 5,
+                    fontSize: normalize(20)
+
                   }} />
               </View>
             </View>
