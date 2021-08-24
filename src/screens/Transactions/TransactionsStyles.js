@@ -5,13 +5,12 @@ const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#F8F8F8',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         alignContent: 'center',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        height: '91%',
     },
     listContainer: {
         height: '78%',
@@ -22,15 +21,37 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    textListTitle: {
-        fontSize: normalize(15),
-        color: '#00A9A0',
-        fontFamily: 'Montserrat-Bold'
+    list: {
+        flexDirection: "row",
+        backgroundColor: '#FFFFFF',
+        marginTop: '3%',
+        borderRadius: 7,
+        justifyContent: 'space-around',
+        paddingTop: '2%',
+        paddingBottom: '2%'
+    },
+    titleText: {
+        fontSize: width * 0.023,
+        color: '#6F6F7B',
+        fontFamily: 'Montserrat-Bold',
     },
     textPlaca: {
-        fontSize: normalize(18),
-        color: '#5D5D5D',
-        fontFamily: 'Montserrat-Bold'
+        fontSize: width * 0.023,
+        color: '#00A9A0',
+        fontFamily: 'Montserrat-Bold',
+        width: '15%',
+        height: '100%',
+        textAlign: 'center'
+    },
+    dateDaysText: {
+        fontSize: width * 0.02,
+        color: '#6F6F7B',
+        fontFamily: 'Montserrat-Medium'
+    },
+    dateDaysText: {
+        fontSize: width * 0.02,
+        color: '#6F6F7B',
+        fontFamily: 'Montserrat-Medium'
     },
     textPago: {
         fontSize: normalize(13),
@@ -43,15 +64,11 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Regular'
     },
     textListTitle: {
-        fontSize: width * 0.025,
+        fontSize: width * 0.035,
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },
-    textPlaca: {
-        fontSize: width * 0.03,
-        color: '#5D5D5D',
-        fontFamily: 'Montserrat-Bold'
-    },
+
     textPago: {
         fontSize: width * 0.02,
         color: '#5D5D5D',

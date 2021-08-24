@@ -29,6 +29,7 @@ import { TIMEOUT } from '../../config/constants/constants';
 import instance from "../../config/axios";
 import store from '../../config/store';
 import * as Sentry from "@sentry/browser";
+import secondsToString from '../../config/services/secondsToString';
 
 
 const { width, height } = Dimensions.get('window');
@@ -220,7 +221,6 @@ const UserOut = (props) => {
             }, timeout: TIMEOUT
           }
         )
-        setLoadingCheckParking(false);
         setDateFinished(new Date());
         if (response.data.data.dateStart) setDateStart(response.data.data.dateStart);
         if (response.data.data.total) setTotalAmount(response.data.data.total);
@@ -231,6 +231,8 @@ const UserOut = (props) => {
           setPlateOne(response.data.data.plate.substring(0, 3))
           setPlateTwo(response.data.data.plate.substring(3, 6))
         }
+        setLoadingCheckParking(false);
+
       }
     } catch (err) {
       Sentry.captureException(err);
@@ -323,10 +325,6 @@ const UserOut = (props) => {
       setModal4Visible(false);
       setErr("Algo malo pasó, vuelve a intentarlo más tarde")
     }
-  }
-
-  function isCharacterALetter(char) {
-    return (/[a-zA-Z]/).test(char)
   }
 
   function dateStartDate() {
@@ -479,8 +477,8 @@ const UserOut = (props) => {
                     style={{ width: '25%' }}
                     resizeMode={"contain"}
                     source={require('../../../assets/images/totalHours.png')} />
-                  <View style={{ flexDirection: 'column', margin: '5%', width: '60%' }}>
-                    <Text style={styles.timePlateInfo}>{Object.keys(check).length === 0 ? '' : Math.round(check.hours) + ' horas'} </Text>
+                  <View style={{ flexDirection: 'column', margin: '5%', width: '68%' }}>
+                    <Text style={styles.timePlateInfo}>{Object.keys(check).length === 0 ? '' : secondsToString((check.hours)*3600)} </Text>
                   </View>
                 </View>
               </View>
@@ -664,10 +662,15 @@ const UserOut = (props) => {
               height: '100%',
               width: '100%',
               justifyContent: 'space-between',
-              padding: '2%'
+              padding: '2%',
             }}>
-              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalTextAlert}> El vehículo no esta estacionado o el código QR no se encuentra asociado a un vehículo estacionado. </Text>
+              <Image
+                style={{ width: '30%', alignSelf: 'center', marginTop: '5%' }}
+                resizeMode={"contain"}
+                source={require("../../../assets/images/alert.png")}
+              />
+              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 30%' }}>
+                <Text style={styles.modalText}> El vehículo no esta estacionado o el código QR no se encuentra asociado a un vehículo estacionado. </Text>
               </View>
               <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
@@ -682,8 +685,9 @@ const UserOut = (props) => {
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold',
-                    letterSpacing: 5
+                    fontFamily: 'Montserrat-Medium',
+                    letterSpacing: 5,
+                    fontSize: normalize(20)
                   }} />
               </View>
             </View>
@@ -732,7 +736,7 @@ const UserOut = (props) => {
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold',
+                    fontFamily: 'Montserrat-Medium',
                     letterSpacing: 5,
                     fontSize: normalize(20)
                   }} />
@@ -777,13 +781,14 @@ const UserOut = (props) => {
                     title="SI"
                     color="#00A9A0"
                     style={
-                      styles.modal2Button
+                      styles.modalYesButton
                     }
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold',
-                      letterSpacing: 5
+                      fontFamily: 'Montserrat-Medium',
+                      letterSpacing: 5,
+                      fontSize: normalize(20)
                     }} />
                 </View>
                 <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
@@ -792,15 +797,16 @@ const UserOut = (props) => {
 
                   }}
                     title="NO"
-                    color="#00A9A0"
+                    color="transparent"
                     style={
-                      styles.modal2Button
+                      styles.modalNoButton
                     }
                     textStyle={{
-                      color: "#FFFFFF",
+                      color: "#00A9A0",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold',
-                      letterSpacing: 5
+                      fontFamily: 'Montserrat-Medium',
+                      letterSpacing: 5,
+                      fontSize: normalize(20)
                     }} />
                 </View>
               </View>
@@ -841,13 +847,15 @@ const UserOut = (props) => {
                     title="TOTAL"
                     color="#00A9A0"
                     style={
-                      styles.modal2Button
+                      styles.modalYesButton
                     }
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold',
-                      letterSpacing: 5
+                      fontFamily: 'Montserrat-Medium',
+                      letterSpacing: 5,
+                      fontSize: normalize(20)
+
                     }} />
                 </View>
                 <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
@@ -857,15 +865,16 @@ const UserOut = (props) => {
 
                   }}
                     title="PARCIAL"
-                    color="#00A9A0"
+                    color="transparent"
                     style={
-                      styles.modal2Button
+                      styles.modalNoButton
                     }
                     textStyle={{
-                      color: "#FFFFFF",
+                      color: "#00A9A0",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold',
-                      letterSpacing: 5
+                      fontFamily: 'Montserrat-Medium',
+                      letterSpacing: 5,
+                      fontSize: normalize(20)
                     }} />
                 </View>
               </View>
@@ -943,16 +952,16 @@ const UserOut = (props) => {
                       fontSize: normalize(20),
                       fontFamily: 'Montserrat-Bold',
                       color: '#ED8E20',
-                      alignSelf: 'center'
-
+                      alignSelf: 'center',
+                      width: '50%'
                     }}
-                    textAlign='left'
+                    textAlign='center'
                     editable={false}
                     value={(totalAmount - totalPay) < 0 ? '$0' : `$${numberWithPoints(totalAmount - totalPay)}`}
                   />
                 </View>
               </View>
-              <View style={{ height: '24%', width: '80%', justifyContent: 'center'}}>
+              <View style={{ height: '20%', width: '80%', justifyContent: 'center'}}>
                 <Button onPress={() => {
 
                   finishParking("parcial-pending", false)
@@ -960,13 +969,14 @@ const UserOut = (props) => {
                   title="GUARDAR"
                   color="#00A9A0"
                   style={
-                    styles.modalButton
+                    styles.modalYesButton
                   }
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold',
-                    letterSpacing: 5
+                    fontFamily: 'Montserrat-Medium',
+                    letterSpacing: 5,
+                    fontSize: normalize(20)
                   }}
                   activityIndicatorStatus={loading} />
               </View>

@@ -5,13 +5,12 @@ const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#F8F8F8',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         alignContent: 'center',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        height: '91%'
     },
     listContainer: {
         height: '76%',
@@ -19,38 +18,54 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         marginTop: '2%',
         borderRadius: 10,
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        borderWidth: 1
     },
     listOne: {
-        height: '40%'
+        height: '35%',
+        width: '85%',
+        marginTop: '4%',
     },
     listTwo: {
-        height: '50%'
+        height: '30%',
+        width: '85%',
+        marginTop: '5%'
     },
     textPlaca: {
-        fontSize: width * 0.03,
-        color: '#5D5D5D',
+        fontSize: width * 0.025,
+        color: '#8F8F8F',
         fontFamily: 'Montserrat-Bold'
     },
+    textPlacaDate: {
+        fontSize: width * 0.03,
+        color: '#8F8F8F',
+        fontFamily: 'Montserrat-Bold',
+    },
+    textPlacaHour: {
+        fontSize: width * 0.03,
+        color: '#8F8F8F',
+        fontFamily: 'Montserrat-Bold',
+
+    },
     textListTitle: {
-        fontSize: width * 0.02,
+        fontSize: width * 0.025,
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },
     screenTitle: {
         fontSize: width * 0.034,
-        color: 'gray',
+        color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },
     textPago: {
-        fontSize: width * 0.02,
+        fontSize: width * 0.03,
         color: '#5D5D5D',
         fontFamily: 'Montserrat-Regular'
     },
     textMoney: {
-        fontSize: width * 0.035,
-        color: '#5D5D5D',
-        fontFamily: 'Montserrat-Regular'
+        fontSize: width * 0.030,
+        color: '#8F8F8F',
+        fontFamily: 'Montserrat-Bold'
     },
     openCashBalanceButton: {
         borderWidth: normalize(1),
@@ -78,10 +93,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(52, 52, 52, 0.8)',
     },
     modalView: {
-        height: normalize(450),
+        height: normalize(500),
         width: '70%',
         padding: '4%',
-        borderRadius: 50,
+        borderRadius: 30,
         borderColor: '#707070',
         borderWidth: 1,
         justifyContent: 'space-between',
@@ -98,10 +113,10 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     },
     modalViewSign: {
-        height: '55%',
+        height: '57%',
         width: '70%',
         padding: normalize(20),
-        borderRadius: 50,
+        borderRadius: 30,
         borderColor: '#707070',
         borderWidth: 1,
         justifyContent: 'space-between',
@@ -120,17 +135,24 @@ const styles = StyleSheet.create({
     modalText: {
         textAlign: "center",
         fontFamily: 'Montserrat-Regular',
-        color: '#B7B7B7',
+        color: '#8F8F8F',
         fontSize: normalize(20)
     },
     modalButton: {
         width: '100%',
-        height: '60%',
-        alignSelf: 'flex-end'
+        height: '70%',
+        alignSelf: 'flex-end',
+    },
+    modalButtonBack: {
+        width: '100%',
+        height: '70%',
+        alignSelf: 'flex-end',
+        borderColor: '#00A9A0',
+        borderWidth: 1
     },
     modalButtonSign: {
         width: '100%',
-        height: '60%',
+        height: '70%',
         alignSelf: 'flex-end'
     },
     preview: {
@@ -152,7 +174,16 @@ const styles = StyleSheet.create({
         width: 120,
         textAlign: "center",
         marginTop: 10
-    }
+    },
+    currencyInput: {
+        fontSize: normalize(20),
+        fontFamily: 'Montserrat-Bold',
+        backgroundColor: '#E7E7EA',
+        width: '60%',
+        padding:'5%',
+        borderRadius: 10,
+        color: '#8F8F8F'
+      },
 });
 
 export default styles;

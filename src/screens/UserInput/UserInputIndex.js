@@ -85,18 +85,6 @@ const UserInput = (props) => {
   const mensualityParkedPlates = mensualityInfo.parkedPlatesList !== undefined ? mensualityInfo.parkedPlatesList.length : ' ';
 
   const priceVehicleType = async () => {
-    // if (isCharacterALetter(plateTwo[2]) || plateTwo.length === 2) {
-    //   let type = "bike"
-    //   let parkingType = 'hours'
-    //   const total =  await getTotal(phone, type, officialHq, parkingType);
-    //   console.log('getTOTAL FN',total)
-    // } else {
-    //   let parkingType = 'hours'
-    //   let type = "car"
-    //   const total = await getTotal(phone, type, officialHq, parkingType);
-    //   console.log('getTOTAL FN',total)
-
-    // }
     if (isCharacterALetter(plateTwo[2]) || plateTwo.length === 2) {
       setPrepayDayValue(hq.dailyBikePrice)
     } else {
@@ -135,7 +123,7 @@ const UserInput = (props) => {
   }
 
   const restartSearch = () => {
-    setPhones([{ label: 'SELECCIONA UN NÚMERO', value: 1 }]);
+    setPhones([{ label: 'Selecciona un número', value: 1 }]);
     setPhone(null);
     setShowDropdown(false);
     setNewPhone("");
@@ -172,7 +160,6 @@ const UserInput = (props) => {
           { timeout: TIMEOUT }
         )
         setExistingUser(true)
-
         setShowPhoneInput(false);
         setShowDropdown(true);
         setBlacklist(response.data.blackList);
@@ -184,19 +171,15 @@ const UserInput = (props) => {
         setPhones(auxPhones);
         if (auxPhones.length === 2) {
           setPhone(auxPhones[0].label)
-        } else {
-          setPhone(null);
-
         }
-
         if (response.data.blackList && response.data.blackList.length > 0) {
           setModal3Visible(true)
         }
       }
     } catch (err) {
-      Sentry.captureException(err)
       // console.log(err)
       // console.log(err?.response)
+      if (err?.response.data.response !== -1) Sentry.captureException(err);
       setExistingUser(false);
       setShowDropdown(false);
       setShowPhoneInput(true);
@@ -216,13 +199,15 @@ const UserInput = (props) => {
         )
         setMensualityExists(true);
         setMensuality(response.data)
-        if (response.data.data[0].capacity === response.data.data[0].parkedPlatesList.length) {
+        let parkedPlates = response.data.data[0].parkedPlatesList
+        let capacity = response.data.data[0].capacity
+        if (Number(capacity) === Number(parkedPlates.length)) {
           setMaxCapMensuality(true);
         }
       }
     } catch (err) {
-      Sentry.captureException(err)
       setMensualityExists(false);
+      if (err?.response.data.response !== -1) Sentry.captureException(err);
       // console.log(err)
       // console.log(err?.response)
     }
@@ -251,6 +236,7 @@ const UserInput = (props) => {
       }
     } catch (err) {
       Sentry.captureException(err)
+      if (err?.response.data.response !== -1) Sentry.captureException(err);
       // console.log(err)
       // console.log(err?.response)
       setHistoryExists(false);
@@ -302,7 +288,7 @@ const UserInput = (props) => {
           change = 0
         } else {
           change = totalPay - prepayDayValue
-        } 
+        }
         const response = await instance.post(
           START_PARKING,
           {
@@ -612,7 +598,7 @@ const UserInput = (props) => {
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
-      <View style={{ height: '12%', width: '100%', justifyContent: 'flex-end' }}>
+      <View style={{ height: '10%', width: '100%', justifyContent: 'flex-end' }}>
         <FooterIndex navigation={navigation} />
       </View>
       <Modal
@@ -629,20 +615,24 @@ const UserInput = (props) => {
               justifyContent: 'space-between',
               padding: '2%'
             }}>
+              <Image
+                style={{ width: '30%', alignSelf: 'center', marginBottom: '10%' }}
+                resizeMode={"contain"}
+                source={require("../../../assets/images/alert.png")}
+              />
               <View style={{
                 margin: '4%',
-                justifyContent: 'flex-end',
-                height: ' 40%'
+                height: ' 40%',
               }}>
-                {carParksFull && <Text style={styles.modalTextAlert}> Las celdas para carros llegaron a su máxima capacidad. </Text>}
-                {bikeParksFull && <Text style={styles.modalTextAlert}> Las celdas para motos llegaron a su máxima capacidad. </Text>}
-                {alreadyParked && <Text style={styles.modalTextAlert}> Este vehículo ya se encuentra parqueado. </Text>}
+                {carParksFull && <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold' }}> Las celdas para carros llegaron a su máxima capacidad. </Text>}
+                {bikeParksFull && <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold' }}> Las celdas para motos llegaron a su máxima capacidad. </Text>}
+                {alreadyParked && <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold' }}> Este vehículo ya se encuentra parqueado. </Text>}
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                 <Button onPress={() => {
                   restart();
                 }}
-                  title="E N T E N D I D O"
+                  title="ENTENDIDO"
                   color="#00A9A0"
                   style={
                     styles.modalButton
@@ -650,7 +640,9 @@ const UserInput = (props) => {
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
+                    fontFamily: 'Montserrat-Medium',
+                    letterSpacing: 5,
+                    fontSize: normalize(20)
                   }} />
               </View>
             </View>
@@ -687,7 +679,13 @@ const UserInput = (props) => {
               justifyContent: 'space-between',
               padding: '2%'
             }}>
+
               <View style={{ margin: '4%', justifyContent: 'center', height: ' 60%' }}>
+                <Image
+                  style={{ width: '30%', alignSelf: 'center', marginBottom: '10%' }}
+                  resizeMode={"contain"}
+                  source={require("../../../assets/images/alert.png")}
+                />
                 <Text style={styles.modalText}> Este usuario se encuentra en lista negra:  </Text>
                 <Text style={styles.modalText}>Deuda: {`$${numberWithPoints(blacklistValue)}`}</Text>
                 <Text style={styles.modalText}>Fecha: {moment(blacklistDate).format('L')} {moment(blacklistDate).format('LT')}</Text>
@@ -697,7 +695,7 @@ const UserInput = (props) => {
                 <Button onPress={() => {
                   setModal3Visible(false);
                 }}
-                  title="E N T E N D I D O"
+                  title="ENTENDIDO"
                   color="#00A9A0"
                   activityIndicatorStatus={loadingStart}
                   style={
@@ -706,7 +704,9 @@ const UserInput = (props) => {
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
+                    fontFamily: 'Montserrat-Medium',
+                    letterSpacing: 5,
+                    fontSize: normalize(20)
                   }} />
               </View>
             </View>
@@ -721,24 +721,31 @@ const UserInput = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                <Text style={styles.modalText}> Algo malo pasó, inténtalo más tarde.  </Text>
+            <View style={{ height: '100%', width: '100%', justifyContent: 'space-between' }}>
+              <Image
+                style={{ width: '30%', alignSelf: 'center', marginTop: '8%' }}
+                resizeMode={"contain"}
+                source={require("../../../assets/images/alert.png")}
+              />
+              <View style={{ margin: '4%', justifyContent: 'center', height: ' 30%' }}>
+                <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold' }}> Algo malo pasó, inténtalo más tarde.  </Text>
               </View>
-              <View style={{ height: '20%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
+              <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end', flexDirection: 'column', alignContent: 'flex-end', alignItems: 'flex-end' }}>
                 <Button onPress={() => {
                   restart();
                 }}
-                  title="E N T E N D I D O"
+                  title="ENTENDIDO"
                   color="#00A9A0"
                   style={{
-                    width: normalize(250),
-                    height: '85%'
+                    width: normalize(300),
+                    height: '75%'
                   }}
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
+                    fontFamily: 'Montserrat-Medium',
+                    letterSpacing: 5,
+                    fontSize: normalize(20)
                   }} />
               </View>
             </View>
@@ -752,18 +759,23 @@ const UserInput = (props) => {
         visible={maxCapMensuality}
       >
         <View style={styles.centeredView}>
-          <View style={styles.modalView}>
+          <View style={styles.modalViewFullMen}>
             <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-              <View style={{ margin: '4%', justifyContent: 'space-between', height: ' 65%' }}>
+              <Image
+                style={{ width: '30%', alignSelf: 'center' }}
+                resizeMode={"contain"}
+                source={require("../../../assets/images/alert.png")}
+              />
+              <View style={{ justifyContent: 'space-between', height: '40%', marginBottom: '3%' }}>
                 <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold', color: '#00A9A0' }}> Alerta </Text>
                 <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Medium', color: '#8F8F8F' }}> Las celdas disponibles para esta mensualidad ya están ocupadas. Al hacer el ingreso del vehículo se hará el cobro por horas. </Text>
                 <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Medium', color: '#8F8F8F' }}> ¿ Desea continuar ? </Text>
               </View>
-              <View style={{ height: '25%', width: '100%', justifyContent: 'flex-start', flexDirection: 'column' }}>
+              <View style={{ height: '20%', width: '100%', justifyContent: 'flex-start', flexDirection: 'column' }}>
                 <Button onPress={() => {
                   setMaxCapMensuality(false);
                 }}
-                  title="S I"
+                  title="SI"
                   color="#00A9A0"
                   style={{
                     width: '100%',
@@ -772,21 +784,23 @@ const UserInput = (props) => {
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
+                    fontFamily: 'Montserrat-Medium',
+                    letterSpacing: 5,
+                    fontSize: normalize(20)
                   }} />
                 <Button onPress={() => {
                   restart();
                 }}
-                  title="N O"
-                  color="gray"
-                  style={{
-                    width: '100%',
-                    height: '60%'
-                  }}
+                  title="NO"
+                  color="transparent"
+                  style={styles.modalButtonBack}
                   textStyle={{
-                    color: "#FFFFFF",
+                    color: "#00A9A0",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold'
+                    fontFamily: 'Montserrat-Medium',
+                    letterSpacing: 5,
+                    fontSize: normalize(20)
+
                   }} />
               </View>
             </View>

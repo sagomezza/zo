@@ -4,6 +4,7 @@ import {
     Text,
     View,
     TextInput,
+    TouchableOpacity,
     TouchableWithoutFeedback,
     Modal
 } from 'react-native';
@@ -21,6 +22,7 @@ import { CREATE_NEWS_REPORT } from "../../config/api";
 import { TIMEOUT } from '../../config/constants/constants';
 import { width } from '../../config/constants/screenDimensions';
 import * as Sentry from "@sentry/browser";
+import { Touchable } from 'react-native';
 
 const NewsReport = (props) => {
     const { navigation, officialProps, reservations, recips, hq } = props;
@@ -59,105 +61,107 @@ const NewsReport = (props) => {
                     height: '40%',
                     flexDirection: 'column'
                 }}
-                source={require('../../../assets/images/Home.png')}>
+                source={require('../../../assets/images/Stripes.png')}>
                 <Header navigation={navigation} />
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                     <View style={styles.container}>
-                        <View style={styles.listContainer}>
-                            <View style={{ height: '20%', justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={styles.textListTitle}> REPORTE DE NOVEDAD </Text>
-                            </View>
-                            <View style={{ height: '50%', alignItems: 'center', padding: '2%' }}>
-                                <TextInput
-                                    style={{
-                                        borderWidth: 2,
-                                        borderColor: '#00A9A0',
-                                        height: '80%',
-                                        width: '80%',
-                                        borderRadius: 20,
-                                        padding: '5%',
-                                        justifyContent: 'flex-start',
-                                        fontSize: width * 0.034,
-                                        fontFamily: 'Montserrat-Regular'
-                                    }}
-                                    numberOfLines={10}
-                                    multiline={true}
-                                    textAlign='center'
-                                    placeholder="Ingrese novedad"
-                                    value={report}
-                                    onChangeText={(text) => {
-                                        setReport(text);
-                                    }}
-                                >
-
-                                </TextInput>
-
-                            </View>
-                            <View style={{ height: '20%', width: '75%', alignSelf: 'center' }}>
-                                <Button onPress={() => {
-                                    createNewsReport();
+                        <View style={{ height: '15%', justifyContent: 'center', alignItems: 'center', marginTop: '3%'}}>
+                            <Text style={styles.textListTitle}> REPORTAR NOVEDAD </Text>
+                            <Text style={styles.textListSubTitle}> Ingrese su novedad aquí </Text>
+                        </View>
+                        <View style={{ height: '25%', width: '80%', alignItems: 'center' }}>
+                            <TouchableOpacity style={styles.option}>
+                                <Text style={{...styles.textListSubTitle, margin: '2%'}}>Predeterminado 1</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.option}>
+                                <Text style={{...styles.textListSubTitle, margin: '2%'}}>Predeterminado 2</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.option}>
+                                <Text style={{...styles.textListSubTitle, margin: '2%'}}>Predeterminado 3</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ height: '35%', width: '80%', alignItems: 'center', marginTop: '5%' }}>
+                            <TextInput
+                                style={{
+                                    height: '100%',
+                                    width: '100%',
+                                    borderRadius: 20,
+                                    justifyContent: 'flex-start',
+                                    fontSize: width * 0.034,
+                                    fontFamily: 'Montserrat-Regular',
+                                    backgroundColor: '#FFFFFF'
                                 }}
-                                    title="R E P O R T A R"
-                                    color='#00A9A0'
-                                    style={report.length === 0 ? styles.buttonEdDisabled : styles.buttonEd}
-                                    textStyle={styles.buttonTextRenew}
-                                    activityIndicatorStatus={loadingReport}
-                                    disabled={report.length === 0}
-                                />
-                            </View>
+                                numberOfLines={10}
+                                multiline={true}
+                                textAlign='center'
+                                placeholder=""
+                                value={report}
+                                onChangeText={(text) => {
+                                    setReport(text);
+                                }}
+                            >
+                            </TextInput>
                         </View>
-                        <View style={{
-                            height: '14%',
-                            width: '100%',
-                            justifyContent: 'center'
-                        }}>
-                            <FooterIndex navigation={navigation} />
+                        <View style={{ height: '11%', width: '45%', alignSelf: 'center', marginBottom: '2%', justifyContent: 'center' }}>
+                            <Button onPress={() => { createNewsReport(); }}
+                                title="REPORTAR"
+                                color='transparent'
+                                style={report.length === 0 ? styles.buttonEdDisabled : styles.buttonEd}
+                                textStyle={styles.buttonTextRenew}
+                                activityIndicatorStatus={loadingReport}
+                                disabled={report.length === 0}
+                            />
                         </View>
+
                     </View>
                 </TouchableWithoutFeedback>
-                <Modal
-                    animationType="fade"
-                    transparent={true}
-                    backdropOpacity={0.3}
-                    visible={modalVisible}
+            </ImageBackground>
+            <View style={styles.footer}>
+                <FooterIndex navigation={navigation} />
+            </View>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                backdropOpacity={0.3}
+                visible={modalVisible}
 
-                >
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <View style={{
-                                height: '100%',
-                                width: '100%',
-                                justifyContent: 'space-between',
-                                padding: '2%'
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <View style={{
+                            height: '100%',
+                            width: '100%',
+                            justifyContent: 'space-between',
+                            padding: '2%'
 
-                            }}>
-                                <View style={{ margin: '4%', justifyContent: 'center', height: ' 60%' }}>
-                                    <Text style={styles.modalTextAlert}> Tu novedad ha sido registrada con éxito  </Text>
+                        }}>
+                            <View style={{ margin: '4%', justifyContent: 'center', height: ' 60%' }}>
+                                <Text style={styles.modalTextAlert}> Tu novedad ha sido registrada con éxito  </Text>
 
 
-                                </View>
-                                <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                                    <Button onPress={() => {
-                                        setModalVisible(false);
-                                        setReport("");
-                                    }}
-                                        title="E N T E N D I D O"
-                                        color="#00A9A0"
-                                        // activityIndicatorStatus={loadingStart}
-                                        style={
-                                            styles.modalButton
-                                        }
-                                        textStyle={{
-                                            color: "#FFFFFF",
-                                            textAlign: "center",
-                                            fontFamily: 'Montserrat-Bold'
-                                        }} />
-                                </View>
+                            </View>
+                            <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                                <Button onPress={() => {
+                                    setModalVisible(false);
+                                    setReport("");
+                                }}
+                                    title="E N T E N D I D O"
+                                    color="#00A9A0"
+                                    // activityIndicatorStatus={loadingStart}
+                                    style={
+                                        styles.modalButton
+                                    }
+                                    textStyle={{
+                                        color: "#FFFFFF",
+                                        textAlign: "center",
+                                        fontFamily: 'Montserrat-Bold'
+                                    }} />
                             </View>
                         </View>
                     </View>
-                </Modal>
-            </ImageBackground>
+                </View>
+            </Modal>
+
         </View>
     )
 };

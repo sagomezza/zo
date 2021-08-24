@@ -5,13 +5,12 @@ const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#F8F8F8',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         alignContent: 'center',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        height: '91%',
     },
     listContainer: {
         height: '77%',
@@ -23,12 +22,16 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     textPlaca: {
-        fontSize: width * 0.03,
-        color: '#5D5D5D',
-        fontFamily: 'Montserrat-Bold'
+        fontSize: width * 0.023,
+        color: '#00A9A0',
+        fontFamily: 'Montserrat-Bold',
+        marginTop: '0%',
+        width: '15%',
+        height: '100%',
+        textAlign: 'center'
     },
     textListTitle: {
-        fontSize: width * 0.025,
+        fontSize: width * 0.035,
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold'
     },
@@ -42,6 +45,30 @@ const styles = StyleSheet.create({
         color: '#5D5D5D',
         fontFamily: 'Montserrat-Regular'
     },
+    list: {
+        flexDirection: "row",
+        backgroundColor: '#FFFFFF',
+        marginTop: '3%',
+        borderRadius: 7,
+        justifyContent: 'space-around',
+        paddingTop: '2%',
+        paddingBottom: '2%'
+    },
+    dateDaysText: {
+        fontSize: width * 0.02,
+        color: '#6F6F7B',
+        fontFamily: 'Montserrat-Medium'
+    },
+    dateHourText: {
+        fontSize: width * 0.02,
+        color: '#19A9A0',
+        fontFamily: 'Montserrat-Medium'
+    },
+    titleText:{
+        fontSize: width * 0.023,
+        color: '#6F6F7B',
+        fontFamily: 'Montserrat-Bold',
+      },
 });
 
 export default styles;

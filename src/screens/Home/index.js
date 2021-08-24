@@ -25,6 +25,7 @@ import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import store from '../../config/store';
 import * as Sentry from "@sentry/browser";
+import secondsToString from '../../config/services/secondsToString';
 
 
 const HomeIndex = (props) => {
@@ -165,7 +166,7 @@ const HomeIndex = (props) => {
               </View>
             </View>
             :
-            <View style={{ height: "97%" }}>
+            <View style={{ height: "97%"}}>
               <View style={{ width: '96%', height: '5%', flexDirection: 'row', alignSelf: 'center', marginTop: '3%' }}>
                 <Text style={{ ...styles.titleText, marginLeft: '2%' }}>Placa</Text>
                 <Text style={{ ...styles.titleText, marginLeft: '7%' }}>Fecha</Text>
@@ -219,8 +220,8 @@ const HomeIndex = (props) => {
                         <Text style={styles.totalHours}>
                           {item.prepayFullDay === true ? " Pase día" : ""}
                           {item.mensuality === true ? " Mensualidad" : ""}
-                          {item.isParanoic === true ? `${formatHours(item.hours)} Horas` : ""}
-                          {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatHours(item.hours)} Horas` : ""}
+                          {item.isParanoic === true ? `${secondsToString((item.hours)*3600)} ` : ""}
+                          {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${secondsToString((item.hours)*3600)} ` : ""}
                         </Text>
 
                         <Text style={styles.textPlaca}>
@@ -246,7 +247,7 @@ const HomeIndex = (props) => {
     } else if (activeList === 0) {
       return (
         <View style={styles.listContainer}>
-          {loadingReservations === 'hi' ?
+          {loadingReservations ?
             <View style={{ height: "72%" }}>
               <View style={{ justifyContent: 'center', height: '100%' }}>
                 <ActivityIndicator size={"large"} color={'#00A9A0'} />

@@ -264,8 +264,13 @@ const styles = StyleSheet.create({
     opacity: 0.5
   },
   // modal2&3
-  modal2Button: {
+  modalYesButton: {
     height: '75%'
+  },
+  modalNoButton: {
+    height: '75%',
+    borderColor: '#00A9A0',
+    borderWidth: 1
   },
   //  modal5
   modalTextAlert: {

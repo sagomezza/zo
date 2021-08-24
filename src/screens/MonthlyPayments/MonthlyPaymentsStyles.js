@@ -67,6 +67,12 @@ const styles = StyleSheet.create({
         height: '80%',
         width: '100%',
         marginTop: '2%',
+    },
+    cleanButton: {
+        borderRadius: 30,
+        height: '80%',
+        width: '100%',
+        marginTop: '2%',
         borderWidth: 1,
         borderColor: '#FFFFFF'
     },
@@ -114,18 +120,21 @@ const styles = StyleSheet.create({
     buttonTextSearch: {
         color: '#00A9A0',
         fontSize: width * 0.03,
-        fontFamily: 'Montserrat-Medium'
+        fontFamily: 'Montserrat-Medium',
+        letterSpacing: 5
     },
     buttonTextClear: {
         color: '#FFFFFF',
         fontSize: width * 0.03,
-        fontFamily: 'Montserrat-Medium'
+        fontFamily: 'Montserrat-Medium',
+        letterSpacing: 5
+
     },
     buttonTextRenew: {
         color: '#00A9A0',
         fontSize: width * 0.025,
         fontFamily: 'Montserrat-Bold',
-        letterSpacing: 4
+        letterSpacing: 5
     },
     notFoundText: {
         fontSize: width * 0.034,
@@ -143,12 +152,14 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Bold',
         fontSize: width * 0.03,
         color: '#00A9A0',
+        textAlign: 'center'
+
     },
     infoTextTitle: {
         fontFamily: 'Montserrat-Bold',
         fontSize: width * 0.027,
         color: '#00A9A0',
-        margin: '2%'
+        margin: '2%',
     },
     infoText: {
         fontFamily: 'Montserrat-Bold',
@@ -187,6 +198,25 @@ const styles = StyleSheet.create({
     modalViewNewMensuality: {
         height: normalize(650),
         width: '80%',
+        padding: '4%',
+        borderRadius: 30,
+        borderColor: '#707070',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        shadowColor: '#FFF',
+        shadowOffset: {
+            width: 50,
+            height: 50,
+        },
+        shadowOpacity: 0,
+        shadowRadius: 50,
+        elevation: 5,
+        flexDirection: 'column'
+    },
+    modalPayMensuality: {
+        height: normalize(450),
+        width: '70%',
         padding: '4%',
         borderRadius: 30,
         borderColor: '#707070',
@@ -282,19 +312,28 @@ const styles = StyleSheet.create({
         margin: '1%'
     },
     createMensualityRowInput: {
-        fontSize: normalize(25),
+        fontSize: normalize(20),
         fontFamily: 'Montserrat-Bold',
         width: '70%',
         borderRadius: 7,
         color: '#00A9A0',
         backgroundColor: '#ECEDEF',
-        padding: '1%'
+        padding: '2%'
     },
     footer: {
         height: '10%',
         width: '100%',
         justifyContent: 'flex-end'
-    }
+    },
+    currencyInput: {
+        fontSize: normalize(20),
+        fontFamily: 'Montserrat-Bold',
+        backgroundColor: '#E7E7EA',
+        width: '60%',
+        padding: '5%',
+        borderRadius: 10,
+        color: '#8F8F8F'
+    },
 
 });
 
