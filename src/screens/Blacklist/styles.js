@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
         borderWidth: 1
     },
     textPlaca: {
-        fontSize: normalize(20),
+        fontSize: width * 0.025,
         color: '#00A9A0',
         fontFamily: 'Montserrat-Bold',
         width: '15%'
