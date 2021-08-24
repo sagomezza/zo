@@ -199,6 +199,16 @@ const styles = StyleSheet.create({
         height: '85%'
 
     },
+    modalYesButton: {
+        width: normalize(250),
+        height: '80%'
+    },
+    modalNoButton: {
+        width: normalize(250),
+        height: '80%',
+        borderWidth: 1,
+        borderColor: '#00A9A0',
+    },
     centeredView: {
         flex: 1,
         justifyContent: "center",
@@ -208,7 +218,7 @@ const styles = StyleSheet.create({
 
     },
     modalView: {
-        height: normalize(350),
+        height: normalize(450),
         width: normalize(400),
         padding: normalize(20),
         borderRadius: 30,

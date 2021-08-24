@@ -598,7 +598,7 @@ const UserInput = (props) => {
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
-      <View style={{ height: '12%', width: '100%', justifyContent: 'flex-end' }}>
+      <View style={{ height: '10%', width: '100%', justifyContent: 'flex-end' }}>
         <FooterIndex navigation={navigation} />
       </View>
       <Modal

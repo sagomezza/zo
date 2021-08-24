@@ -35,6 +35,7 @@ import { createIdempotency } from '../../utils/idempotency';
 import * as Sentry from "@sentry/browser";
 import * as Device from "expo-device";
 import CurrencyInput from 'react-native-currency-input';
+import normalize from '../../config/services/normalizeFontSize';
 
 
 const LogoutIndex = (props) => {
@@ -335,9 +336,14 @@ const LogoutIndex = (props) => {
               padding: '2%'
             }}
             >
-              <View style={{ margin: '2%', justifyContent: 'flex-end', height: '30%' }}>
+              <Image
+                style={{ width: '30%', alignSelf: 'center', marginBottom: '10%' }}
+                resizeMode={"contain"}
+                source={require("../../../assets/images/alert.png")}
+              />
+              <View style={{ margin: '2%', height: '30%' }}>
                 <Text style={styles.modalText}>
-                  Una vez cierres el turno no podrás modificar el valor ingresado  ¿está seguro que desea guardar y cerrar?
+                  Una vez cierres el turno no podrás modificar el valor ingresado ¿Está seguro de que desea guardar y cerrar?
                 </Text>
               </View>
               <View style={{
@@ -357,17 +363,17 @@ const LogoutIndex = (props) => {
                     setLoading(true)
                     markEndOfShift();
                   }}
-                    title="S I"
+                    title="SI"
                     color="#00A9A0"
-                    style={
-                      styles.modal2Button
-                    }
+                    style={styles.modalYesButton}
                     activityIndicatorStatus={loading}
                     isDisabled={loading}
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
+                      fontFamily: 'Montserrat-Medium',
+                      fontSize: normalize(20),
+                      letterSpacing: 5
                     }}
                   />
                 </View>
@@ -381,13 +387,15 @@ const LogoutIndex = (props) => {
                     setModalVisible(!modalVisible);
                     navigation.navigate('Logout');
                   }}
-                    title="N O"
-                    color="#00A9A0"
-                    style={styles.modal2Button}
+                    title="NO"
+                    color="transparent"
+                    style={styles.modalNoButton}
                     textStyle={{
-                      color: "#FFFFFF",
+                      color: "#00A9A0",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
+                      fontFamily: 'Montserrat-Medium',
+                      fontSize: normalize(20),
+                      letterSpacing: 5
                     }}
                   />
                 </View>
@@ -406,11 +414,16 @@ const LogoutIndex = (props) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
-              <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
+              <Image
+                style={{ width: '30%', alignSelf: 'center', marginBottom: '10%', marginTop: '5%' }}
+                resizeMode={"contain"}
+                source={require("../../../assets/images/alert.png")}
+              />
+              <View style={{ margin: '4%', justifyContent: 'center', height: '35%' }}>
                 <Text style={styles.modalText}> Algo malo pasó, inténtalo más tarde.  </Text>
               </View>
               <View style={{ height: '30%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
-                <View style={{ width: '75%', height: '50%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                <View style={{ width: '78%', height: '50%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                   <Button onPress={() => {
                     setModal3Visible(false);
                     setIsDisabled(false)
@@ -418,13 +431,14 @@ const LogoutIndex = (props) => {
                     title="ENTENDIDO"
                     color="#00A9A0"
                     style={
-                      styles.modal2Button
+                      styles.modalYesButton
                     }
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold',
-                      letterSpacing: 5
+                      fontFamily: 'Montserrat-Medium',
+                      letterSpacing: 5,
+                      fontSize: normalize(20)
                     }} />
                 </View>
               </View>
@@ -448,7 +462,12 @@ const LogoutIndex = (props) => {
             }}
             >
               {logoutError ?
-                <View style={{ margin: '2%', justifyContent: 'flex-end', height: '40%' }}>
+                <View style={{ margin: '2%', justifyContent: 'flex-end', height: '50%'}}>
+                  <Image
+                    style={{ width: '30%', alignSelf: 'center', marginBottom: '10%', marginTop: '10%' }}
+                    resizeMode={"contain"}
+                    source={require("../../../assets/images/alert.png")}
+                  />
                   <Text style={styles.modalText}> ¡ Algo malo pasó ! </Text>
                   <Text style={styles.modalText}> Espera un momento y dale en el botón para intentar de nuevo. </Text>
                 </View>
@@ -497,7 +516,7 @@ const LogoutIndex = (props) => {
                     title="CERRAR SESIÓN"
                     color="#00A9A0"
                     style={
-                      styles.modal2Button
+                      styles.modalYesButton
                     }
                     activityIndicatorStatus={loading}
                     isDisabled={loading}
@@ -505,7 +524,8 @@ const LogoutIndex = (props) => {
                       color: "#FFFFFF",
                       textAlign: "center",
                       fontFamily: 'Montserrat-Medium',
-                      letterSpacing: 5
+                      letterSpacing: 3,
+                      fontSize: normalize(20)
                     }}
                   />
                 </View>

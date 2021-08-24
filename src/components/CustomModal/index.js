@@ -225,7 +225,7 @@ const CustomModal = (props) => {
                                     alignItems: 'center',
                                     padding: '4%',
                                 }}>
-                                    <View style={{ height: '35%', width: '75%', justifyContent: 'center' }}>
+                                    <View style={{ height: '32%', width: '75%', justifyContent: 'center' }}>
                                         <Image
                                             style={{ alignSelf: 'center', width: '60%', height: '85%' }}
                                             resizeMode={'contain'}
@@ -248,7 +248,7 @@ const CustomModal = (props) => {
                                     <View style={{ height: '15%', width: '76%', justifyContent: 'center' }}>
                                         <Text style={styles.prepayModalText}>{phone} </Text>
                                     </View>
-                                    <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
+                                    <View style={{ height: '16%', width: '100%', justifyContent: 'flex-end' }}>
                                         <Button onPress={onClose}
                                             title="ENTENDIDO"
                                             color="#00A9A0"
@@ -256,8 +256,9 @@ const CustomModal = (props) => {
                                             textStyle={{
                                                 color: "#FFFFFF",
                                                 textAlign: "center",
-                                                fontFamily: 'Montserrat-Bold',
-                                                letterSpacing: 5
+                                                fontFamily: 'Montserrat-Medium',
+                                                letterSpacing: 5,
+                                                fontSize: normalize(20)
                                             }} />
                                     </View>
 
