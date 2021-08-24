@@ -361,7 +361,7 @@ const txtGenerator = (props) => {
                 height: '60%',
                 margin: '2%',
               }}
-              textStyle={{ color: "#00A9A0", fontFamily: 'Montserrat-Bold', fontSize: width * 0.03, letterSpacing: 5 }}
+              textStyle={{ color: "#00A9A0", fontFamily: 'Montserrat-Medium', fontSize: width * 0.023, letterSpacing: 5 }}
               activityIndicatorStatus={loadingBoxGenerator}
             />
           </View>
@@ -388,8 +388,8 @@ const txtGenerator = (props) => {
                               {item.status === 'active' ?
                                 <Button
                                   // onPress={onShare}
-                                  title="Abierto"
-                                  color='#FFFFFF'
+                                  title="ABIERTO"
+                                  color='transparent'
                                   style={{
                                     borderColor: "#00A9A0",
                                     borderWidth: 1,
@@ -397,8 +397,8 @@ const txtGenerator = (props) => {
                                   }}
                                   textStyle={{
                                     color: "#00A9A0",
-                                    fontFamily: 'Montserrat-Bold',
-                                    fontSize: width * 0.02
+                                    fontFamily: 'Montserrat-Medium',
+                                    fontSize: width * 0.015
                                   }}
                                   disabled={true}
                                 />
@@ -415,7 +415,7 @@ const txtGenerator = (props) => {
                                   textStyle={{
                                     color: "#FFFFFF",
                                     fontFamily: 'Montserrat-Medium',
-                                    fontSize: width * 0.02,
+                                    fontSize: width * 0.015,
                                     letterSpacing: 5
                                   }}
                                   disabled={true}
