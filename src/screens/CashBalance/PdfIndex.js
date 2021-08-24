@@ -3,12 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { ImageBackground } from 'react-native';
 import {
   Text,
-  TouchableOpacity,
   View,
   FlatList,
   Modal,
-  TextInput,
   ActivityIndicator,
+  Image,
   Dimensions
 } from 'react-native';
 import CurrencyInput from 'react-native-currency-input';
@@ -18,9 +17,6 @@ import { LIST_BOX_CLOSE, CREATE_BOX_REPORT, READ_BOX_REPORT, SAVE_SIGN_REPORT } 
 import { connect } from 'react-redux';
 import { TIMEOUT } from '../../config/constants/constants';
 import * as actions from "../../redux/actions";
-import * as Print from "expo-print";
-import * as MediaLibrary from "expo-media-library";
-import * as Sharing from "expo-sharing";
 import Button from "../../components/Button"
 import moment from 'moment-timezone';
 import Header from '../../components/Header/HeaderIndex';
@@ -112,11 +108,6 @@ const txtGenerator = (props) => {
       border-color: gray;
     }`;
 
-  const formatHours = (hours) => {
-    if (typeof hours === "number" || typeof hours === "double" || typeof hours === "long" || typeof hours === "float") {
-      return Math.round(hours)
-    } else return hours
-  };
 
   const gotBoxTotal = () => {
     setLoadingBoxGenerator(false);
@@ -316,7 +307,7 @@ const txtGenerator = (props) => {
                 </View>
               </View>
               :
-              <View style={{ height: "83%"}}>
+              <View style={{ height: "83%" }}>
                 {dataToday.length > 0 ?
                   <FlatList
                     style={{ height: "37%" }}
@@ -356,9 +347,9 @@ const txtGenerator = (props) => {
             }
 
           </View>
-          <View style={{ height: '10%', width: '85%', alignSelf: 'center'}}>
+          <View style={{ height: '10%', width: '85%', alignSelf: 'center' }}>
             <Button
-              onPress={() => {getBoxTotal();}}
+              onPress={() => { getBoxTotal(); }}
               title="GENERAR CIERRE DE CAJA"
               color='transparent'
               style={{
@@ -370,12 +361,12 @@ const txtGenerator = (props) => {
                 height: '60%',
                 margin: '2%',
               }}
-              textStyle={{ color: "#00A9A0", fontFamily: 'Montserrat-Bold', fontSize: width * 0.03, letterSpacing: 5}}
+              textStyle={{ color: "#00A9A0", fontFamily: 'Montserrat-Bold', fontSize: width * 0.03, letterSpacing: 5 }}
               activityIndicatorStatus={loadingBoxGenerator}
             />
           </View>
           <View style={styles.listTwo}>
-            <View style={{ marginBottom: '3%', marginTop: '3%'}}>
+            <View style={{ marginBottom: '3%', marginTop: '3%' }}>
               <Text style={styles.textListTitle} >CIERRES DE CAJA ANTERIORES</Text>
             </View>
             {!loadingReadBoxReport ?
@@ -388,50 +379,50 @@ const txtGenerator = (props) => {
                       keyExtractor={(item, index) => String(index)}
                       renderItem={({ item, index }) => {
                         return (
-                            <View style={{ flexDirection: "row",marginBottom: '2%',justifyContent: 'space-around' }} >
-                              <View style={{ margin: '1%' }} >
-                                <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')}     {moment(item.dateFinished).format('LT')}</Text>
-                              </View>
-                              <View style={{height: '50%', width: '25%', borderBottomWidth: 0.5, borderColor: '#707070', marginLeft: '2%', marginRight: '3%'}}></View>
-                              <View style={{ width: '30%', marginRight: '2%', justifyContent: 'flex-end', alignItems: 'flex-end' }} >
-                                {item.status === 'active' ?
-                                  <Button
-                                    // onPress={onShare}
-                                    title="Abierto"
-                                    color='#FFFFFF'
-                                    style={{
-                                      borderColor: "#00A9A0",
-                                      borderWidth: 1,
-                                      width: '90%'
-                                    }}
-                                    textStyle={{
-                                      color: "#00A9A0",
-                                      fontFamily: 'Montserrat-Bold',
-                                      fontSize: width * 0.02
-                                    }}
-                                    disabled={true}
-                                  />
-                                  :
-                                  <Button
-                                    // onPress={onShare}
-                                    title="CERRADO"
-                                    color='#00A9A0'
-                                    style={{
-                                      borderColor: "#707070",
-                                      width: '100%',
-                                      padding: '5%'
-                                    }}
-                                    textStyle={{
-                                      color: "#FFFFFF",
-                                      fontFamily: 'Montserrat-Medium',
-                                      fontSize: width * 0.02,
-                                      letterSpacing: 5
-                                    }}
-                                    disabled={true}
-                                  />
-                                }
-                              </View>
+                          <View style={{ flexDirection: "row", marginBottom: '2%', justifyContent: 'space-around' }} >
+                            <View style={{ margin: '1%' }} >
+                              <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')}     {moment(item.dateFinished).format('LT')}</Text>
                             </View>
+                            <View style={{ height: '50%', width: '25%', borderBottomWidth: 0.5, borderColor: '#707070', marginLeft: '2%', marginRight: '3%' }}></View>
+                            <View style={{ width: '30%', marginRight: '2%', justifyContent: 'flex-end', alignItems: 'flex-end' }} >
+                              {item.status === 'active' ?
+                                <Button
+                                  // onPress={onShare}
+                                  title="Abierto"
+                                  color='#FFFFFF'
+                                  style={{
+                                    borderColor: "#00A9A0",
+                                    borderWidth: 1,
+                                    width: '90%'
+                                  }}
+                                  textStyle={{
+                                    color: "#00A9A0",
+                                    fontFamily: 'Montserrat-Bold',
+                                    fontSize: width * 0.02
+                                  }}
+                                  disabled={true}
+                                />
+                                :
+                                <Button
+                                  // onPress={onShare}
+                                  title="CERRADO"
+                                  color='#00A9A0'
+                                  style={{
+                                    borderColor: "#707070",
+                                    width: '100%',
+                                    padding: '5%'
+                                  }}
+                                  textStyle={{
+                                    color: "#FFFFFF",
+                                    fontFamily: 'Montserrat-Medium',
+                                    fontSize: width * 0.02,
+                                    letterSpacing: 5
+                                  }}
+                                  disabled={true}
+                                />
+                              }
+                            </View>
+                          </View>
                         )
                       }}
                     />
@@ -477,12 +468,12 @@ const txtGenerator = (props) => {
               padding: '2%',
               flexDirection: 'column'
             }}>
-              <View style={{justifyContent: 'center', height: ' 30%'}}>
+              <View style={{ justifyContent: 'center', height: ' 30%' }}>
                 <Text style={{
-                   fontSize: normalize(30),
-                   textAlign: 'center',
-                   color: '#00A9A0',
-                   fontFamily: 'Montserrat-Bold'
+                  fontSize: normalize(30),
+                  textAlign: 'center',
+                  color: '#00A9A0',
+                  fontFamily: 'Montserrat-Bold'
                 }}>
                   INGRESE EL VALOR EXACTO:
                 </Text>
@@ -502,8 +493,8 @@ const txtGenerator = (props) => {
                 paddingBottom: '6%',
                 width: '95%',
               }}>
-                <View style={{flexDirection: "row", justifyContent: 'space-between'}}>
-                  <Text style={{...styles.modalText, fontSize: normalize(20)}}>Base:  </Text>
+                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                  <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>Base:  </Text>
                   <CurrencyInput
                     placeholder='$'
                     textAlign='center'
@@ -533,17 +524,18 @@ const txtGenerator = (props) => {
                   />
                 </View>
               </View>
-              <View style={{height: '20%', width: '100%', justifyContent: 'space-between'}}>
+              <View style={{ height: '20%', width: '100%', justifyContent: 'space-between' }}>
                 <Button
-                  onPress={() => {createBoxReport()}}
+                  onPress={() => { createBoxReport() }}
                   title="GUARDAR"
                   color="#00A9A0"
                   style={styles.modalButton}
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold',
-                    letterSpacing: 5
+                    fontFamily: 'Montserrat-Medium',
+                    letterSpacing: 5,
+                    fontSize: normalize(20)
                   }}
                   activityIndicatorStatus={loadingBoxGenerator}
                 />
@@ -559,8 +551,9 @@ const txtGenerator = (props) => {
                   textStyle={{
                     color: "#00A9A0",
                     textAlign: "center",
-                    fontFamily: 'Montserrat-Bold',
-                    letterSpacing: 5
+                    fontFamily: 'Montserrat-Medium',
+                    letterSpacing: 5,
+                    fontSize: normalize(20)
                   }} />
               </View>
             </View>
@@ -577,7 +570,7 @@ const txtGenerator = (props) => {
           <View style={styles.modalViewSign}>
             <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '3%' }}>
               <View style={{ justifyContent: 'center', height: ' 75%' }}>
-                <View style={{justifyContent: 'center', height: ' 30%'}}>
+                <View style={{ justifyContent: 'center', height: ' 30%' }}>
                   <Text style={{ ...styles.modalText, fontSize: normalize(25), fontFamily: 'Montserrat-Bold', color: '#00A9A0' }}>CIERRE DE CAJA</Text>
                   <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>
                     {moment(readBoxReportInfo.dateFinished).format('L')} {moment(readBoxReportInfo.dateFinished).format('LT')}
@@ -597,12 +590,11 @@ const txtGenerator = (props) => {
                   />
                   :
                   <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Firma guardada</Text>
-
                 }
               </View>
               {signature ?
                 <View style={{ margin: '0%', justifyContent: 'center', height: ' 10%' }}>
-                  <Text style={{ ...styles.modalText, fontSize: normalize(15), fontFamily: 'Montserrat-Bold', color: 'red' }}>¡ Firma guardada !</Text>
+                  <Text style={{ ...styles.modalText, fontSize: normalize(15), fontFamily: 'Montserrat-Bold' }}>¡ Firma guardada !</Text>
                 </View>
                 :
                 <View style={{ margin: '0%', justifyContent: 'center', height: ' 10%' }}>
@@ -611,12 +603,10 @@ const txtGenerator = (props) => {
 
 
               {boxStatus === "active" ?
-
-                <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginTop: '5%' }}>
-
+                <View style={{ height: '15%', width: '100%', justifyContent: 'center' }}>
                   <Button
                     onPress={uploadImageToFirebase}
-                    title="G U A R D A R"
+                    title="GUARDAR"
                     color="#00A9A0"
                     style={
                       styles.modalButtonSign
@@ -624,7 +614,9 @@ const txtGenerator = (props) => {
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold'
+                      fontFamily: 'Montserrat-Medium',
+                      letterSpacing: 5,
+                      fontSize: normalize(20)
                     }}
                     activityIndicatorStatus={loadingBoxGenerator}
                   />
@@ -640,22 +632,24 @@ const txtGenerator = (props) => {
                     textStyle={{
                       color: "#00A9A0",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold',
-                      letterSpacing: 5
+                      fontFamily: 'Montserrat-Medium',
+                      letterSpacing: 5,
+                      fontSize: normalize(20)
                     }} />
                 </View>
                 :
                 <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginTop: '5%' }}>
                   <Button
-                    onPress={() => {setModal2Visible(!modal2Visible);}}
+                    onPress={() => { setModal2Visible(!modal2Visible); }}
                     title="VOLVER"
                     color="transparent"
                     style={styles.modalButtonBack}
                     textStyle={{
                       color: "#00A9A0",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold', 
-                      letterSpacing: 5
+                      fontFamily: 'Montserrat-Medium',
+                      letterSpacing: 5,
+                      fontSize: normalize(20)
                     }} />
                 </View>
               }
@@ -668,24 +662,31 @@ const txtGenerator = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modal3Visible}
+
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={{ height: '100%', width: '100%', justifyContent: 'space-between', padding: '0%' }}>
+              <Image
+                style={{ width: '30%', alignSelf: 'center', marginBottom: '10%', marginTop: '10%' }}
+                resizeMode={"contain"}
+                source={require("../../../assets/images/alert.png")}
+              />
               <View style={{ justifyContent: 'center', height: '30%' }}>
                 <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#8F8F8F', fontFamily: 'Montserrat-Bold' }}> No se han realizado los cierres de turno necesarios para generar un cierre de caja. </Text>
               </View>
-              <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
-                <View style={{ height: '57%', width: '100%', justifyContent: 'flex-end'}}>
-                  <Button onPress={() => {setModal3Visible(false);}}
+              <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%'}}>
+                <View style={{ height: '57%', width: '80%', justifyContent: 'flex-end', alignSelf: 'center' }}>
+                  <Button onPress={() => { setModal3Visible(false); }}
                     title="ENTENDIDO"
                     color="#00A9A0"
                     style={styles.modalButton}
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
-                      fontFamily: 'Montserrat-Bold',
-                      letterSpacing: 5
+                      fontFamily: 'Montserrat-Medium',
+                      letterSpacing: 5,
+                      fontSize: normalize(20)
                     }}
                   />
                 </View>
@@ -695,11 +696,7 @@ const txtGenerator = (props) => {
           </View>
         </View>
       </Modal>
-
     </View>
-
-
-
   );
 }
 
