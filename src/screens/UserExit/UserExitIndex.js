@@ -317,7 +317,6 @@ const UserOut = (props) => {
       setIsDisabled(true);
     } catch (err) {
       Sentry.captureException(err);
-      Sentry.captureMessage(err?.response);
       console.log(err?.response)
       console.log(err)
       setLoading(false);

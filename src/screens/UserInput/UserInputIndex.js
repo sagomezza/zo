@@ -172,6 +172,7 @@ const UserInput = (props) => {
         if (auxPhones.length === 2) {
           setPhone(auxPhones[0].label)
         }
+        console.log('FIND USER BY PLATE ------',response.data)
         if (response.data.blackList && response.data.blackList.length > 0) {
           setModal3Visible(true)
         }
