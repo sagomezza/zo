@@ -477,9 +477,9 @@ const UserInput = (props) => {
                   <Button onPress={() => { priceVehicleType(); }}
                     title="INICIAR"
                     color='#FFF200'
-                    style={[!existingUser || plateOne === "" || plateTwo === "" ? styles.buttonIDisabled : styles.buttonI]}
+                    style={[!existingUser || plateOne === "" || plateTwo === "" || (phone === null && newPhone === '') ? styles.buttonIDisabled : styles.buttonI]}
                     textStyle={styles.buttonText}
-                    disabled={!existingUser || plateOne === "" || plateTwo === ""}
+                    disabled={!existingUser || plateOne === "" || plateTwo === "" || (phone === null && newPhone === '')  }
                   />
                 }
                 {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}

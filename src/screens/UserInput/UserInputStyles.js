@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   textInput: {
     width: '60%',
     height: '6%',
-    fontSize: width * 0.04,
+    fontSize: width * 0.035,
     fontFamily: 'Montserrat-Bold',
     color: '#8F8F8F',
     backgroundColor: '#FFFFFF',

@@ -6,6 +6,7 @@ import {
   View,
   FlatList,
   Modal,
+  TouchableOpacity,
   ActivityIndicator,
   Image,
   Dimensions
@@ -152,10 +153,9 @@ const txtGenerator = (props) => {
           const dailyReports = reports.filter((report) => {
             return report.dateStart >= dateStart && report.dateStart <= dateEnd
           })
-          // console.log('DAILY REPORTS', dailyReports)
           if (dailyReports.length === 0 || dailyReports.length < 3) {
             setModal3Visible(true);
-          } else if (reports.length > 2) {
+          } else if (dailyReports.length > 2) {
             let boxTotal = 0
             dailyReports.forEach(report => {
               boxTotal += report.total
@@ -212,7 +212,7 @@ const txtGenerator = (props) => {
       settoTalReported(0);
       listBoxClose();
       setLoadingBoxGenerator(false);
-      setModalVisible(!modalVisible);
+      setModalVisible(false);
     } catch (err) {
       Sentry.captureException(err);
       // console.log(err)
@@ -363,6 +363,7 @@ const txtGenerator = (props) => {
               }}
               textStyle={{ color: "#00A9A0", fontFamily: 'Montserrat-Medium', fontSize: width * 0.023, letterSpacing: 5 }}
               activityIndicatorStatus={loadingBoxGenerator}
+              activityIndicatorStatusColor={'#00A9A0'}
             />
           </View>
           <View style={styles.listTwo}>
@@ -379,50 +380,56 @@ const txtGenerator = (props) => {
                       keyExtractor={(item, index) => String(index)}
                       renderItem={({ item, index }) => {
                         return (
-                          <View style={{ flexDirection: "row", marginBottom: '2%', justifyContent: 'space-around' }} >
-                            <View style={{ margin: '1%' }} >
-                              <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')}     {moment(item.dateFinished).format('LT')}</Text>
+                          <TouchableOpacity
+                          key={index.toString()}
+                          onPress={()=>{readBoxReport(item.id);}}>
+                            <View style={{ flexDirection: "row", marginBottom: '2%', justifyContent: 'space-around' }} >
+                              <View style={{ margin: '1%' }} >
+                                <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')}     {moment(item.dateFinished).format('LT')}</Text>
+                              </View>
+                              <View style={{ height: '50%', width: '25%', borderBottomWidth: 0.5, borderColor: '#707070', marginLeft: '2%', marginRight: '3%' }}></View>
+                              <View style={{ width: '30%', marginRight: '2%', justifyContent: 'flex-end', alignItems: 'flex-end' }} >
+                                {item.status === 'active' ?
+                                  <Button
+                                    // onPress={onShare}
+                                    title="ABIERTO"
+                                    color='transparent'
+                                    style={{
+                                      borderColor: "#00A9A0",
+                                      borderWidth: 1,
+                                      width: '90%'
+                                    }}
+                                    textStyle={{
+                                      color: "#00A9A0",
+                                      fontFamily: 'Montserrat-Medium',
+                                      fontSize: width * 0.015
+                                    }}
+                                    disabled={true}
+                                  />
+                                  :
+                                  <Button
+                                    // onPress={onShare}
+                                    title="CERRADO"
+                                    color='#00A9A0'
+                                    style={{
+                                      borderColor: "#707070",
+                                      width: '100%',
+                                      padding: '5%'
+                                    }}
+                                    textStyle={{
+                                      color: "#FFFFFF",
+                                      fontFamily: 'Montserrat-Medium',
+                                      fontSize: width * 0.015,
+                                      letterSpacing: 5
+                                    }}
+                                    disabled={true}
+                                  />
+                                }
+                              </View>
                             </View>
-                            <View style={{ height: '50%', width: '25%', borderBottomWidth: 0.5, borderColor: '#707070', marginLeft: '2%', marginRight: '3%' }}></View>
-                            <View style={{ width: '30%', marginRight: '2%', justifyContent: 'flex-end', alignItems: 'flex-end' }} >
-                              {item.status === 'active' ?
-                                <Button
-                                  // onPress={onShare}
-                                  title="ABIERTO"
-                                  color='transparent'
-                                  style={{
-                                    borderColor: "#00A9A0",
-                                    borderWidth: 1,
-                                    width: '90%'
-                                  }}
-                                  textStyle={{
-                                    color: "#00A9A0",
-                                    fontFamily: 'Montserrat-Medium',
-                                    fontSize: width * 0.015
-                                  }}
-                                  disabled={true}
-                                />
-                                :
-                                <Button
-                                  // onPress={onShare}
-                                  title="CERRADO"
-                                  color='#00A9A0'
-                                  style={{
-                                    borderColor: "#707070",
-                                    width: '100%',
-                                    padding: '5%'
-                                  }}
-                                  textStyle={{
-                                    color: "#FFFFFF",
-                                    fontFamily: 'Montserrat-Medium',
-                                    fontSize: width * 0.015,
-                                    letterSpacing: 5
-                                  }}
-                                  disabled={true}
-                                />
-                              }
-                            </View>
-                          </View>
+                          </TouchableOpacity>
+
+
                         )
                       }}
                     />
@@ -622,7 +629,7 @@ const txtGenerator = (props) => {
                   />
                   <Button
                     onPress={() => {
-                      setModal2Visible(!modal2Visible);
+                      setModal2Visible(false);
                     }}
                     title="VOLVER"
                     color="transparent"
@@ -640,7 +647,7 @@ const txtGenerator = (props) => {
                 :
                 <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginTop: '5%' }}>
                   <Button
-                    onPress={() => { setModal2Visible(!modal2Visible); }}
+                    onPress={() => { setModal2Visible(false); }}
                     title="VOLVER"
                     color="transparent"
                     style={styles.modalButtonBack}
@@ -675,7 +682,7 @@ const txtGenerator = (props) => {
               <View style={{ justifyContent: 'center', height: '30%' }}>
                 <Text style={{ ...styles.modalText, fontSize: normalize(20), color: '#8F8F8F', fontFamily: 'Montserrat-Bold' }}> No se han realizado los cierres de turno necesarios para generar un cierre de caja. </Text>
               </View>
-              <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%'}}>
+              <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
                 <View style={{ height: '57%', width: '80%', justifyContent: 'flex-end', alignSelf: 'center' }}>
                   <Button onPress={() => { setModal3Visible(false); }}
                     title="ENTENDIDO"
@@ -696,7 +703,7 @@ const txtGenerator = (props) => {
           </View>
         </View>
       </Modal>
-    </View>
+    </View >
   );
 }
 
