@@ -12,6 +12,7 @@ const Button = (props) => {
     onPress,
     disabled,
     activityIndicatorStatus,
+    activityIndicatorStatusColor
   } = props;
 
   const background =
@@ -33,7 +34,10 @@ const Button = (props) => {
     <>
       {activityIndicatorStatus ? (
         <View style={[styles.container, style]}>
-          <ActivityIndicator size={"large"} color={background} />
+          {activityIndicatorStatusColor ? 
+          <ActivityIndicator size={"large"} color={activityIndicatorStatusColor} />
+          :
+          <ActivityIndicator size={"large"} color={background} />}
         </View>
       ) : (
         <TouchableOpacity onPress={onPress} disabled={disabled}>
