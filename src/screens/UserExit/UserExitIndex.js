@@ -201,7 +201,7 @@ const UserOut = (props) => {
   async function checkParkingCode() {
     try {
       setLoadingCheckParking(true);
-      if (inputVerificationCode.length === 6) {
+      if (inputVerificationCode.length >= 5) {
         let reserve = reservations.reservations.filter(reserve => reserve.verificationCode === Number(inputVerificationCode));
         let idempotencyKey = createIdempotency(uid.uid)
         const response = await instance.post(
