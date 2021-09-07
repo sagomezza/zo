@@ -201,7 +201,7 @@ const UserOut = (props) => {
   async function checkParkingCode() {
     try {
       setLoadingCheckParking(true);
-      if (inputVerificationCode.length === 5) {
+      if (inputVerificationCode.length === 6) {
         let reserve = reservations.reservations.filter(reserve => reserve.verificationCode === Number(inputVerificationCode));
         let idempotencyKey = createIdempotency(uid.uid)
         const response = await instance.post(
@@ -421,11 +421,11 @@ const UserOut = (props) => {
                   value={inputVerificationCode}
                   // style={styles.plateInput}
                   textAlign='center'
-                  maxLength={5}
+                  maxLength={6}
                   autoCapitalize={'characters'}
                   onFocus={() => { restart(); }}
                   onChangeText={text => {
-                    if (text.length === 5) { Keyboard.dismiss() }
+                    if (text.length === 6) { Keyboard.dismiss() }
                     setInputVerificationCode(text.trim());
                     setVerificationCodeCall(text.trim());
                   }}
