@@ -188,8 +188,8 @@ const UserOut = (props) => {
       }
     } catch (err) {
       Sentry.captureException(err);
-      console.log("ERR", err)
-      console.log("ERR2", err?.response)
+      // console.log("ERR", err)
+      // console.log("ERR2", err?.response)
       if (modal5Visible === false) {
         setModal5Visible(true);
       }
