@@ -129,7 +129,6 @@ const UserOut = (props) => {
           const splitPlateFive = splitPlate[5] !== undefined ? splitPlate[5] : '';
           setPlateOne(splitPlate[0] + splitPlate[1] + splitPlate[2])
           setPlateTwo(splitPlate[3] + splitPlate[4] + splitPlateFive)
-
           setPlateOneCall(splitPlate[0] + splitPlate[1] + splitPlate[2])
           setPlateTwoCall(splitPlate[3] + splitPlate[4] + splitPlateFive)
           setIsParanoicUser(true)
@@ -178,6 +177,7 @@ const UserOut = (props) => {
           if (response.data.data.dateStart) setDateStart(response.data.data.dateStart);
           if (response.data.data.total) setTotalAmount(response.data.data.total);
           setIsDisabled(false)
+          setInputVerificationCode('')
           if (response.data.data.pendingValue) setPendingValue(response.data.data.pendingValue)
           if (response.data.data) setCheck(response.data.data)
           if (response.data.data.verificationCode) setInputVerificationCode(response.data.data.verificationCode + '')
@@ -188,8 +188,8 @@ const UserOut = (props) => {
       }
     } catch (err) {
       Sentry.captureException(err);
-      // console.log("ERR", err)
-      // console.log("ERR2", err?.response)
+      console.log("ERR", err)
+      console.log("ERR2", err?.response)
       if (modal5Visible === false) {
         setModal5Visible(true);
       }
@@ -477,7 +477,7 @@ const UserOut = (props) => {
                     resizeMode={"contain"}
                     source={require('../../../assets/images/totalHours.png')} />
                   <View style={{ flexDirection: 'column', margin: '5%', width: '68%' }}>
-                    <Text style={styles.timePlateInfo}>{Object.keys(check).length === 0 ? '' : secondsToString((check.hours)*3600)} </Text>
+                    <Text style={styles.timePlateInfo}>{Object.keys(check).length === 0 ? '' : secondsToString((check.hours) * 3600)} </Text>
                   </View>
                 </View>
               </View>
@@ -570,7 +570,7 @@ const UserOut = (props) => {
                 height: '100%',
               }}>
                 <TextInput
-                  style={{...styles.inputMoney, color: '#04746E'}}
+                  style={{ ...styles.inputMoney, color: '#04746E' }}
                   keyboardType='numeric'
                   placeholder='$'
                   editable={false}
@@ -613,8 +613,8 @@ const UserOut = (props) => {
                   <Button
                     title="C O B R A R"
                     color='transparent'
-                    disabled={totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0 || inputVerificationCode !== verification}
-                    style={[totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0 || inputVerificationCode !== verification ? styles.buttonStyleDisabled : styles.buttonStyle]}
+                    disabled={totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0 }
+                    style={[totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0  ? styles.buttonStyleDisabled : styles.buttonStyle]}
                     textStyle={{
                       color: '#00A9A0',
                       fontFamily: 'Montserrat-Bold',
@@ -903,7 +903,7 @@ const UserOut = (props) => {
                   resizeMode={'contain'}
                   source={require('../../../assets/images/pending.png')} />
               </View>
-              <View style={{ margin: '4%', justifyContent: 'center', height: ' 20%'}}>
+              <View style={{ margin: '4%', justifyContent: 'center', height: ' 20%' }}>
                 <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>
                   Ingresa el valor exacto de pago
                 </Text>
@@ -919,33 +919,33 @@ const UserOut = (props) => {
               <View style={{
                 justifyContent: 'space-between',
                 height: '25%',
-                width:'100%',
+                width: '100%',
                 flexDirection: 'column',
                 paddingBottom: '6%',
               }}>
-                  <CurrencyInput
-                    placeholder='$'
-                    textAlign='center'
-                    keyboardType='numeric'
-                    style={{
-                      fontSize: normalize(30),
-                      fontFamily: 'Montserrat-Bold',
-                      backgroundColor: '#00A9A0',
-                      width: '70%',
-                      borderRadius: 30,
-                      color: '#FFF200',
-                      height: '70%',
-                      alignSelf: 'center'
-                    }}
-                    value={totalPay}
-                    onChangeValue={text => setTotalPay(text)}
-                    prefix="$"
-                    delimiter="."
-                    separator="."
-                    precision={0}
-                  />
-                <View style={{ flexDirection: "row", justifyContent: 'center', width: '70%', alignItems: 'center', alignSelf: 'center'}}>
-                  <Text style={{color: '#ED8E20', fontSize: normalize(20), fontFamily: 'Montserrat-Bold'}}>Deuda  </Text>
+                <CurrencyInput
+                  placeholder='$'
+                  textAlign='center'
+                  keyboardType='numeric'
+                  style={{
+                    fontSize: normalize(30),
+                    fontFamily: 'Montserrat-Bold',
+                    backgroundColor: '#00A9A0',
+                    width: '70%',
+                    borderRadius: 30,
+                    color: '#FFF200',
+                    height: '70%',
+                    alignSelf: 'center'
+                  }}
+                  value={totalPay}
+                  onChangeValue={text => setTotalPay(text)}
+                  prefix="$"
+                  delimiter="."
+                  separator="."
+                  precision={0}
+                />
+                <View style={{ flexDirection: "row", justifyContent: 'center', width: '70%', alignItems: 'center', alignSelf: 'center' }}>
+                  <Text style={{ color: '#ED8E20', fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Deuda  </Text>
                   <TextInput
                     style={{
                       fontSize: normalize(20),
@@ -960,7 +960,7 @@ const UserOut = (props) => {
                   />
                 </View>
               </View>
-              <View style={{ height: '20%', width: '80%', justifyContent: 'center'}}>
+              <View style={{ height: '20%', width: '80%', justifyContent: 'center' }}>
                 <Button onPress={() => {
 
                   finishParking("parcial-pending", false)
