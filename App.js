@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { View, ActivityIndicator, StyleSheet, Modal, Text, AsyncStorage } from 'react-native';
 import SnackBar from 'react-native-snackbar-component'
-import normalize from './src/config/services/normalizeFontSize';
 import NoConnectionModal from './src/components/NoConnectionModal';
 import { Provider } from "react-redux";
 import store from './src/config/store'
@@ -15,7 +14,8 @@ import instance from "./src/config/axios";
 import { READ_OFFICIAL } from "./src/config/api";
 import { READ_ADMIN, READ_CORPO, STORAGE_KEY } from "./src/config/api/index";
 import { setOfficial, setExpoToken } from "./src/redux/actions";
-import * as Network from 'expo-network';
+// import * as Network from 'expo-network';
+import InternetConnectionAlert from "react-native-internet-connection-alert";
 import moment from 'moment';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
@@ -23,7 +23,6 @@ import * as Permissions from "expo-permissions";
 import * as Sentry from "@sentry/browser";
 import { LogBox } from 'react-native';
 import * as Updates from 'expo-updates';
-import { Alert } from "react-native";
 
 LogBox.ignoreLogs([
   'Animated: `useNativeDriver` was not specified.',
@@ -46,7 +45,7 @@ const fetchFont = () => {
     'Montserrat-Medium': require('./assets/fonts/Montserrat-Medium.ttf'),
 
   })
-}
+};
 
 const App = () => {
   const [fontLoaded, setfontLoaded] = useState(false);
@@ -61,30 +60,19 @@ const App = () => {
   const [logoutSnackbar, setLogoutSnackbar] = useState(false)
   const [officialData, setOfficialData] = useState({});
   const officialScheduleStart = officialData.start !== undefined ? officialData.start : null;
-
-  // useEffect(() => {
-  //   throw new Error("Zona P first Sentry error")
-  // }, [])
-
-  Network.getNetworkStateAsync().then(state => {
-    // console.log('Connection type:', state.type);
-    // console.log('Is connected?:', state.isConnected);
-    // console.log('Is internet reachable?:', state.isInternetReachable);
-    state.isConnected === false ? setIsConnected(false) : setIsConnected(true);
-  });
-
-  const checkInternetReachable = () => {
-    Network.getNetworkStateAsync().then(state => {
-      // console.log('Connection TYPE:', state.type);
-      // console.log('Is connected?:', state.isConnected);
-      // console.log('Is internet reachable?:', state.isInternetReachable);
-      state.isConnected === false ? setIsConnected(false) : setIsConnected(true);
-    });
-  }
-
   const MINUTE_MS = 60000;
 
   useEffect(() => {
+    // const checkInternetReachable = () => {
+    //   Network.getNetworkStateAsync().then(state => {
+    //     console.log('Connection TYPE:', state.type);
+    //     console.log('Is connected?:', state.isConnected);
+    //     console.log('Is internet reachable?:', state.isInternetReachable);
+    //     state.isConnected === false ? setIsConnected(false) : setIsConnected(true);
+    //   });
+    // };
+    // checkInternetReachable();
+
     const updateApp = async () => {
       try {
         const update = await Updates.checkForUpdateAsync();
@@ -118,7 +106,7 @@ const App = () => {
       }, MINUTE_MS);
       return () => clearInterval(checkOfficialHours);
     }
-  }, [])
+  }, []);
 
   Sentry.init({
     dsn: 'https://022b0475f7b147aba62d6d1988bf95df@o479500.ingest.sentry.io/5644578',
@@ -243,12 +231,18 @@ const App = () => {
   }
 
   return (
-    isConnected ? (
+    <InternetConnectionAlert
+      onChange={(connectionState) => {
+        // console.log("Connection State: ", connectionState);
+      }}
+      title={"Upss no hay conexión..."}
+      message="Verifica tu conexión a internet."
+      type="error"
+    >
       <Provider store={store}>
         <AuthProvider value={{ currentUser }}>
           <NavigationContainer >
             <RootStack initialRouteName={initialRouteName} />
-
           </NavigationContainer>
           <SnackBar
             visible={logoutSnackbar}
@@ -262,9 +256,8 @@ const App = () => {
             containerStyle={{ height: 90 }}
           />
         </AuthProvider>
-      </Provider>) : (
-      <NoConnectionModal onCheck={checkInternetReachable} />
-    )
+      </Provider>
+    </InternetConnectionAlert>
 
   );
 
