@@ -4,9 +4,7 @@ import {
   Text,
   FlatList,
   Image,
-  TouchableOpacity,
   ActivityIndicator,
-  Modal
 } from 'react-native';
 import { Button } from 'native-base';
 import { ImageBackground } from 'react-native';
@@ -16,7 +14,6 @@ import FooterIndex from '../../components/Footer';
 import styles from '../Home/HomeStyles';
 import instance from "../../config/axios";
 import moment from 'moment';
-import normalize from '../../config/services/normalizeFontSize';
 // api
 import { GET_RECIPS, READ_HQ, EDIT_OFFICIAL, EDIT_ADMIN, READ_OFFICIAL } from "../../config/api";
 import { TIMEOUT } from '../../config/constants/constants';
@@ -33,13 +30,6 @@ const HomeIndex = (props) => {
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const [loadingRecips, setLoadingRecips] = useState(true);
   const [loadingReservations, setLoadingReservations] = useState(true);
-  const [showRecipModal, setShowRecipModal] = useState(false);
-  const [showReserveModal, setShowReserveModal] = useState(false);
-  const [plate, setPlate] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
-  const [prepayFullDay, setPrepayFullDay] = useState('');
-  const [mensuality, setMensuality] = useState('');
-  const [isParanoic, setIsParanoic] = useState('');
   const [activeList, setActiveList] = useState(0);
 
   useEffect(() => {
@@ -126,30 +116,25 @@ const HomeIndex = (props) => {
     // parked(officialHq);
   }, []);
 
-  const infoReservation = (props) => {
-    setPlate(props.plate)
-    setVerificationCode(props.verificationCode)
-    setPrepayFullDay(props.prepayFullDay)
-    setMensuality(props.mensuality)
-    setIsParanoic(props.isParanoic)
-    setShowReserveModal(true)
-  }
-
-  const formatHours = (hours) => {
-    if (typeof hours === "number" || typeof hours === "double" || typeof hours === "long" || typeof hours === "float") {
-      return Math.round(hours)
-    } else return hours
-  }
   const formatDateDays = (date) => {
-    return moment(date).format('L')
-  }
+    return moment(date).format('L');
+  };
+
   const formatDateHours = (date) => {
-    return moment(date).format('LT')
-  }
+    return moment(date).format('LT');
+  };
 
   const segmentClicked = (index) => {
-    setActiveList(index)
-  }
+    setActiveList(index);
+  };
+
+  const handleReservationsButton = () => {
+    segmentClicked(0);
+  };
+
+  const handleRecips = () => {
+    segmentClicked(1);
+  };
 
   const renderList = () => {
     if (activeList === 1) {
@@ -169,7 +154,6 @@ const HomeIndex = (props) => {
                 <Text style={{ ...styles.titleText, marginLeft: '15%' }}>Tiempo</Text>
                 <Text style={{ ...styles.titleText, marginLeft: '13%' }}>Total horas</Text>
                 <Text style={{ ...styles.titleText, marginLeft: '8%' }}>Total</Text>
-
               </View>
               {recips.recips.length > 0 ?
                 <FlatList
@@ -181,7 +165,6 @@ const HomeIndex = (props) => {
                       // <TouchableOpacity
                       //   key={index.toString()}
                       //   onPress={() => {
-                      //     setShowRecipModal(true);
                       //   }}
                       // >
                       <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%' }} >
@@ -212,14 +195,12 @@ const HomeIndex = (props) => {
                             {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateHours(item.dateFinished)}` : ""}
                           </Text>
                         </View>
-
                         <Text style={styles.totalHours}>
                           {item.prepayFullDay === true ? " Pase día" : ""}
                           {item.mensuality === true ? " Mensualidad" : ""}
                           {item.isParanoic === true ? `${secondsToString((item.hours)*3600)} ` : ""}
                           {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${secondsToString((item.hours)*3600)} ` : ""}
                         </Text>
-
                         <Text style={styles.textPlaca}>
                           {item.cash === 0 && item.change === 0 ? '$0' : ''}
                           {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
@@ -227,7 +208,6 @@ const HomeIndex = (props) => {
                         </Text>
                       </View>
                       // </TouchableOpacity>
-
                     )
                   }}
                 />
@@ -267,19 +247,6 @@ const HomeIndex = (props) => {
                       // <TouchableOpacity
                       //   key={index.toString()}
                       //   onPress={() => {
-                      //     console.log(item)
-                      //     let plate = item.plate
-                      //     let verificationCode = item.verificationCode
-                      //     let prepayFullDay = item.prepayFullDay ? item.prepayFullDay : ''
-                      //     let mensuality = item.mensuality ? item.mensuality : ''
-                      //     let isParanoic = item.isParanoic ? item.isParanoic : ''
-                      //     infoReservation({
-                      //       plate,
-                      //       verificationCode,
-                      //       prepayFullDay,
-                      //       mensuality,
-                      //       isParanoic
-                      //     })
                       //   }}
                       // >
                       <View style={styles.list} >
@@ -329,31 +296,31 @@ const HomeIndex = (props) => {
                 source={require('../../../assets/images/homeCar.png')}
               />
               <View style={{ width: '70%' }}>
-                <Text style={styles.totalCellsText} >{`${hq.totalCars}`} CELDAS</Text>
+                <Text style={styles.totalCellsText}>{`${hq.totalCars}`} CELDAS</Text>
               </View>
             </View>
             <View style={styles.bikeCounter} >
               <Text style={styles.plateInputTextBig}>{`${hq.occupiedCars}`}</Text>
               <View style={{ width: '70%' }}>
-                <Text style={styles.plateInputTextSmall} >VEHÍCULOS PARQUEADOS</Text>
+                <Text style={styles.plateInputTextSmall}>VEHÍCULOS PARQUEADOS</Text>
               </View>
             </View>
             <View style={styles.bikeCounter} >
               <Text style={styles.plateInputTextBig2}>{`${hq.availableCars}`}</Text>
               <View style={{ width: '70%' }}>
-                <Text style={styles.plateInputTextSmall} >CELDAS DISPONIBLES</Text>
+                <Text style={styles.plateInputTextSmall}>CELDAS DISPONIBLES</Text>
               </View>
             </View>
           </View>
           <View style={styles.plateInput}>
-            <View style={styles.cellContainer} >
+            <View style={styles.cellContainer}>
               <Image
                 style={styles.carImage}
                 resizeMode={"contain"}
                 source={require('../../../assets/images/homeBike.png')}
               />
               <View style={{ width: '70%' }}>
-                <Text style={styles.totalCellsText} >{`${hq.totalBikes}`} CELDAS</Text>
+                <Text style={styles.totalCellsText}>{`${hq.totalBikes}`} CELDAS</Text>
               </View>
             </View>
             <View style={styles.bikeCounter} >
@@ -375,33 +342,33 @@ const HomeIndex = (props) => {
             <Button
               transparent
               style={activeList === 0 ? styles.flatlistButtonSelected : styles.flatlistButton}
-              onPress={() => segmentClicked(0)}
+              onPress={handleReservationsButton}
               active={activeList === 0}
             >
               <Image
                 style={{ width: '20%' }}
                 resizeMode={"contain"}
                 source={require('../../../assets/images/parked.png')} />
-              <Text style={activeList === 0 ? styles.textListTitle : styles.textListTitleInact} >VEHÍCULOS PARQUEADOS</Text>
+              <Text style={activeList === 0 ? styles.textListTitle : styles.textListTitleInact}>VEHÍCULOS PARQUEADOS</Text>
             </Button>
             <Button
               transparent
               style={activeList === 1 ? styles.flatlistButtonSelected : styles.flatlistButton}
-              onPress={() => segmentClicked(1)}
+              onPress={handleRecips}
               active={activeList === 1}
             >
               <Image
                 style={{ width: '20%' }}
                 resizeMode={"contain"}
                 source={require('../../../assets/images/history.png')} />
-              <Text style={activeList === 1 ? styles.textListTitle : styles.textListTitleInact}  >HISTORIAL DE PAGOS</Text>
+              <Text style={activeList === 1 ? styles.textListTitle : styles.textListTitleInact}>HISTORIAL DE PAGOS</Text>
             </Button>
           </View>
           {renderList()}
         </View>
       </ImageBackground>
       <View style={styles.footerContainer}>
-        <FooterIndex navigation={navigation} />
+        <FooterIndex navigation={navigation}/>
       </View>
     </View>
   );

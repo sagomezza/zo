@@ -14,7 +14,6 @@ import instance from "./src/config/axios";
 import { READ_OFFICIAL } from "./src/config/api";
 import { READ_ADMIN, READ_CORPO, STORAGE_KEY } from "./src/config/api/index";
 import { setOfficial, setExpoToken } from "./src/redux/actions";
-// import * as Network from 'expo-network';
 import InternetConnectionAlert from "react-native-internet-connection-alert";
 import moment from 'moment';
 import * as Notifications from 'expo-notifications';
@@ -56,23 +55,12 @@ const App = () => {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
-  const [isConnected, setIsConnected] = useState(false);
   const [logoutSnackbar, setLogoutSnackbar] = useState(false)
   const [officialData, setOfficialData] = useState({});
   const officialScheduleStart = officialData.start !== undefined ? officialData.start : null;
   const MINUTE_MS = 60000;
 
   useEffect(() => {
-    // const checkInternetReachable = () => {
-    //   Network.getNetworkStateAsync().then(state => {
-    //     console.log('Connection TYPE:', state.type);
-    //     console.log('Is connected?:', state.isConnected);
-    //     console.log('Is internet reachable?:', state.isInternetReachable);
-    //     state.isConnected === false ? setIsConnected(false) : setIsConnected(true);
-    //   });
-    // };
-    // checkInternetReachable();
-
     const updateApp = async () => {
       try {
         const update = await Updates.checkForUpdateAsync();

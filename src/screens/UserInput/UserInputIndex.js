@@ -13,10 +13,8 @@ import {
 } from 'react-native';
 import { ImageBackground } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import CurrencyInput from 'react-native-currency-input';
 import styles from './UserInputStyles';
 import FooterIndex from '../../components/Footer/index';
-import { Table, Row, Rows } from 'react-native-table-component';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Header from '../../components/Header/HeaderIndex';
 import normalize from '../../config/services/normalizeFontSize';
@@ -25,30 +23,31 @@ import moment from 'moment';
 import Button from '../../components/Button';
 import CustomModal from '../../components/CustomModal';
 import numberWithPoints from '../../config/services/numberWithPoints';
-
 // api
-import { START_PARKING, FIND_USER_BY_PLATE, CREATE_USER, READ_HQ, GET_RECIPS_BY_PLATE, FIND_MENSUALITY_PLATE } from "../../config/api";
+import {
+  START_PARKING,
+  FIND_USER_BY_PLATE,
+  CREATE_USER, READ_HQ,
+  GET_RECIPS_BY_PLATE,
+  FIND_MENSUALITY_PLATE
+} from "../../config/api";
 import { TIMEOUT } from '../../config/constants/constants';
 import instance from "../../config/axios";
 import store from '../../config/store';
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
-
 import { createIdempotency } from '../../utils/idempotency'
-import { StyleProvider } from 'native-base';
-import { firestore } from '../../config/firebase';
 import * as Sentry from "@sentry/browser";
 
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const UserInput = (props) => {
   const { navigation, officialProps, hq, uid } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const officialEmail = officialProps.email;
   const [loadingStart, setLoadingStart] = useState(false);
-  // plates
   const [plateOne, setPlateOne] = useState('');
   const [plateTwo, setPlateTwo] = useState('');
   const refPlateOne = useRef(null);
@@ -359,13 +358,59 @@ const UserInput = (props) => {
     clearPlateTwo();
     store.dispatch(actions.setQr(plateOne + plateTwo));
     navigation.navigate('QRscanner');
-  }
+  };
 
   const plateHandler = () => {
     getRecipsByPlate();
     findUserByPlate();
     findMensualityPlate();
-  }
+  };
+
+  const handleOnChangePO = text => {
+    setPlateOne(text.trim());
+    if (refPlateTwo && text.length === 3) {
+      refPlateTwo.current.focus();
+    };
+  };
+
+  const handleOnChangePT = text => {
+    setPlateTwo(text.trim());
+    if (text.length === 3) {
+      if (plateOne.length === 3) Keyboard.dismiss()
+    };
+  };
+
+  const handleOnFocusPO = () => {
+    clearPlateOne();
+    clearPlateTwo();
+    restartSearch();
+  };
+
+  const handleOnFocusPT = () => {
+    clearPlateTwo();
+    restartSearch();
+  };
+
+  const handleOnChangeItem = item => {
+    if (item.value === 0) {
+      setShowPhoneInput(true)
+    } else {
+      setPhone(item.value)
+    }
+  };
+
+  const handleOnChangeNewPhone = text => {
+    setNewPhone(text);
+    if (text.length === 10) {
+      if (plateOne.length === 3 && plateTwo.length === 3)
+        Keyboard.dismiss()
+    }
+  };
+
+  const handleChangeTotalPay = text => setTotalPay(text);
+  const handleCheckBox = () => setPrepayDay(!prepayDay);
+  const handleModal3 = () => setModal3Visible(false);
+  const handleMaxCapMensuality = () => setMaxCapMensuality(false);
 
   let inputChange = (totalPay - prepayDayValue) <= 0 ? '' : '' + (totalPay - prepayDayValue)
 
@@ -376,7 +421,11 @@ const UserInput = (props) => {
         source={require('../../../assets/images/logoutStripes.png')}>
         <Header navigation={navigation} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={{ alignContent: 'center', alignItems: 'center', flexDirection: "column" }} >
+          <View style={{
+            alignContent: 'center',
+            alignItems: 'center',
+            flexDirection: "column"
+          }} >
             <View style={styles.plateContainer}>
               <TextInput
                 ref={refPlateOne}
@@ -386,14 +435,9 @@ const UserInput = (props) => {
                 textAlign='center'
                 maxLength={3}
                 autoCapitalize={"characters"}
-                onChangeText={(text) => {
-                  setPlateOne(text.trim());
-                  if (refPlateTwo && text.length === 3) {
-                    refPlateTwo.current.focus();
-                  };
-                }}
+                onChangeText={handleOnChangePO}
                 value={plateOne}
-                onFocus={() => { clearPlateOne(); clearPlateTwo(); restartSearch(); }}
+                onFocus={handleOnFocusPO}
               />
               <TextInput
                 ref={refPlateTwo}
@@ -404,19 +448,19 @@ const UserInput = (props) => {
                 maxLength={3}
                 autoCapitalize={"characters"}
                 keyboardType='default'
-                onFocus={() => { clearPlateTwo(); restartSearch(); }}
-                onChangeText={text => {
-                  setPlateTwo(text.trim());
-                  if (text.length === 3) {
-                    if (plateOne.length === 3) Keyboard.dismiss()
-                  };
-                }}
+                onFocus={handleOnFocusPT}
+                onChangeText={handleOnChangePT}
                 value={plateTwo}
                 onEndEditing={plateHandler}
               />
             </View>
             <View style={styles.textContainer}>
-              <Text style={{ fontFamily: 'Montserrat-Bold', color: '#FFFFFF', fontSize: width * 0.03, letterSpacing: 5 }}>
+              <Text style={{
+                fontFamily: 'Montserrat-Bold',
+                color: '#FFFFFF',
+                fontSize: width * 0.03,
+                letterSpacing: 5
+              }}>
                 INGRESE CELULAR
               </Text>
             </View>
@@ -438,13 +482,7 @@ const UserInput = (props) => {
                   arrowColor={'#00A9A0'}
                   arrowStyle={styles.dropdownArrow}
                   arrowSize={24}
-                  onChangeItem={item => {
-                    if (item.value === 0) {
-                      setShowPhoneInput(true)
-                    } else {
-                      setPhone(item.value)
-                    }
-                  }}
+                  onChangeItem={handleOnChangeItem}
                   dropDownContainerStyle={{ position: "relative", top: 0 }}
                 />
                 :
@@ -454,19 +492,13 @@ const UserInput = (props) => {
                   keyboardType='numeric'
                   textAlign='center'
                   maxLength={10}
-                  onChangeText={text => {
-                    setNewPhone(text);
-                    if (text.length === 10) {
-                      if (plateOne.length === 3 && plateTwo.length === 3)
-                        Keyboard.dismiss()
-                    }
-                  }}
+                  onChangeText={handleOnChangeNewPhone}
                   value={newPhone}
                 />}
               <View style={styles.checkPrepayContainer}>
                 <CheckBox
                   value={prepayDay}
-                  onValueChange={() => setPrepayDay(!prepayDay)}
+                  onValueChange={handleCheckBox}
                   style={{ alignSelf: 'center' }}
                   tintColors={{ true: '#FFF200', false: '#FFF200' }}
                 />
@@ -474,12 +506,13 @@ const UserInput = (props) => {
               </View>
               <View style={styles.startButtonContainer}>
                 {!loadingStart &&
-                  <Button onPress={() => { priceVehicleType(); }}
+                  <Button
+                    onPress={priceVehicleType}
                     title="INICIAR"
                     color='#FFF200'
                     style={[!existingUser || plateOne === "" || plateTwo === "" || (phone === null && newPhone === '') ? styles.buttonIDisabled : styles.buttonI]}
                     textStyle={styles.buttonText}
-                    disabled={!existingUser || plateOne === "" || plateTwo === "" || (phone === null && newPhone === '')  }
+                    disabled={!existingUser || plateOne === "" || plateTwo === "" || (phone === null && newPhone === '')}
                   />
                 }
                 {loadingStart && <ActivityIndicator size={"large"} color={'#FFF200'} />}
@@ -489,10 +522,13 @@ const UserInput = (props) => {
                     onPress={qrHandler}
                     disabled={(plateOne + plateTwo).length < 5}
                   >
-                    <Image style={styles.qrImage} resizeMode={"contain"} source={require('../../../assets/images/qr.png')} />
+                    <Image
+                      style={styles.qrImage}
+                      resizeMode={"contain"}
+                      source={require('../../../assets/images/qr.png')}
+                    />
                   </TouchableOpacity>
                 }
-
               </View>
               <View style={styles.containerTwo}>
                 <View style={{ height: "90%", width: '90%', marginTop: '9%' }}>
@@ -562,7 +598,6 @@ const UserInput = (props) => {
                                 </Text>
                               </View>
                               // </TouchableOpacity>
-
                             )
                           } else if (index % 2 !== 0) {
                             return (
@@ -582,15 +617,13 @@ const UserInput = (props) => {
                                 </Text>
                               </View>
                               // </TouchableOpacity>
-
                             )
                           }
                         }}
                       />
                     </View>
                     :
-                    <View >
-                    </View>
+                    <View/>
                   }
                 </View>
               </View>
@@ -629,9 +662,7 @@ const UserInput = (props) => {
                 {alreadyParked && <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold' }}> Este vehículo ya se encuentra parqueado. </Text>}
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                <Button onPress={() => {
-                  restart();
-                }}
+                <Button onPress={restart}
                   title="ENTENDIDO"
                   color="#00A9A0"
                   style={
@@ -657,12 +688,12 @@ const UserInput = (props) => {
         plateOne={plateOne}
         plateTwo={plateTwo}
         phone={newPhone ? newPhone : phone}
-        onClose={() => { restart(); }}
-        onChangeTotalPay={text => setTotalPay(text)}
+        onClose={restart}
+        onChangeTotalPay={handleChangeTotalPay}
         totalPay={totalPay}
         prepayDayValue={prepayDayValue}
         change={`$${numberWithPoints(inputChange)}`}
-        onStartPark={() => { startPark(); }}
+        onStartPark={startPark}
         activityStatus={loadingStart}
       />
       <Modal
@@ -679,7 +710,6 @@ const UserInput = (props) => {
               justifyContent: 'space-between',
               padding: '2%'
             }}>
-
               <View style={{ margin: '4%', justifyContent: 'center', height: ' 60%' }}>
                 <Image
                   style={{ width: '30%', alignSelf: 'center', marginBottom: '10%' }}
@@ -689,18 +719,13 @@ const UserInput = (props) => {
                 <Text style={styles.modalText}> Este usuario se encuentra en lista negra:  </Text>
                 <Text style={styles.modalText}>Deuda: {`$${numberWithPoints(blacklistValue)}`}</Text>
                 <Text style={styles.modalText}>Fecha: {moment(blacklistDate).format('L')} {moment(blacklistDate).format('LT')}</Text>
-
               </View>
               <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                <Button onPress={() => {
-                  setModal3Visible(false);
-                }}
+                <Button onPress={handleModal3}
                   title="ENTENDIDO"
                   color="#00A9A0"
                   activityIndicatorStatus={loadingStart}
-                  style={
-                    styles.modalButton
-                  }
+                  style={styles.modalButton}
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
@@ -731,9 +756,7 @@ const UserInput = (props) => {
                 <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Bold' }}> Algo malo pasó, inténtalo más tarde.  </Text>
               </View>
               <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end', flexDirection: 'column', alignContent: 'flex-end', alignItems: 'flex-end' }}>
-                <Button onPress={() => {
-                  restart();
-                }}
+                <Button onPress={restart}
                   title="ENTENDIDO"
                   color="#00A9A0"
                   style={{
@@ -772,9 +795,7 @@ const UserInput = (props) => {
                 <Text style={{ ...styles.modalText, fontFamily: 'Montserrat-Medium', color: '#8F8F8F' }}> ¿ Desea continuar ? </Text>
               </View>
               <View style={{ height: '20%', width: '100%', justifyContent: 'flex-start', flexDirection: 'column' }}>
-                <Button onPress={() => {
-                  setMaxCapMensuality(false);
-                }}
+                <Button onPress={handleMaxCapMensuality}
                   title="SI"
                   color="#00A9A0"
                   style={{
@@ -788,9 +809,7 @@ const UserInput = (props) => {
                     letterSpacing: 5,
                     fontSize: normalize(20)
                   }} />
-                <Button onPress={() => {
-                  restart();
-                }}
+                <Button onPress={restart}
                   title="NO"
                   color="transparent"
                   style={styles.modalButtonBack}
@@ -800,7 +819,6 @@ const UserInput = (props) => {
                     fontFamily: 'Montserrat-Medium',
                     letterSpacing: 5,
                     fontSize: normalize(20)
-
                   }} />
               </View>
             </View>

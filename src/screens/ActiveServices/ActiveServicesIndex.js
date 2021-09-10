@@ -4,8 +4,6 @@ import {
     Text,
     View,
     FlatList,
-    Image,
-    TouchableOpacity
 } from 'react-native';
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
@@ -13,9 +11,6 @@ import Header from '../../components/Header/HeaderIndex';
 import styles from '../ActiveServices/ActiveServicesStyles';
 import FooterIndex from '../../components/Footer';
 import moment from 'moment';
-import secondsToString from '../../config/services/secondsToString';
-import numberWithPoints from '../../config/services/numberWithPoints';
-
 
 const ActiveServices = (props) => {
     const { navigation, officialProps, reservations, recips } = props;
