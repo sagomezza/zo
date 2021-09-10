@@ -37,7 +37,6 @@ import * as Device from "expo-device";
 import CurrencyInput from 'react-native-currency-input';
 import normalize from '../../config/services/normalizeFontSize';
 
-
 const LogoutIndex = (props) => {
   const { navigation, officialProps, recips, uid } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
@@ -59,20 +58,19 @@ const LogoutIndex = (props) => {
   const [uidLogout, setUidLogout] = useState('');
   const uidDefini = uid.uid !== '' ? uid.uid : uidLogout;
 
-
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         setUidLogout(user.uid)
       } else {
       }
-    })
+    });
     const macAdd = () => {
       Network.getMacAddressAsync().then(state => {
         setMacAddress(state)
       }
       )
-    }
+    };
     const getShiftRecips = async () => {
       setLoadingShiftRecips(true);
       try {
@@ -92,7 +90,7 @@ const LogoutIndex = (props) => {
         // console.log(err?.response)
         setLoadingShiftRecips(false);
       }
-    }
+    };
     getShiftRecips();
     macAdd();
   }, []);
@@ -124,16 +122,14 @@ const LogoutIndex = (props) => {
       store.dispatch(actions.setReservations([]));
       store.dispatch(actions.setHq({}));
       store.dispatch(actions.setUid({}));
-
     } catch (err) {
       // console.log(err?.response)
       setLoading(false);
       setModalVisible(!modalVisible);
       setModal3Visible(true);
       Sentry.captureException(err)
-      // asociar a un evento de sentry, si pasa error intentar de nuevo descartar
     }
-  }
+  };
 
   const logoutFromFirebase = () => {
     firebase
@@ -151,7 +147,26 @@ const LogoutIndex = (props) => {
         setLoading(false);
         setLogoutError(true);
       });
-  }
+  };
+
+  const handleBaseInput = text => { text === null ? setInputBaseValue(0) : setInputBaseValue(text) };
+  const handleCashInput = text => { text === null ? setInputValue(0) : setInputValue(text) };
+  const handleEndShift = () => setModalVisible(true);
+  const handleEndShiftModal = () => setModalVisible(false);
+
+  const handleConfirmEndShift = () => {
+    setLoading(true);
+    markEndOfShift();
+  };
+
+   const handleErrorModal = () => {
+    setModal3Visible(false);
+  };
+
+  const handleLogout = () => {
+    setLoading(true);
+    logoutFromFirebase();
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -209,7 +224,7 @@ const LogoutIndex = (props) => {
                       textAlign='center'
                       style={styles.textInput}
                       value={inputBaseValue}
-                      onChangeValue={text => { text === null ? setInputBaseValue(0) : setInputBaseValue(text) }}
+                      onChangeValue={handleBaseInput}
                       prefix="$"
                       delimiter="."
                       separator="."
@@ -232,7 +247,7 @@ const LogoutIndex = (props) => {
                       keyboardType='numeric'
                       style={styles.textInput}
                       value={inputValue}
-                      onChangeValue={text => { text === null ? setInputValue(0) : setInputValue(text) }}
+                      onChangeValue={handleCashInput}
                       prefix="$"
                       delimiter="."
                       separator="."
@@ -280,7 +295,6 @@ const LogoutIndex = (props) => {
                               </View>
                             </View>
                           </TouchableOpacity>
-
                         )
                       }}
                     />
@@ -299,15 +313,17 @@ const LogoutIndex = (props) => {
               height: '15%',
               justifyContent: 'flex-end',
             }}>
-              <Button onPress={() => { setModalVisible(true); }}
-                title="C E R R A R  T U R N O"
+              <Button
+                onPress={handleEndShift}
+                title="CERRAR TURNO"
                 disabled={inputValue.length === 0 || inputBaseValue.length === 0}
                 style={[inputValue.length === 0 || inputBaseValue.length === 0 ? styles.shiftButtonDisabled : styles.shiftButton]}
                 textStyle={{
                   color: "#00A9A0",
                   fontSize: width * 0.025,
                   textAlign: "center",
-                  fontFamily: 'Montserrat-Medium'
+                  fontFamily: 'Montserrat-Medium',
+                  letterSpacing: 5
                 }} />
             </View>
 
@@ -359,10 +375,7 @@ const LogoutIndex = (props) => {
                   height: '50%',
                   alignItems: 'center'
                 }}>
-                  <Button onPress={() => {
-                    setLoading(true)
-                    markEndOfShift();
-                  }}
+                  <Button onPress={handleConfirmEndShift}
                     title="SI"
                     color="#00A9A0"
                     style={styles.modalYesButton}
@@ -383,10 +396,7 @@ const LogoutIndex = (props) => {
                   height: '50%',
                   alignItems: 'center'
                 }}>
-                  <Button onPress={() => {
-                    setModalVisible(!modalVisible);
-                    navigation.navigate('Logout');
-                  }}
+                  <Button onPress={handleEndShiftModal}
                     title="NO"
                     color="transparent"
                     style={styles.modalNoButton}
@@ -424,15 +434,10 @@ const LogoutIndex = (props) => {
               </View>
               <View style={{ height: '30%', width: '100%', justifyContent: 'center', flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
                 <View style={{ width: '78%', height: '50%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
-                  <Button onPress={() => {
-                    setModal3Visible(false);
-                    setIsDisabled(false)
-                  }}
+                  <Button onPress={handleErrorModal}
                     title="ENTENDIDO"
                     color="#00A9A0"
-                    style={
-                      styles.modalYesButton
-                    }
+                    style={styles.modalYesButton}
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
@@ -462,7 +467,7 @@ const LogoutIndex = (props) => {
             }}
             >
               {logoutError ?
-                <View style={{ margin: '2%', justifyContent: 'flex-end', height: '50%'}}>
+                <View style={{ margin: '2%', justifyContent: 'flex-end', height: '50%' }}>
                   <Image
                     style={{ width: '30%', alignSelf: 'center', marginBottom: '10%', marginTop: '10%' }}
                     resizeMode={"contain"}
@@ -509,10 +514,7 @@ const LogoutIndex = (props) => {
                   height: '60%',
                   alignItems: 'center'
                 }}>
-                  <Button onPress={() => {
-                    setLoading(true);
-                    logoutFromFirebase();
-                  }}
+                  <Button onPress={handleLogout}
                     title="CERRAR SESIÓN"
                     color="#00A9A0"
                     style={

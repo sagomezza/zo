@@ -135,17 +135,9 @@ const UserInput = (props) => {
     setPrepayDayRecip(false);
   }
 
-  const clearPlateOne = () => {
-    setPlateOne('');
-
-  }
-  const clearPlateTwo = () => {
-    setPlateTwo('');
-  }
-
-  const isCharacterALetter = (char) => {
-    return (/[a-zA-Z]/).test(char)
-  }
+  const clearPlateOne = () => setPlateOne('');
+  const clearPlateTwo = () => setPlateTwo('');
+  const isCharacterALetter = (char) => {return (/[a-zA-Z]/).test(char)}
 
   async function findUserByPlate() {
     try {
