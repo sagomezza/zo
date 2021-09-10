@@ -13,15 +13,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between'
     },
-    listContainer: {
-        height: '77%',
-        width: '73%',
-        backgroundColor: '#FFFFFF',
-        marginTop: '8%',
-        borderRadius: 10,
-        justifyContent: 'center',
-        borderWidth: 1
-    },
     textListTitle: {
         fontSize: width * 0.04,
         color: '#00A9A0',

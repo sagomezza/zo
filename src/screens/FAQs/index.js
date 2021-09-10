@@ -1,36 +1,28 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import { ImageBackground } from 'react-native';
 import {
     Text,
     View,
     FlatList,
-    ScrollView
 } from 'react-native';
-import Button from '../../components/Button';
 import {
     Collapse,
     CollapseHeader,
     CollapseBody,
-    AccordionList
 } from 'accordion-collapse-react-native';
-import { Video, AVPlaybackStatus } from 'expo-av';
+import { Video } from 'expo-av';
 import Header from '../../components/Header/HeaderIndex';
-import numberWithPoints from '../../config/services/numberWithPoints';
 import styles from './styles';
 import FooterIndex from '../../components/Footer';
-import moment from 'moment';
-import normalize from '../../config/services/normalizeFontSize';
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 // import { storage } from "../../config/firebase/index";
 
 const FAQs = (props) => {
-    const { navigation, officialProps, recips } = props;
-    const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
+    const { navigation  } = props;
     const videoRef = React.useRef(null);
     const [status, setStatus] = React.useState({});
-    const [videoUrl, setVideoUrl] = useState();
 
 
     const FAQs = [
@@ -90,7 +82,6 @@ const FAQs = (props) => {
                             borderRadius: 10
                         }}>
                             <FlatList
-                                // style={{ borderWidth: 2 }}
                                 data={FAQs}
                                 keyExtractor={(item, index) => String(index)}
                                 renderItem={({ item }) => {
@@ -143,8 +134,6 @@ const FAQs = (props) => {
                     </View>
                 </View>
             </ImageBackground>
-
-
         </View>
     )
 };

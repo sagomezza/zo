@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -49,7 +49,6 @@ const LogoutIndex = (props) => {
   const [total, setTotal] = useState(0);
   const [shiftRecips, setShiftRecips] = useState('');
   const [loadingShiftRecips, setLoadingShiftRecips] = useState(true);
-  const [isDisabled, setIsDisabled] = useState(true);
   const hq = props.hq;
   const [inputBaseValue, setInputBaseValue] = useState('');
   const [inputValue, setInputValue] = useState('');
@@ -159,7 +158,7 @@ const LogoutIndex = (props) => {
     markEndOfShift();
   };
 
-   const handleErrorModal = () => {
+  const handleErrorModal = () => {
     setModal3Visible(false);
   };
 
@@ -375,7 +374,8 @@ const LogoutIndex = (props) => {
                   height: '50%',
                   alignItems: 'center'
                 }}>
-                  <Button onPress={handleConfirmEndShift}
+                  <Button
+                    onPress={handleConfirmEndShift}
                     title="SI"
                     color="#00A9A0"
                     style={styles.modalYesButton}

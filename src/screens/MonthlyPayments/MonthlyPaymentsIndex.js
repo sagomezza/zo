@@ -38,8 +38,7 @@ import store from "../../config/store";
 import { createIdempotency } from "../../utils/idempotency";
 import * as Sentry from "@sentry/browser";
 
-
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 const MonthlyPayments = (props) => {
   const { navigation, officialProps, hq, uid } = props;
@@ -165,6 +164,7 @@ const MonthlyPayments = (props) => {
     setGenerateMenRecip(true);
     setMdlMenAlreadyExists(false);
   };
+
   const mensualityRenewedModal = () => {
     setModal2Visible(false);
     setLoading(true);
@@ -173,6 +173,7 @@ const MonthlyPayments = (props) => {
     setMonthPrice(0);
     setMonthPrice(0);
   };
+
   const mensualityEditedModal = () => {
     setLoading(false);
     setModalVisible(false);
@@ -349,7 +350,7 @@ const MonthlyPayments = (props) => {
       setLoading(false);
       setModal5Visible(true);
     }
-  }
+  };
 
   async function findMensualityPlate() {
     try {
@@ -398,7 +399,7 @@ const MonthlyPayments = (props) => {
       }
       setMensualityExists(false);
     }
-  }
+  };
 
   async function editMensuality() {
     setLoading(true);
@@ -422,7 +423,7 @@ const MonthlyPayments = (props) => {
       // console.log(err?.response);
       setLoading(false);
     }
-  }
+  };
 
   const editMenButton = () => {
     setModalVisible(true);
@@ -474,7 +475,7 @@ const MonthlyPayments = (props) => {
       // console.log(err?.response.data);
       setLoading(false);
     }
-  }
+  };
 
   const getRecips = async () => {
     try {
@@ -491,6 +492,29 @@ const MonthlyPayments = (props) => {
       Sentry.captureException(err);
       // console.log(err?.response);
       // console.log(err);
+    }
+  };
+
+  const handlePlateOne = (text) => {
+    setPlateOne(text);
+    if (refPlateTwo && text.length === 3) {
+      refPlateTwo.current.focus();
+    }
+  };
+
+  const handleFocusPlateOne = () => {
+    setPlateOne("");
+    setPlateTwo("");
+  };
+
+  const handleFocusPlateTwo = () => {
+    setPlateTwo("");
+  };
+
+  const handlePlateTwo = (text) => {
+    setPlateTwo(text);
+    if (text.length === 3) {
+      if (plateOne.length === 3) Keyboard.dismiss();
     }
   };
 
@@ -514,17 +538,9 @@ const MonthlyPayments = (props) => {
               textAlign="center"
               maxLength={3}
               autoCapitalize={"characters"}
-              onChangeText={(text) => {
-                setPlateOne(text);
-                if (refPlateTwo && text.length === 3) {
-                  refPlateTwo.current.focus();
-                }
-              }}
+              onChangeText={handlePlateOne}
               value={plateOne}
-              onFocus={() => {
-                setPlateOne("");
-                setPlateTwo("");
-              }}
+              onFocus={handleFocusPlateOne}
             />
             <TextInput
               ref={refPlateTwo}
@@ -535,15 +551,8 @@ const MonthlyPayments = (props) => {
               maxLength={3}
               autoCapitalize={"characters"}
               keyboardType="default"
-              onFocus={() => {
-                setPlateTwo("");
-              }}
-              onChangeText={(text) => {
-                setPlateTwo(text);
-                if (text.length === 3) {
-                  if (plateOne.length === 3) Keyboard.dismiss();
-                }
-              }}
+              onFocus={handleFocusPlateTwo}
+              onChangeText={handlePlateTwo}
               value={plateTwo}
             />
           </View>

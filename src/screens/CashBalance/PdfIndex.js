@@ -46,7 +46,7 @@ const txtGenerator = (props) => {
 
   const [dataToday, setDataToday] = useState([]);
   const [base, setBase] = useState(0);
-  const [totalReported, settoTalReported] = useState(0);
+  const [totalReported, setTotalReported] = useState(0);
   const [listBox, setListBox] = useState([]);
   const [shiftsOfBox, setShiftsOfBox] = useState(0);
   const shiftsOfBoxNum = shiftsOfBox !== undefined ? `$${numberWithPoints(shiftsOfBox)}` : "$ 0";
@@ -109,7 +109,6 @@ const txtGenerator = (props) => {
       border-color: gray;
     }`;
 
-
   const gotBoxTotal = () => {
     setLoadingBoxGenerator(false);
     setModalVisible(true);
@@ -163,14 +162,12 @@ const txtGenerator = (props) => {
             setReports(dailyReports);
             setShiftsOfBox(boxTotal);
             gotBoxTotal();
-
           }
           setLoadingBoxGenerator(false);
         } catch (err) {
           Sentry.captureException(err);
           // console.log(err)
         }
-
       })
       .catch(err => {
         Sentry.captureException(err);
@@ -278,7 +275,14 @@ const txtGenerator = (props) => {
       if (err.response) Sentry.Native.captureEvent(new Error(err.response))
       setLoading(false)
     }
-  }
+  };
+
+  const handleGenerateBox = () => getBoxTotal();
+  const handleBase = text => setBase(text); 
+  const handleTotalReported = text => setTotalReported(text);
+  const handleBack1 = () => setModalVisible(false);
+  const handleBack2 = () => setModal2Visible(false);
+  const handleOk3 = () => setModal3Visible(false); 
 
   return (
     <View style={{ flex: 1 }}>
@@ -349,7 +353,7 @@ const txtGenerator = (props) => {
           </View>
           <View style={{ height: '10%', width: '85%', alignSelf: 'center' }}>
             <Button
-              onPress={() => { getBoxTotal(); }}
+              onPress={handleGenerateBox}
               title="GENERAR CIERRE DE CAJA"
               color='transparent'
               style={{
@@ -391,7 +395,6 @@ const txtGenerator = (props) => {
                               <View style={{ width: '30%', marginRight: '2%', justifyContent: 'flex-end', alignItems: 'flex-end' }} >
                                 {item.status === 'active' ?
                                   <Button
-                                    // onPress={onShare}
                                     title="ABIERTO"
                                     color='transparent'
                                     style={{
@@ -408,7 +411,6 @@ const txtGenerator = (props) => {
                                   />
                                   :
                                   <Button
-                                    // onPress={onShare}
                                     title="CERRADO"
                                     color='#00A9A0'
                                     style={{
@@ -428,8 +430,6 @@ const txtGenerator = (props) => {
                               </View>
                             </View>
                           </TouchableOpacity>
-
-
                         )
                       }}
                     />
@@ -508,7 +508,7 @@ const txtGenerator = (props) => {
                     keyboardType='numeric'
                     style={styles.currencyInput}
                     value={base}
-                    onChangeValue={text => setBase(text)}
+                    onChangeValue={handleBase}
                     prefix="$"
                     delimiter="."
                     separator="."
@@ -523,7 +523,7 @@ const txtGenerator = (props) => {
                     keyboardType='numeric'
                     style={styles.currencyInput}
                     value={totalReported}
-                    onChangeValue={text => settoTalReported(text)}
+                    onChangeValue={handleTotalReported}
                     prefix="$"
                     delimiter="."
                     separator="."
@@ -533,7 +533,7 @@ const txtGenerator = (props) => {
               </View>
               <View style={{ height: '20%', width: '100%', justifyContent: 'space-between' }}>
                 <Button
-                  onPress={() => { createBoxReport() }}
+                  onPress={createBoxReport}
                   title="GUARDAR"
                   color="#00A9A0"
                   style={styles.modalButton}
@@ -547,9 +547,7 @@ const txtGenerator = (props) => {
                   activityIndicatorStatus={loadingBoxGenerator}
                 />
                 <Button
-                  onPress={() => {
-                    setModalVisible(false);
-                  }}
+                  onPress={handleBack1}
                   title="VOLVER"
                   color="transparent"
                   style={
@@ -607,8 +605,6 @@ const txtGenerator = (props) => {
                 <View style={{ margin: '0%', justifyContent: 'center', height: ' 10%' }}>
                 </View>
               }
-
-
               {boxStatus === "active" ?
                 <View style={{ height: '15%', width: '100%', justifyContent: 'center' }}>
                   <Button
@@ -628,9 +624,7 @@ const txtGenerator = (props) => {
                     activityIndicatorStatus={loadingBoxGenerator}
                   />
                   <Button
-                    onPress={() => {
-                      setModal2Visible(false);
-                    }}
+                    onPress={handleBack2}
                     title="VOLVER"
                     color="transparent"
                     style={
@@ -647,7 +641,7 @@ const txtGenerator = (props) => {
                 :
                 <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginTop: '5%' }}>
                   <Button
-                    onPress={() => { setModal2Visible(false); }}
+                    onPress={handleBack2}
                     title="VOLVER"
                     color="transparent"
                     style={styles.modalButtonBack}
@@ -669,7 +663,6 @@ const txtGenerator = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modal3Visible}
-
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -684,7 +677,7 @@ const txtGenerator = (props) => {
               </View>
               <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
                 <View style={{ height: '57%', width: '80%', justifyContent: 'flex-end', alignSelf: 'center' }}>
-                  <Button onPress={() => { setModal3Visible(false); }}
+                  <Button onPress={handleOk3}
                     title="ENTENDIDO"
                     color="#00A9A0"
                     style={styles.modalButton}
