@@ -109,7 +109,7 @@ const MonthlyPayments = (props) => {
   const userIdToEdit = mensualityInfo.userId !== undefined ? mensualityInfo.userId : "";
   let plates = [firstPlate, secondPlate, thirdPlate, fourthPlate, fifthPlate];
   let newPlates = plates.filter((plate) => plate != undefined && plate != "" && plate != "undefined");
-  let platesNewMen = [ firstPlateNewMen, secondPlateNewMen, thirdPlateNewMen, fourthPlateNewMen, fifthPlateNewMen,];
+  let platesNewMen = [firstPlateNewMen, secondPlateNewMen, thirdPlateNewMen, fourthPlateNewMen, fifthPlateNewMen,];
   let platesNewMensuality = platesNewMen.filter((plate) => plate != undefined && plate != "");
   let validityDateMen = moment(mensualityInfo.validity).tz("America/Bogota");
   let validityDateMenHours =
@@ -353,6 +353,7 @@ const MonthlyPayments = (props) => {
   };
 
   async function findMensualityPlate() {
+    setLoading(true);
     try {
       if (plateOne.length === 3 && plateTwo.length >= 2) {
         const response = await instance.post(
@@ -507,9 +508,7 @@ const MonthlyPayments = (props) => {
     setPlateTwo("");
   };
 
-  const handleFocusPlateTwo = () => {
-    setPlateTwo("");
-  };
+  const handleFocusPlateTwo = () => setPlateTwo("");
 
   const handlePlateTwo = (text) => {
     setPlateTwo(text);
@@ -517,6 +516,64 @@ const MonthlyPayments = (props) => {
       if (plateOne.length === 3) Keyboard.dismiss();
     }
   };
+
+  const handlePayRenew = () => setModal2Visible(true);
+  const handleCreate = () => setModal3Visible(true);
+  const handleChangeUserName = (text) => setUserName(text);
+  const handleFocusUserName = () => setUserName("");
+  const handleChangeUserEmail = (text) => setUserEmail(text);
+  const handleFocusUserEmail = () => setUserEmail("");
+  const handleChangeUserPhone = (text) => setUserPhone(text);
+  const handleFocusUserPhone = () => setUserPhone("");
+  const handleChangeFirstPlate = (text) => setFirstPlate(text);
+  const handleFocusFirstPlate = () => setFirstPlate("");
+  const handleChangeSecondPlate = (text) => setSecondPlate(text);
+  const handleFocusSecondPlate = () => setSecondPlate("");
+  const handleChangeThirdPlate = (text) => setThirdPlate(text);
+  const handleFocusThirdPlate = () => setThirdPlate("");
+  const handleChangeFourthPlate = (text) => setFourthPlate(text);
+  const handleFocusFourthPlate = () => setFourthPlate("");
+  const handleChangeFifthPlate = (text) => setFifthPlate(text);
+  const handleFocusFifthPlate = () => setFifthPlate("");
+
+  const handleEdit = () => {
+    editMensuality();
+    editUser(userIdToEdit);
+  };
+
+  const handleBackEdit = () => setModalVisible(!modalVisible);
+  const handleTotalPay = (text) => setTotalPay(text);
+  const handleBackModal2 = () => setModal2Visible(!modal2Visible);
+  const handleBackModal3 = () => setModal3Visible(false);
+
+  const handleOkModal2 = () => {
+    setModal2Visible(!modal2Visible);
+    setAlreadyRenewed(false);
+  };
+
+  const handleChangeCheckBox = () => {
+    if (pendingMensualityPay === false) {
+      setPendingMensualityPay(!pendingMensualityPay);
+      setGenerateMenRecip(!generateMenRecip);
+      setTotalPay(0);
+    } else {
+      setPendingMensualityPay(!pendingMensualityPay);
+      setGenerateMenRecip(!generateMenRecip);
+    }
+  };
+
+  const handleTotalPayMensuality = (text) => setTotalPay(text);
+  const handleChangeNewName = (text) => setNameNewMen(text);
+  const handleFocusNewName = () => setNameNewMen("");
+  const handleChangeLastNameNew = (text) => setLastNameNewMen(text);
+  const handleFocusLastNameNew = () => setLastNameNewMen("");
+  const handleChangeNewMenNid = (text) => setNewMenNid(text);
+  const handleChangePhoneNewMen = (text) => setPhoneNewMen(text);
+  const handleFocusPhoneNewMen = () => setPhoneNewMen("");
+  const handleChangeEmailNewMen = (text) => setEmailNewMen(text);
+  const handleFocusEmailNewMen = () => setEmailNewMen("");
+  const handleChangeFirstPlateNewMen = (text) => setFirstPlateNewMen(text);
+  const handleFocusFirstPlateNewMen = () => setFirstPlateNewMen("");
 
   let textinputMoney = totalPay === 0 ? "" : "" + totalPay;
   let inputChange = totalPay - monthPrice <= 0 ? "" : "" + (totalPay - monthPrice);
@@ -558,10 +615,7 @@ const MonthlyPayments = (props) => {
           </View>
           <View style={styles.buttonContainer}>
             <Button
-              onPress={() => {
-                setLoading(true);
-                findMensualityPlate();
-              }}
+              onPress={findMensualityPlate}
               title="BUSCAR"
               color="#FFF200"
               style={[
@@ -576,14 +630,11 @@ const MonthlyPayments = (props) => {
           </View>
           <View style={styles.buttonContainer}>
             <Button
-              onPress={() => {
-                clearPageInfo();
-              }}
+              onPress={clearPageInfo}
               title="LIMPIAR"
               color="transparent"
               style={styles.cleanButton}
               textStyle={styles.buttonTextClear}
-            // activityIndicatorStatus={loading}
             />
           </View>
         </View>
@@ -643,7 +694,7 @@ const MonthlyPayments = (props) => {
               </View>
               <View style={styles.mensualityInfoButtonsContainer}>
                 <Button
-                  onPress={() => setModal2Visible(true)}
+                  onPress={handlePayRenew}
                   title="PAGAR / RENOVAR"
                   color="transparent"
                   style={[
@@ -682,7 +733,7 @@ const MonthlyPayments = (props) => {
                 <Text style={styles.notFoundText}></Text>
               )}
               <Button
-                onPress={() => setModal3Visible(true)}
+                onPress={handleCreate}
                 title="CREAR"
                 color="transparent"
                 style={styles.buttonCreate}
@@ -691,7 +742,6 @@ const MonthlyPayments = (props) => {
               />
             </View>
           )}
-
         </View>
       </ImageBackground>
       <View style={styles.footer}>
@@ -755,10 +805,8 @@ const MonthlyPayments = (props) => {
                     placeholder=""
                     textAlign="center"
                     value={userName !== undefined + "" ? userName : ""}
-                    onChangeText={(text) => setUserName(text)}
-                    onFocus={() => {
-                      setUserName("");
-                    }}
+                    onChangeText={handleChangeUserName}
+                    onFocus={handleFocusUserName}
                   />
                 </View>
                 <View style={styles.createMensualityRowContainer}>
@@ -778,10 +826,8 @@ const MonthlyPayments = (props) => {
                     autoCapitalize={"none"}
                     textAlign="center"
                     value={userEmail !== undefined + "" ? userEmail : ""}
-                    onChangeText={(text) => setUserEmail(text)}
-                    onFocus={() => {
-                      setUserEmail("");
-                    }}
+                    onChangeText={handleChangeUserEmail}
+                    onFocus={handleFocusUserEmail}
                   />
                 </View>
                 <View style={styles.createMensualityRowContainer}>
@@ -801,10 +847,8 @@ const MonthlyPayments = (props) => {
                     maxLength={10}
                     textAlign="center"
                     value={userPhone !== undefined + "" ? userPhone : ""}
-                    onChangeText={(text) => setUserPhone(text)}
-                    onFocus={() => {
-                      setUserPhone("");
-                    }}
+                    onChangeText={handleChangeUserPhone}
+                    onFocus={handleFocusUserPhone}
                   />
                 </View>
                 <View style={styles.createMensualityRowContainer}>
@@ -824,10 +868,8 @@ const MonthlyPayments = (props) => {
                     maxLength={6}
                     textAlign="center"
                     value={firstPlate !== undefined + "" ? firstPlate : ""}
-                    onChangeText={(text) => setFirstPlate(text)}
-                    onFocus={() => {
-                      setFirstPlate("");
-                    }}
+                    onChangeText={handleChangeFirstPlate}
+                    onFocus={handleFocusFirstPlate}
                   />
                 </View>
                 <View style={styles.createMensualityRowContainer}>
@@ -846,12 +888,9 @@ const MonthlyPayments = (props) => {
                     placeholder=""
                     maxLength={6}
                     textAlign="center"
-                    // keyboardType={"numeric"}
                     value={secondPlate !== undefined + "" ? secondPlate : ""}
-                    onChangeText={(text) => setSecondPlate(text)}
-                    onFocus={() => {
-                      setSecondPlate("");
-                    }}
+                    onChangeText={handleChangeSecondPlate}
+                    onFocus={handleFocusSecondPlate}
                   />
                 </View>
                 <View style={styles.createMensualityRowContainer}>
@@ -862,7 +901,7 @@ const MonthlyPayments = (props) => {
                       fontFamily: "Montserrat-Bold",
                     }}
                   >
-                    Placa 3:{" "}
+                    Placa 3:
                   </Text>
                   <TextInput
                     style={styles.createMensualityRowInput}
@@ -870,12 +909,9 @@ const MonthlyPayments = (props) => {
                     placeholder=""
                     maxLength={6}
                     textAlign="center"
-                    // keyboardType={"numeric"}
                     value={thirdPlate !== undefined + "" ? thirdPlate : ""}
-                    onChangeText={(text) => setThirdPlate(text)}
-                    onFocus={() => {
-                      setThirdPlate("");
-                    }}
+                    onChangeText={handleChangeThirdPlate}
+                    onFocus={handleFocusThirdPlate}
                   />
                 </View>
                 <View style={styles.createMensualityRowContainer}>
@@ -894,12 +930,9 @@ const MonthlyPayments = (props) => {
                     placeholder=""
                     maxLength={6}
                     textAlign="center"
-                    // keyboardType={"numeric"}
                     value={fourthPlate !== undefined + "" ? fourthPlate : ""}
-                    onChangeText={(text) => setFourthPlate(text)}
-                    onFocus={() => {
-                      setFourthPlate("");
-                    }}
+                    onChangeText={handleChangeFourthPlate}
+                    onFocus={handleFocusFourthPlate}
                   />
                 </View>
                 <View style={styles.createMensualityRowContainer}>
@@ -918,12 +951,9 @@ const MonthlyPayments = (props) => {
                     placeholder=""
                     maxLength={6}
                     textAlign="center"
-                    // keyboardType={"numeric"}
                     value={fifthPlate !== undefined + "" ? fifthPlate : ""}
-                    onChangeText={(text) => setFifthPlate(text)}
-                    onFocus={() => {
-                      setFifthPlate("");
-                    }}
+                    onChangeText={handleChangeFifthPlate}
+                    onFocus={handleFocusFifthPlate}
                   />
                 </View>
               </View>
@@ -943,10 +973,7 @@ const MonthlyPayments = (props) => {
                   }}
                 >
                   <Button
-                    onPress={() => {
-                      editMensuality();
-                      editUser(userIdToEdit);
-                    }}
+                    onPress={handleEdit}
                     title="GUARDAR"
                     color="#00A9A0"
                     style={styles.modalButton}
@@ -955,7 +982,6 @@ const MonthlyPayments = (props) => {
                       textAlign: "center",
                       fontFamily: "Montserrat-Bold",
                       letterSpacing: 5
-
                     }}
                     activityIndicatorStatus={loading}
                   />
@@ -968,9 +994,7 @@ const MonthlyPayments = (props) => {
                   }}
                 >
                   <Button
-                    onPress={() => {
-                      setModalVisible(!modalVisible);
-                    }}
+                    onPress={handleBackEdit}
                     title="VOLVER"
                     color="transparent"
                     style={styles.modalButton}
@@ -1004,8 +1028,8 @@ const MonthlyPayments = (props) => {
                   padding: "2%",
                 }}
               >
-                <View style={{justifyContent: "center",height: "20%"}}>
-                  <Text style={{...styles.modalText,fontSize: width * 0.05,color: "#00A9A0"}}>
+                <View style={{ justifyContent: "center", height: "20%" }}>
+                  <Text style={{ ...styles.modalText, fontSize: width * 0.05, color: "#00A9A0" }}>
                     RECLAME {`$${numberWithPoints(monthPrice)}`}
                   </Text>
                 </View>
@@ -1038,15 +1062,11 @@ const MonthlyPayments = (props) => {
                       keyboardType="numeric"
                       style={styles.currencyInput}
                       value={totalPay}
-                      onChangeValue={(text) => setTotalPay(text)}
+                      onChangeValue={handleTotalPay}
                       prefix="$"
                       delimiter="."
                       separator="."
                       precision={0}
-                      onChangeText={(formattedValue) => {
-                        // console.log(formattedValue);
-                        // $2,310.46
-                      }}
                     />
                   </View>
                   <View
@@ -1089,9 +1109,7 @@ const MonthlyPayments = (props) => {
                     }}
                   >
                     <Button
-                      onPress={() => {
-                        renewMensuality();
-                      }}
+                      onPress={renewMensuality}
                       title="RENOVAR"
                       color="#00A9A0"
                       style={
@@ -1109,11 +1127,9 @@ const MonthlyPayments = (props) => {
                       activityIndicatorStatus={loading}
                     />
                   </View>
-                  <View style={{height: "54%", width: "100%",justifyContent: "flex-end"}}>
+                  <View style={{ height: "54%", width: "100%", justifyContent: "flex-end" }}>
                     <Button
-                      onPress={() => {
-                        setModal2Visible(!modal2Visible);
-                      }}
+                      onPress={handleBackModal2}
                       title="VOLVER"
                       color="transparent"
                       style={styles.modalButton}
@@ -1161,17 +1177,15 @@ const MonthlyPayments = (props) => {
                   }}
                 >
                   <Button
-                    onPress={() => {
-                      setModal2Visible(!modal2Visible);
-                      setAlreadyRenewed(false);
-                    }}
-                    title="E N T E N D I D O"
+                    onPress={handleOkModal2}
+                    title="ENTENDIDO"
                     color="gray"
                     style={styles.modalButton}
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
                       fontFamily: "Montserrat-Bold",
+                      letterSpacing: 5
                     }}
                   />
                 </View>
@@ -1214,16 +1228,7 @@ const MonthlyPayments = (props) => {
                 >
                   <CheckBox
                     value={pendingMensualityPay}
-                    onValueChange={() => {
-                      if (pendingMensualityPay === false) {
-                        setPendingMensualityPay(!pendingMensualityPay);
-                        setGenerateMenRecip(!generateMenRecip);
-                        setTotalPay(0);
-                      } else {
-                        setPendingMensualityPay(!pendingMensualityPay);
-                        setGenerateMenRecip(!generateMenRecip);
-                      }
-                    }}
+                    onValueChange={handleChangeCheckBox}
                     style={{ alignSelf: "center" }}
                     tintColors={{ true: "#00A9A0", false: "gray" }}
                   />
@@ -1269,7 +1274,7 @@ const MonthlyPayments = (props) => {
                       keyboardType="numeric"
                       style={styles.currencyInput}
                       value={totalPay}
-                      onChangeValue={(text) => setTotalPay(text)}
+                      onChangeValue={handleTotalPayMensuality}
                       prefix="$"
                       delimiter="."
                       separator="."
@@ -1277,7 +1282,7 @@ const MonthlyPayments = (props) => {
                       editable={pendingMensualityPay === false}
                     />
                   </View>
-                  <View style={{ flexDirection: "row", justifyContent: "space-between"}} >
+                  <View style={{ flexDirection: "row", justifyContent: "space-between" }} >
                     <Text
                       style={{
                         ...styles.modalText,
@@ -1298,9 +1303,9 @@ const MonthlyPayments = (props) => {
                     />
                   </View>
                 </View>
-                <View style={{height: "18%",width: "100%",justifyContent: "flex-end"}}>
+                <View style={{ height: "18%", width: "100%", justifyContent: "flex-end" }}>
                   <Button
-                    onPress={() => user()}
+                    onPress={user}
                     title="GUARDAR"
                     color="#00A9A0"
                     textStyle={{
@@ -1365,10 +1370,8 @@ const MonthlyPayments = (props) => {
                       placeholder=""
                       textAlign="left"
                       value={nameNewMen}
-                      onChangeText={(text) => setNameNewMen(text)}
-                      onFocus={() => {
-                        setNameNewMen("");
-                      }}
+                      onChangeText={handleChangeNewName}
+                      onFocus={handleFocusNewName}
                     />
                   </View>
                   <View style={styles.createMensualityRowContainer}>
@@ -1383,16 +1386,12 @@ const MonthlyPayments = (props) => {
                       placeholder=""
                       textAlign="left"
                       value={lastNameNewMen}
-                      onChangeText={(text) => setLastNameNewMen(text)}
-                      onFocus={() => {
-                        setLastNameNewMen("");
-                      }}
+                      onChangeText={handleChangeLastNameNew}
+                      onFocus={handleFocusLastNameNew}
                     />
                   </View>
                   <View style={styles.createMensualityRowContainer}>
-                    <Text
-                      style={{ ...styles.modalText, fontSize: normalize(20) }}
-                    >
+                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>
                       Cédula:
                     </Text>
                     <TextInput
@@ -1402,13 +1401,11 @@ const MonthlyPayments = (props) => {
                       textAlign="left"
                       autoCapitalize={"characters"}
                       value={newMenNid}
-                      onChangeText={(text) => setNewMenNid(text)}
+                      onChangeText={handleChangeNewMenNid}
                     />
                   </View>
                   <View style={styles.createMensualityRowContainer}>
-                    <Text
-                      style={{ ...styles.modalText, fontSize: normalize(20) }}
-                    >
+                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>
                       Celular:
                     </Text>
                     <TextInput
@@ -1418,17 +1415,12 @@ const MonthlyPayments = (props) => {
                       textAlign="left"
                       maxLength={10}
                       value={phoneNewMen}
-                      onChangeText={(text) => setPhoneNewMen(text)}
-                      onFocus={() => {
-                        setPhoneNewMen("");
-                      }}
+                      onChangeText={handleChangePhoneNewMen}
+                      onFocus={handleFocusPhoneNewMen}
                     />
                   </View>
-
                   <View style={styles.createMensualityRowContainer}>
-                    <Text
-                      style={{ ...styles.modalText, fontSize: normalize(20) }}
-                    >
+                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>
                       Correo:
                     </Text>
                     <TextInput
@@ -1438,16 +1430,12 @@ const MonthlyPayments = (props) => {
                       autoCapitalize={"none"}
                       textAlign="left"
                       value={emailNewMen}
-                      onChangeText={(text) => setEmailNewMen(text)}
-                      onFocus={() => {
-                        setEmailNewMen("");
-                      }}
+                      onChangeText={handleChangeEmailNewMen}
+                      onFocus={handleFocusEmailNewMen}
                     />
                   </View>
                   <View style={styles.createMensualityRowContainer}>
-                    <Text
-                      style={{ ...styles.modalText, fontSize: normalize(20) }}
-                    >
+                    <Text style={{ ...styles.modalText, fontSize: normalize(20) }}>
                       Placa:
                     </Text>
                     <TextInput
@@ -1459,10 +1447,8 @@ const MonthlyPayments = (props) => {
                       keyboardType={"default"}
                       autoCapitalize={"characters"}
                       value={firstPlateNewMen}
-                      onChangeText={(text) => setFirstPlateNewMen(text)}
-                      onFocus={() => {
-                        setFirstPlateNewMen("");
-                      }}
+                      onChangeText={handleChangeFirstPlateNewMen}
+                      onFocus={handleFocusFirstPlateNewMen}
                     />
                   </View>
                 </View>
@@ -1482,10 +1468,7 @@ const MonthlyPayments = (props) => {
                     }}
                   >
                     <Button
-                      onPress={() => {
-                        setLoading(true);
-                        findMensualityPlate();
-                      }}
+                      onPress={findMensualityPlate}
                       title="GUARDAR"
                       color="#00A9A0"
                       style={styles.modalButton}
@@ -1506,9 +1489,7 @@ const MonthlyPayments = (props) => {
                     }}
                   >
                     <Button
-                      onPress={() => {
-                        setModal3Visible(false);
-                      }}
+                      onPress={handleBackModal3}
                       title="VOLVER"
                       color="transparent"
                       style={styles.modalButton}
@@ -1570,9 +1551,7 @@ const MonthlyPayments = (props) => {
                   }}
                 >
                   <Button
-                    onPress={() => {
-                      mensualityCreatedModal();
-                    }}
+                    onPress={mensualityCreatedModal}
                     title="ENTENDIDO"
                     color="#00A9A0"
                     style={styles.modalButton}
@@ -1625,9 +1604,7 @@ const MonthlyPayments = (props) => {
                   }}
                 >
                   <Button
-                    onPress={() => {
-                      mensualityCreatedModal()
-                    }}
+                    onPress={mensualityCreatedModal}
                     title="ENTENDIDO"
                     color="#00A9A0"
                     style={styles.modalButton}
@@ -1684,9 +1661,7 @@ const MonthlyPayments = (props) => {
                   }}
                 >
                   <Button
-                    onPress={() => {
-                      mensualityCreatedModal();
-                    }}
+                    onPress={mensualityCreatedModal}
                     title="ENTENDIDO"
                     color="#00A9A0"
                     style={styles.modalButton}

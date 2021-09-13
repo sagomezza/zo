@@ -280,6 +280,17 @@ const UserInput = (props) => {
         } else {
           change = totalPay - prepayDayValue
         }
+        console.log({
+          plate: plateOne + plateTwo,
+          hqId: officialHq,
+          dateStart: new Date(),
+          phone: !showPhoneInput ? '+57' + phone : '+57' + newPhone,
+          prepayFullDay: prepayDay,
+          officialEmail: officialEmail,
+          type,
+          cash: Number(totalPay),
+          change: change
+        })
         const response = await instance.post(
           START_PARKING,
           {
@@ -325,8 +336,8 @@ const UserInput = (props) => {
       } else {
         setErrorModalVisible(true)
       }
-      // console.log(err)
-      // console.log(err?.response)
+      console.log(err)
+      console.log(err?.response)
     }
   };
 
