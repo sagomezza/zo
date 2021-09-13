@@ -14,14 +14,6 @@ import moment from 'moment';
 
 const ActiveServices = (props) => {
     const { navigation, officialProps, reservations, recips } = props;
-    const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-
-    const formatDateDays = (date) => {
-        return moment(date).format('L')
-    }
-    const formatDateHours = (date) => {
-        return moment(date).format('LT')
-    }
 
     return (
         <View style={{ flex: 1 }}>

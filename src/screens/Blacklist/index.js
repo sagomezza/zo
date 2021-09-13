@@ -171,8 +171,7 @@ const Blacklist = (props) => {
         setPlateOne(text);
         if (refPlateTwo && text.length === 3) {
             refPlateTwo.current.focus();
-        }
-        ;
+        };
     };
 
     const handleFocusPlateOne = () => { clearPlateOne(); clearPlateTwo(); }
@@ -186,6 +185,7 @@ const Blacklist = (props) => {
 
     const handleModal = () => setModalVisible(true);
     const handleChangeTotalPay = text => setTotalPay(text);
+    
     const handleBackModal = () => {
         setBlacklistExists(false);
         setModalVisible(false);

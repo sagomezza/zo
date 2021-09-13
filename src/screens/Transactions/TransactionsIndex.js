@@ -1,33 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ImageBackground } from 'react-native';
 import {
     Text,
     View,
     FlatList,
     Image,
-    TouchableOpacity
 } from 'react-native';
 import Header from '../../components/Header/HeaderIndex';
 import numberWithPoints from '../../config/services/numberWithPoints';
 import styles from '../Transactions/TransactionsStyles';
 import FooterIndex from '../../components/Footer';
 import moment from 'moment';
-import normalize from '../../config/services/normalizeFontSize';
 import secondsToString from '../../config/services/secondsToString';
-
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 
 const Transactions = (props) => {
-    const { navigation, officialProps, recips } = props;
-    const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-
-    const formatHours = (hours) => {
-        if (typeof hours === "number" || typeof hours === "double" || typeof hours === "long" || typeof hours === "float") {
-            return Math.round(hours)
-        } else return hours
-    }
+    const { navigation, recips } = props;
 
     const formatDateDays = (date) => {
         return moment(date).format('L')
@@ -67,12 +57,6 @@ const Transactions = (props) => {
                                     keyExtractor={(item, index) => String(index)}
                                     renderItem={({ item, index }) => {
                                         return (
-                                            // <TouchableOpacity
-                                            //   key={index.toString()}
-                                            //   onPress={() => {
-                                            //     setShowRecipModal(true);
-                                            //   }}
-                                            // >
                                             <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%' }} >
                                                 <Text style={styles.textPlaca}>
                                                     {typeof item.plate === 'string' ? item.plate : item.plate[0]}
@@ -115,8 +99,6 @@ const Transactions = (props) => {
                                                     {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
                                                 </Text>
                                             </View>
-                                            // </TouchableOpacity>
-
                                         )
                                     }}
                                 />
