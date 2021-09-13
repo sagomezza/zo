@@ -27,7 +27,6 @@ import * as actions from "../../redux/actions";
 import * as Sentry from "@sentry/browser";
 import moment from 'moment';
 
-
 const Blacklist = (props) => {
     const { navigation, officialProps, reservations, recips, hq } = props;
     const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
@@ -47,30 +46,27 @@ const Blacklist = (props) => {
     const [blackListExists, setBlacklistExists] = useState(false);
     let blacklistValue = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].value : 0;
 
-    const clearPlateOne = () => {
-        setPlateOne('');
-    }
-    const clearPlateTwo = () => {
-        setPlateTwo('');
-    }
+    const clearPlateOne = () => setPlateOne('');
+    const clearPlateTwo = () => setPlateTwo('');
 
     const debtPayedSuccess = () => {
         listHQDebtsCall();
         clearPlateOne();
         clearPlateTwo();
         setModalVisible(false);
-    }
+    };
 
     const userNotFoundModal = () => {
         clearPlateOne();
         clearPlateTwo();
         setModal2Visible(false);
-    }
+    };
+    
     const debtNotFoundModal = () => {
         clearPlateOne();
         clearPlateTwo();
         setModal3Visible(false);
-    }
+    };
 
 
     async function findUserByPlate() {
@@ -165,10 +161,38 @@ const Blacklist = (props) => {
 
     const formatDateDays = (date) => {
         return moment(date).format('L')
-    }
+    };
+    
     const formatDateHours = (date) => {
         return moment(date).format('LT')
-    }
+    };
+
+    const handleChangePlateOne = (text) => {
+        setPlateOne(text);
+        if (refPlateTwo && text.length === 3) {
+            refPlateTwo.current.focus();
+        }
+        ;
+    };
+
+    const handleFocusPlateOne = () => { clearPlateOne(); clearPlateTwo(); }
+
+    const handleChangePlateTwo = text => {
+        setPlateTwo(text);
+        if (text.length === 3) {
+            if (plateOne.length === 3) Keyboard.dismiss()
+        };
+    };
+
+    const handleModal = () => setModalVisible(true);
+    const handleChangeTotalPay = text => setTotalPay(text);
+    const handleBackModal = () => {
+        setBlacklistExists(false);
+        setModalVisible(false);
+        clearPlateOne();
+        clearPlateTwo();
+        setTotalPay(0);
+    };
 
     return (
         <View style={{ flex: 1 }}>
@@ -191,15 +215,9 @@ const Blacklist = (props) => {
                             textAlign='center'
                             maxLength={3}
                             autoCapitalize={"characters"}
-                            onChangeText={(text) => {
-                                setPlateOne(text);
-                                if (refPlateTwo && text.length === 3) {
-                                    refPlateTwo.current.focus();
-                                }
-                                ;
-                            }}
+                            onChangeText={handleChangePlateOne}
                             value={plateOne}
-                            onFocus={() => { clearPlateOne(); clearPlateTwo(); }}
+                            onFocus={handleFocusPlateOne}
                         />
                         <TextInput
                             ref={refPlateTwo}
@@ -210,23 +228,14 @@ const Blacklist = (props) => {
                             maxLength={3}
                             autoCapitalize={"characters"}
                             keyboardType='default'
-                            onFocus={() => { clearPlateTwo(); }}
-                            onChangeText={text => {
-                                setPlateTwo(text);
-                                if (text.length === 3) {
-                                    if (plateOne.length === 3) Keyboard.dismiss()
-                                };
-                            }}
+                            onFocus={clearPlateTwo}
+                            onChangeText={handleChangePlateTwo}
                             value={plateTwo}
-                            onEndEditing={() => {
-                                findUserByPlate();
-                            }}
+                            onEndEditing={findUserByPlate}
                         />
                     </View>
                     <View style={{ height: '42%', width: '57%', justifyContent: 'center', marginTop: '2%' }}>
-                        <Button onPress={() => {
-                            setModalVisible(true);
-                        }}
+                        <Button onPress={handleModal}
                             title="PAGAR"
                             color='#FFF200'
                             style={[plateOne === "" || plateTwo === "" ? styles.buttonIDisabled : styles.buttonI]}
@@ -313,21 +322,15 @@ const Blacklist = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modalVisible}
-                // visible={true}
-
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-
-                        {/* {blackListExists ? */}
                         {blackListExists ?
-
                             <View style={{
                                 height: '100%',
                                 width: '100%',
                                 justifyContent: 'space-between',
                                 padding: '2%'
-
                             }}>
                                 <View style={{ justifyContent: 'center', height: ' 20%'}}>
                                     <Text style={styles.modalTitleText}>
@@ -351,15 +354,11 @@ const Blacklist = (props) => {
                                             keyboardType='numeric'
                                             style={styles.currencyInput}
                                             value={totalPay}
-                                            onChangeValue={text => setTotalPay(text)}
+                                            onChangeValue={handleChangeTotalPay}
                                             prefix="$"
                                             delimiter="."
                                             separator="."
                                             precision={0}
-                                            onChangeText={(formattedValue) => {
-                                                // console.log(formattedValue);
-                                                // $2,310.46
-                                            }}
                                         />
                                     </View>
                                     <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
@@ -376,14 +375,10 @@ const Blacklist = (props) => {
 
                                 </View>
                                 <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginBottom: '3%'}}>
-                                    <Button onPress={() => {
-                                        payDebts();
-                                    }}
+                                    <Button onPress={payDebts}
                                         title="PAGAR"
                                         color="#00A9A0"
-                                        style={totalPay - blacklistValue < 0
-                                            ? styles.modalButtonDisabled : styles.modalButton
-                                        }
+                                        style={totalPay - blacklistValue < 0 ? styles.modalButtonDisabled : styles.modalButton}
                                         textStyle={{
                                             color: "#FFFFFF",
                                             textAlign: "center",
@@ -393,19 +388,10 @@ const Blacklist = (props) => {
                                         activityIndicatorStatus={loading}
                                         disabled={totalPay - blacklistValue < 0}
                                     />
-                                    <Button onPress={() => {
-                                        setBlacklistExists(false);
-                                        setModalVisible(false);
-                                        clearPlateOne();
-                                        clearPlateTwo();
-                                        setTotalPay(0);
-
-                                    }}
+                                    <Button onPress={handleBackModal}
                                         title="DEVOLVER"
                                         color="transparent"
-                                        style={
-                                            styles.modalButtonBack
-                                        }
+                                        style={styles.modalButtonBack}
                                         textStyle={{
                                             color: "#00A9A0",
                                             textAlign: "center",
@@ -424,33 +410,24 @@ const Blacklist = (props) => {
 
                             }}>
                                 <View>
-
                                 </View>
                                 <View style={{ margin: '4%', justifyContent: 'center', height: ' 40%' }}>
                                     <Text style={{...styles.textListTitle, textAlign: 'center'}}>LA DEUDA YA FUE RETIRADA</Text>
                                 </View>
                                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                                    <Button onPress={() => {
-                                        debtPayedSuccess();
-                                    }}
-                                        title="E N T E N D I D O"
+                                    <Button onPress={debtPayedSuccess}
+                                        title="ENTENDIDO"
                                         color="#00A9A0"
-                                        style={
-                                            styles.modalButton
-                                        }
+                                        style={styles.modalButton}
                                         textStyle={{
                                             color: "#FFFFFF",
                                             textAlign: "center",
-                                            fontFamily: 'Montserrat-Bold'
+                                            fontFamily: 'Montserrat-Bold',
+                                            letterSpacing: 5
                                         }} />
                                 </View>
                             </View>
-
-
-
-
                         }
-
                     </View>
                 </View>
             </Modal>
@@ -473,10 +450,8 @@ const Blacklist = (props) => {
                                 <Text style={styles.modalTextAlert}> Esta placa no se encuentra asociada a un usuario. </Text>
                             </View>
                             <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                                <Button onPress={() => {
-                                    userNotFoundModal();
-                                }}
-                                    title="E N T E N D I D O"
+                                <Button onPress={userNotFoundModal}
+                                    title="ENTENDIDO"
                                     color="#00A9A0"
                                     style={
                                         styles.modalButton
@@ -484,7 +459,8 @@ const Blacklist = (props) => {
                                     textStyle={{
                                         color: "#FFFFFF",
                                         textAlign: "center",
-                                        fontFamily: 'Montserrat-Bold'
+                                        fontFamily: 'Montserrat-Bold',
+                                        letterSpacing: 5
                                     }} />
                             </View>
                         </View>
@@ -504,24 +480,20 @@ const Blacklist = (props) => {
                             width: '100%',
                             justifyContent: 'space-between',
                             padding: '2%'
-
                         }}>
                             <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
                                 <Text style={styles.modalTextAlert}> No se encuentra deuda asociada a este usuario. </Text>
                             </View>
                             <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                                <Button onPress={() => {
-                                    debtNotFoundModal();
-                                }}
-                                    title="E N T E N D I D O"
+                                <Button onPress={debtNotFoundModal}
+                                    title="ENTENDIDO"
                                     color="#00A9A0"
-                                    style={
-                                        styles.modalButton
-                                    }
+                                    style={styles.modalButton}
                                     textStyle={{
                                         color: "#FFFFFF",
                                         textAlign: "center",
-                                        fontFamily: 'Montserrat-Bold'
+                                        fontFamily: 'Montserrat-Bold',
+                                        letterSpacing: 5
                                     }} />
                             </View>
                         </View>
