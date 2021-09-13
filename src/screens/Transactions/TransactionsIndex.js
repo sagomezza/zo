@@ -123,11 +123,7 @@ const Transactions = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-    officialProps: state.official,
-    reservations: state.reservations,
     recips: state.recips,
-    hq: state.hq,
-    expoToken: state.expoToken
 });
 
 export default connect(mapStateToProps, actions)(Transactions);

@@ -24,7 +24,6 @@ const FAQs = (props) => {
     const videoRef = React.useRef(null);
     const [status, setStatus] = React.useState({});
 
-
     const FAQs = [
         {
             title: '¿ Cómo inicio sesión ?',

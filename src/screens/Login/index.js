@@ -38,7 +38,7 @@ import * as Device from "expo-device";
 import * as Sentry from "@sentry/browser";
 
 const LoginIndex = (props) => {
-  const { navigation, officialProps } = props;
+  const { navigation } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

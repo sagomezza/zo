@@ -1685,10 +1685,7 @@ const MonthlyPayments = (props) => {
 
 const mapStateToProps = (state) => ({
   officialProps: state.official,
-  reservations: state.reservations,
-  recips: state.recips,
   hq: state.hq,
-  expoToken: state.expoToken,
   uid: state.uid,
 });
 

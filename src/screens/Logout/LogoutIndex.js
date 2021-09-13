@@ -38,7 +38,7 @@ import CurrencyInput from 'react-native-currency-input';
 import normalize from '../../config/services/normalizeFontSize';
 
 const LogoutIndex = (props) => {
-  const { navigation, officialProps, recips, uid } = props;
+  const { navigation, officialProps, uid } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const startTimeSchedule = officialProps.start ? officialProps.start : "";
   const startTime = startTimeSchedule._seconds ? startTimeSchedule._seconds : ''
@@ -542,9 +542,6 @@ const LogoutIndex = (props) => {
 
 const mapStateToProps = (state) => ({
   officialProps: state.official,
-  reservations: state.reservations,
-  recips: state.recips,
-  hq: state.hq,
   uid: state.uid
 });
 

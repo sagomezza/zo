@@ -248,7 +248,6 @@ const BarcodeScanner = (props) => {
 const mapStateToProps = (state) => ({
   qr: state.qr,
   officialProps: state.official,
-
 });
 
 export default connect(mapStateToProps, actions)(BarcodeScanner);

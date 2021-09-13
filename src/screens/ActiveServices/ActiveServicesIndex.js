@@ -13,7 +13,7 @@ import FooterIndex from '../../components/Footer';
 import moment from 'moment';
 
 const ActiveServices = (props) => {
-    const { navigation, officialProps, reservations, recips } = props;
+    const { navigation, reservations} = props;
 
     return (
         <View style={{ flex: 1 }}>
@@ -83,11 +83,7 @@ const ActiveServices = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-    officialProps: state.official,
     reservations: state.reservations,
-    recips: state.recips,
-    hq: state.hq,
-    expoToken: state.expoToken
 });
 
 export default connect(mapStateToProps, actions)(ActiveServices);

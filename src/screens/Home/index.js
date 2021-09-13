@@ -379,7 +379,6 @@ const mapStateToProps = (state) => ({
   reservations: state.reservations,
   recips: state.recips,
   hq: state.hq,
-  expoToken: state.expoToken
 });
 
 export default connect(mapStateToProps, actions)(HomeIndex);

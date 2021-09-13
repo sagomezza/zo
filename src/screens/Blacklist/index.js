@@ -28,7 +28,7 @@ import * as Sentry from "@sentry/browser";
 import moment from 'moment';
 
 const Blacklist = (props) => {
-    const { navigation, officialProps, reservations, recips, hq } = props;
+    const { navigation, officialProps} = props;
     const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
     const [plateOne, setPlateOne] = useState('');
     const [plateTwo, setPlateTwo] = useState('');
@@ -508,10 +508,6 @@ const Blacklist = (props) => {
 
 const mapStateToProps = (state) => ({
     officialProps: state.official,
-    reservations: state.reservations,
-    recips: state.recips,
-    hq: state.hq,
-    expoToken: state.expoToken
 });
 
 export default connect(mapStateToProps, actions)(Blacklist);
