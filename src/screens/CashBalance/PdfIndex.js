@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ImageBackground } from 'react-native';
 import {
   Text,
@@ -284,6 +284,83 @@ const txtGenerator = (props) => {
   const handleBack2 = () => setModal2Visible(false);
   const handleOk3 = () => setModal3Visible(false); 
 
+  const dataTodayKeyExtractor = useCallback((item, index) => String(index));
+
+  const renderDataTodayItem = useCallback(({ item }) => {
+    return (
+      <View style={{
+        flexDirection: "row",
+        marginBottom: '2%',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 7,
+      }} >
+        <View style={{ margin: '3%' }} >
+          <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
+        </View>
+        <View style={{ flex: 1, alignItems: 'flex-end', margin: '3%' }} >
+          <Text style={styles.textMoney}>
+            {item.cash === 0 && item.change === 0 ? '$0' : ''}
+            {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+            {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+          </Text>
+        </View>
+      </View>
+    )
+  });
+
+  const listBoxKeyExtractor = useCallback((item, index) => String(index));
+
+  const renderListBoxItem = useCallback(({ item, index }) => {
+    return (
+      <TouchableOpacity
+      key={index.toString()}
+      onPress={()=>{readBoxReport(item.id);}}>
+        <View style={{ flexDirection: "row", marginBottom: '2%', justifyContent: 'space-around' }} >
+          <View style={{ margin: '1%' }} >
+            <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')}     {moment(item.dateFinished).format('LT')}</Text>
+          </View>
+          <View style={{ height: '50%', width: '25%', borderBottomWidth: 0.5, borderColor: '#707070', marginLeft: '2%', marginRight: '3%' }}></View>
+          <View style={{ width: '30%', marginRight: '2%', justifyContent: 'flex-end', alignItems: 'flex-end' }} >
+            {item.status === 'active' ?
+              <Button
+                title="ABIERTO"
+                color='transparent'
+                style={{
+                  borderColor: "#00A9A0",
+                  borderWidth: 1,
+                  width: '90%'
+                }}
+                textStyle={{
+                  color: "#00A9A0",
+                  fontFamily: 'Montserrat-Medium',
+                  fontSize: width * 0.015
+                }}
+                disabled={true}
+              />
+              :
+              <Button
+                title="CERRADO"
+                color='#00A9A0'
+                style={{
+                  borderColor: "#707070",
+                  width: '100%',
+                  padding: '5%'
+                }}
+                textStyle={{
+                  color: "#FFFFFF",
+                  fontFamily: 'Montserrat-Medium',
+                  fontSize: width * 0.015,
+                  letterSpacing: 5
+                }}
+                disabled={true}
+              />
+            }
+          </View>
+        </View>
+      </TouchableOpacity>
+    )
+  });
+
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground
@@ -316,28 +393,8 @@ const txtGenerator = (props) => {
                   <FlatList
                     style={{ height: "37%" }}
                     data={dataToday}
-                    keyExtractor={(item, index) => String(index)}
-                    renderItem={({ item }) => {
-                      return (
-                        <View style={{
-                          flexDirection: "row",
-                          marginBottom: '2%',
-                          backgroundColor: '#FFFFFF',
-                          borderRadius: 7,
-                        }} >
-                          <View style={{ margin: '3%' }} >
-                            <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
-                          </View>
-                          <View style={{ flex: 1, alignItems: 'flex-end', margin: '3%' }} >
-                            <Text style={styles.textMoney}>
-                              {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                              {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                              {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
-                            </Text>
-                          </View>
-                        </View>
-                      )
-                    }}
+                    keyExtractor={dataTodayKeyExtractor}
+                    renderItem={renderDataTodayItem}
                   />
                   :
                   <View style={{ padding: '10%' }}>
@@ -381,68 +438,17 @@ const txtGenerator = (props) => {
                     <FlatList
                       style={{ height: "70%" }}
                       data={listBox}
-                      keyExtractor={(item, index) => String(index)}
-                      renderItem={({ item, index }) => {
-                        return (
-                          <TouchableOpacity
-                          key={index.toString()}
-                          onPress={()=>{readBoxReport(item.id);}}>
-                            <View style={{ flexDirection: "row", marginBottom: '2%', justifyContent: 'space-around' }} >
-                              <View style={{ margin: '1%' }} >
-                                <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')}     {moment(item.dateFinished).format('LT')}</Text>
-                              </View>
-                              <View style={{ height: '50%', width: '25%', borderBottomWidth: 0.5, borderColor: '#707070', marginLeft: '2%', marginRight: '3%' }}></View>
-                              <View style={{ width: '30%', marginRight: '2%', justifyContent: 'flex-end', alignItems: 'flex-end' }} >
-                                {item.status === 'active' ?
-                                  <Button
-                                    title="ABIERTO"
-                                    color='transparent'
-                                    style={{
-                                      borderColor: "#00A9A0",
-                                      borderWidth: 1,
-                                      width: '90%'
-                                    }}
-                                    textStyle={{
-                                      color: "#00A9A0",
-                                      fontFamily: 'Montserrat-Medium',
-                                      fontSize: width * 0.015
-                                    }}
-                                    disabled={true}
-                                  />
-                                  :
-                                  <Button
-                                    title="CERRADO"
-                                    color='#00A9A0'
-                                    style={{
-                                      borderColor: "#707070",
-                                      width: '100%',
-                                      padding: '5%'
-                                    }}
-                                    textStyle={{
-                                      color: "#FFFFFF",
-                                      fontFamily: 'Montserrat-Medium',
-                                      fontSize: width * 0.015,
-                                      letterSpacing: 5
-                                    }}
-                                    disabled={true}
-                                  />
-                                }
-                              </View>
-                            </View>
-                          </TouchableOpacity>
-                        )
-                      }}
+                      keyExtractor={listBoxKeyExtractor}
+                      renderItem={renderListBoxItem}
                     />
                     :
                     <View style={{ height: "70%" }}>
-
                       <View style={{ padding: '10%' }}>
                         <Text style={styles.textPago}>
                           No se encuentran registros en el historial
                         </Text>
                       </View>
                     </View>
-
                 }
               </View>
               :

@@ -26,6 +26,7 @@ import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import * as Sentry from "@sentry/browser";
 import moment from 'moment';
+import { useCallback } from 'react/cjs/react.development';
 
 const Blacklist = (props) => {
     const { navigation, officialProps} = props;
@@ -41,7 +42,6 @@ const Blacklist = (props) => {
     const [listHQDebts, setListHQDebts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [loadingListHQDebts, setLoadingListHQDebts] = useState(true);
-    const [findUserByPlateInfo, setFindUserByPlateInfo] = useState([]);
     const [blacklist, setBlacklist] = useState([]);
     const [blackListExists, setBlacklistExists] = useState(false);
     let blacklistValue = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].value : 0;
@@ -81,7 +81,6 @@ const Blacklist = (props) => {
                     { timeout: TIMEOUT }
                 )
                 if (response.data.blackList) {
-                    setFindUserByPlateInfo(response.data);
                     setBlacklist(response.data.blackList);
                     setBlacklistExists(true);
                 } else {
@@ -95,7 +94,7 @@ const Blacklist = (props) => {
             // console.log(err?.response)
             if (err?.response.data.response === -1) setModal2Visible(true);
         }
-    }
+    };
 
     useEffect(() => {
         listHQDebtsCall();
@@ -151,11 +150,6 @@ const Blacklist = (props) => {
         }
     }
 
-    const formatHours = (hours) => {
-        if (typeof hours === "number" || typeof hours === "double" || typeof hours === "long" || typeof hours === "float") {
-            return Math.round(hours)
-        } else return hours
-    }
 
     let inputChange = (totalPay - blacklistValue) <= 0 ? 0 : '' + (totalPay - blacklistValue)
 
@@ -193,6 +187,30 @@ const Blacklist = (props) => {
         clearPlateTwo();
         setTotalPay(0);
     };
+
+    const listHQDebtsKeyExtractor = useCallback(({ id }) => id);
+
+    const renderListHQDebtsKeyExtractorItem = useCallback(({ item }) => {
+        return (
+            <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%'}} >
+                <Text style={styles.textPlaca}>
+                    {item.plate !== undefined ? item.plate : ''}
+                </Text>
+                <Text style={styles.dateDaysText}>
+                    {item.date ? formatDateDays(item.date) : ''}
+                </Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'center', width: '20%', height: '100%'}}>
+                    <Text style={styles.dateDaysText}>
+                        {item.date ? formatDateHours(item.date) : ''}
+                    </Text>
+                    
+                </View>
+                <Text style={{...styles.textPlaca, textAlign: 'right', marginRight: '3%'}}>
+                    {item.value ? `$${numberWithPoints(item.value)}` : ''}
+                </Text>
+            </View>
+        )
+    });
 
     return (
         <View style={{ flex: 1 }}>
@@ -268,36 +286,9 @@ const Blacklist = (props) => {
                                     <FlatList
                                         style={{ height: "37%" }}
                                         data={listHQDebts}
-                                        keyExtractor={({ id }) => id}
-                                        renderItem={({ item }) => {
-                                            return (
-                                                // <TouchableOpacity
-                                                //   key={index.toString()}
-                                                //   onPress={() => {
-                                                //     setShowRecipModal(true);
-                                                //   }}
-                                                // >
-                                                <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%'}} >
-                                                    <Text style={styles.textPlaca}>
-                                                        {item.plate !== undefined ? item.plate : ''}
-                                                    </Text>
-                                                    <Text style={styles.dateDaysText}>
-                                                        {item.date ? formatDateDays(item.date) : ''}
-                                                    </Text>
-                                                    <View style={{ flexDirection: 'row', justifyContent: 'center', width: '20%', height: '100%'}}>
-                                                        <Text style={styles.dateDaysText}>
-                                                            {item.date ? formatDateHours(item.date) : ''}
-                                                        </Text>
-                                                        
-                                                    </View>
-                                                    <Text style={{...styles.textPlaca, textAlign: 'right', marginRight: '3%'}}>
-                                                        {item.value ? `$${numberWithPoints(item.value)}` : ''}
-                                                    </Text>
-                                                </View>
-                                                // </TouchableOpacity>
-
-                                            )
-                                        }}
+                                        keyExtractor={listHQDebtsKeyExtractor}
+                                        renderItem={renderListHQDebtsKeyExtractorItem}
+                                        maxToRenderPerBatch={6}
                                     />
                                     :
                                     <View style={{ marginLeft: '13%', padding: '10%' }}>
