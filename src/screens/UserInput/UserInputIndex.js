@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -406,6 +406,37 @@ const UserInput = (props) => {
 
   let inputChange = (totalPay - prepayDayValue) <= 0 ? '' : '' + (totalPay - prepayDayValue)
 
+  const renderTableDataItem = useCallback(({ item, index }) => {
+    if (index % 2 == 0) {
+      return (
+        <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '2%' }} >
+          <Text style={{ ...styles.infoText }}>{item.plate}</Text>
+          <Text style={{ ...styles.infoText }}>{moment(item.dateFinished).format('L')}</Text>
+          <Text style={{ ...styles.infoText }}>
+            {item.cash === 0 && item.change === 0 ? '$0' : ''}
+            {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+            {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+            {!item.cash && !item.change ? `$${numberWithPoints(item.total)}` : ''}
+          </Text>
+        </View>
+      )
+    } else if (index % 2 !== 0) {
+      return (
+        <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '2%', backgroundColor: 'transparent' }} >
+          <Text style={{ ...styles.infoText }}>{item.plate}</Text>
+          <Text style={{ ...styles.infoText }}>{moment(item.dateFinished).format('L')}</Text>
+          <Text style={{ ...styles.infoText }}>
+            {item.cash === 0 && item.change === 0 ? '$0' : ''}
+            {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+            {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+          </Text>
+        </View>
+      )
+    }
+  });
+
+  const tableDataKeyExtractor = (item, index) => String(index);
+
   return (
     <View style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
       <ImageBackground
@@ -568,50 +599,8 @@ const UserInput = (props) => {
                       <FlatList
                         style={{ height: "70%" }}
                         data={tableData}
-                        keyExtractor={(item, index) => String(index)}
-                        renderItem={({ item, index }) => {
-                          if (index % 2 == 0) {
-                            return (
-                              // <TouchableOpacity
-                              //   key={index.toString()}
-                              //   onPress={() => {
-                              //     setShowRecipModal(true);
-                              //   }}
-                              // >
-                              <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '2%' }} >
-                                <Text style={{ ...styles.infoText }}>{item.plate}</Text>
-                                <Text style={{ ...styles.infoText }}>{moment(item.dateFinished).format('L')}</Text>
-                                <Text style={{ ...styles.infoText }}>
-                                  {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                                  {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                                  {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
-                                  {!item.cash && !item.change ? `$${numberWithPoints(item.total)}` : ''}
-
-                                </Text>
-                              </View>
-                              // </TouchableOpacity>
-                            )
-                          } else if (index % 2 !== 0) {
-                            return (
-                              // <TouchableOpacity
-                              //   key={index.toString()}
-                              //   onPress={() => {
-                              //     setShowRecipModal(true);
-                              //   }}
-                              // >
-                              <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '2%', backgroundColor: 'transparent' }} >
-                                <Text style={{ ...styles.infoText }}>{item.plate}</Text>
-                                <Text style={{ ...styles.infoText }}>{moment(item.dateFinished).format('L')}</Text>
-                                <Text style={{ ...styles.infoText }}>
-                                  {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                                  {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                                  {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
-                                </Text>
-                              </View>
-                              // </TouchableOpacity>
-                            )
-                          }
-                        }}
+                        keyExtractor={tableDataKeyExtractor}
+                        renderItem={renderTableDataItem}
                       />
                     </View>
                     :
