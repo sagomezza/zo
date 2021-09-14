@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -136,6 +136,73 @@ const HomeIndex = (props) => {
     segmentClicked(1);
   };
 
+  const recipKeyExtractor = useCallback((item, index) => String(index));
+  const reservationKeyExtractor = useCallback((item, index) => String(index));
+
+  const renderRecipItem = useCallback(({ item, index }) => {
+    return (
+      <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%' }} >
+        <Text style={styles.textPlaca}>
+          {typeof item.plate === 'string' ? item.plate : item.plate[0]}
+        </Text>
+        <Text style={styles.dateDaysText}>
+          {item.prepayFullDay === true ? `${formatDateDays(item.dateFactured)}` : ""}
+          {item.mensuality === true ? `${formatDateDays(item.dateStart)}` : ""}
+          {item.isParanoic === true ? `${formatDateDays(item.dateFinished)}` : ""}
+          {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateDays(item.dateFinished)}` : ""}
+        </Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', width: '30%', height: '100%' }}>
+          <Text style={styles.dateDaysText}>
+            {item.prepayFullDay === true ? `${formatDateHours(item.dateFactured)}` : ""}
+            {item.mensuality === true ? `${formatDateHours(item.dateStart)}` : ""}
+            {item.isParanoic === true ? `${formatDateHours(item.dateStart)}` : ""}
+            {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateHours(item.dateStart)}` : ""}
+          </Text>
+          <Image
+            style={{ width: '20%' }}
+            resizeMode={"contain"}
+            source={require('../../../assets/images/arrow.png')} />
+          <Text style={styles.dateDaysText}>
+            {item.prepayFullDay === true ? `${formatDateHours(item.dateFinished)}` : ""}
+            {item.mensuality === true ? `${formatDateHours(item.dateFinished)}` : ""}
+            {item.isParanoic === true ? `${formatDateHours(item.dateFinished)}` : ""}
+            {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateHours(item.dateFinished)}` : ""}
+          </Text>
+        </View>
+        <Text style={styles.totalHours}>
+          {item.prepayFullDay === true ? " Pase día" : ""}
+          {item.mensuality === true ? " Mensualidad" : ""}
+          {item.isParanoic === true ? `${secondsToString((item.hours)*3600)} ` : ""}
+          {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${secondsToString((item.hours)*3600)} ` : ""}
+        </Text>
+        <Text style={styles.textPlaca}>
+          {item.cash === 0 && item.change === 0 ? '$0' : ''}
+          {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+          {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+        </Text>
+      </View>
+    )
+  });
+
+  const renderReservationItem = useCallback(({ item, index }) => {
+    return (
+      <View style={styles.list} >
+        <Text style={styles.textPlaca}>{item.plate}</Text>
+        <Text style={styles.dateDaysText}>{item.verificationCode}</Text>
+        <View style={{ flexDirection: 'column' }}>
+          <Text style={styles.dateDaysText}>{moment(item.dateStart).format('L')}</Text>
+          <Text style={styles.dateHourText}>{moment(item.dateStart).format('LT')}</Text>
+        </View>
+        <Text style={styles.dateDaysText}>
+          {item.prepayFullDay === true ? " Pase día" : ""}
+          {item.mensuality === true ? " Mensualidad" : ""}
+          {item.isParanoic === true ? " Por horas" : ""}
+          {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? " Por horas" : ""}
+        </Text>
+      </View>
+    )
+  });
+
   const renderList = () => {
     if (activeList === 1) {
       return (
@@ -159,57 +226,9 @@ const HomeIndex = (props) => {
                 <FlatList
                   style={{ height: "37%" }}
                   data={recips.recips}
-                  keyExtractor={(item, index) => String(index)}
-                  renderItem={({ item, index }) => {
-                    return (
-                      // <TouchableOpacity
-                      //   key={index.toString()}
-                      //   onPress={() => {
-                      //   }}
-                      // >
-                      <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%' }} >
-                        <Text style={styles.textPlaca}>
-                          {typeof item.plate === 'string' ? item.plate : item.plate[0]}
-                        </Text>
-                        <Text style={styles.dateDaysText}>
-                          {item.prepayFullDay === true ? `${formatDateDays(item.dateFactured)}` : ""}
-                          {item.mensuality === true ? `${formatDateDays(item.dateStart)}` : ""}
-                          {item.isParanoic === true ? `${formatDateDays(item.dateFinished)}` : ""}
-                          {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateDays(item.dateFinished)}` : ""}
-                        </Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'center', width: '30%', height: '100%' }}>
-                          <Text style={styles.dateDaysText}>
-                            {item.prepayFullDay === true ? `${formatDateHours(item.dateFactured)}` : ""}
-                            {item.mensuality === true ? `${formatDateHours(item.dateStart)}` : ""}
-                            {item.isParanoic === true ? `${formatDateHours(item.dateStart)}` : ""}
-                            {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateHours(item.dateStart)}` : ""}
-                          </Text>
-                          <Image
-                            style={{ width: '20%' }}
-                            resizeMode={"contain"}
-                            source={require('../../../assets/images/arrow.png')} />
-                          <Text style={styles.dateDaysText}>
-                            {item.prepayFullDay === true ? `${formatDateHours(item.dateFinished)}` : ""}
-                            {item.mensuality === true ? `${formatDateHours(item.dateFinished)}` : ""}
-                            {item.isParanoic === true ? `${formatDateHours(item.dateFinished)}` : ""}
-                            {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateHours(item.dateFinished)}` : ""}
-                          </Text>
-                        </View>
-                        <Text style={styles.totalHours}>
-                          {item.prepayFullDay === true ? " Pase día" : ""}
-                          {item.mensuality === true ? " Mensualidad" : ""}
-                          {item.isParanoic === true ? `${secondsToString((item.hours)*3600)} ` : ""}
-                          {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${secondsToString((item.hours)*3600)} ` : ""}
-                        </Text>
-                        <Text style={styles.textPlaca}>
-                          {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                          {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                          {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
-                        </Text>
-                      </View>
-                      // </TouchableOpacity>
-                    )
-                  }}
+                  keyExtractor={recipKeyExtractor}
+                  renderItem={renderRecipItem}
+                  maxToRenderPerBatch={5}
                 />
                 : <View style={{ marginLeft: '13%', padding: '10%' }}>
                   <Text style={styles.textPago}>
@@ -241,31 +260,9 @@ const HomeIndex = (props) => {
                 <FlatList
                   style={{ height: "37%" }}
                   data={reservations.reservations}
-                  keyExtractor={(item, index) => String(index)}
-                  renderItem={({ item, index }) => {
-                    return (
-                      // <TouchableOpacity
-                      //   key={index.toString()}
-                      //   onPress={() => {
-                      //   }}
-                      // >
-                      <View style={styles.list} >
-                        <Text style={styles.textPlaca}>{item.plate}</Text>
-                        <Text style={styles.dateDaysText}>{item.verificationCode}</Text>
-                        <View style={{ flexDirection: 'column' }}>
-                          <Text style={styles.dateDaysText}>{moment(item.dateStart).format('L')}</Text>
-                          <Text style={styles.dateHourText}>{moment(item.dateStart).format('LT')}</Text>
-                        </View>
-                        <Text style={styles.dateDaysText}>
-                          {item.prepayFullDay === true ? " Pase día" : ""}
-                          {item.mensuality === true ? " Mensualidad" : ""}
-                          {item.isParanoic === true ? " Por horas" : ""}
-                          {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? " Por horas" : ""}
-                        </Text>
-                      </View>
-                      // </TouchableOpacity>
-                    )
-                  }}
+                  keyExtractor={reservationKeyExtractor}
+                  renderItem={renderReservationItem}
+                  maxToRenderPerBatch={5}
                 />
                 :
                 <View style={{ marginLeft: '13%', padding: '10%' }}>
