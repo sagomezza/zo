@@ -1,9 +1,7 @@
-import React, { Component } from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import FooterStyles from './styles';
-import { Icon } from 'react-native-elements';
 import Button from '../Button/index'
-import normalize from '../../config/services/normalizeFontSize';
 
 const FooterIndex = ({ navigation }) => {
   return (
