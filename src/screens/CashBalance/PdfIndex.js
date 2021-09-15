@@ -30,20 +30,17 @@ import * as FileSystem from 'expo-file-system';
 import * as Sentry from "@sentry/browser";
 
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const txtGenerator = (props) => {
-  const { navigation, officialProps, recips} = props;
+  const { navigation, officialProps, recips } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const totalRecips = recips.recips !== undefined ? recips.recips : [];
-
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
-
   const [loadingBoxGenerator, setLoadingBoxGenerator] = useState(false);
   const [loadingReadBoxReport, setLoadingReadBoxReport] = useState(false);
-
   const [dataToday, setDataToday] = useState([]);
   const [base, setBase] = useState(0);
   const [totalReported, setTotalReported] = useState(0);
@@ -278,88 +275,85 @@ const txtGenerator = (props) => {
   };
 
   const handleGenerateBox = () => getBoxTotal();
-  const handleBase = text => setBase(text); 
+  const handleBase = text => setBase(text);
   const handleTotalReported = text => setTotalReported(text);
   const handleBack1 = () => setModalVisible(false);
   const handleBack2 = () => setModal2Visible(false);
-  const handleOk3 = () => setModal3Visible(false); 
+  const handleOk3 = () => setModal3Visible(false);
 
-  const dataTodayKeyExtractor = useCallback((item, index) => String(index));
+  const dataTodayKeyExtractor = useCallback((item, index) => String(index), [dataToday]);
 
-  const renderDataTodayItem = useCallback(({ item }) => {
-    return (
-      <View style={{
-        flexDirection: "row",
-        marginBottom: '2%',
-        backgroundColor: '#FFFFFF',
-        borderRadius: 7,
-      }} >
-        <View style={{ margin: '3%' }} >
-          <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
+  const renderDataTodayItem = useCallback(({ item }) =>
+    <View style={{
+      flexDirection: "row",
+      marginBottom: '2%',
+      backgroundColor: '#FFFFFF',
+      borderRadius: 7,
+    }} >
+      <View style={{ margin: '3%' }} >
+        <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
+      </View>
+      <View style={{ flex: 1, alignItems: 'flex-end', margin: '3%' }} >
+        <Text style={styles.textMoney}>
+          {item.cash === 0 && item.change === 0 ? '$0' : ''}
+          {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+          {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+        </Text>
+      </View>
+    </View>
+
+    , [dataToday]);
+
+  const listBoxKeyExtractor = useCallback((item, index) => String(index), [listBox]);
+
+  const renderListBoxItem = useCallback(({ item, index }) =>
+    <TouchableOpacity
+      key={index.toString()}
+      onPress={() => { readBoxReport(item.id); }}>
+      <View style={{ flexDirection: "row", marginBottom: '2%', justifyContent: 'space-around' }} >
+        <View style={{ margin: '1%' }} >
+          <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')}     {moment(item.dateFinished).format('LT')}</Text>
         </View>
-        <View style={{ flex: 1, alignItems: 'flex-end', margin: '3%' }} >
-          <Text style={styles.textMoney}>
-            {item.cash === 0 && item.change === 0 ? '$0' : ''}
-            {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-            {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
-          </Text>
+        <View style={{ height: '50%', width: '25%', borderBottomWidth: 0.5, borderColor: '#707070', marginLeft: '2%', marginRight: '3%' }}></View>
+        <View style={{ width: '30%', marginRight: '2%', justifyContent: 'flex-end', alignItems: 'flex-end' }} >
+          {item.status === 'active' ?
+            <Button
+              title="ABIERTO"
+              color='transparent'
+              style={{
+                borderColor: "#00A9A0",
+                borderWidth: 1,
+                width: '90%'
+              }}
+              textStyle={{
+                color: "#00A9A0",
+                fontFamily: 'Montserrat-Medium',
+                fontSize: width * 0.015
+              }}
+              disabled={true}
+            />
+            :
+            <Button
+              title="CERRADO"
+              color='#00A9A0'
+              style={{
+                borderColor: "#707070",
+                width: '100%',
+                padding: '5%'
+              }}
+              textStyle={{
+                color: "#FFFFFF",
+                fontFamily: 'Montserrat-Medium',
+                fontSize: width * 0.015,
+                letterSpacing: 5
+              }}
+              disabled={true}
+            />
+          }
         </View>
       </View>
-    )
-  });
-
-  const listBoxKeyExtractor = useCallback((item, index) => String(index));
-
-  const renderListBoxItem = useCallback(({ item, index }) => {
-    return (
-      <TouchableOpacity
-      key={index.toString()}
-      onPress={()=>{readBoxReport(item.id);}}>
-        <View style={{ flexDirection: "row", marginBottom: '2%', justifyContent: 'space-around' }} >
-          <View style={{ margin: '1%' }} >
-            <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')}     {moment(item.dateFinished).format('LT')}</Text>
-          </View>
-          <View style={{ height: '50%', width: '25%', borderBottomWidth: 0.5, borderColor: '#707070', marginLeft: '2%', marginRight: '3%' }}></View>
-          <View style={{ width: '30%', marginRight: '2%', justifyContent: 'flex-end', alignItems: 'flex-end' }} >
-            {item.status === 'active' ?
-              <Button
-                title="ABIERTO"
-                color='transparent'
-                style={{
-                  borderColor: "#00A9A0",
-                  borderWidth: 1,
-                  width: '90%'
-                }}
-                textStyle={{
-                  color: "#00A9A0",
-                  fontFamily: 'Montserrat-Medium',
-                  fontSize: width * 0.015
-                }}
-                disabled={true}
-              />
-              :
-              <Button
-                title="CERRADO"
-                color='#00A9A0'
-                style={{
-                  borderColor: "#707070",
-                  width: '100%',
-                  padding: '5%'
-                }}
-                textStyle={{
-                  color: "#FFFFFF",
-                  fontFamily: 'Montserrat-Medium',
-                  fontSize: width * 0.015,
-                  letterSpacing: 5
-                }}
-                disabled={true}
-              />
-            }
-          </View>
-        </View>
-      </TouchableOpacity>
-    )
-  });
+    </TouchableOpacity>
+    , [listBox]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -440,6 +434,7 @@ const txtGenerator = (props) => {
                       data={listBox}
                       keyExtractor={listBoxKeyExtractor}
                       renderItem={renderListBoxItem}
+                      maxToRenderPerBatch={5}
                     />
                     :
                     <View style={{ height: "70%" }}>

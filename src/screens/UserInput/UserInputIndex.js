@@ -406,7 +406,7 @@ const UserInput = (props) => {
 
   let inputChange = (totalPay - prepayDayValue) <= 0 ? '' : '' + (totalPay - prepayDayValue)
 
-  const renderTableDataItem = useCallback(({ item, index }) => {
+  const renderTableDataItem = ({ item, index }) => {
     if (index % 2 == 0) {
       return (
         <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '2%' }} >
@@ -433,7 +433,7 @@ const UserInput = (props) => {
         </View>
       )
     }
-  });
+  };
 
   const tableDataKeyExtractor = (item, index) => String(index);
 

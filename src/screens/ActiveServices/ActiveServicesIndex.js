@@ -15,11 +15,9 @@ import moment from 'moment';
 const ActiveServices = (props) => {
     const { navigation, reservations} = props;
 
-    const reservationKeyExtractor = useCallback((item, index) => String(index));
+    const reservationKeyExtractor = useCallback((item, index) => String(index), [reservations.reservations]);
 
-    const renderReservationItem = useCallback(({ item, index }) => {
-        return (
-
+    const renderReservationItem = useCallback(({ item, index }) => 
             <View style={styles.list} >
                 <Text style={styles.textPlaca}>{item.plate}</Text>
                 <Text style={styles.dateDaysText}>{item.verificationCode}</Text>
@@ -34,8 +32,7 @@ const ActiveServices = (props) => {
                     {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? " Por horas" : ""}
                 </Text>
             </View>
-        )
-    });
+    ,[reservations.reservations]);
 
     return (
         <View style={{ flex: 1 }}>

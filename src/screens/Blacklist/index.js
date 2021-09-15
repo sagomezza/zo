@@ -29,7 +29,7 @@ import moment from 'moment';
 import { useCallback } from 'react/cjs/react.development';
 
 const Blacklist = (props) => {
-    const { navigation, officialProps} = props;
+    const { navigation, officialProps } = props;
     const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
     const [plateOne, setPlateOne] = useState('');
     const [plateTwo, setPlateTwo] = useState('');
@@ -61,7 +61,7 @@ const Blacklist = (props) => {
         clearPlateTwo();
         setModal2Visible(false);
     };
-    
+
     const debtNotFoundModal = () => {
         clearPlateOne();
         clearPlateTwo();
@@ -156,7 +156,7 @@ const Blacklist = (props) => {
     const formatDateDays = (date) => {
         return moment(date).format('L')
     };
-    
+
     const formatDateHours = (date) => {
         return moment(date).format('LT')
     };
@@ -179,7 +179,7 @@ const Blacklist = (props) => {
 
     const handleModal = () => setModalVisible(true);
     const handleChangeTotalPay = text => setTotalPay(text);
-    
+
     const handleBackModal = () => {
         setBlacklistExists(false);
         setModalVisible(false);
@@ -188,29 +188,27 @@ const Blacklist = (props) => {
         setTotalPay(0);
     };
 
-    const listHQDebtsKeyExtractor = useCallback(({ id }) => id);
+    const listHQDebtsKeyExtractor = useCallback(({ id }) => id, [listHQDebts]);
 
-    const renderListHQDebtsKeyExtractorItem = useCallback(({ item }) => {
-        return (
-            <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%'}} >
-                <Text style={styles.textPlaca}>
-                    {item.plate !== undefined ? item.plate : ''}
-                </Text>
+    const renderListHQDebtsKeyExtractorItem = useCallback(({ item }) =>
+        <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%' }} >
+            <Text style={styles.textPlaca}>
+                {item.plate !== undefined ? item.plate : ''}
+            </Text>
+            <Text style={styles.dateDaysText}>
+                {item.date ? formatDateDays(item.date) : ''}
+            </Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', width: '20%', height: '100%' }}>
                 <Text style={styles.dateDaysText}>
-                    {item.date ? formatDateDays(item.date) : ''}
+                    {item.date ? formatDateHours(item.date) : ''}
                 </Text>
-                <View style={{ flexDirection: 'row', justifyContent: 'center', width: '20%', height: '100%'}}>
-                    <Text style={styles.dateDaysText}>
-                        {item.date ? formatDateHours(item.date) : ''}
-                    </Text>
-                    
-                </View>
-                <Text style={{...styles.textPlaca, textAlign: 'right', marginRight: '3%'}}>
-                    {item.value ? `$${numberWithPoints(item.value)}` : ''}
-                </Text>
+
             </View>
-        )
-    });
+            <Text style={{ ...styles.textPlaca, textAlign: 'right', marginRight: '3%' }}>
+                {item.value ? `$${numberWithPoints(item.value)}` : ''}
+            </Text>
+        </View>
+        , [listHQDebts]);
 
     return (
         <View style={{ flex: 1 }}>
@@ -264,7 +262,7 @@ const Blacklist = (props) => {
                     </View>
                 </View>
                 <View style={styles.container}>
-                    <View style={{ height: '90%', width: '90%', borderRadius: 10}}>
+                    <View style={{ height: '90%', width: '90%', borderRadius: 10 }}>
                         <View style={{ marginBottom: '5%', marginTop: '5%', justifyContent: 'center', alignItems: 'center' }}>
                             <Text style={styles.textListTitle} >LISTA NEGRA</Text>
                         </View>
@@ -276,7 +274,7 @@ const Blacklist = (props) => {
                             </View>
                             :
                             <View style={{ height: "95%" }}>
-                                <View style={{ width: '100%', height: '5%', flexDirection: 'row', alignSelf: 'center', marginTop: '3%'}}>
+                                <View style={{ width: '100%', height: '5%', flexDirection: 'row', alignSelf: 'center', marginTop: '3%' }}>
                                     <Text style={{ ...styles.titleText, marginLeft: '5%' }}>Placa</Text>
                                     <Text style={{ ...styles.titleText, marginLeft: '16%' }}>Fecha</Text>
                                     <Text style={{ ...styles.titleText, marginLeft: '18%' }}>Hora</Text>
@@ -323,7 +321,7 @@ const Blacklist = (props) => {
                                 justifyContent: 'space-between',
                                 padding: '2%'
                             }}>
-                                <View style={{ justifyContent: 'center', height: ' 20%'}}>
+                                <View style={{ justifyContent: 'center', height: ' 20%' }}>
                                     <Text style={styles.modalTitleText}>
                                         COBRAR DEUDA
                                     </Text>
@@ -365,7 +363,7 @@ const Blacklist = (props) => {
                                     </View>
 
                                 </View>
-                                <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginBottom: '3%'}}>
+                                <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginBottom: '3%' }}>
                                     <Button onPress={payDebts}
                                         title="PAGAR"
                                         color="#00A9A0"
@@ -403,7 +401,7 @@ const Blacklist = (props) => {
                                 <View>
                                 </View>
                                 <View style={{ margin: '4%', justifyContent: 'center', height: ' 40%' }}>
-                                    <Text style={{...styles.textListTitle, textAlign: 'center'}}>LA DEUDA YA FUE RETIRADA</Text>
+                                    <Text style={{ ...styles.textListTitle, textAlign: 'center' }}>LA DEUDA YA FUE RETIRADA</Text>
                                 </View>
                                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                                     <Button onPress={debtPayedSuccess}

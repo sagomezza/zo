@@ -26,10 +26,9 @@ const Transactions = (props) => {
         return moment(date).format('LT')
     }
 
-    const recipKeyExtractor = useCallback((item, index) => String(index));
+    const recipKeyExtractor = useCallback((item, index) => String(index),[recips.recips]);
 
-    const renderRecipItem = useCallback(({ item, index }) => {
-        return (
+    const renderRecipItem = useCallback(({ item, index }) => 
             <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%' }} >
                 <Text style={styles.textPlaca}>
                     {typeof item.plate === 'string' ? item.plate : item.plate[0]}
@@ -72,8 +71,7 @@ const Transactions = (props) => {
                     {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
                 </Text>
             </View>
-        )
-    });
+    ,[recips.recips]);
 
     return (
         <View style={{ flex: 1 }}>
@@ -104,6 +102,7 @@ const Transactions = (props) => {
                                 data={recips.recips}
                                 keyExtractor={recipKeyExtractor}
                                 renderItem={renderRecipItem}
+                                maxToRenderPerBatch={7}
                             />
                             :
                             <View style={{ marginLeft: '13%', padding: '10%' }}>
