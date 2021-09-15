@@ -11,7 +11,7 @@ import RootStack from "./src/navigators/RootStack"
 import * as Font from 'expo-font';
 import { AppLoading } from "expo";
 import instance from "./src/config/axios";
-import { READ_OFFICIAL } from "./src/config/api";
+import { READ_OFFICIAL, READ_HQ } from "./src/config/api";
 import { READ_ADMIN, READ_CORPO, STORAGE_KEY } from "./src/config/api/index";
 import { setOfficial, setExpoToken } from "./src/redux/actions";
 import InternetConnectionAlert from "react-native-internet-connection-alert";
@@ -22,6 +22,8 @@ import * as Permissions from "expo-permissions";
 import * as Sentry from "@sentry/browser";
 import { LogBox } from 'react-native';
 import * as Updates from 'expo-updates';
+import * as actions from './src/redux/actions';
+
 
 LogBox.ignoreLogs([
   'Animated: `useNativeDriver` was not specified.',
@@ -102,6 +104,34 @@ const App = () => {
     debug: false, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
   });
 
+  const readHq = async(hqId) => {
+    try {
+      const response = await instance.post(READ_HQ, {
+        id: hqId
+      });
+      store.dispatch(actions.setReservations(response.data.data.reservations));
+      store.dispatch(actions.setHq(response.data.data));
+    } catch (err) {
+      // Sentry.captureException(err);
+      console.log("errD: ", err);
+      console.log(err?.response)
+    }
+  }
+
+  const getRecips = async (hqId, userEmail) => {
+    try {
+      const response = await instance.post(GET_RECIPS, {
+        hqId: hqId,
+        officialEmail: userEmail
+      },
+        { timeout: TIMEOUT }
+      );
+      store.dispatch(actions.setRecips(response.data.data));
+    } catch (err) {
+      // console.log(err?.response)
+    }
+  };
+
   const readUser = async (userEmail) => {
     if (userEmail) {
       try {
@@ -110,17 +140,27 @@ const App = () => {
         });
         store.dispatch(setOfficial(response.data.data));
         setOfficialData(response.data.data)
+        console.log(response.data.data.hq[0])
+        if (response.data.data.hq) {
+          let hqId = response.data.data.hq[0]
+          readHq(hqId);
+          getRecips(hqId,userEmail);
+        }
       } catch (err) {
         Sentry.captureException(err)
         try {
-          let readOff = await instance.post(
-            READ_ADMIN,
-            { email: userEmail })
+          let readOff = await instance.post(READ_ADMIN,{ 
+            email: userEmail 
+          });
           let data = readOff.data.data
-          readOff = await instance.post(
-            READ_CORPO,
-            { name: data.context }
-          )
+          if (data.hq) {
+            let hqId = data.hq
+            readHq(hqId);
+            getRecips(hqId,userEmail);
+          }
+          readOff = await instance.post(READ_CORPO,{ 
+            name: data.context 
+          });
           data.hq = readOff.data.data.hqs
           store.dispatch(setOfficial(data));
           setOfficialData(data)

@@ -389,6 +389,7 @@ const txtGenerator = (props) => {
                     data={dataToday}
                     keyExtractor={dataTodayKeyExtractor}
                     renderItem={renderDataTodayItem}
+                    maxToRenderPerBatch={4}
                   />
                   :
                   <View style={{ padding: '10%' }}>

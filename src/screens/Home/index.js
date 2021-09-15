@@ -28,8 +28,8 @@ import secondsToString from '../../config/services/secondsToString';
 const HomeIndex = (props) => {
   const { navigation, officialProps, reservations, recips, hq } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  const [loadingRecips, setLoadingRecips] = useState(true);
-  const [loadingReservations, setLoadingReservations] = useState(true);
+  const [loadingRecips, setLoadingRecips] = useState(false);
+  const [loadingReservations, setLoadingReservations] = useState(false);
   const [activeList, setActiveList] = useState(0);
 
   useEffect(() => {
@@ -48,23 +48,6 @@ const HomeIndex = (props) => {
         // console.log(err?.response)
       }
     }
-
-    const getRecips = async () => {
-      setLoadingRecips(true);
-      try {
-        const response = await instance.post(GET_RECIPS, {
-          hqId: officialHq,
-          officialEmail: officialProps.email
-        },
-          { timeout: TIMEOUT }
-        );
-        store.dispatch(actions.setRecips(response.data.data));
-        setLoadingRecips(false);
-      } catch (err) {
-        setLoadingRecips(false);
-        // console.log(err?.response)
-      }
-    };
 
     const updateExpoToken = async () => {
       try {
@@ -89,31 +72,8 @@ const HomeIndex = (props) => {
       }
     }
 
-    const readHq = async () => {
-      setLoadingReservations(true);
-      try {
-        const response = await instance.post(READ_HQ, {
-          id: officialHq
-        },
-          { timeout: TIMEOUT }
-        );
-        store.dispatch(actions.setReservations(response.data.data.reservations));
-        store.dispatch(actions.setHq(response.data.data));
-        setLoadingReservations(false);
-      } catch (err) {
-        Sentry.captureException(err);
-        setLoadingReservations(false);
-        // console.log("err: ", err);
-        // console.log(err?.response)
-      }
-    };
-
-    // getRecips();
-    readHq();
     updateExpoToken();
     offData();
-    getRecips();
-    // parked(officialHq);
   }, []);
 
   const formatDateDays = (date) => {

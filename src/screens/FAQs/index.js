@@ -59,6 +59,37 @@ const FAQs = (props) => {
         }
     ]
 
+    const FAQsKeyExtractor = (item, index) => String(index);
+
+    const renderFAQItem = ({ item }) => 
+            <Collapse style={styles.collapseContainer}>
+                <CollapseHeader >
+                    <View>
+                        <Text style={styles.title}>
+                            {item.title}
+                        </Text>
+                    </View>
+                </CollapseHeader>
+                <CollapseBody style={{ justifyContent: 'center' }}>
+                    <View style={{flex: 1, justifyContent: 'center'}}>
+                        <Video
+                            ref={videoRef}
+                            style={{
+                                alignSelf: 'center',
+                                width: 350,
+                                height: 300,
+                            }}
+                            source={item.dir}
+                            useNativeControls
+                            resizeMode="contain"
+                            isLooping
+                            onPlaybackStatusUpdate={status => setStatus(() => status)}
+                        />
+                    </View>
+                </CollapseBody>
+            </Collapse>
+    ;
+
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground
@@ -73,7 +104,6 @@ const FAQs = (props) => {
                 <View style={styles.container}>
                     <View style={styles.listContainer}>
                         <Text style={styles.textListTitle} >PREGUNTAS FRECUENTES</Text>
-
                         <View style={{
                             flex: 1,
                             width: '98%',
@@ -82,47 +112,10 @@ const FAQs = (props) => {
                         }}>
                             <FlatList
                                 data={FAQs}
-                                keyExtractor={(item, index) => String(index)}
-                                renderItem={({ item }) => {
-                                    return (
-                                        <Collapse style={styles.collapseContainer}>
-                                            <CollapseHeader >
-                                                <View>
-                                                    <Text style={styles.title}>
-                                                        {item.title}
-                                                    </Text>
-                                                </View>
-                                            </CollapseHeader>
-                                            <CollapseBody style={{ justifyContent: 'center' }}>
-                                                {/* {renderVideo(item.uri)} */}
-                                                <View
-                                                    style={{
-                                                        flex: 1,
-                                                        justifyContent: 'center',
-                                                       
-                                                    }}
-                                                >
-                                                    <Video
-                                                        ref={videoRef}
-                                                        style={{
-                                                            alignSelf: 'center',
-                                                            width: 350,
-                                                            height: 300,
-                                                        }}
-                                                        source={item.dir}
-                                                        useNativeControls
-                                                        resizeMode="contain"
-                                                        isLooping
-                                                        onPlaybackStatusUpdate={status => setStatus(() => status)}
-                                                    />
-                                                </View>
-                                            </CollapseBody>
-                                        </Collapse>
-                                    )
-                                }}
+                                keyExtractor={FAQsKeyExtractor}
+                                renderItem={renderFAQItem}
                             />
                         </View>
-
                     </View>
                     <View style={{
                         height: '14%',

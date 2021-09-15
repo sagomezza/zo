@@ -29,7 +29,8 @@ import {
   FIND_USER_BY_PLATE,
   CREATE_USER, READ_HQ,
   GET_RECIPS_BY_PLATE,
-  FIND_MENSUALITY_PLATE
+  FIND_MENSUALITY_PLATE,
+  GET_RECIPS
 } from "../../config/api";
 import { TIMEOUT } from '../../config/constants/constants';
 import instance from "../../config/axios";
@@ -137,7 +138,7 @@ const UserInput = (props) => {
 
   const clearPlateOne = () => setPlateOne('');
   const clearPlateTwo = () => setPlateTwo('');
-  const isCharacterALetter = (char) => {return (/[a-zA-Z]/).test(char)}
+  const isCharacterALetter = (char) => { return (/[a-zA-Z]/).test(char) }
 
   async function findUserByPlate() {
     try {
@@ -175,7 +176,7 @@ const UserInput = (props) => {
       setShowDropdown(false);
       setShowPhoneInput(true);
     }
-  }
+  };
 
   async function findMensualityPlate() {
     try {
@@ -202,7 +203,7 @@ const UserInput = (props) => {
       // console.log(err)
       // console.log(err?.response)
     }
-  }
+  };
 
   async function getRecipsByPlate() {
     try {
@@ -233,7 +234,7 @@ const UserInput = (props) => {
       setHistoryExists(false);
       setPrepayDayRecip(false);
     }
-  }
+  };
 
   useEffect(() => {
     async function createUser() {
@@ -305,6 +306,7 @@ const UserInput = (props) => {
         setPrepayDayValue(0);
         setTotalPay(0);
         setModalVisible(true);
+        getRecips();
         readHq();
       }
     } catch (err) {
@@ -340,6 +342,20 @@ const UserInput = (props) => {
     } catch (err) {
       Sentry.captureException(err);
       // console.log(err)
+      // console.log(err?.response)
+    }
+  };
+
+  const getRecips = async () => {
+    try {
+      const response = await instance.post(GET_RECIPS, {
+        hqId: officialHq,
+        officialEmail: officialProps.email
+      },
+        { timeout: TIMEOUT }
+      );
+      store.dispatch(actions.setRecips(response.data.data));
+    } catch (err) {
       // console.log(err?.response)
     }
   };
@@ -604,7 +620,7 @@ const UserInput = (props) => {
                       />
                     </View>
                     :
-                    <View/>
+                    <View />
                   }
                 </View>
               </View>
