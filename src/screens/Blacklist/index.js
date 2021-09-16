@@ -132,7 +132,8 @@ const Blacklist = (props) => {
                         value: Number(blacklistValue),
                         cash: Number(totalPay),
                         change: Number(inputChange),
-                        generateRecip: true
+                        generateRecip: true,
+                        officialEmail: officialProps.email
                     },
                     { timeout: TIMEOUT }
                 )

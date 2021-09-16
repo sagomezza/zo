@@ -578,6 +578,23 @@ const MonthlyPayments = (props) => {
   let textinputMoney = totalPay === 0 ? "" : "" + totalPay;
   let inputChange = totalPay - monthPrice <= 0 ? "" : "" + (totalPay - monthPrice);
 
+  const newMenPlateKeyExtractor = (item, index) => String(index);
+
+  const renderNewMenPlatesItem = ({ item }) => {
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          marginBottom: "2%",
+          marginLeft: "10%",
+          marginRight: "10%",
+        }}
+      >
+        <Text style={styles.infoText}>{item.plate}</Text>
+      </View>
+    );
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: '#00A9A0' }}>
       <ImageBackground
@@ -618,11 +635,7 @@ const MonthlyPayments = (props) => {
               onPress={findMensualityPlate}
               title="BUSCAR"
               color="#FFF200"
-              style={[
-                plateOne === "" || plateTwo === ""
-                  ? styles.searchButtonDisabled
-                  : styles.searchButton,
-              ]}
+              style={[plateOne === "" || plateTwo === "" ? styles.searchButtonDisabled : styles.searchButton]}
               textStyle={styles.buttonTextSearch}
               disabled={plateOne === "" || plateTwo === ""}
               activityIndicatorStatus={loading}
@@ -651,9 +664,7 @@ const MonthlyPayments = (props) => {
                 </View>
                 <View style={styles.mensualityInfo}>
                   <Text style={styles.infoTextTitle}>Valor</Text>
-                  <Text style={styles.infoText}>
-                    {`$${numberWithPoints(monthPrice)}`}
-                  </Text>
+                  <Text style={styles.infoText}>{`$${numberWithPoints(monthPrice)}`}</Text>
                 </View>
                 <View style={styles.mensualityInfo}>
                   <Text style={styles.infoTextTitle}>Estado</Text>
@@ -673,21 +684,9 @@ const MonthlyPayments = (props) => {
                     <FlatList
                       style={{ height: "30%" }}
                       data={newMensualityPlates}
-                      keExtractor={(item, index) => String(index)}
-                      renderItem={({ item }) => {
-                        return (
-                          <View
-                            style={{
-                              flexDirection: "row",
-                              marginBottom: "2%",
-                              marginLeft: "10%",
-                              marginRight: "10%",
-                            }}
-                          >
-                            <Text style={styles.infoText}>{item.plate}</Text>
-                          </View>
-                        );
-                      }}
+                      keExtractor={newMenPlateKeyExtractor}
+                      renderItem={renderNewMenPlatesItem}
+                      maxToRenderPerBatch={3}
                     />
                   </View>
                 </View>
@@ -720,11 +719,7 @@ const MonthlyPayments = (props) => {
               </View>
             </View>
           ) : (
-            <View style={{
-              height: "30%", justifyContent: "space-between",
-              width: "80%",
-            }}
-            >
+            <View style={{ height: "30%", justifyContent: "space-between", width: "80%"}}>
               {mensualityExists === false ? (
                 <Text style={styles.notFoundText}>
                   No se encuentra mensualidad asociada.
@@ -738,7 +733,6 @@ const MonthlyPayments = (props) => {
                 color="transparent"
                 style={styles.buttonCreate}
                 textStyle={styles.buttonTextRenew}
-              // disabled={!(plateOne.length === 3 && plateTwo.length === 3) || !mensualityExists}
               />
             </View>
           )}
