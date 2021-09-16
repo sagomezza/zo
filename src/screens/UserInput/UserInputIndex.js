@@ -219,7 +219,7 @@ const UserInput = (props) => {
         setHistoryExists(true)
         if (response.data.data[0].prepayFullDay) {
           let prepayDayData = response.data.data[0]
-          let prepayDateEnd = new Date((prepayDayData.dateFinished._seconds) * 1000)
+          let prepayDateEnd = typeof(prepayDayData.dateFinished) === 'string' ? prepayDayData.dateFinished : new Date((prepayDayData.dateFinished._seconds) * 1000);
           setPrepayDayDateFinished(prepayDateEnd);
           setPrepayDayRecip(true);
         } else {
