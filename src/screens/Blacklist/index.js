@@ -49,6 +49,10 @@ const Blacklist = (props) => {
     const clearPlateOne = () => setPlateOne('');
     const clearPlateTwo = () => setPlateTwo('');
 
+    useEffect(() => {
+        listHQDebtsCall();
+    }, []);
+
     const debtPayedSuccess = () => {
         listHQDebtsCall();
         clearPlateOne();
@@ -96,9 +100,7 @@ const Blacklist = (props) => {
         }
     };
 
-    useEffect(() => {
-        listHQDebtsCall();
-    }, []);
+  
 
     const listHQDebtsCall = async () => {
         setLoadingListHQDebts(true);
