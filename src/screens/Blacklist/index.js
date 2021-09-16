@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
     Text,
     View,
@@ -26,7 +26,6 @@ import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import * as Sentry from "@sentry/browser";
 import moment from 'moment';
-import { useCallback } from 'react/cjs/react.development';
 
 const Blacklist = (props) => {
     const { navigation, officialProps } = props;
