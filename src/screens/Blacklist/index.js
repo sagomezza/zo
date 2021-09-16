@@ -199,16 +199,16 @@ const Blacklist = (props) => {
                 {item.plate !== undefined ? item.plate : ''}
             </Text>
             <Text style={styles.dateDaysText}>
-                {item.date ? formatDateDays(item.date) : ''}
+                {item.date !== undefined ? formatDateDays(item.date) : ''}
             </Text>
             <View style={{ flexDirection: 'row', justifyContent: 'center', width: '20%', height: '100%' }}>
                 <Text style={styles.dateDaysText}>
-                    {item.date ? formatDateHours(item.date) : ''}
+                    {item.date !== undefined ? formatDateHours(item.date) : ''}
                 </Text>
 
             </View>
             <Text style={{ ...styles.textPlaca, textAlign: 'right', marginRight: '3%' }}>
-                {item.value ? `$${numberWithPoints(item.value)}` : ''}
+                {item.value !== undefined ? `$${numberWithPoints(item.value)}` : ''}
             </Text>
         </View>
         , [listHQDebts]);
