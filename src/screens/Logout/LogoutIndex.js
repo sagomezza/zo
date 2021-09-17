@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -63,12 +63,14 @@ const LogoutIndex = (props) => {
       } else {
       }
     });
+
     const macAdd = () => {
       Network.getMacAddressAsync().then(state => {
         setMacAddress(state)
       }
       )
     };
+    
     const getShiftRecips = async () => {
       setLoadingShiftRecips(true);
       try {
@@ -165,6 +167,26 @@ const LogoutIndex = (props) => {
     setLoading(true);
     logoutFromFirebase();
   };
+
+   const recipsKeyExtractor = useCallback(({ id }) => id, [shiftRecips]);
+
+   const renderRecipItem = useCallback(({ item, index }) => {
+    return (
+        <View style={styles.flatlist} >
+          <View style={{ marginLeft: 20, marginTop: 10, marginBottom: 10 }} >
+            <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
+            <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
+          </View>
+          <View style={{ flex: 1, alignItems: 'flex-end', marginRight: 20, marginTop: 20 }} >
+            <Text style={styles.textMoney}>
+              {item.cash === 0 && item.change === 0 ? '$0' : ''}
+              {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(Number(item.cash))}` : ''}
+              {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(Number(item.total))}` : ''}
+            </Text>
+          </View>
+        </View>
+    )
+  }, [shiftRecips])
 
   return (
     <View style={{ flex: 1 }}>
@@ -270,31 +292,8 @@ const LogoutIndex = (props) => {
                   <View style={{ paddingBottom: 10, height: "100%" }}>
                     <FlatList
                       data={shiftRecips}
-                      keyExtractor={({ id }) => id}
-                      renderItem={({ item, index }) => {
-                        return (
-                          <TouchableOpacity
-                            key={index.toString()}
-                            onPress={() => {
-
-                            }}
-                          >
-                            <View style={styles.flatlist} >
-                              <View style={{ marginLeft: 20, marginTop: 10, marginBottom: 10 }} >
-                                <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
-                                <Text style={styles.textPago}>{`Pago por ${Math.round(item.hours)} horas`}</Text>
-                              </View>
-                              <View style={{ flex: 1, alignItems: 'flex-end', marginRight: 20, marginTop: 20 }} >
-                                <Text style={styles.textMoney}>
-                                  {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                                  {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(Number(item.cash))}` : ''}
-                                  {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(Number(item.total))}` : ''}
-                                </Text>
-                              </View>
-                            </View>
-                          </TouchableOpacity>
-                        )
-                      }}
+                      keyExtractor={recipsKeyExtractor}
+                      renderItem={renderRecipItem}
                     />
                   </View>
                   :

@@ -329,8 +329,8 @@ const UserInput = (props) => {
       } else {
         setErrorModalVisible(true)
       }
-      console.log(err)
-      console.log(err?.response)
+      // console.log(err)
+      // console.log(err?.response)
     }
   };
 

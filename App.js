@@ -66,7 +66,7 @@ const App = () => {
     const updateApp = async () => {
       try {
         const update = await Updates.checkForUpdateAsync();
-        console.log(update)
+        // console.log(update)
         if (update.isAvailable) {
           await Updates.fetchUpdateAsync();
           // ... notify user of update ...
@@ -74,7 +74,7 @@ const App = () => {
         }
       } catch (e) {
         // handle or log error
-        console.log(e)
+        // console.log(e)
       }
     };
     updateApp();
@@ -113,8 +113,8 @@ const App = () => {
       store.dispatch(actions.setHq(response.data.data));
     } catch (err) {
       // Sentry.captureException(err);
-      console.log("errD: ", err);
-      console.log(err?.response)
+      // console.log("errD: ", err);
+      // console.log(err?.response)
     }
   }
 
@@ -140,7 +140,6 @@ const App = () => {
         });
         store.dispatch(setOfficial(response.data.data));
         setOfficialData(response.data.data)
-        console.log(response.data.data.hq[0])
         if (response.data.data.hq) {
           let hqId = response.data.data.hq[0]
           readHq(hqId);

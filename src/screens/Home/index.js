@@ -33,7 +33,6 @@ const HomeIndex = (props) => {
   const [activeList, setActiveList] = useState(0);
 
   useEffect(() => {
-    console.log(officialProps)
     const offData = async () => {
       try {
         let response = await instance.post(
@@ -51,10 +50,6 @@ const HomeIndex = (props) => {
     }
 
     const updateExpoToken = async () => {
-      console.log({
-        id: officialProps.id,
-        expoToken: props.expoToken
-      })
       try {
         await instance.post(EDIT_OFFICIAL, {
           id: officialProps.id,
