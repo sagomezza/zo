@@ -23,6 +23,7 @@ import * as Sentry from "@sentry/browser";
 import { LogBox } from 'react-native';
 import * as Updates from 'expo-updates';
 import * as actions from './src/redux/actions';
+import getRecipsOfShift from './src/config/services/getRecips';
 
 
 LogBox.ignoreLogs([
@@ -104,7 +105,7 @@ const App = () => {
     debug: false, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
   });
 
-  const readHq = async(hqId) => {
+  const readHq = async (hqId) => {
     try {
       const response = await instance.post(READ_HQ, {
         id: hqId
@@ -118,20 +119,6 @@ const App = () => {
     }
   }
 
-  const getRecips = async (hqId, userEmail) => {
-    try {
-      const response = await instance.post(GET_RECIPS, {
-        hqId: hqId,
-        officialEmail: userEmail
-      },
-        { timeout: TIMEOUT }
-      );
-      store.dispatch(actions.setRecips(response.data.data));
-    } catch (err) {
-      // console.log(err?.response)
-    }
-  };
-
   const readUser = async (userEmail) => {
     if (userEmail) {
       try {
@@ -143,22 +130,22 @@ const App = () => {
         if (response.data.data.hq) {
           let hqId = response.data.data.hq[0]
           readHq(hqId);
-          getRecips(hqId,userEmail);
+          store.dispatch(actions.setRecips(getRecipsOfShift(officialProps)));
         }
       } catch (err) {
         Sentry.captureException(err)
         try {
-          let readOff = await instance.post(READ_ADMIN,{ 
-            email: userEmail 
+          let readOff = await instance.post(READ_ADMIN, {
+            email: userEmail
           });
           let data = readOff.data.data
           if (data.hq) {
             let hqId = data.hq
             readHq(hqId);
-            getRecips(hqId,userEmail);
+            // getRecips(hqId,userEmail);
           }
-          readOff = await instance.post(READ_CORPO,{ 
-            name: data.context 
+          readOff = await instance.post(READ_CORPO, {
+            name: data.context
           });
           data.hq = readOff.data.data.hqs
           store.dispatch(setOfficial(data));

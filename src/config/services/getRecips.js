@@ -4,8 +4,7 @@ import store from '../../config/store';
 import * as Sentry from "@sentry/browser";
 
 
-const getRecipsOfShift = (officialProps,) => {
-    setLoadingRecips(true);
+const getRecipsOfShift = (officialProps) => {
     const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
 
     if (officialProps.start) {
@@ -38,6 +37,7 @@ const getRecipsOfShift = (officialProps,) => {
                         .collection("recips")
                         .where("hqId", "==", officialHq)
                         .where("prepayFullDay", "==", true)
+                        .where("officialEmail", "==", officialProps.email)
                         .where("dateFactured", ">=", date)
                         .orderBy("dateFactured", "desc")
                         .get()
@@ -53,6 +53,7 @@ const getRecipsOfShift = (officialProps,) => {
                                 .collection("recips")
                                 .where("hqId", "==", officialHq)
                                 .where("mensuality", "==", true)
+                                .where("officialEmail", "==", officialProps.email)
                                 .where("dateStart", ">=", date)
                                 .orderBy("dateStart", "desc")
                                 .get()
@@ -108,8 +109,8 @@ const getRecipsOfShift = (officialProps,) => {
                                                 return b.dateFinished - a.dateFinished;
                                             }
                                         });
-                                        store.dispatch(actions.setRecips(recips));
-                                        setLoadingRecips(false);
+                                        // store.dispatch(actions.setRecips(recips));
+
                                         // if (parameter.limit) {
                                         //   resolve({
                                         //     data: {
@@ -119,6 +120,7 @@ const getRecipsOfShift = (officialProps,) => {
                                         // } else {
 
                                         // }
+                                        return recips;
                                     }
                                 });
                         });
