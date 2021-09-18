@@ -1,8 +1,7 @@
 import { firestore } from '../firebase';
-import * as actions from "../../redux/actions";
-import store from '../../config/store';
 import * as Sentry from "@sentry/browser";
-
+import store from '../store/index';
+import * as actions from '../../redux/actions';
 
 const getRecipsOfShift = (officialProps) => {
     const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
@@ -15,11 +14,11 @@ const getRecipsOfShift = (officialProps) => {
             .tz("America/Bogota")
             .toDate();
         firestore
-            .collection("recips")
-            .where("hqId", "==", officialHq)
-            .where("officialEmail", "==", officialProps.email)
-            .where("dateFinished", ">=", date)
-            .orderBy("dateFinished", "desc")
+            .collection('recips')
+            .where('hqId', '==', officialHq)
+            .where('officialEmail', '==', officialProps.email)
+            .where('dateFinished', '>=', date)
+            .orderBy('dateFinished', 'desc')
             .get()
             .then(async (snapshot) => {
                 try {
@@ -120,17 +119,19 @@ const getRecipsOfShift = (officialProps) => {
                                         // } else {
 
                                         // }
-                                        return recips;
+                                        store.dispatch(actions.setRecips(recips));
                                     }
                                 });
                         });
                 } catch (err) {
                     Sentry.captureException(err);
+                    return ("Error getting recips", err)
                     // console.log(err);
                 }
             })
             .catch((err) => {
                 Sentry.captureException(err);
+                return ("Error getting documents", err)
             });
 
     }

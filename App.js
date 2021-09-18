@@ -24,6 +24,8 @@ import { LogBox } from 'react-native';
 import * as Updates from 'expo-updates';
 import * as actions from './src/redux/actions';
 import getRecipsOfShift from './src/config/services/getRecips';
+import readHqInfo from './src/config/services/readHqInfo';
+
 
 
 LogBox.ignoreLogs([
@@ -125,12 +127,13 @@ const App = () => {
         const response = await instance.post(READ_OFFICIAL, {
           email: userEmail
         });
+        // console.log(response.data.data.hq[0])
         store.dispatch(setOfficial(response.data.data));
         setOfficialData(response.data.data)
         if (response.data.data.hq) {
           let hqId = response.data.data.hq[0]
-          readHq(hqId);
-          store.dispatch(actions.setRecips(getRecipsOfShift(officialProps)));
+          readHqInfo(hqId);
+          getRecipsOfShift(officialProps);
         }
       } catch (err) {
         Sentry.captureException(err)
@@ -141,8 +144,6 @@ const App = () => {
           let data = readOff.data.data
           if (data.hq) {
             let hqId = data.hq
-            readHq(hqId);
-            // getRecips(hqId,userEmail);
           }
           readOff = await instance.post(READ_CORPO, {
             name: data.context
