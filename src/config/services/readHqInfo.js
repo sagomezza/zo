@@ -31,7 +31,7 @@ const readHqInfo = (hqId) => {
         .catch(err => {
             Sentry.captureException(err);
             console.log(err)
-            return ("Error getting document", err)
+            // return ("Error getting document", err)
 
         })
 

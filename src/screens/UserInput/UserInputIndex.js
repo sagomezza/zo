@@ -27,7 +27,8 @@ import numberWithPoints from '../../config/services/numberWithPoints';
 import {
   START_PARKING,
   FIND_USER_BY_PLATE,
-  CREATE_USER, READ_HQ,
+  CREATE_USER, 
+  READ_HQ,
   GET_RECIPS_BY_PLATE,
   FIND_MENSUALITY_PLATE,
   GET_RECIPS
@@ -40,7 +41,8 @@ import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import { createIdempotency } from '../../utils/idempotency'
 import * as Sentry from "@sentry/browser";
-
+import getRecipsOfShift from '../../config/services/getRecipsOfShift';
+import readHqInfo from '../../config/services/readHqInfo';
 
 const { width } = Dimensions.get('window');
 
@@ -299,7 +301,8 @@ const UserInput = (props) => {
           {
             headers: {
               "x-idempotence-key": idempotencyKey
-            }, timeout: TIMEOUT
+            }, 
+            timeout: TIMEOUT
           }
         )
         setPhones([{ label: 'Selecciona un número', value: 1 }]);
@@ -308,8 +311,8 @@ const UserInput = (props) => {
         setPrepayDayValue(0);
         setTotalPay(0);
         setModalVisible(true);
-        getRecips();
-        readHq();
+        getRecipsOfShift(officialProps);
+        readHqInfo(officialHq);
       }
     } catch (err) {
       Sentry.captureException(err);
@@ -334,33 +337,33 @@ const UserInput = (props) => {
     }
   };
 
-  async function readHq() {
-    try {
-      const response = await instance.post(READ_HQ, {
-        id: officialHq
-      });
-      store.dispatch(actions.setReservations(response.data.data.reservations));
-      store.dispatch(actions.setHq(response.data.data));
-    } catch (err) {
-      Sentry.captureException(err);
-      // console.log(err)
-      // console.log(err?.response)
-    }
-  };
+  // async function readHq() {
+  //   try {
+  //     const response = await instance.post(READ_HQ, {
+  //       id: officialHq
+  //     });
+  //     store.dispatch(actions.setReservations(response.data.data.reservations));
+  //     store.dispatch(actions.setHq(response.data.data));
+  //   } catch (err) {
+  //     Sentry.captureException(err);
+  //     // console.log(err)
+  //     // console.log(err?.response)
+  //   }
+  // };
 
-  const getRecips = async () => {
-    try {
-      const response = await instance.post(GET_RECIPS, {
-        hqId: officialHq,
-        officialEmail: officialProps.email
-      },
-        { timeout: TIMEOUT }
-      );
-      store.dispatch(actions.setRecips(response.data.data));
-    } catch (err) {
-      // console.log(err?.response)
-    }
-  };
+  // const getRecips = async () => {
+  //   try {
+  //     const response = await instance.post(GET_RECIPS, {
+  //       hqId: officialHq,
+  //       officialEmail: officialProps.email
+  //     },
+  //       { timeout: TIMEOUT }
+  //     );
+  //     store.dispatch(actions.setRecips(response.data.data));
+  //   } catch (err) {
+  //     // console.log(err?.response)
+  //   }
+  // };
 
   const qrHandler = () => {
     restartSearch();

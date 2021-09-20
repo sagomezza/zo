@@ -23,7 +23,7 @@ import * as Sentry from "@sentry/browser";
 import { LogBox } from 'react-native';
 import * as Updates from 'expo-updates';
 import * as actions from './src/redux/actions';
-import getRecipsOfShift from './src/config/services/getRecips';
+import getRecipsOfShift from './src/config/services/getRecipsOfShift';
 import readHqInfo from './src/config/services/readHqInfo';
 
 

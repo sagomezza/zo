@@ -2,21 +2,23 @@ import { firestore } from '../firebase';
 import * as Sentry from "@sentry/browser";
 import store from '../store/index';
 import * as actions from '../../redux/actions';
+import moment from 'moment';
 
 const getRecipsOfShift = (officialProps) => {
     const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
+    const email = officialProps.email !== undefined ? officialProps.email : "";
 
     if (officialProps.start) {
         if (officialProps.schedule.status !== "active") {
             // ??
         }
-        let date = moment(new Date(officialProps.start._seconds) * 1000)
-            .tz("America/Bogota")
-            .toDate();
+        // console.log(new Date(officialProps.start._seconds * 1000))
+        let date = new Date((officialProps.start._seconds) * 1000)
+        // console.log(date);
         firestore
             .collection('recips')
             .where('hqId', '==', officialHq)
-            .where('officialEmail', '==', officialProps.email)
+            .where('officialEmail', '==', email)
             .where('dateFinished', '>=', date)
             .orderBy('dateFinished', 'desc')
             .get()
@@ -36,7 +38,7 @@ const getRecipsOfShift = (officialProps) => {
                         .collection("recips")
                         .where("hqId", "==", officialHq)
                         .where("prepayFullDay", "==", true)
-                        .where("officialEmail", "==", officialProps.email)
+                        .where("officialEmail", "==", email)
                         .where("dateFactured", ">=", date)
                         .orderBy("dateFactured", "desc")
                         .get()
@@ -52,7 +54,7 @@ const getRecipsOfShift = (officialProps) => {
                                 .collection("recips")
                                 .where("hqId", "==", officialHq)
                                 .where("mensuality", "==", true)
-                                .where("officialEmail", "==", officialProps.email)
+                                .where("officialEmail", "==", email)
                                 .where("dateStart", ">=", date)
                                 .orderBy("dateStart", "desc")
                                 .get()
@@ -65,13 +67,13 @@ const getRecipsOfShift = (officialProps) => {
                                         });
                                     }
                                     if (recips.length === 0) {
-                                        setLoadingRecips(false);
+                                        return ("No recips")
 
                                     } else {
-                                        if (officialProps.email) {
+                                        if (email) {
                                             let filteredRecips = recips.filter((recip) => {
                                                 return (
-                                                    recip.officialEmail === officialProps.email
+                                                    recip.officialEmail === email
                                                 );
                                             });
                                             recips = [...filteredRecips];
@@ -124,13 +126,14 @@ const getRecipsOfShift = (officialProps) => {
                                 });
                         });
                 } catch (err) {
-                    Sentry.captureException(err);
+                    // Sentry.captureException(err);
+                    console.log(err);
                     return ("Error getting recips", err)
-                    // console.log(err);
                 }
             })
             .catch((err) => {
-                Sentry.captureException(err);
+                // Sentry.captureException(err);
+                console.log(err);
                 return ("Error getting documents", err)
             });
 
