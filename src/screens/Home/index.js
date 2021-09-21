@@ -102,7 +102,7 @@ const HomeIndex = (props) => {
 
   const renderRecipItem = useCallback(({ item, index }) =>
     // return (
-    <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%' }} >
+    <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%' }} key={item.key}>
       <Text style={styles.textPlaca}>
         {typeof item.plate === 'string' ? item.plate : item.plate[0]}
       </Text>
@@ -146,7 +146,7 @@ const HomeIndex = (props) => {
     , [recips.recips]);
 
   const renderReservationItem = useCallback(({ item, index }) =>
-    <View style={styles.list} >
+    <View style={styles.list} key={item.key}>
       <Text style={styles.textPlaca}>{item.plate}</Text>
       <Text style={styles.dateDaysText}>{item.verificationCode}</Text>
       <View style={{ flexDirection: 'column' }}>
@@ -187,7 +187,9 @@ const HomeIndex = (props) => {
                   data={recips.recips}
                   keyExtractor={recipKeyExtractor}
                   renderItem={renderRecipItem}
+                  initialNumToRender={5} 
                   maxToRenderPerBatch={5}
+                  removeClippedSubviews={true}
                 />
                 : <View style={{ marginLeft: '13%', padding: '10%' }}>
                   <Text style={styles.textPago}>
@@ -221,7 +223,9 @@ const HomeIndex = (props) => {
                   data={reservations.reservations}
                   keyExtractor={reservationKeyExtractor}
                   renderItem={renderReservationItem}
+                  initialNumToRender={5} 
                   maxToRenderPerBatch={5}
+                  removeClippedSubviews={true}
                 />
                 :
                 <View style={{ marginLeft: '13%', padding: '10%' }}>

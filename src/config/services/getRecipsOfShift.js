@@ -12,7 +12,7 @@ const getRecipsOfShift = (officialProps) => {
         if (officialProps.schedule.status !== "active") {
             // ??
         }
-        // console.log(new Date(officialProps.start._seconds * 1000))
+        // console.log(officialProps.schedule.status)
         let date = new Date((officialProps.start._seconds) * 1000)
         // console.log(date);
         firestore
