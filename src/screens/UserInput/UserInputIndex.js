@@ -337,33 +337,6 @@ const UserInput = (props) => {
     }
   };
 
-  // async function readHq() {
-  //   try {
-  //     const response = await instance.post(READ_HQ, {
-  //       id: officialHq
-  //     });
-  //     store.dispatch(actions.setReservations(response.data.data.reservations));
-  //     store.dispatch(actions.setHq(response.data.data));
-  //   } catch (err) {
-  //     Sentry.captureException(err);
-  //     // console.log(err)
-  //     // console.log(err?.response)
-  //   }
-  // };
-
-  // const getRecips = async () => {
-  //   try {
-  //     const response = await instance.post(GET_RECIPS, {
-  //       hqId: officialHq,
-  //       officialEmail: officialProps.email
-  //     },
-  //       { timeout: TIMEOUT }
-  //     );
-  //     store.dispatch(actions.setRecips(response.data.data));
-  //   } catch (err) {
-  //     // console.log(err?.response)
-  //   }
-  // };
 
   const qrHandler = () => {
     restartSearch();
