@@ -28,10 +28,8 @@ import {
   START_PARKING,
   FIND_USER_BY_PLATE,
   CREATE_USER, 
-  READ_HQ,
   GET_RECIPS_BY_PLATE,
   FIND_MENSUALITY_PLATE,
-  GET_RECIPS
 } from "../../config/api";
 import { TIMEOUT } from '../../config/constants/constants';
 import instance from "../../config/axios";

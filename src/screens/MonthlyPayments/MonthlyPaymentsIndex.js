@@ -26,7 +26,6 @@ import {
   CREATE_USER,
   CREATE_MENSUALITY,
   EDIT_USER,
-  GET_RECIPS,
 } from "../../config/api";
 import instance from "../../config/axios";
 import { TIMEOUT } from "../../config/constants/constants";
@@ -34,7 +33,6 @@ import { firestore } from "../../config/firebase";
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
-import store from "../../config/store";
 import { createIdempotency } from "../../utils/idempotency";
 import * as Sentry from "@sentry/browser";
 import getRecipsOfShift from '../../config/services/getRecipsOfShift';
