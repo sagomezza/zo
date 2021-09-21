@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { View, ActivityIndicator, StyleSheet, Modal, Text, AsyncStorage } from 'react-native';
 import SnackBar from 'react-native-snackbar-component'
-import normalize from './src/config/services/normalizeFontSize';
 import NoConnectionModal from './src/components/NoConnectionModal';
 import { Provider } from "react-redux";
 import store from './src/config/store'
@@ -12,10 +11,10 @@ import RootStack from "./src/navigators/RootStack"
 import * as Font from 'expo-font';
 import { AppLoading } from "expo";
 import instance from "./src/config/axios";
-import { READ_OFFICIAL } from "./src/config/api";
+import { READ_OFFICIAL, READ_HQ } from "./src/config/api";
 import { READ_ADMIN, READ_CORPO, STORAGE_KEY } from "./src/config/api/index";
 import { setOfficial, setExpoToken } from "./src/redux/actions";
-import * as Network from 'expo-network';
+import InternetConnectionAlert from "react-native-internet-connection-alert";
 import moment from 'moment';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
@@ -23,7 +22,11 @@ import * as Permissions from "expo-permissions";
 import * as Sentry from "@sentry/browser";
 import { LogBox } from 'react-native';
 import * as Updates from 'expo-updates';
-import { Alert } from "react-native";
+import * as actions from './src/redux/actions';
+import getRecipsOfShift from './src/config/services/getRecipsOfShift';
+import readHqInfo from './src/config/services/readHqInfo';
+
+
 
 LogBox.ignoreLogs([
   'Animated: `useNativeDriver` was not specified.',
@@ -46,7 +49,7 @@ const fetchFont = () => {
     'Montserrat-Medium': require('./assets/fonts/Montserrat-Medium.ttf'),
 
   })
-}
+};
 
 const App = () => {
   const [fontLoaded, setfontLoaded] = useState(false);
@@ -57,38 +60,16 @@ const App = () => {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
-  const [isConnected, setIsConnected] = useState(false);
   const [logoutSnackbar, setLogoutSnackbar] = useState(false)
   const [officialData, setOfficialData] = useState({});
   const officialScheduleStart = officialData.start !== undefined ? officialData.start : null;
-
-  // useEffect(() => {
-  //   throw new Error("Zona P first Sentry error")
-  // }, [])
-
-  Network.getNetworkStateAsync().then(state => {
-    // console.log('Connection type:', state.type);
-    // console.log('Is connected?:', state.isConnected);
-    // console.log('Is internet reachable?:', state.isInternetReachable);
-    state.isConnected === false ? setIsConnected(false) : setIsConnected(true);
-  });
-
-  const checkInternetReachable = () => {
-    Network.getNetworkStateAsync().then(state => {
-      // console.log('Connection TYPE:', state.type);
-      // console.log('Is connected?:', state.isConnected);
-      // console.log('Is internet reachable?:', state.isInternetReachable);
-      state.isConnected === false ? setIsConnected(false) : setIsConnected(true);
-    });
-  }
-
   const MINUTE_MS = 60000;
 
   useEffect(() => {
     const updateApp = async () => {
       try {
         const update = await Updates.checkForUpdateAsync();
-        console.log(update)
+        // console.log(update)
         if (update.isAvailable) {
           await Updates.fetchUpdateAsync();
           // ... notify user of update ...
@@ -96,17 +77,19 @@ const App = () => {
         }
       } catch (e) {
         // handle or log error
-        console.log(e)
+        // console.log(e)
       }
     };
+
     updateApp();
 
-    // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
+
     if (officialScheduleStart !== null) {
       // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
       const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
       const checkOfficialHours = setInterval(() => {
         let hours = moment(new Date()).diff(offStart, 'hours', true);
+        // console.log(hours)
         if (
           Number(hours) > 7.25 && Number(hours) <= 7.5 ||
           Number(hours) > 7.5 && Number(hours) <= 7.75 ||
@@ -118,7 +101,7 @@ const App = () => {
       }, MINUTE_MS);
       return () => clearInterval(checkOfficialHours);
     }
-  }, [])
+  }, []);
 
   Sentry.init({
     dsn: 'https://022b0475f7b147aba62d6d1988bf95df@o479500.ingest.sentry.io/5644578',
@@ -126,25 +109,47 @@ const App = () => {
     debug: false, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
   });
 
+  const readHq = async (hqId) => {
+    try {
+      const response = await instance.post(READ_HQ, {
+        id: hqId
+      });
+      store.dispatch(actions.setReservations(response.data.data.reservations));
+      store.dispatch(actions.setHq(response.data.data));
+    } catch (err) {
+      // Sentry.captureException(err);
+      // console.log("errD: ", err);
+      // console.log(err?.response)
+    }
+  }
+
   const readUser = async (userEmail) => {
     if (userEmail) {
       try {
         const response = await instance.post(READ_OFFICIAL, {
           email: userEmail
         });
+        // console.log(response.data.data.hq[0])
         store.dispatch(setOfficial(response.data.data));
         setOfficialData(response.data.data)
+        if (response.data.data.hq) {
+          let hqId = response.data.data.hq[0]
+          readHqInfo(hqId);
+          getRecipsOfShift(officialProps);
+        }
       } catch (err) {
         Sentry.captureException(err)
         try {
-          let readOff = await instance.post(
-            READ_ADMIN,
-            { email: userEmail })
+          let readOff = await instance.post(READ_ADMIN, {
+            email: userEmail
+          });
           let data = readOff.data.data
-          readOff = await instance.post(
-            READ_CORPO,
-            { name: data.context }
-          )
+          if (data.hq) {
+            let hqId = data.hq
+          }
+          readOff = await instance.post(READ_CORPO, {
+            name: data.context
+          });
           data.hq = readOff.data.data.hqs
           store.dispatch(setOfficial(data));
           setOfficialData(data)
@@ -243,12 +248,18 @@ const App = () => {
   }
 
   return (
-    isConnected ? (
+    <InternetConnectionAlert
+      onChange={(connectionState) => {
+        // console.log("Connection State: ", connectionState);
+      }}
+      title={"Upss no hay conexión..."}
+      message="Verifica tu conexión a internet."
+      type="error"
+    >
       <Provider store={store}>
         <AuthProvider value={{ currentUser }}>
           <NavigationContainer >
             <RootStack initialRouteName={initialRouteName} />
-
           </NavigationContainer>
           <SnackBar
             visible={logoutSnackbar}
@@ -262,9 +273,8 @@ const App = () => {
             containerStyle={{ height: 90 }}
           />
         </AuthProvider>
-      </Provider>) : (
-      <NoConnectionModal onCheck={checkInternetReachable} />
-    )
+      </Provider>
+    </InternetConnectionAlert>
 
   );
 

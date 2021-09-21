@@ -1,7 +1,5 @@
-//Import dependencies
-
 // Native dependecies
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -12,14 +10,12 @@ import {
   Image,
   TouchableWithoutFeedback,
   Keyboard,
-  Modal,
 } from "react-native";
 // Library dependecies
 import { auth } from "../../config/firebase";
 import * as SecureStore from "expo-secure-store";
 import { connect } from "react-redux";
 import { CommonActions } from "@react-navigation/native";
-import { MaterialIcons } from "@expo/vector-icons";
 // Constants dependecies
 import {
   START_SHIFT,
@@ -36,15 +32,13 @@ import styles from "./LoginStyles";
 import normalize from "../../config/services/normalizeFontSize";
 import Button from "../../components/Button";
 import CustomModal from "../../components/CustomModal";
-
 import { ImageBackground } from "react-native";
-import { Dimensions } from "react-native";
 import store from "../../config/store";
 import * as Device from "expo-device";
 import * as Sentry from "@sentry/browser";
 
 const LoginIndex = (props) => {
-  const { navigation, officialProps } = props;
+  const { navigation } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -54,7 +48,12 @@ const LoginIndex = (props) => {
   const handleEmail = (text) => {
     let email = text.trim()
     setEmail(email)
-  }
+  };
+  const handlePassword = (text) => setPassword(text.trim());
+
+  const closeInstructionsModal = () => {
+    setShowInstructions(false);
+  };
 
   const firstLogin = async () => {
     try {
@@ -182,8 +181,6 @@ const LoginIndex = (props) => {
     }
   };
 
-  const { width, height } = Dimensions.get("window");
-
   return (
     <View style={{ flex: 1, backgroundColor: "#00A9A0" }}>
       <ImageBackground
@@ -227,7 +224,7 @@ const LoginIndex = (props) => {
                     autoCapitalize={"none"}
                     autoCorrect={false}
                     value={password}
-                    onChangeText={(text) => setPassword(text.trim())}
+                    onChangeText={handlePassword}
                     secureTextEntry={true}
                   />
                 </View>
@@ -256,9 +253,7 @@ const LoginIndex = (props) => {
       <CustomModal
         visible={showInstructions}
         type='workerInstructions'
-        onClose={() => {
-          setShowInstructions(false);
-        }}
+        onClose={closeInstructionsModal}
       />
     </View>
   );

@@ -24,23 +24,20 @@ import { createIdempotency } from '../../utils/idempotency'
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 // api
-import { FINISHPARKING, READ_HQ, READ_PARANOIC_USER, GET_RECIPS, CHECK_PARKING } from '../../config/api'
+import { FINISHPARKING, READ_PARANOIC_USER, CHECK_PARKING } from '../../config/api'
 import { TIMEOUT } from '../../config/constants/constants';
 import instance from "../../config/axios";
 import store from '../../config/store';
 import * as Sentry from "@sentry/browser";
 import secondsToString from '../../config/services/secondsToString';
+import readHqInfo from '../../config/services/readHqInfo';
+import getRecipsOfShift from '../../config/services/getRecipsOfShift';
 
-
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const UserOut = (props) => {
   const { navigation, officialProps, qr, uid, reservations } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  // const qrPlate = qr.plate !== undefined ? qr.plate : '';
-  // const qrPhone = qr.phone !== undefined ? qr.phone : '';
-  // const [qrCodePlate, setQrCodePlate] = useState(qrPlate);
-  // const [qrCodePhone, setQrCodePhone] = useState(qrPhone);
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalPay, setTotalPay] = useState('');
   const [recip, setRecip] = useState({})
@@ -48,7 +45,6 @@ const UserOut = (props) => {
   const [isDisabled, setIsDisabled] = useState(true);
   const [err, setErr] = useState("");
   const [isParanoicUser, setIsParanoicUser] = useState(false);
-
   const [plateOne, setPlateOne] = useState('');
   const [plateTwo, setPlateTwo] = useState('');
   const [plateOneCall, setPlateOneCall] = useState('');
@@ -61,30 +57,14 @@ const UserOut = (props) => {
   let pendingValueNum = pendingValue !== undefined ? `$${numberWithPoints(pendingValue)}` : `$${numberWithPoints(0)}`
   const [inputVerificationCode, setInputVerificationCode] = useState('');
   const [verificationCodeCall, setVerificationCodeCall] = useState('');
-
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
   const [modal5Visible, setModal5Visible] = useState(false);
-
   const verification = check.verificationCode === undefined ? '' : check.verificationCode + ''
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
-
-  // const hoursToDHMS = (seconds) => {
-  //   var numdays = "" + Math.floor(seconds / 86400);
-  //   var numhours = "" + Math.floor((seconds % 86400) / 3600);
-  //   var numminutes = "" + Math.floor(((seconds % 86400) % 3600) / 60);
-  //   var numseconds = "" + ((seconds % 86400) % 3600) % 60;
-
-  //   if (numdays.length < 2) numdays = "0" + numdays;
-  //   if (numhours.length < 2) numhours = "0" + numhours;
-  //   if (numminutes.length < 2) numminutes = "0" + numminutes;
-  //   if (numseconds.length < 2) numseconds = "0" + numseconds;
-
-  //   return [numdays, numhours, numminutes, numseconds].join(":") ;
-  // }
 
 
   const restart = () => {
@@ -244,39 +224,6 @@ const UserOut = (props) => {
     }
   }
 
-  async function readHq() {
-    try {
-      const response = await instance.post(READ_HQ, {
-        id: officialHq
-      },
-        { timeout: TIMEOUT }
-      );
-      getRecips();
-      store.dispatch(actions.setReservations(response.data.data.reservations));
-      store.dispatch(actions.setHq(response.data.data));
-    } catch (err) {
-      Sentry.captureException(err);
-      // console.log(err?.response)
-      // console.log(err)
-    }
-  };
-
-  const getRecips = async () => {
-    try {
-      const response = await instance.post(GET_RECIPS, {
-        hqId: officialHq,
-        officialEmail: officialProps.email
-      },
-        { timeout: TIMEOUT }
-      );
-      store.dispatch(actions.setRecips(response.data.data));
-    } catch (err) {
-      Sentry.captureException(err);
-      // console.log(err?.response)
-      // console.log(err)
-    }
-  };
-
   const finishParking = async (paymentStatus, showModal) => {
     setLoading(true)
     try {
@@ -312,13 +259,14 @@ const UserOut = (props) => {
       }
       store.dispatch(actions.setPhone(''))
       store.dispatch(actions.setQr(''))
-      readHq();
+      readHqInfo(officialHq);
+      getRecipsOfShift(officialProps);
       setRecip(response.data.data);
       setIsDisabled(true);
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err?.response)
-      console.log(err)
+      // console.log(err?.response)
+      // console.log(err)
       setLoading(false);
       setIsDisabled(true);
       setModal4Visible(false);
@@ -354,6 +302,80 @@ const UserOut = (props) => {
   let phoneNumberLength = phoneNumber.length
   let inputChange = (totalPay - totalAmount) <= 0 ? '' : '' + (totalPay - totalAmount)
 
+  const handleChangePlateOne = (text) => {
+    setPlateOne(text.trim());
+    // setPlateOneCall(text.trim());
+    if (refPlateTwo && text.length === 3) {
+      refPlateTwo.current.focus();
+    };
+  };
+
+  const handleChangePlateTwo = text => {
+    setPlateTwo(text.trim());
+    // setPlateTwoCall(text.trim());
+    if (text.length === 3) {
+      if (plateOne.length === 3) Keyboard.dismiss()
+    };
+  };
+
+  const handleFocusPlateTwo = () => setPlateTwo('');
+
+  const onPressQr = () => { restart(); navigation.navigate('QRscanner'); }
+
+  const handleChangeInputVerificationCode = text => {
+    if (text.length === 6) { Keyboard.dismiss() }
+    setInputVerificationCode(text.trim());
+    setVerificationCodeCall(text.trim());
+  };
+
+  const handleChangeTotalPay = text => setTotalPay(text);
+
+  const handleMoneyButton1 = () => setTotalPay(5000);
+  const handleMoneyButton2 = () => setTotalPay(10000);
+  const handleMoneyButton3 = () => setTotalPay(20000);
+  const handleMoneyButton4 = () => setTotalPay(50000);
+
+  const onPressCollect = () => {
+    setLoading(true);
+    finishParking("payed", true);
+  };
+
+  const onPressPending = () => {
+    setModal2Visible(true);
+    setTotalPay(0)
+  };
+
+  const handleSaveDebt = () => {
+    finishParking("parcial-pending", false)
+  };
+
+  const handleChangeTotalPayWithDebt = text => setTotalPay(text);
+
+  const handleTotalPending = () => {
+    setModal3Visible(!modal3Visible);
+    finishParking("pending", true);
+  };
+
+  const onPressPartial = () => {
+    setModal3Visible(false);
+    setModal4Visible(true);
+  };
+
+  const handleModal2No = () => {
+    setModal2Visible(!modal2Visible);
+
+  };
+
+  const handleModal2Yes = () => {
+    setModal2Visible(!modal2Visible);
+    setModal3Visible(!modal3Visible);
+  };
+
+  const handleOkModal5 = () => {
+    setModal5Visible(false);
+    restart();
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <ImageBackground
@@ -371,15 +393,9 @@ const UserOut = (props) => {
                 textAlign='center'
                 maxLength={3}
                 autoCapitalize={'characters'}
-                onChangeText={(text) => {
-                  setPlateOne(text.trim());
-                  // setPlateOneCall(text.trim());
-                  if (refPlateTwo && text.length === 3) {
-                    refPlateTwo.current.focus();
-                  };
-                }}
+                onChangeText={handleChangePlateOne}
                 value={plateOne}
-                onFocus={() => { restart(); }}
+                onFocus={restart}
               />
               <TextInput
                 ref={refPlateTwo}
@@ -390,21 +406,13 @@ const UserOut = (props) => {
                 textAlign='center'
                 maxLength={3}
                 autoCapitalize={'characters'}
-                onFocus={() => { setPlateTwo(''); }}
-                onChangeText={text => {
-                  setPlateTwo(text.trim());
-                  // setPlateTwoCall(text.trim());
-                  if (text.length === 3) {
-                    if (plateOne.length === 3) Keyboard.dismiss()
-                  };
-                }}
-                onEndEditing={() => {
-                  checkParkingPlate();
-                }}
+                onFocus={handleFocusPlateTwo}
+                onChangeText={handleChangePlateTwo}
+                onEndEditing={checkParkingPlate}
               />
               <TouchableOpacity
                 style={styles.buttonT}
-                onPress={() => { restart(); navigation.navigate('QRscanner'); }}>
+                onPress={onPressQr}>
                 <Image
                   style={{ width: '65%', height: '65%', marginTop: '10%' }}
                   resizeMode={"contain"}
@@ -419,19 +427,12 @@ const UserOut = (props) => {
                   placeholder={'Ingrese código'}
                   placeholderTextColor={'#FFFFFF'}
                   value={inputVerificationCode}
-                  // style={styles.plateInput}
                   textAlign='center'
                   maxLength={6}
                   autoCapitalize={'characters'}
-                  onFocus={() => { restart(); }}
-                  onChangeText={text => {
-                    if (text.length === 6) { Keyboard.dismiss() }
-                    setInputVerificationCode(text.trim());
-                    setVerificationCodeCall(text.trim());
-                  }}
-                  onEndEditing={() => {
-                    checkParkingCode();
-                  }}
+                  onFocus={restart}
+                  onChangeText={handleChangeInputVerificationCode}
+                  onEndEditing={checkParkingCode}
                 />
               </View>
               <View style={styles.textPhoneCode}>
@@ -533,7 +534,6 @@ const UserOut = (props) => {
                   A devolver
                 </Text>
               </View>
-              {/*  */}
             </View>
             <View style={{
               flexDirection: 'row',
@@ -555,13 +555,11 @@ const UserOut = (props) => {
                   keyboardType='numeric'
                   style={styles.inputMoney}
                   value={totalPay}
-                  onChangeValue={text => setTotalPay(text)}
+                  onChangeValue={handleChangeTotalPay}
                   prefix="$"
                   delimiter="."
                   separator="."
                   precision={0}
-                // onChangeText={(formattedValue) => {
-                // }}
                 />
               </View>
               <View style={{ height: '100%', borderWidth: 0.4, borderColor: '#FFFFFF' }}></View>
@@ -585,16 +583,16 @@ const UserOut = (props) => {
               height: '12%',
               marginTop: '3%'
             }}>
-              <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(5000)} >
+              <TouchableOpacity style={styles.miniButtonMoney} onPress={handleMoneyButton1} >
                 <Text style={styles.miniButtonMoneyText}>$5.000</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(10000)}>
+              <TouchableOpacity style={styles.miniButtonMoney} onPress={handleMoneyButton2}>
                 <Text style={styles.miniButtonMoneyText}>$10.000</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.miniButtonMoney} onPress={() => setTotalPay(20000)}>
+              <TouchableOpacity style={styles.miniButtonMoney} onPress={handleMoneyButton3}>
                 <Text style={styles.miniButtonMoneyText}>$20.000</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.miniButtonMoney} underlayColor={'#00A9A0'} onPress={() => setTotalPay(50000)}>
+              <TouchableOpacity style={styles.miniButtonMoney} onPress={handleMoneyButton4}>
                 <Text style={styles.miniButtonMoneyText}>$50.000</Text>
               </TouchableOpacity>
             </View>
@@ -611,34 +609,29 @@ const UserOut = (props) => {
               {!loading &&
                 <View style={{ width: '60%', height: ' 36%', marginTop: '2%', alignSelf: 'center' }}>
                   <Button
-                    title="C O B R A R"
+                    title="COBRAR"
                     color='transparent'
-                    disabled={totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0 }
-                    style={[totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0  ? styles.buttonStyleDisabled : styles.buttonStyle]}
+                    disabled={totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0}
+                    style={[totalPay - totalAmount < 0 && (plateOne + plateTwo).length !== 0 ? styles.buttonStyleDisabled : styles.buttonStyle]}
                     textStyle={{
                       color: '#00A9A0',
                       fontFamily: 'Montserrat-Bold',
-                      fontSize: width * 0.028
+                      fontSize: width * 0.028,
+                      letterSpacing: 5
                     }}
-                    onPress={() => {
-                      setLoading(true);
-                      finishParking("payed", true);
-                    }} />
+                    onPress={onPressCollect} />
                 </View>
               }
               {loading && <ActivityIndicator size={"large"} color={'#00A9A0'} />}
               {!loading &&
                 <View style={{ width: '100%', height: ' 35%', marginTop: '2%' }}>
                   <Button
-                    title="P A G O   P E N D I E N T E"
+                    title="PAGO PENDIENTE"
                     color='transparent'
                     disabled={isDisabled}
                     style={[isDisabled ? styles.buttonStylePPDisabled : styles.buttonStylePP]}
-                    textStyle={{ color: '#00A9A0', fontFamily: 'Montserrat-Bold', fontSize: width * 0.028 }}
-                    onPress={() => {
-                      setModal2Visible(true);
-                      setTotalPay(0)
-                    }}
+                    textStyle={{ color: '#00A9A0', fontFamily: 'Montserrat-Bold', fontSize: width * 0.028, letterSpacing: 5 }}
+                    onPress={onPressPending}
                   />
                 </View>
               }
@@ -672,15 +665,10 @@ const UserOut = (props) => {
                 <Text style={styles.modalText}> El vehículo no esta estacionado o el código QR no se encuentra asociado a un vehículo estacionado. </Text>
               </View>
               <View style={{ height: '25%', width: '100%', justifyContent: 'flex-end' }}>
-                <Button onPress={() => {
-                  setModal5Visible(false);
-                  restart();
-                }}
+                <Button onPress={handleOkModal5}
                   title="ENTENDIDO"
                   color="#00A9A0"
-                  style={
-                    styles.modalButton
-                  }
+                  style={styles.modalButton}
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
@@ -724,14 +712,10 @@ const UserOut = (props) => {
               </View>
 
               <View style={{ height: '30%', width: '80%', justifyContent: 'flex-end', flexDirection: 'column', alignContent: 'flex-end' }}>
-                <Button onPress={() => {
-                  restart();
-                }}
+                <Button onPress={restart}
                   title="ENTENDIDO"
                   color="#00A9A0"
-                  style={
-                    styles.modalButton
-                  }
+                  style={styles.modalButton}
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
@@ -773,15 +757,10 @@ const UserOut = (props) => {
                 alignItems: 'center'
               }}>
                 <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
-                  <Button onPress={() => {
-                    setModal2Visible(!modal2Visible);
-                    setModal3Visible(!modal3Visible);
-                  }}
+                  <Button onPress={handleModal2Yes}
                     title="SI"
                     color="#00A9A0"
-                    style={
-                      styles.modalYesButton
-                    }
+                    style={styles.modalYesButton}
                     textStyle={{
                       color: "#FFFFFF",
                       textAlign: "center",
@@ -791,15 +770,10 @@ const UserOut = (props) => {
                     }} />
                 </View>
                 <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
-                  <Button onPress={() => {
-                    setModal2Visible(!modal2Visible);
-
-                  }}
+                  <Button onPress={handleModal2No}
                     title="NO"
                     color="transparent"
-                    style={
-                      styles.modalNoButton
-                    }
+                    style={styles.modalNoButton}
                     textStyle={{
                       color: "#00A9A0",
                       textAlign: "center",
@@ -839,10 +813,7 @@ const UserOut = (props) => {
                 alignItems: 'center'
               }}>
                 <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
-                  <Button onPress={() => {
-                    setModal3Visible(!modal3Visible);
-                    finishParking("pending", true);
-                  }}
+                  <Button onPress={handleTotalPending}
                     title="TOTAL"
                     color="#00A9A0"
                     style={
@@ -858,11 +829,7 @@ const UserOut = (props) => {
                     }} />
                 </View>
                 <View style={{ width: '60%', height: '50%', justifyContent: 'flex-end' }}>
-                  <Button onPress={() => {
-                    setModal3Visible(false);
-                    setModal4Visible(true);
-
-                  }}
+                  <Button onPress={onPressPartial}
                     title="PARCIAL"
                     color="transparent"
                     style={
@@ -938,7 +905,7 @@ const UserOut = (props) => {
                     alignSelf: 'center'
                   }}
                   value={totalPay}
-                  onChangeValue={text => setTotalPay(text)}
+                  onChangeValue={handleChangeTotalPayWithDebt}
                   prefix="$"
                   delimiter="."
                   separator="."
@@ -961,15 +928,10 @@ const UserOut = (props) => {
                 </View>
               </View>
               <View style={{ height: '20%', width: '80%', justifyContent: 'center' }}>
-                <Button onPress={() => {
-
-                  finishParking("parcial-pending", false)
-                }}
+                <Button onPress={handleSaveDebt}
                   title="GUARDAR"
                   color="#00A9A0"
-                  style={
-                    styles.modalYesButton
-                  }
+                  style={styles.modalYesButton}
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",

@@ -7,6 +7,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 const NoConnectionModal = (props) => {
     return (
         <Modal
+        ref={props.ref}
         animationType="fade"
         transparent={true}
         backdropOpacity={0.3}
