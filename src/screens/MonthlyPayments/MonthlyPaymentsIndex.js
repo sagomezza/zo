@@ -37,6 +37,8 @@ import * as actions from "../../redux/actions";
 import store from "../../config/store";
 import { createIdempotency } from "../../utils/idempotency";
 import * as Sentry from "@sentry/browser";
+import getRecipsOfShift from '../../config/services/getRecipsOfShift';
+
 
 const { width } = Dimensions.get("window");
 
@@ -467,7 +469,7 @@ const MonthlyPayments = (props) => {
         } else {
           mensualityRenewedModal();
         }
-        getRecips();
+        getRecipsOfShift(officialProps);
         setLoading(false);
       }
     } catch (err) {
@@ -475,24 +477,6 @@ const MonthlyPayments = (props) => {
       // console.log(err);
       // console.log(err?.response.data);
       setLoading(false);
-    }
-  };
-
-  const getRecips = async () => {
-    try {
-      const response = await instance.post(
-        GET_RECIPS,
-        {
-          hqId: officialHq,
-          officialEmail: officialProps.email,
-        },
-        { timeout: TIMEOUT }
-      );
-      store.dispatch(actions.setRecips(response.data.data));
-    } catch (err) {
-      Sentry.captureException(err);
-      // console.log(err?.response);
-      // console.log(err);
     }
   };
 
@@ -583,6 +567,7 @@ const MonthlyPayments = (props) => {
   const renderNewMenPlatesItem = ({ item }) => {
     return (
       <View
+       key={item.key}
         style={{
           flexDirection: "row",
           marginBottom: "2%",
