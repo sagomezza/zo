@@ -24,23 +24,20 @@ import { createIdempotency } from '../../utils/idempotency'
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 // api
-import { FINISHPARKING, READ_HQ, READ_PARANOIC_USER, GET_RECIPS, CHECK_PARKING } from '../../config/api'
+import { FINISHPARKING, READ_PARANOIC_USER, CHECK_PARKING } from '../../config/api'
 import { TIMEOUT } from '../../config/constants/constants';
 import instance from "../../config/axios";
 import store from '../../config/store';
 import * as Sentry from "@sentry/browser";
 import secondsToString from '../../config/services/secondsToString';
+import readHqInfo from '../../config/services/readHqInfo';
+import getRecipsOfShift from '../../config/services/getRecipsOfShift';
 
-
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const UserOut = (props) => {
   const { navigation, officialProps, qr, uid, reservations } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-  // const qrPlate = qr.plate !== undefined ? qr.plate : '';
-  // const qrPhone = qr.phone !== undefined ? qr.phone : '';
-  // const [qrCodePlate, setQrCodePlate] = useState(qrPlate);
-  // const [qrCodePhone, setQrCodePhone] = useState(qrPhone);
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalPay, setTotalPay] = useState('');
   const [recip, setRecip] = useState({})
@@ -48,7 +45,6 @@ const UserOut = (props) => {
   const [isDisabled, setIsDisabled] = useState(true);
   const [err, setErr] = useState("");
   const [isParanoicUser, setIsParanoicUser] = useState(false);
-
   const [plateOne, setPlateOne] = useState('');
   const [plateTwo, setPlateTwo] = useState('');
   const [plateOneCall, setPlateOneCall] = useState('');
@@ -61,13 +57,11 @@ const UserOut = (props) => {
   let pendingValueNum = pendingValue !== undefined ? `$${numberWithPoints(pendingValue)}` : `$${numberWithPoints(0)}`
   const [inputVerificationCode, setInputVerificationCode] = useState('');
   const [verificationCodeCall, setVerificationCodeCall] = useState('');
-
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
   const [modal4Visible, setModal4Visible] = useState(false);
   const [modal5Visible, setModal5Visible] = useState(false);
-
   const verification = check.verificationCode === undefined ? '' : check.verificationCode + ''
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
@@ -230,39 +224,6 @@ const UserOut = (props) => {
     }
   }
 
-  async function readHq() {
-    try {
-      const response = await instance.post(READ_HQ, {
-        id: officialHq
-      },
-        { timeout: TIMEOUT }
-      );
-      getRecips();
-      store.dispatch(actions.setReservations(response.data.data.reservations));
-      store.dispatch(actions.setHq(response.data.data));
-    } catch (err) {
-      Sentry.captureException(err);
-      // console.log(err?.response)
-      // console.log(err)
-    }
-  };
-
-  const getRecips = async () => {
-    try {
-      const response = await instance.post(GET_RECIPS, {
-        hqId: officialHq,
-        officialEmail: officialProps.email
-      },
-        { timeout: TIMEOUT }
-      );
-      store.dispatch(actions.setRecips(response.data.data));
-    } catch (err) {
-      Sentry.captureException(err);
-      // console.log(err?.response)
-      // console.log(err)
-    }
-  };
-
   const finishParking = async (paymentStatus, showModal) => {
     setLoading(true)
     try {
@@ -298,13 +259,14 @@ const UserOut = (props) => {
       }
       store.dispatch(actions.setPhone(''))
       store.dispatch(actions.setQr(''))
-      readHq();
+      readHqInfo(officialHq);
+      getRecipsOfShift(officialProps);
       setRecip(response.data.data);
       setIsDisabled(true);
     } catch (err) {
       Sentry.captureException(err);
-      console.log(err?.response)
-      console.log(err)
+      // console.log(err?.response)
+      // console.log(err)
       setLoading(false);
       setIsDisabled(true);
       setModal4Visible(false);
