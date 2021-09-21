@@ -23,6 +23,8 @@ import { TIMEOUT } from '../../config/constants/constants';
 import { READ_HQ, START_PARKING } from '../../config/api';
 import instance from '../../config/axios';
 import * as Sentry from "@sentry/browser";
+import readHqInfo from '../../config/services/readHqInfo';
+
 
 const BarcodeScanner = (props) => {
   const { navigation, officialProps, qr } = props;
@@ -73,7 +75,7 @@ const BarcodeScanner = (props) => {
           { timeout: TIMEOUT }
         )
         setStartParking(response.data.data);
-        readHq();
+        readHqInfo(officialHq);
         setPlate(qr.plate);
         setModalVisible(true);
       }
@@ -86,20 +88,6 @@ const BarcodeScanner = (props) => {
     }
     store.dispatch(actions.setQr(''))
   }
-
-  async function readHq() {
-    try {
-      const response = await instance.post(READ_HQ, {
-        id: officialHq
-      });
-      store.dispatch(actions.setReservations(response.data.data.reservations));
-      store.dispatch(actions.setHq(response.data.data));
-    } catch (error) {
-      Sentry.captureException(error);
-      // console.log("err: ", error);
-      // console.log(err?.response?.data);
-    }
-  };
 
   if (hasPermission === null) {
     return <View />;
