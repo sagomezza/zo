@@ -22,14 +22,16 @@ import { Keyboard } from 'react-native';
 import moment from 'moment';
 import Button from '../../components/Button';
 import CustomModal from '../../components/CustomModal';
+import CurrencyInput from 'react-native-currency-input';
 import numberWithPoints from '../../config/services/numberWithPoints';
 // api
 import {
   START_PARKING,
   FIND_USER_BY_PLATE,
-  CREATE_USER, 
+  CREATE_USER,
   GET_RECIPS_BY_PLATE,
   FIND_MENSUALITY_PLATE,
+  PAY_DEBTS
 } from "../../config/api";
 import { TIMEOUT } from '../../config/constants/constants';
 import instance from "../../config/axios";
@@ -219,7 +221,7 @@ const UserInput = (props) => {
         setHistoryExists(true)
         if (response.data.data[0].prepayFullDay) {
           let prepayDayData = response.data.data[0]
-          let prepayDateEnd = typeof(prepayDayData.dateFinished) === 'string' ? prepayDayData.dateFinished : new Date((prepayDayData.dateFinished._seconds) * 1000);
+          let prepayDateEnd = typeof (prepayDayData.dateFinished) === 'string' ? prepayDayData.dateFinished : new Date((prepayDayData.dateFinished._seconds) * 1000);
           setPrepayDayDateFinished(prepayDateEnd);
           setPrepayDayRecip(true);
         } else {
@@ -299,7 +301,7 @@ const UserInput = (props) => {
           {
             headers: {
               "x-idempotence-key": idempotencyKey
-            }, 
+            },
             timeout: TIMEOUT
           }
         )
@@ -335,6 +337,38 @@ const UserInput = (props) => {
     }
   };
 
+  async function payDebts() {
+    setLoadingStart(true);
+    try {
+      if (plateOne.length === 3 && plateTwo.length >= 2) {
+        const response = await instance.post(
+          PAY_DEBTS,
+          {
+            hqId: officialHq,
+            plate: plateOne + plateTwo,
+            value: Number(blacklistValue),
+            cash: Number(totalPay),
+            change: Number(inputChangeDebt),
+            generateRecip: true,
+            officialEmail: officialProps.email
+          },
+          { timeout: TIMEOUT }
+        )
+        getRecipsOfShift(officialProps);
+        setTotalPay(0);
+        setLoadingStart(false);
+        setModal3Visible(false);
+        console.log('payed')
+      }
+    } catch (err) {
+      setModal3Visible(false);
+      Sentry.captureException(err);
+      console.log(err)
+      console.log(err?.response)
+      setLoadingStart(false);
+      if (err?.response.data.response === -2) setErrorModalVisible(true);
+    }
+  }
 
   const qrHandler = () => {
     restartSearch();
@@ -393,10 +427,12 @@ const UserInput = (props) => {
 
   const handleChangeTotalPay = text => setTotalPay(text);
   const handleCheckBox = () => setPrepayDay(!prepayDay);
-  const handleModal3 = () => setModal3Visible(false);
-  const handleMaxCapMensuality = () => setMaxCapMensuality(false);
+  const handleModal3 = () => {setModal3Visible(false); setTotalPay(0);}
+  const handleMaxCapMensuality = () => {setMaxCapMensuality(false); }
 
   let inputChange = (totalPay - prepayDayValue) <= 0 ? '' : '' + (totalPay - prepayDayValue)
+  let inputChangeDebt = (totalPay - blacklistValue) <= 0 ? 0 : '' + (totalPay - blacklistValue)
+
 
   const renderTableDataItem = ({ item, index }) => {
     if (index % 2 == 0) {
@@ -676,14 +712,13 @@ const UserInput = (props) => {
         visible={modal3Visible}
       >
         <View style={styles.centeredView}>
-          <View style={styles.modalView}>
+          <View style={styles.modalViewPayDebt}>
             <View style={{
               height: '100%',
               width: '100%',
               justifyContent: 'space-between',
-              padding: '2%'
             }}>
-              <View style={{ margin: '4%', justifyContent: 'center', height: ' 60%' }}>
+              <View style={{ margin: '4%', justifyContent: 'center', height: ' 45%' }}>
                 <Image
                   style={{ width: '30%', alignSelf: 'center', marginBottom: '10%' }}
                   resizeMode={"contain"}
@@ -693,18 +728,62 @@ const UserInput = (props) => {
                 <Text style={styles.modalText}>Deuda: {`$${numberWithPoints(blacklistValue)}`}</Text>
                 <Text style={styles.modalText}>Fecha: {moment(blacklistDate).format('L')} {moment(blacklistDate).format('LT')}</Text>
               </View>
-              <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                <Button onPress={handleModal3}
-                  title="ENTENDIDO"
+              <View style={{
+                justifyContent: 'space-between',
+                height: '30%',
+                flexDirection: 'column',
+                paddingBottom: '10%',
+              }}>
+                <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
+                  <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Pago:  </Text>
+                  <CurrencyInput
+                    placeholder='$'
+                    textAlign='center'
+                    keyboardType='numeric'
+                    style={styles.currencyInput}
+                    value={totalPay}
+                    onChangeValue={handleChangeTotalPay}
+                    prefix="$"
+                    delimiter="."
+                    separator="."
+                    precision={0}
+                  />
+                </View>
+                <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
+                  <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}> A devolver:  </Text>
+                  <TextInput
+                    style={styles.currencyInput}
+                    keyboardType='numeric'
+                    placeholder='$'
+                    textAlign='center'
+                    editable={false}
+                    value={`$${numberWithPoints(inputChangeDebt)}`}
+                  />
+                </View>
+              </View>
+              <View style={{ height: '18%', width: '100%'}}>
+                <Button onPress={payDebts}
+                  title="PAGAR"
                   color="#00A9A0"
                   activityIndicatorStatus={loadingStart}
-                  style={styles.modalButton}
+                  style={totalPay - blacklistValue < 0 ? styles.PayDebtPayModalButtonDisabled : styles.PayDebtModalButton}
+                  disabled={totalPay - blacklistValue < 0}
                   textStyle={{
                     color: "#FFFFFF",
                     textAlign: "center",
                     fontFamily: 'Montserrat-Medium',
                     letterSpacing: 5,
-                    fontSize: normalize(20)
+                  }} />
+                <Button onPress={handleModal3}
+                  title="CANCELAR"
+                  color="transparent"
+                  style={styles.PayDebtBackButton}
+                  textStyle={{
+                    color: "#00A9A0",
+                    textAlign: "center",
+                    fontFamily: 'Montserrat-Medium',
+                    letterSpacing: 5,
+
                   }} />
               </View>
             </View>

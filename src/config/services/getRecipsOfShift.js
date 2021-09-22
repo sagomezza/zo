@@ -121,9 +121,11 @@ const getRecipsOfShift = (officialProps) => {
                                         // } else {
 
                                         // }
-                                        store.dispatch(actions.setRecips(recips));
                                     }
+                                    store.dispatch(actions.setRecips(recips));
+                                    
                                 });
+
                         });
                 } catch (err) {
                     // Sentry.captureException(err);
