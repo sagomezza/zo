@@ -135,6 +135,7 @@ const App = () => {
         if (response.data.data.hq) {
           let hqId = response.data.data.hq[0]
           readHqInfo(hqId);
+          console.log(officialProps)
           getRecipsOfShift(officialProps);
         }
       } catch (err) {

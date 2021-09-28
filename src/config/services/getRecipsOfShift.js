@@ -66,71 +66,111 @@ const getRecipsOfShift = (officialProps) => {
                                             recips.push(recipData);
                                         });
                                     }
-                                    if (recips.length === 0) {
-                                        return ("No recips")
-
-                                    } else {
-                                        if (email) {
-                                            let filteredRecips = recips.filter((recip) => {
-                                                return (
-                                                    recip.officialEmail === email
-                                                );
-                                            });
-                                            recips = [...filteredRecips];
-                                        }
-                                        recips.map((recip) => {
-                                            recip.dateStart = recip.dateStart.nanoseconds
-                                                ? recip.dateStart.toDate()
-                                                : recip.dateStart;
-                                            recip.dateFinished = recip.dateFinished.nanoseconds
-                                                ? recip.dateFinished.toDate()
-                                                : recip.dateFinished;
-                                            if (recip.totalTime)
-                                                recip.totalTime = recip.totalTime.nanoseconds
-                                                    ? recip.totalTime.toDate()
-                                                    : recip.totalTime;
-                                        });
-                                        recips.sort((a, b) => {
-                                            if (
-                                                (a.mensuality || a.prepayFullDay) &&
-                                                !b.mensuality
-                                            ) {
-                                                return b.dateFinished - a.dateStart;
-                                            } else if (
-                                                (b.mensuality || b.prepayFullDay) &&
-                                                !a.mensuality
-                                            ) {
-                                                return b.dateStart - a.dateFinished;
-                                            } else if (
-                                                (a.mensuality || a.prepayFullDay) &&
-                                                (b.mensuality || b.prepayFullDay)
-                                            ) {
-                                                return b.dateStart - a.dateStart;
-                                            } else {
-                                                return b.dateFinished - a.dateFinished;
+                                    firestore
+                                        .collection("recips")
+                                        .where("hqId", "==", officialHq)
+                                        .where("blackList", "==", true)
+                                        .where("officialEmail", "==", email)
+                                        .where("dateFactured", ">=", date)
+                                        .orderBy("dateFactured", "desc")
+                                        .get()
+                                        .then((snapshot) => {
+                                            if (!snapshot.empty) {
+                                                snapshot.forEach((doc) => {
+                                                    let recipData = doc.data();
+                                                    recipData.id = doc.id;
+                                                    recips.push(recipData);
+                                                });
                                             }
-                                        });
-                                        // store.dispatch(actions.setRecips(recips));
+                                            if (recips.length === 0) {
+                                                return ("No recips")
 
-                                        // if (parameter.limit) {
-                                        //   resolve({
-                                        //     data: {
-                                        //       total: recips.slice(0, parameter.limit),
-                                        //     },
-                                        //   });
-                                        // } else {
+                                            } else {
+                                                if (email) {
+                                                    let filteredRecips = recips.filter((recip) => {
+                                                        return (
+                                                            recip.officialEmail === email
+                                                        );
+                                                    });
+                                                    recips = [...filteredRecips];
+                                                }
+                                                recips.map((recip) => {
+                                                    if (recip.dateFactured) {
+                                                        recip.dateFactured = recip.dateFactured.nanoseconds
+                                                            ? recip.dateFactured.toDate()
+                                                            : recip.dateFactured;
+                                                    } else {
+                                                        recip.dateStart = recip.dateStart.nanoseconds
+                                                            ? recip.dateStart.toDate()
+                                                            : recip.dateStart;
+                                                        recip.dateFinished = recip.dateFinished.nanoseconds
+                                                            ? recip.dateFinished.toDate()
+                                                            : recip.dateFinished;
+                                                        if (recip.totalTime)
+                                                            recip.totalTime = recip.totalTime.nanoseconds
+                                                                ? recip.totalTime.toDate()
+                                                                : recip.totalTime;
+                                                    }
+                                                });
+                                                recips.sort((a, b) => {
+                                                    if (
+                                                        (a.mensuality || a.prepayFullDay) &&
+                                                        !b.mensuality
+                                                    ) {
+                                                        return b.dateFinished - a.dateStart;
+                                                    } else if (
+                                                        (b.mensuality || b.prepayFullDay) &&
+                                                        !a.mensuality
+                                                    ) {
+                                                        return b.dateStart - a.dateFinished;
+                                                    } else if (
+                                                        (a.mensuality || a.prepayFullDay) &&
+                                                        (b.mensuality || b.prepayFullDay)
+                                                    ) {
+                                                        return b.dateStart - a.dateStart;
+                                                    } else if (
+                                                        (a.blacklist || a.prepayFullDay) &&
+                                                        (b.blacklist || b.prepayFullDay)
+                                                    ){ 
+                                                        return b.dateStart - a.dateFactured
+                                                    }
+                                                    else {
+                                                        return b.dateFinished - a.dateFinished;
+                                                    }
+                                                });
 
-                                        // }
-                                    }
-                                    store.dispatch(actions.setRecips(recips));
-                                    
-                                });
+                                                // if (parameter.limit) {
+                                                //   resolve({
+                                                //     data: {
+                                                //       total: recips.slice(0, parameter.limit),
+                                                //     },
+                                                //   });
+                                                // } else {
 
-                        });
+                                                // }
+                                                store.dispatch(actions.setRecips(recips));
+                                            }
+                                        })
+                                        .catch((err) => {
+                                            // Sentry.captureException(err);
+                                            console.log(err);
+                                            return ("Error getting blacklist documents", err)
+                                        })
+
+                                })
+                                .catch((err) => {
+                                    // Sentry.captureException(err);
+                                    console.log(err);
+                                    return ("Error getting mensuality documents", err)
+                                })
+                        })
+                        .catch((err) => {
+                            // Sentry.captureException(err);
+                            console.log(err);
+                            return ("Error getting mensuality documents", err)
+                        })
                 } catch (err) {
-                    // Sentry.captureException(err);
-                    console.log(err);
-                    return ("Error getting recips", err)
+
                 }
             })
             .catch((err) => {
