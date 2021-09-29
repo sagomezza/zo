@@ -74,7 +74,6 @@ const Blacklist = (props) => {
         setErrorMessage(false);
     };
 
-
     async function findUserByPlate() {
         try {
             if (plateOne.length === 3 && plateTwo.length >= 2) {
@@ -91,18 +90,16 @@ const Blacklist = (props) => {
                     setBlacklistExists(true);
                 } else {
                     setModal3Visible(true);
-                }
-            }
+                };
+            };
         } catch (err) {
             Sentry.captureException(err);
             setBlacklistExists(false);
-            console.log(err)
-            console.log(err?.response)
+            // console.log(err);
+            // console.log(err?.response);
             if (err?.response.data.response === -1) setModal2Visible(true);
-        }
+        };
     };
-
-
 
     const listHQDebtsCall = async () => {
         setLoadingListHQDebts(true);
@@ -114,12 +111,13 @@ const Blacklist = (props) => {
                 },
                 { timeout: TIMEOUT }
             )
-            setListHQDebts(response.data.data)
+            setListHQDebts(response.data.data);
             setLoadingListHQDebts(false);
         } catch (err) {
             Sentry.captureException(err);
             // console.log(err)
             // console.log(err?.response)
+            if (err?.response.data.response === -2) setListHQDebts([]);
             setLoadingListHQDebts(false);
         }
     };
@@ -128,15 +126,6 @@ const Blacklist = (props) => {
         setLoading(true);
         try {
             if (plateOne.length === 3 && plateTwo.length >= 2) {
-                console.log({
-                    hqId: officialHq,
-                    plate: plateOne + plateTwo,
-                    value: Number(blacklistValue),
-                    cash: Number(totalPay),
-                    change: Number(inputChange),
-                    generateRecip: true,
-                    officialEmail: officialProps.email
-                });
                 const response = await instance.post(
                     PAY_DEBTS,
                     {
@@ -154,13 +143,13 @@ const Blacklist = (props) => {
                 setTotalPay(0);
                 setBlacklistExists(false);
                 setLoading(false);
-                setModalVisible(false);
+                // setModalVisible(false);
                 listHQDebtsCall();
             }
         } catch (err) {
             // Sentry.captureException(err);
-            console.log(err)
-            console.log(err?.response)
+            // console.log(err)
+            // console.log(err?.response)
             setLoading(false);
             setModalVisible(false);
             // console.log('ERROR PAY DEBT', err?.response.data);
@@ -425,7 +414,7 @@ const Blacklist = (props) => {
                                 <View>
                                 </View>
                                 <View style={{ margin: '4%', justifyContent: 'center', height: ' 40%' }}>
-                                    <Text style={{ ...styles.textListTitle, textAlign: 'center' }}>LA DEUDA YA FUE RETIRADA</Text>
+                                    <Text style={{ ...styles.textListTitle, textAlign: 'center' }}>LA DEUDA FUE RETIRADA</Text>
                                 </View>
                                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                                     <Button onPress={debtPayedSuccess}

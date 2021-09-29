@@ -64,6 +64,7 @@ const UserInput = (props) => {
   const [modal3Visible, setModal3Visible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [maxCapMensuality, setMaxCapMensuality] = useState(false);
+  const [debtExists, setDebtExists] = useState(true);
   const [blacklist, setBlacklist] = useState([]);
   let blacklistValue = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].value : 0;
   let blacklistDate = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].date : '';
@@ -357,14 +358,13 @@ const UserInput = (props) => {
         getRecipsOfShift(officialProps);
         setTotalPay(0);
         setLoadingStart(false);
-        setModal3Visible(false);
-        console.log('payed')
+        setDebtExists(false);
       }
     } catch (err) {
       setModal3Visible(false);
       Sentry.captureException(err);
-      console.log(err)
-      console.log(err?.response)
+      // console.log(err)
+      // console.log(err?.response)
       setLoadingStart(false);
       setErrorModalVisible(true);
       // if (err?.response.data.response === -2) setErrorModalVisible(true);
@@ -428,8 +428,8 @@ const UserInput = (props) => {
 
   const handleChangeTotalPay = text => setTotalPay(text);
   const handleCheckBox = () => setPrepayDay(!prepayDay);
-  const handleModal3 = () => {setModal3Visible(false); setTotalPay(0);}
-  const handleMaxCapMensuality = () => {setMaxCapMensuality(false); }
+  const handleModal3 = () => { setModal3Visible(false); setTotalPay(0); setDebtExists(true);}
+  const handleMaxCapMensuality = () => { setMaxCapMensuality(false); }
 
   let inputChange = (totalPay - prepayDayValue) <= 0 ? '' : '' + (totalPay - prepayDayValue)
   let inputChangeDebt = (totalPay - blacklistValue) <= 0 ? 0 : '' + (totalPay - blacklistValue)
@@ -713,82 +713,110 @@ const UserInput = (props) => {
         visible={modal3Visible}
       >
         <View style={styles.centeredView}>
-          <View style={styles.modalViewPayDebt}>
-            <View style={{
-              height: '100%',
-              width: '100%',
-              justifyContent: 'space-between',
-            }}>
-              <View style={{ margin: '4%', justifyContent: 'center', height: ' 45%' }}>
-                <Image
-                  style={{ width: '30%', alignSelf: 'center', marginBottom: '10%' }}
-                  resizeMode={"contain"}
-                  source={require("../../../assets/images/alert.png")}
-                />
-                <Text style={styles.modalText}> Este usuario se encuentra en lista negra:  </Text>
-                <Text style={styles.modalText}>Deuda: {`$${numberWithPoints(blacklistValue)}`}</Text>
-                <Text style={styles.modalText}>Fecha: {moment(blacklistDate).format('L')} {moment(blacklistDate).format('LT')}</Text>
-              </View>
+          {debtExists ?
+            <View style={styles.modalViewPayDebt}>
               <View style={{
+                height: '100%',
+                width: '100%',
                 justifyContent: 'space-between',
-                height: '30%',
-                flexDirection: 'column',
-                paddingBottom: '10%',
               }}>
-                <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
-                  <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Pago:  </Text>
-                  <CurrencyInput
-                    placeholder='$'
-                    textAlign='center'
-                    keyboardType='numeric'
-                    style={styles.currencyInput}
-                    value={totalPay}
-                    onChangeValue={handleChangeTotalPay}
-                    prefix="$"
-                    delimiter="."
-                    separator="."
-                    precision={0}
+                <View style={{ margin: '4%', justifyContent: 'center', height: ' 45%' }}>
+                  <Image
+                    style={{ width: '30%', alignSelf: 'center', marginBottom: '10%' }}
+                    resizeMode={"contain"}
+                    source={require("../../../assets/images/alert.png")}
                   />
+                  <Text style={styles.modalText}> Este usuario se encuentra en lista negra:  </Text>
+                  <Text style={styles.modalText}>Deuda: {`$${numberWithPoints(blacklistValue)}`}</Text>
+                  <Text style={styles.modalText}>Fecha: {moment(blacklistDate).format('L')} {moment(blacklistDate).format('LT')}</Text>
                 </View>
-                <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
-                  <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}> A devolver:  </Text>
-                  <TextInput
-                    style={styles.currencyInput}
-                    keyboardType='numeric'
-                    placeholder='$'
-                    textAlign='center'
-                    editable={false}
-                    value={`$${numberWithPoints(inputChangeDebt)}`}
-                  />
+                <View style={{
+                  justifyContent: 'space-between',
+                  height: '30%',
+                  flexDirection: 'column',
+                  paddingBottom: '10%',
+                }}>
+                  <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
+                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}>Pago:  </Text>
+                    <CurrencyInput
+                      placeholder='$'
+                      textAlign='center'
+                      keyboardType='numeric'
+                      style={styles.currencyInput}
+                      value={totalPay}
+                      onChangeValue={handleChangeTotalPay}
+                      prefix="$"
+                      delimiter="."
+                      separator="."
+                      precision={0}
+                    />
+                  </View>
+                  <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
+                    <Text style={{ ...styles.modalText, fontSize: normalize(20), fontFamily: 'Montserrat-Bold' }}> A devolver:  </Text>
+                    <TextInput
+                      style={styles.currencyInput}
+                      keyboardType='numeric'
+                      placeholder='$'
+                      textAlign='center'
+                      editable={false}
+                      value={`$${numberWithPoints(inputChangeDebt)}`}
+                    />
+                  </View>
                 </View>
-              </View>
-              <View style={{ height: '18%', width: '100%'}}>
-                <Button onPress={payDebts}
-                  title="PAGAR"
-                  color="#00A9A0"
-                  activityIndicatorStatus={loadingStart}
-                  style={totalPay - blacklistValue < 0 ? styles.PayDebtPayModalButtonDisabled : styles.PayDebtModalButton}
-                  disabled={totalPay - blacklistValue < 0}
-                  textStyle={{
-                    color: "#FFFFFF",
-                    textAlign: "center",
-                    fontFamily: 'Montserrat-Medium',
-                    letterSpacing: 5,
-                  }} />
-                <Button onPress={handleModal3}
-                  title="CANCELAR"
-                  color="transparent"
-                  style={styles.PayDebtBackButton}
-                  textStyle={{
-                    color: "#00A9A0",
-                    textAlign: "center",
-                    fontFamily: 'Montserrat-Medium',
-                    letterSpacing: 5,
+                <View style={{ height: '18%', width: '100%' }}>
+                  <Button onPress={payDebts}
+                    title="PAGAR"
+                    color="#00A9A0"
+                    activityIndicatorStatus={loadingStart}
+                    style={totalPay - blacklistValue < 0 ? styles.PayDebtPayModalButtonDisabled : styles.PayDebtModalButton}
+                    disabled={totalPay - blacklistValue < 0}
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Medium',
+                      letterSpacing: 5,
+                    }} />
+                  <Button onPress={handleModal3}
+                    title="CANCELAR"
+                    color="transparent"
+                    style={styles.PayDebtBackButton}
+                    textStyle={{
+                      color: "#00A9A0",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Medium',
+                      letterSpacing: 5,
 
-                  }} />
+                    }} />
+                </View>
               </View>
             </View>
-          </View>
+            :
+            <View style={styles.modalView}>
+              <View style={{
+                height: '100%',
+                width: '100%',
+                justifyContent: 'space-between',
+              }}>
+                <View style={{ margin: '4%', justifyContent: 'center', height: ' 55%' }}>
+                  <Text style={styles.modalText}> LA DEUDA FUE RETIRADA. </Text>
+                </View>
+                <View style={{ height: '20%', width: '100%',justifyContent: 'flex-end' }}>
+                  <Button onPress={handleModal3}
+                    title="ENTENDIDO"
+                    color="#00A9A0"
+                    activityIndicatorStatus={loadingStart}
+                    style={styles.modalButton}
+                    textStyle={{
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                      fontFamily: 'Montserrat-Medium',
+                      letterSpacing: 5,
+                    }} />
+                </View>
+              </View>
+            </View>
+
+          }
         </View>
       </Modal>
       <Modal
