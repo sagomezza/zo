@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
     Text,
     View,
@@ -21,15 +21,15 @@ import CurrencyInput from 'react-native-currency-input';
 import { PAY_DEBTS, FIND_USER_BY_PLATE, LIST_HQ_DEBTS } from "../../config/api";
 import instance from "../../config/axios";
 import { TIMEOUT } from '../../config/constants/constants';
+import getRecipsOfShift from '../../config/services/getRecipsOfShift';
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
 import * as Sentry from "@sentry/browser";
 import moment from 'moment';
 
-
 const Blacklist = (props) => {
-    const { navigation, officialProps, reservations, recips, hq } = props;
+    const { navigation, officialProps } = props;
     const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
     const [plateOne, setPlateOne] = useState('');
     const [plateTwo, setPlateTwo] = useState('');
@@ -38,40 +38,41 @@ const Blacklist = (props) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modal2Visible, setModal2Visible] = useState(false);
     const [modal3Visible, setModal3Visible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(false);
     const [totalPay, setTotalPay] = useState(0);
     const [listHQDebts, setListHQDebts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [loadingListHQDebts, setLoadingListHQDebts] = useState(true);
-    const [findUserByPlateInfo, setFindUserByPlateInfo] = useState([]);
     const [blacklist, setBlacklist] = useState([]);
     const [blackListExists, setBlacklistExists] = useState(false);
     let blacklistValue = blacklist !== undefined && blacklist.length > 0 ? blacklist[0].value : 0;
 
-    const clearPlateOne = () => {
-        setPlateOne('');
-    }
-    const clearPlateTwo = () => {
-        setPlateTwo('');
-    }
+    const clearPlateOne = () => setPlateOne('');
+    const clearPlateTwo = () => setPlateTwo('');
+
+    useEffect(() => {
+        listHQDebtsCall();
+    }, []);
 
     const debtPayedSuccess = () => {
         listHQDebtsCall();
         clearPlateOne();
         clearPlateTwo();
         setModalVisible(false);
-    }
+    };
 
     const userNotFoundModal = () => {
         clearPlateOne();
         clearPlateTwo();
         setModal2Visible(false);
-    }
+    };
+
     const debtNotFoundModal = () => {
         clearPlateOne();
         clearPlateTwo();
         setModal3Visible(false);
-    }
-
+        setErrorMessage(false);
+    };
 
     async function findUserByPlate() {
         try {
@@ -85,25 +86,20 @@ const Blacklist = (props) => {
                     { timeout: TIMEOUT }
                 )
                 if (response.data.blackList) {
-                    setFindUserByPlateInfo(response.data);
                     setBlacklist(response.data.blackList);
                     setBlacklistExists(true);
                 } else {
                     setModal3Visible(true);
-                }
-            }
+                };
+            };
         } catch (err) {
             Sentry.captureException(err);
             setBlacklistExists(false);
-            // console.log(err)
-            // console.log(err?.response)
+            // console.log(err);
+            // console.log(err?.response);
             if (err?.response.data.response === -1) setModal2Visible(true);
-        }
-    }
-
-    useEffect(() => {
-        listHQDebtsCall();
-    }, []);
+        };
+    };
 
     const listHQDebtsCall = async () => {
         setLoadingListHQDebts(true);
@@ -115,12 +111,13 @@ const Blacklist = (props) => {
                 },
                 { timeout: TIMEOUT }
             )
-            setListHQDebts(response.data.data)
+            setListHQDebts(response.data.data);
             setLoadingListHQDebts(false);
         } catch (err) {
             Sentry.captureException(err);
             // console.log(err)
             // console.log(err?.response)
+            if (err?.response.data.response === -2) setListHQDebts([]);
             setLoadingListHQDebts(false);
         }
     };
@@ -137,38 +134,94 @@ const Blacklist = (props) => {
                         value: Number(blacklistValue),
                         cash: Number(totalPay),
                         change: Number(inputChange),
-                        generateRecip: true
+                        generateRecip: true,
+                        officialEmail: officialProps.email
                     },
                     { timeout: TIMEOUT }
                 )
+                getRecipsOfShift(officialProps);
                 setTotalPay(0);
                 setBlacklistExists(false);
                 setLoading(false);
-                setModalVisible(true);
+                // setModalVisible(false);
+                listHQDebtsCall();
             }
         } catch (err) {
-            Sentry.captureException(err);
+            // Sentry.captureException(err);
             // console.log(err)
             // console.log(err?.response)
             setLoading(false);
-            if (err?.response.data.response === -2) setModal3Visible(true);
+            setModalVisible(false);
+            // console.log('ERROR PAY DEBT', err?.response.data);
+            if (err?.response.data.response === -2) {
+                setErrorMessage(false);
+                setModal3Visible(true);
+            } else {
+                setErrorMessage(true);
+                setModal3Visible(true);
+            }
         }
     }
 
-    const formatHours = (hours) => {
-        if (typeof hours === "number" || typeof hours === "double" || typeof hours === "long" || typeof hours === "float") {
-            return Math.round(hours)
-        } else return hours
-    }
 
     let inputChange = (totalPay - blacklistValue) <= 0 ? 0 : '' + (totalPay - blacklistValue)
 
     const formatDateDays = (date) => {
         return moment(date).format('L')
-    }
+    };
+
     const formatDateHours = (date) => {
         return moment(date).format('LT')
-    }
+    };
+
+    const handleChangePlateOne = (text) => {
+        setPlateOne(text);
+        if (refPlateTwo && text.length === 3) {
+            refPlateTwo.current.focus();
+        };
+    };
+
+    const handleFocusPlateOne = () => { clearPlateOne(); clearPlateTwo(); }
+
+    const handleChangePlateTwo = text => {
+        setPlateTwo(text);
+        if (text.length === 3) {
+            if (plateOne.length === 3) Keyboard.dismiss()
+        };
+    };
+
+    const handleModal = () => setModalVisible(true);
+    const handleChangeTotalPay = text => setTotalPay(text);
+
+    const handleBackModal = () => {
+        setBlacklistExists(false);
+        setModalVisible(false);
+        clearPlateOne();
+        clearPlateTwo();
+        setTotalPay(0);
+    };
+
+    const listHQDebtsKeyExtractor = useCallback(({ id }) => id, [listHQDebts]);
+
+    const renderListHQDebtsKeyExtractorItem = useCallback(({ item }) =>
+        <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%' }} >
+            <Text style={styles.textPlaca}>
+                {item.plate !== undefined ? item.plate : ''}
+            </Text>
+            <Text style={styles.dateDaysText}>
+                {item.date !== undefined ? formatDateDays(item.date) : ''}
+            </Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', width: '20%', height: '100%' }}>
+                <Text style={styles.dateDaysText}>
+                    {item.date !== undefined ? formatDateHours(item.date) : ''}
+                </Text>
+
+            </View>
+            <Text style={{ ...styles.textPlaca, textAlign: 'right', marginRight: '3%' }}>
+                {item.value !== undefined ? `$${numberWithPoints(item.value)}` : ''}
+            </Text>
+        </View>
+        , [listHQDebts]);
 
     return (
         <View style={{ flex: 1 }}>
@@ -191,15 +244,9 @@ const Blacklist = (props) => {
                             textAlign='center'
                             maxLength={3}
                             autoCapitalize={"characters"}
-                            onChangeText={(text) => {
-                                setPlateOne(text);
-                                if (refPlateTwo && text.length === 3) {
-                                    refPlateTwo.current.focus();
-                                }
-                                ;
-                            }}
+                            onChangeText={handleChangePlateOne}
                             value={plateOne}
-                            onFocus={() => { clearPlateOne(); clearPlateTwo(); }}
+                            onFocus={handleFocusPlateOne}
                         />
                         <TextInput
                             ref={refPlateTwo}
@@ -210,23 +257,14 @@ const Blacklist = (props) => {
                             maxLength={3}
                             autoCapitalize={"characters"}
                             keyboardType='default'
-                            onFocus={() => { clearPlateTwo(); }}
-                            onChangeText={text => {
-                                setPlateTwo(text);
-                                if (text.length === 3) {
-                                    if (plateOne.length === 3) Keyboard.dismiss()
-                                };
-                            }}
+                            onFocus={clearPlateTwo}
+                            onChangeText={handleChangePlateTwo}
                             value={plateTwo}
-                            onEndEditing={() => {
-                                findUserByPlate();
-                            }}
+                            onEndEditing={findUserByPlate}
                         />
                     </View>
                     <View style={{ height: '42%', width: '57%', justifyContent: 'center', marginTop: '2%' }}>
-                        <Button onPress={() => {
-                            setModalVisible(true);
-                        }}
+                        <Button onPress={handleModal}
                             title="PAGAR"
                             color='#FFF200'
                             style={[plateOne === "" || plateTwo === "" ? styles.buttonIDisabled : styles.buttonI]}
@@ -237,7 +275,7 @@ const Blacklist = (props) => {
                     </View>
                 </View>
                 <View style={styles.container}>
-                    <View style={{ height: '90%', width: '90%', borderRadius: 10}}>
+                    <View style={{ height: '90%', width: '90%', borderRadius: 10 }}>
                         <View style={{ marginBottom: '5%', marginTop: '5%', justifyContent: 'center', alignItems: 'center' }}>
                             <Text style={styles.textListTitle} >LISTA NEGRA</Text>
                         </View>
@@ -249,7 +287,7 @@ const Blacklist = (props) => {
                             </View>
                             :
                             <View style={{ height: "95%" }}>
-                                <View style={{ width: '100%', height: '5%', flexDirection: 'row', alignSelf: 'center', marginTop: '3%'}}>
+                                <View style={{ width: '100%', height: '5%', flexDirection: 'row', alignSelf: 'center', marginTop: '3%' }}>
                                     <Text style={{ ...styles.titleText, marginLeft: '5%' }}>Placa</Text>
                                     <Text style={{ ...styles.titleText, marginLeft: '16%' }}>Fecha</Text>
                                     <Text style={{ ...styles.titleText, marginLeft: '18%' }}>Hora</Text>
@@ -259,36 +297,9 @@ const Blacklist = (props) => {
                                     <FlatList
                                         style={{ height: "37%" }}
                                         data={listHQDebts}
-                                        keyExtractor={({ id }) => id}
-                                        renderItem={({ item }) => {
-                                            return (
-                                                // <TouchableOpacity
-                                                //   key={index.toString()}
-                                                //   onPress={() => {
-                                                //     setShowRecipModal(true);
-                                                //   }}
-                                                // >
-                                                <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%'}} >
-                                                    <Text style={styles.textPlaca}>
-                                                        {item.plate !== undefined ? item.plate : ''}
-                                                    </Text>
-                                                    <Text style={styles.dateDaysText}>
-                                                        {item.date ? formatDateDays(item.date) : ''}
-                                                    </Text>
-                                                    <View style={{ flexDirection: 'row', justifyContent: 'center', width: '20%', height: '100%'}}>
-                                                        <Text style={styles.dateDaysText}>
-                                                            {item.date ? formatDateHours(item.date) : ''}
-                                                        </Text>
-                                                        
-                                                    </View>
-                                                    <Text style={{...styles.textPlaca, textAlign: 'right', marginRight: '3%'}}>
-                                                        {item.value ? `$${numberWithPoints(item.value)}` : ''}
-                                                    </Text>
-                                                </View>
-                                                // </TouchableOpacity>
-
-                                            )
-                                        }}
+                                        keyExtractor={listHQDebtsKeyExtractor}
+                                        renderItem={renderListHQDebtsKeyExtractorItem}
+                                        maxToRenderPerBatch={6}
                                     />
                                     :
                                     <View style={{ marginLeft: '13%', padding: '10%' }}>
@@ -313,23 +324,17 @@ const Blacklist = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modalVisible}
-                // visible={true}
-
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-
-                        {/* {blackListExists ? */}
                         {blackListExists ?
-
                             <View style={{
                                 height: '100%',
                                 width: '100%',
                                 justifyContent: 'space-between',
                                 padding: '2%'
-
                             }}>
-                                <View style={{ justifyContent: 'center', height: ' 20%'}}>
+                                <View style={{ justifyContent: 'center', height: ' 20%' }}>
                                     <Text style={styles.modalTitleText}>
                                         COBRAR DEUDA
                                     </Text>
@@ -351,15 +356,11 @@ const Blacklist = (props) => {
                                             keyboardType='numeric'
                                             style={styles.currencyInput}
                                             value={totalPay}
-                                            onChangeValue={text => setTotalPay(text)}
+                                            onChangeValue={handleChangeTotalPay}
                                             prefix="$"
                                             delimiter="."
                                             separator="."
                                             precision={0}
-                                            onChangeText={(formattedValue) => {
-                                                // console.log(formattedValue);
-                                                // $2,310.46
-                                            }}
                                         />
                                     </View>
                                     <View style={{ flexDirection: "row", justifyContent: 'flex-end' }}>
@@ -375,15 +376,11 @@ const Blacklist = (props) => {
                                     </View>
 
                                 </View>
-                                <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginBottom: '3%'}}>
-                                    <Button onPress={() => {
-                                        payDebts();
-                                    }}
+                                <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginBottom: '3%' }}>
+                                    <Button onPress={payDebts}
                                         title="PAGAR"
                                         color="#00A9A0"
-                                        style={totalPay - blacklistValue < 0
-                                            ? styles.modalButtonDisabled : styles.modalButton
-                                        }
+                                        style={totalPay - blacklistValue < 0 ? styles.modalButtonDisabled : styles.modalButton}
                                         textStyle={{
                                             color: "#FFFFFF",
                                             textAlign: "center",
@@ -393,19 +390,10 @@ const Blacklist = (props) => {
                                         activityIndicatorStatus={loading}
                                         disabled={totalPay - blacklistValue < 0}
                                     />
-                                    <Button onPress={() => {
-                                        setBlacklistExists(false);
-                                        setModalVisible(false);
-                                        clearPlateOne();
-                                        clearPlateTwo();
-                                        setTotalPay(0);
-
-                                    }}
+                                    <Button onPress={handleBackModal}
                                         title="DEVOLVER"
                                         color="transparent"
-                                        style={
-                                            styles.modalButtonBack
-                                        }
+                                        style={styles.modalButtonBack}
                                         textStyle={{
                                             color: "#00A9A0",
                                             textAlign: "center",
@@ -424,33 +412,24 @@ const Blacklist = (props) => {
 
                             }}>
                                 <View>
-
                                 </View>
                                 <View style={{ margin: '4%', justifyContent: 'center', height: ' 40%' }}>
-                                    <Text style={{...styles.textListTitle, textAlign: 'center'}}>LA DEUDA YA FUE RETIRADA</Text>
+                                    <Text style={{ ...styles.textListTitle, textAlign: 'center' }}>LA DEUDA FUE RETIRADA</Text>
                                 </View>
                                 <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                                    <Button onPress={() => {
-                                        debtPayedSuccess();
-                                    }}
-                                        title="E N T E N D I D O"
+                                    <Button onPress={debtPayedSuccess}
+                                        title="ENTENDIDO"
                                         color="#00A9A0"
-                                        style={
-                                            styles.modalButton
-                                        }
+                                        style={styles.modalButton}
                                         textStyle={{
                                             color: "#FFFFFF",
                                             textAlign: "center",
-                                            fontFamily: 'Montserrat-Bold'
+                                            fontFamily: 'Montserrat-Bold',
+                                            letterSpacing: 5
                                         }} />
                                 </View>
                             </View>
-
-
-
-
                         }
-
                     </View>
                 </View>
             </Modal>
@@ -473,10 +452,8 @@ const Blacklist = (props) => {
                                 <Text style={styles.modalTextAlert}> Esta placa no se encuentra asociada a un usuario. </Text>
                             </View>
                             <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                                <Button onPress={() => {
-                                    userNotFoundModal();
-                                }}
-                                    title="E N T E N D I D O"
+                                <Button onPress={userNotFoundModal}
+                                    title="ENTENDIDO"
                                     color="#00A9A0"
                                     style={
                                         styles.modalButton
@@ -484,7 +461,8 @@ const Blacklist = (props) => {
                                     textStyle={{
                                         color: "#FFFFFF",
                                         textAlign: "center",
-                                        fontFamily: 'Montserrat-Bold'
+                                        fontFamily: 'Montserrat-Bold',
+                                        letterSpacing: 5
                                     }} />
                             </View>
                         </View>
@@ -504,24 +482,24 @@ const Blacklist = (props) => {
                             width: '100%',
                             justifyContent: 'space-between',
                             padding: '2%'
-
                         }}>
                             <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                                <Text style={styles.modalTextAlert}> No se encuentra deuda asociada a este usuario. </Text>
+                                {errorMessage ?
+                                    <Text style={styles.modalTextAlert}> Algo malo pasó, inténtalo más tarde. </Text>
+                                    :
+                                    <Text style={styles.modalTextAlert}> No se encuentra deuda asociada a este usuario. </Text>
+                                }
                             </View>
                             <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                                <Button onPress={() => {
-                                    debtNotFoundModal();
-                                }}
-                                    title="E N T E N D I D O"
+                                <Button onPress={debtNotFoundModal}
+                                    title="ENTENDIDO"
                                     color="#00A9A0"
-                                    style={
-                                        styles.modalButton
-                                    }
+                                    style={styles.modalButton}
                                     textStyle={{
                                         color: "#FFFFFF",
                                         textAlign: "center",
-                                        fontFamily: 'Montserrat-Bold'
+                                        fontFamily: 'Montserrat-Bold',
+                                        letterSpacing: 5
                                     }} />
                             </View>
                         </View>
@@ -536,10 +514,6 @@ const Blacklist = (props) => {
 
 const mapStateToProps = (state) => ({
     officialProps: state.official,
-    reservations: state.reservations,
-    recips: state.recips,
-    hq: state.hq,
-    expoToken: state.expoToken
 });
 
 export default connect(mapStateToProps, actions)(Blacklist);

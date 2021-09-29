@@ -278,6 +278,27 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     borderWidth: 1
   },
+  modalViewPayDebt: {
+    height: normalize(600),
+    width: '65%',
+    padding: '5%',
+    borderRadius: 30,
+    borderColor: '#707070',
+    borderWidth: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    shadowColor: '#FFF',
+    shadowOffset: {
+      width: 50,
+      height: 50,
+    },
+    shadowOpacity: 0,
+    shadowRadius: 50,
+    elevation: 5,
+    flexDirection: 'column',
+    borderWidth: 1
+  },
   modalViewFullMen: {
     height: normalize(550),
     width: '70%',
@@ -331,6 +352,23 @@ const styles = StyleSheet.create({
   modalButton: {
     width: '100%',
     height: '75%',
+    borderColor: '#00A9A0',
+    borderWidth: 1
+  },
+  PayDebtBackButton: {
+    width: '100%',
+    height: '60%',
+    borderColor: '#00A9A0',
+    borderWidth: 1
+  },
+  PayDebtModalButton: {
+    width: '100%',
+    height: '60%',
+  },
+  PayDebtPayModalButtonDisabled: {
+    width: '100%',
+    height: '60%',
+    opacity: 0.5,
   },
   modalButtonBack: {
     width: '100%',
@@ -352,7 +390,9 @@ const styles = StyleSheet.create({
   modalButtonDisabled: {
     width: '100%',
     height: '70%',
-    opacity: 0.5
+    opacity: 0.5,
+    borderColor: '#00A9A0',
+    borderWidth: 1
   },
   modalPhoneText: {
     textAlign: "center",

@@ -210,7 +210,12 @@ const styles = StyleSheet.create({
     height: '100%',
     borderBottomWidth: 2,
     borderColor: '#D1D0D0'
-  }
+  },
+  textPago: {
+    fontSize: width * 0.02,
+    color: '#5D5D5D',
+    fontFamily: 'Montserrat-Regular'
+},
 });
 
 export default styles;

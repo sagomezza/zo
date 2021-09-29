@@ -239,13 +239,6 @@ const styles = StyleSheet.create({
         color: '#8F8F8F',
         fontSize: normalize(20)
     },
-    modalTextAlert: {
-        textAlign: "center",
-        fontFamily: 'Montserrat-Regular',
-        color: 'red',
-        fontSize: normalize(22),
-        margin: '2%'
-    },
     modalButton: {
         width: '100%',
         height: '80%',

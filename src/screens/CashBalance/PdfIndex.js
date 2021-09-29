@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ImageBackground } from 'react-native';
 import {
   Text,
@@ -30,23 +30,20 @@ import * as FileSystem from 'expo-file-system';
 import * as Sentry from "@sentry/browser";
 
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const txtGenerator = (props) => {
-  const { navigation, officialProps, reservations, recips, hq } = props;
+  const { navigation, officialProps, recips } = props;
   const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
   const totalRecips = recips.recips !== undefined ? recips.recips : [];
-
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [modal3Visible, setModal3Visible] = useState(false);
-
   const [loadingBoxGenerator, setLoadingBoxGenerator] = useState(false);
   const [loadingReadBoxReport, setLoadingReadBoxReport] = useState(false);
-
   const [dataToday, setDataToday] = useState([]);
   const [base, setBase] = useState(0);
-  const [totalReported, settoTalReported] = useState(0);
+  const [totalReported, setTotalReported] = useState(0);
   const [listBox, setListBox] = useState([]);
   const [shiftsOfBox, setShiftsOfBox] = useState(0);
   const shiftsOfBoxNum = shiftsOfBox !== undefined ? `$${numberWithPoints(shiftsOfBox)}` : "$ 0";
@@ -109,7 +106,6 @@ const txtGenerator = (props) => {
       border-color: gray;
     }`;
 
-
   const gotBoxTotal = () => {
     setLoadingBoxGenerator(false);
     setModalVisible(true);
@@ -163,14 +159,12 @@ const txtGenerator = (props) => {
             setReports(dailyReports);
             setShiftsOfBox(boxTotal);
             gotBoxTotal();
-
           }
           setLoadingBoxGenerator(false);
         } catch (err) {
           Sentry.captureException(err);
           // console.log(err)
         }
-
       })
       .catch(err => {
         Sentry.captureException(err);
@@ -278,7 +272,88 @@ const txtGenerator = (props) => {
       if (err.response) Sentry.Native.captureEvent(new Error(err.response))
       setLoading(false)
     }
-  }
+  };
+
+  const handleGenerateBox = () => getBoxTotal();
+  const handleBase = text => setBase(text);
+  const handleTotalReported = text => setTotalReported(text);
+  const handleBack1 = () => setModalVisible(false);
+  const handleBack2 = () => setModal2Visible(false);
+  const handleOk3 = () => setModal3Visible(false);
+
+  const dataTodayKeyExtractor = useCallback((item, index) => String(index), [dataToday]);
+
+  const renderDataTodayItem = useCallback(({ item }) =>
+    <View style={{
+      flexDirection: "row",
+      marginBottom: '2%',
+      backgroundColor: '#FFFFFF',
+      borderRadius: 7,
+    }} >
+      <View style={{ margin: '3%' }} >
+        <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
+      </View>
+      <View style={{ flex: 1, alignItems: 'flex-end', margin: '3%' }} >
+        <Text style={styles.textMoney}>
+          {item.cash === 0 && item.change === 0 ? '$0' : ''}
+          {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+          {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+        </Text>
+      </View>
+    </View>
+
+    , [dataToday]);
+
+  const listBoxKeyExtractor = useCallback((item, index) => String(index), [listBox]);
+
+  const renderListBoxItem = useCallback(({ item, index }) =>
+    <TouchableOpacity
+      key={index.toString()}
+      onPress={() => { readBoxReport(item.id); }}>
+      <View style={{ flexDirection: "row", marginBottom: '2%', justifyContent: 'space-around' }} >
+        <View style={{ margin: '1%' }} >
+          <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')}     {moment(item.dateFinished).format('LT')}</Text>
+        </View>
+        <View style={{ height: '50%', width: '25%', borderBottomWidth: 0.5, borderColor: '#707070', marginLeft: '2%', marginRight: '3%' }}></View>
+        <View style={{ width: '30%', marginRight: '2%', justifyContent: 'flex-end', alignItems: 'flex-end' }} >
+          {item.status === 'active' ?
+            <Button
+              title="ABIERTO"
+              color='transparent'
+              style={{
+                borderColor: "#00A9A0",
+                borderWidth: 1,
+                width: '90%'
+              }}
+              textStyle={{
+                color: "#00A9A0",
+                fontFamily: 'Montserrat-Medium',
+                fontSize: width * 0.015
+              }}
+              disabled={true}
+            />
+            :
+            <Button
+              title="CERRADO"
+              color='#00A9A0'
+              style={{
+                borderColor: "#707070",
+                width: '100%',
+                padding: '5%'
+              }}
+              textStyle={{
+                color: "#FFFFFF",
+                fontFamily: 'Montserrat-Medium',
+                fontSize: width * 0.015,
+                letterSpacing: 5
+              }}
+              disabled={true}
+            />
+          }
+        </View>
+      </View>
+    </TouchableOpacity>
+    , [listBox]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -312,28 +387,9 @@ const txtGenerator = (props) => {
                   <FlatList
                     style={{ height: "37%" }}
                     data={dataToday}
-                    keyExtractor={(item, index) => String(index)}
-                    renderItem={({ item }) => {
-                      return (
-                        <View style={{
-                          flexDirection: "row",
-                          marginBottom: '2%',
-                          backgroundColor: '#FFFFFF',
-                          borderRadius: 7,
-                        }} >
-                          <View style={{ margin: '3%' }} >
-                            <Text style={styles.textPlaca}>{typeof item.plate === 'string' ? item.plate : item.plate[0]}</Text>
-                          </View>
-                          <View style={{ flex: 1, alignItems: 'flex-end', margin: '3%' }} >
-                            <Text style={styles.textMoney}>
-                              {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                              {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                              {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
-                            </Text>
-                          </View>
-                        </View>
-                      )
-                    }}
+                    keyExtractor={dataTodayKeyExtractor}
+                    renderItem={renderDataTodayItem}
+                    maxToRenderPerBatch={4}
                   />
                   :
                   <View style={{ padding: '10%' }}>
@@ -349,7 +405,7 @@ const txtGenerator = (props) => {
           </View>
           <View style={{ height: '10%', width: '85%', alignSelf: 'center' }}>
             <Button
-              onPress={() => { getBoxTotal(); }}
+              onPress={handleGenerateBox}
               title="GENERAR CIERRE DE CAJA"
               color='transparent'
               style={{
@@ -377,72 +433,18 @@ const txtGenerator = (props) => {
                     <FlatList
                       style={{ height: "70%" }}
                       data={listBox}
-                      keyExtractor={(item, index) => String(index)}
-                      renderItem={({ item, index }) => {
-                        return (
-                          <TouchableOpacity
-                          key={index.toString()}
-                          onPress={()=>{readBoxReport(item.id);}}>
-                            <View style={{ flexDirection: "row", marginBottom: '2%', justifyContent: 'space-around' }} >
-                              <View style={{ margin: '1%' }} >
-                                <Text style={styles.textPlaca}>{moment(item.dateFinished).format('L')}     {moment(item.dateFinished).format('LT')}</Text>
-                              </View>
-                              <View style={{ height: '50%', width: '25%', borderBottomWidth: 0.5, borderColor: '#707070', marginLeft: '2%', marginRight: '3%' }}></View>
-                              <View style={{ width: '30%', marginRight: '2%', justifyContent: 'flex-end', alignItems: 'flex-end' }} >
-                                {item.status === 'active' ?
-                                  <Button
-                                    // onPress={onShare}
-                                    title="ABIERTO"
-                                    color='transparent'
-                                    style={{
-                                      borderColor: "#00A9A0",
-                                      borderWidth: 1,
-                                      width: '90%'
-                                    }}
-                                    textStyle={{
-                                      color: "#00A9A0",
-                                      fontFamily: 'Montserrat-Medium',
-                                      fontSize: width * 0.015
-                                    }}
-                                    disabled={true}
-                                  />
-                                  :
-                                  <Button
-                                    // onPress={onShare}
-                                    title="CERRADO"
-                                    color='#00A9A0'
-                                    style={{
-                                      borderColor: "#707070",
-                                      width: '100%',
-                                      padding: '5%'
-                                    }}
-                                    textStyle={{
-                                      color: "#FFFFFF",
-                                      fontFamily: 'Montserrat-Medium',
-                                      fontSize: width * 0.015,
-                                      letterSpacing: 5
-                                    }}
-                                    disabled={true}
-                                  />
-                                }
-                              </View>
-                            </View>
-                          </TouchableOpacity>
-
-
-                        )
-                      }}
+                      keyExtractor={listBoxKeyExtractor}
+                      renderItem={renderListBoxItem}
+                      maxToRenderPerBatch={5}
                     />
                     :
                     <View style={{ height: "70%" }}>
-
                       <View style={{ padding: '10%' }}>
                         <Text style={styles.textPago}>
                           No se encuentran registros en el historial
                         </Text>
                       </View>
                     </View>
-
                 }
               </View>
               :
@@ -508,7 +510,7 @@ const txtGenerator = (props) => {
                     keyboardType='numeric'
                     style={styles.currencyInput}
                     value={base}
-                    onChangeValue={text => setBase(text)}
+                    onChangeValue={handleBase}
                     prefix="$"
                     delimiter="."
                     separator="."
@@ -523,7 +525,7 @@ const txtGenerator = (props) => {
                     keyboardType='numeric'
                     style={styles.currencyInput}
                     value={totalReported}
-                    onChangeValue={text => settoTalReported(text)}
+                    onChangeValue={handleTotalReported}
                     prefix="$"
                     delimiter="."
                     separator="."
@@ -533,7 +535,7 @@ const txtGenerator = (props) => {
               </View>
               <View style={{ height: '20%', width: '100%', justifyContent: 'space-between' }}>
                 <Button
-                  onPress={() => { createBoxReport() }}
+                  onPress={createBoxReport}
                   title="GUARDAR"
                   color="#00A9A0"
                   style={styles.modalButton}
@@ -547,9 +549,7 @@ const txtGenerator = (props) => {
                   activityIndicatorStatus={loadingBoxGenerator}
                 />
                 <Button
-                  onPress={() => {
-                    setModalVisible(false);
-                  }}
+                  onPress={handleBack1}
                   title="VOLVER"
                   color="transparent"
                   style={
@@ -607,8 +607,6 @@ const txtGenerator = (props) => {
                 <View style={{ margin: '0%', justifyContent: 'center', height: ' 10%' }}>
                 </View>
               }
-
-
               {boxStatus === "active" ?
                 <View style={{ height: '15%', width: '100%', justifyContent: 'center' }}>
                   <Button
@@ -628,9 +626,7 @@ const txtGenerator = (props) => {
                     activityIndicatorStatus={loadingBoxGenerator}
                   />
                   <Button
-                    onPress={() => {
-                      setModal2Visible(false);
-                    }}
+                    onPress={handleBack2}
                     title="VOLVER"
                     color="transparent"
                     style={
@@ -647,7 +643,7 @@ const txtGenerator = (props) => {
                 :
                 <View style={{ height: '15%', width: '100%', justifyContent: 'center', marginTop: '5%' }}>
                   <Button
-                    onPress={() => { setModal2Visible(false); }}
+                    onPress={handleBack2}
                     title="VOLVER"
                     color="transparent"
                     style={styles.modalButtonBack}
@@ -669,7 +665,6 @@ const txtGenerator = (props) => {
         transparent={true}
         backdropOpacity={0.3}
         visible={modal3Visible}
-
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -684,7 +679,7 @@ const txtGenerator = (props) => {
               </View>
               <View style={{ height: '30%', justifyContent: 'flex-end', flexDirection: 'column', marginTop: '3%' }}>
                 <View style={{ height: '57%', width: '80%', justifyContent: 'flex-end', alignSelf: 'center' }}>
-                  <Button onPress={() => { setModal3Visible(false); }}
+                  <Button onPress={handleOk3}
                     title="ENTENDIDO"
                     color="#00A9A0"
                     style={styles.modalButton}
@@ -709,11 +704,7 @@ const txtGenerator = (props) => {
 
 const mapStateToProps = (state) => ({
   officialProps: state.official,
-  reservations: state.reservations,
   recips: state.recips,
-  hq: state.hq,
-  expoToken: state.expoToken
-
 });
 
 export default connect(mapStateToProps, actions)(txtGenerator);

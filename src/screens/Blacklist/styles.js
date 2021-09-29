@@ -36,7 +36,16 @@ const styles = StyleSheet.create({
     buttonI: {
         borderRadius: 30,
         height: width * 0.06,
-        width: '100%',
+        width: '70%',
+        alignSelf: 'center',
+
+    },
+    buttonIDisabled: {
+        borderRadius: 30,
+        height: width * 0.06,
+        width: '70%',
+        alignSelf: 'center',
+        opacity: 0.5
     },
     buttonRe: {
         borderRadius: 30,
@@ -83,13 +92,7 @@ const styles = StyleSheet.create({
         fontSize: normalize(15),
         fontFamily: 'Montserrat-Bold',
     },
-    buttonIDisabled: {
-        borderRadius: 30,
-        height: width * 0.06,
-        width: '70%',
-        alignSelf: 'center',
-        opacity: 0.5
-    },
+    
     infoTextTitle: {
         fontFamily: 'Montserrat-Bold',
         fontSize: normalize(20),

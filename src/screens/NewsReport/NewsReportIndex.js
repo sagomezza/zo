@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { ImageBackground, Keyboard } from 'react-native';
 import {
     Text,
@@ -12,7 +12,6 @@ import Header from '../../components/Header/HeaderIndex';
 import styles from '../NewsReport/NewsReportStyles';
 import FooterIndex from '../../components/Footer';
 import Button from '../../components/Button';
-import normalize from '../../config/services/normalizeFontSize';
 // redux
 import { connect } from "react-redux";
 import instance from "../../config/axios";
@@ -22,12 +21,9 @@ import { CREATE_NEWS_REPORT } from "../../config/api";
 import { TIMEOUT } from '../../config/constants/constants';
 import { width } from '../../config/constants/screenDimensions';
 import * as Sentry from "@sentry/browser";
-import { Touchable } from 'react-native';
 
 const NewsReport = (props) => {
-    const { navigation, officialProps, reservations, recips, hq } = props;
-    const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
-
+    const { navigation, officialProps } = props;
     const [modalVisible, setModalVisible] = useState(false);
     const [report, setReport] = useState("")
     const [loadingReport, setLoadingReport] = useState(false);
@@ -52,6 +48,13 @@ const NewsReport = (props) => {
         }
     };
 
+    const handleReport = (text) => setReport(text);
+
+    const handleOk = () => {
+        setModalVisible(false);
+        setReport("");
+    };
+
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground
@@ -61,7 +64,7 @@ const NewsReport = (props) => {
                     height: '40%',
                     flexDirection: 'column'
                 }}
-                source={require('../../../assets/images/Stripes.png')}>
+                source={require('../../../assets/images/logoutStripes.png')}>
                 <Header navigation={navigation} />
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                     <View style={styles.container}>
@@ -96,14 +99,12 @@ const NewsReport = (props) => {
                                 textAlign='center'
                                 placeholder=""
                                 value={report}
-                                onChangeText={(text) => {
-                                    setReport(text);
-                                }}
+                                onChangeText={handleReport}
                             >
                             </TextInput>
                         </View>
                         <View style={{ height: '11%', width: '45%', alignSelf: 'center', marginBottom: '2%', justifyContent: 'center' }}>
-                            <Button onPress={() => { createNewsReport(); }}
+                            <Button onPress={createNewsReport}
                                 title="REPORTAR"
                                 color='transparent'
                                 style={report.length === 0 ? styles.buttonEdDisabled : styles.buttonEd}
@@ -124,7 +125,6 @@ const NewsReport = (props) => {
                 transparent={true}
                 backdropOpacity={0.3}
                 visible={modalVisible}
-
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
@@ -133,45 +133,32 @@ const NewsReport = (props) => {
                             width: '100%',
                             justifyContent: 'space-between',
                             padding: '2%'
-
                         }}>
                             <View style={{ margin: '4%', justifyContent: 'center', height: ' 60%' }}>
                                 <Text style={styles.modalTextAlert}> Tu novedad ha sido registrada con éxito  </Text>
-
-
                             </View>
                             <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
-                                <Button onPress={() => {
-                                    setModalVisible(false);
-                                    setReport("");
-                                }}
-                                    title="E N T E N D I D O"
+                                <Button onPress={handleOk}
+                                    title="ENTENDIDO"
                                     color="#00A9A0"
-                                    // activityIndicatorStatus={loadingStart}
-                                    style={
-                                        styles.modalButton
-                                    }
+                                    style={styles.modalButton}
                                     textStyle={{
                                         color: "#FFFFFF",
                                         textAlign: "center",
-                                        fontFamily: 'Montserrat-Bold'
+                                        fontFamily: 'Montserrat-Bold',
+                                        letterSpacing: 5
                                     }} />
                             </View>
                         </View>
                     </View>
                 </View>
             </Modal>
-
         </View>
     )
 };
 
 const mapStateToProps = (state) => ({
     officialProps: state.official,
-    reservations: state.reservations,
-    recips: state.recips,
-    hq: state.hq,
-    expoToken: state.expoToken
 });
 
 export default connect(mapStateToProps, actions)(NewsReport);
