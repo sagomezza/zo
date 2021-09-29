@@ -21,6 +21,7 @@ import CurrencyInput from 'react-native-currency-input';
 import { PAY_DEBTS, FIND_USER_BY_PLATE, LIST_HQ_DEBTS } from "../../config/api";
 import instance from "../../config/axios";
 import { TIMEOUT } from '../../config/constants/constants';
+import getRecipsOfShift from '../../config/services/getRecipsOfShift';
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
@@ -37,6 +38,7 @@ const Blacklist = (props) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modal2Visible, setModal2Visible] = useState(false);
     const [modal3Visible, setModal3Visible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(false);
     const [totalPay, setTotalPay] = useState(0);
     const [listHQDebts, setListHQDebts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -69,6 +71,7 @@ const Blacklist = (props) => {
         clearPlateOne();
         clearPlateTwo();
         setModal3Visible(false);
+        setErrorMessage(false);
     };
 
 
@@ -93,13 +96,13 @@ const Blacklist = (props) => {
         } catch (err) {
             Sentry.captureException(err);
             setBlacklistExists(false);
-            // console.log(err)
-            // console.log(err?.response)
+            console.log(err)
+            console.log(err?.response)
             if (err?.response.data.response === -1) setModal2Visible(true);
         }
     };
 
-  
+
 
     const listHQDebtsCall = async () => {
         setLoadingListHQDebts(true);
@@ -125,6 +128,15 @@ const Blacklist = (props) => {
         setLoading(true);
         try {
             if (plateOne.length === 3 && plateTwo.length >= 2) {
+                console.log({
+                    hqId: officialHq,
+                    plate: plateOne + plateTwo,
+                    value: Number(blacklistValue),
+                    cash: Number(totalPay),
+                    change: Number(inputChange),
+                    generateRecip: true,
+                    officialEmail: officialProps.email
+                });
                 const response = await instance.post(
                     PAY_DEBTS,
                     {
@@ -138,17 +150,27 @@ const Blacklist = (props) => {
                     },
                     { timeout: TIMEOUT }
                 )
+                getRecipsOfShift(officialProps);
                 setTotalPay(0);
                 setBlacklistExists(false);
                 setLoading(false);
-                setModalVisible(true);
+                setModalVisible(false);
+                listHQDebtsCall();
             }
         } catch (err) {
-            Sentry.captureException(err);
-            // console.log(err)
-            // console.log(err?.response)
+            // Sentry.captureException(err);
+            console.log(err)
+            console.log(err?.response)
             setLoading(false);
-            if (err?.response.data.response === -2) setModal3Visible(true);
+            setModalVisible(false);
+            // console.log('ERROR PAY DEBT', err?.response.data);
+            if (err?.response.data.response === -2) {
+                setErrorMessage(false);
+                setModal3Visible(true);
+            } else {
+                setErrorMessage(true);
+                setModal3Visible(true);
+            }
         }
     }
 
@@ -473,7 +495,11 @@ const Blacklist = (props) => {
                             padding: '2%'
                         }}>
                             <View style={{ margin: '4%', justifyContent: 'flex-end', height: ' 40%' }}>
-                                <Text style={styles.modalTextAlert}> No se encuentra deuda asociada a este usuario. </Text>
+                                {errorMessage ?
+                                    <Text style={styles.modalTextAlert}> Algo malo pasó, inténtalo más tarde. </Text>
+                                    :
+                                    <Text style={styles.modalTextAlert}> No se encuentra deuda asociada a este usuario. </Text>
+                                }
                             </View>
                             <View style={{ height: '18%', width: '100%', justifyContent: 'flex-end' }}>
                                 <Button onPress={debtNotFoundModal}

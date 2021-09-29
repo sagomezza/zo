@@ -366,7 +366,8 @@ const UserInput = (props) => {
       console.log(err)
       console.log(err?.response)
       setLoadingStart(false);
-      if (err?.response.data.response === -2) setErrorModalVisible(true);
+      setErrorModalVisible(true);
+      // if (err?.response.data.response === -2) setErrorModalVisible(true);
     }
   }
 
