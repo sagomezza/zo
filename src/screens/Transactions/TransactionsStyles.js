@@ -79,6 +79,13 @@ const styles = StyleSheet.create({
         color: '#5D5D5D',
         fontFamily: 'Montserrat-Regular'
     },
+    totalHours: {
+        fontSize: width * 0.02,
+        color: '#6F6F7B',
+        fontFamily: 'Montserrat-Medium',
+        width: '20%',
+        textAlign: 'center'
+      },
 });
 
 export default styles;

@@ -149,7 +149,7 @@ const HomeIndex = (props) => {
   const renderReservationItem = useCallback(({ item, index }) =>
     <View style={styles.list} key={item.key}>
       <Text style={styles.textPlaca}>{item.plate}</Text>
-      <Text style={styles.dateDaysText}>{item.verificationCode}</Text>
+      <Text style={styles.dateDaysText}>{item.isParanoic === true ? 'N/A' : item.verificationCode}</Text>
       <View style={{ flexDirection: 'column' }}>
         <Text style={styles.dateDaysText}>{moment(item.dateStart).format('L')}</Text>
         <Text style={styles.dateHourText}>{moment(item.dateStart).format('LT')}</Text>

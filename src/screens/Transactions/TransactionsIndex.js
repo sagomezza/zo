@@ -26,52 +26,53 @@ const Transactions = (props) => {
         return moment(date).format('LT')
     }
 
-    const recipKeyExtractor = useCallback((item, index) => String(index),[recips.recips]);
+    const recipKeyExtractor = useCallback((item, index) => String(index), [recips.recips]);
 
-    const renderRecipItem = useCallback(({ item, index }) => 
-            <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%' }} >
-                <Text style={styles.textPlaca}>
-                    {typeof item.plate === 'string' ? item.plate : item.plate[0]}
-                </Text>
+    const renderRecipItem = useCallback(({ item, index }) =>
+        <View style={{ ...styles.list, paddingTop: '3%', paddingBottom: '4%' }} >
+            <Text style={styles.textPlaca}>
+                {typeof item.plate === 'string' ? item.plate : item.plate[0]}
+            </Text>
+            <Text style={styles.dateDaysText}>
+                {item.prepayFullDay === true ? `${formatDateDays(item.dateFactured)}` : ""}
+                {item.mensuality === true ? `${formatDateDays(item.dateStart)}` : ""}
+                {item.isParanoic === true ? `${formatDateDays(item.dateFinished)}` : ""}
+                {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateDays(item.dateFinished)}` : ""}
+            </Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', width: '30%', height: '100%' }}>
                 <Text style={styles.dateDaysText}>
-                    {item.prepayFullDay === true ? `${formatDateDays(item.dateFactured)}` : ""}
-                    {item.mensuality === true ? `${formatDateDays(item.dateStart)}` : ""}
-                    {item.isParanoic === true ? `${formatDateDays(item.dateFinished)}` : ""}
-                    {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateDays(item.dateFinished)}` : ""}
+                    {item.prepayFullDay === true ? `${formatDateHours(item.dateFactured)}` : ""}
+                    {item.mensuality === true ? `${formatDateHours(item.dateStart)}` : ""}
+                    {item.isParanoic === true ? `${formatDateHours(item.dateStart)}` : ""}
+                    {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateHours(item.dateStart)}` : ""}
                 </Text>
-                <View style={{ flexDirection: 'row', justifyContent: 'center', width: '30%', height: '100%' }}>
-                    <Text style={styles.dateDaysText}>
-                        {item.prepayFullDay === true ? `${formatDateHours(item.dateFactured)}` : ""}
-                        {item.mensuality === true ? `${formatDateHours(item.dateStart)}` : ""}
-                        {item.isParanoic === true ? `${formatDateHours(item.dateStart)}` : ""}
-                        {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateHours(item.dateStart)}` : ""}
-                    </Text>
-                    <Image
-                        style={{ width: '20%' }}
-                        resizeMode={"contain"}
-                        source={require('../../../assets/images/arrow.png')} />
-                    <Text style={styles.dateDaysText}>
-                        {item.prepayFullDay === true ? `${formatDateHours(item.dateFinished)}` : ""}
-                        {item.mensuality === true ? `${formatDateHours(item.dateFinished)}` : ""}
-                        {item.isParanoic === true ? `${formatDateHours(item.dateFinished)}` : ""}
-                        {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateHours(item.dateFinished)}` : ""}
-                    </Text>
-                </View>
-
-                <Text style={styles.totalHours}>
-                    {item.prepayFullDay === true ? " Pase día" : ""}
-                    {item.mensuality === true ? " Mensualidad" : ""}
-                    {item.isParanoic === true ? `${secondsToString((item.hours) * 3600)} ` : ""}
-                    {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${secondsToString((item.hours) * 3600)} ` : ""}
-                </Text>
-
-                <Text style={styles.textPlaca}>
-                    {item.cash === 0 && item.change === 0 ? '$0' : ''}
-                    {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
-                    {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+                <Image
+                    style={{ width: '20%' }}
+                    resizeMode={"contain"}
+                    source={require('../../../assets/images/arrow.png')} />
+                <Text style={styles.dateDaysText}>
+                    {item.prepayFullDay === true ? `${formatDateHours(item.dateFinished)}` : ""}
+                    {item.mensuality === true ? `${formatDateHours(item.dateFinished)}` : ""}
+                    {item.isParanoic === true ? `${formatDateHours(item.dateFinished)}` : ""}
+                    {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${formatDateHours(item.dateFinished)}` : ""}
                 </Text>
             </View>
-    ,[recips.recips]);
+
+            <Text style={styles.totalHours}>
+                {item.prepayFullDay === true ? " Pase día" : ""}
+                {item.mensuality === true ? " Mensualidad" : ""}
+                {item.isParanoic === true ? `${secondsToString((item.hours) * 3600)} ` : ""}
+                {!item.prepayFullDay && !item.mensuality && !item.isParanoic && item.hours ? `${secondsToString((item.hours) * 3600)} ` : ""}
+                {!item.prepayFullDay && !item.mensuality && !item.isParanoic && !item.hours ? 'Pago deuda' : ""}
+            </Text>
+
+            <Text style={styles.textPlaca}>
+                {item.cash === 0 && item.change === 0 ? '$0' : ''}
+                {item.cash >= 0 && item.change < 0 ? `$${numberWithPoints(item.cash)}` : ''}
+                {item.cash > 0 && item.change >= 0 ? `$${numberWithPoints(item.total)}` : ''}
+            </Text>
+        </View>
+        , [recips.recips]);
 
     return (
         <View style={{ flex: 1 }}>
