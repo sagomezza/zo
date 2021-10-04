@@ -134,7 +134,8 @@ const HomeIndex = (props) => {
         {item.prepayFullDay === true ? " Pase día" : ""}
         {item.mensuality === true ? " Mensualidad" : ""}
         {item.isParanoic === true ? `${secondsToString((item.hours) * 3600)} ` : ""}
-        {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${secondsToString((item.hours) * 3600)} ` : ""}
+        {!item.prepayFullDay && !item.mensuality && !item.isParanoic && item.hours ? `${secondsToString((item.hours) * 3600)} ` : ""}
+        {!item.prepayFullDay && !item.mensuality && !item.isParanoic && !item.hours ? 'Pago deuda' : ""}
       </Text>
       <Text style={styles.textPlaca}>
         {item.cash === 0 && item.change === 0 ? '$0' : ''}
