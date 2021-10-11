@@ -25,8 +25,7 @@ import * as Updates from 'expo-updates';
 import * as actions from './src/redux/actions';
 import getRecipsOfShift from './src/config/services/getRecipsOfShift';
 import readHqInfo from './src/config/services/readHqInfo';
-
-
+import { firestore } from './src/config/firebase/index';
 
 LogBox.ignoreLogs([
   'Animated: `useNativeDriver` was not specified.',
@@ -47,7 +46,6 @@ const fetchFont = () => {
     'Montserrat-Bold': require('./assets/fonts/Montserrat-Bold.ttf'),
     'Montserrat-Light': require('./assets/fonts/Montserrat-Light.ttf'),
     'Montserrat-Medium': require('./assets/fonts/Montserrat-Medium.ttf'),
-
   })
 };
 
@@ -60,7 +58,9 @@ const App = () => {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
-  const [logoutSnackbar, setLogoutSnackbar] = useState(false)
+  const [logoutSnackbar, setLogoutSnackbar] = useState(false);
+  const [userInSnackbar, setUserInSnackbar] = useState(false);
+  const [userInPlate, setUserInPlate] = useState('');
   const [officialData, setOfficialData] = useState({});
   const officialScheduleStart = officialData.start !== undefined ? officialData.start : null;
   const MINUTE_MS = 60000;
@@ -81,9 +81,6 @@ const App = () => {
       }
     };
 
-    updateApp();
-
-
     if (officialScheduleStart !== null) {
       // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
       const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
@@ -101,6 +98,38 @@ const App = () => {
       }, MINUTE_MS);
       return () => clearInterval(checkOfficialHours);
     }
+
+    const unsubscribe = firestore
+      .collection("headquarters")
+      .onSnapshot(
+        (snapshot) => {
+          snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+              if (officialData) getRecipsOfShift(officialData);
+
+              console.log("New INFO---------------------------:: ", change.doc.data().reservations.length);
+            }
+            if (change.type === "modified") {
+              let reservations = change.doc.data().reservations;
+              let lastUserIn = reservations[reservations.length - 1];
+              setUserInPlate(lastUserIn.plate);
+              setUserInSnackbar(true);
+              getRecipsOfShift(officialData); 
+              console.log("Modified INFO---------------------------: ", reservations[reservations.length - 1] );
+            }
+            if (change.type === "removed") {
+
+              console.log("Removed INFO---------------------------:: ", change.doc.data().reservations.length);
+            }
+          });
+        },
+        (error) => { console.log('ERROR onSnapshot'); }
+      );
+
+    return () => {
+      unsubscribe();
+      updateApp();
+    }
   }, []);
 
   Sentry.init({
@@ -109,34 +138,19 @@ const App = () => {
     debug: false, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
   });
 
-  const readHq = async (hqId) => {
-    try {
-      const response = await instance.post(READ_HQ, {
-        id: hqId
-      });
-      store.dispatch(actions.setReservations(response.data.data.reservations));
-      store.dispatch(actions.setHq(response.data.data));
-    } catch (err) {
-      // Sentry.captureException(err);
-      // console.log("errD: ", err);
-      // console.log(err?.response)
-    }
-  }
-
   const readUser = async (userEmail) => {
     if (userEmail) {
       try {
         const response = await instance.post(READ_OFFICIAL, {
           email: userEmail
         });
-        // console.log(response.data.data.hq[0])
+        // console.log(response.data.data)
         store.dispatch(setOfficial(response.data.data));
         setOfficialData(response.data.data)
         if (response.data.data.hq) {
           let hqId = response.data.data.hq[0]
           readHqInfo(hqId);
-          console.log(officialProps)
-          getRecipsOfShift(officialProps);
+          getRecipsOfShift(officialData);
         }
       } catch (err) {
         Sentry.captureException(err)
@@ -271,6 +285,17 @@ const App = () => {
             accentColor="#00A9A0"
             messageColor="#00A9A0"
             messageStyle={{ fontSize: 60 }}
+            containerStyle={{ height: 90 }}
+          />
+          <SnackBar
+            visible={userInSnackbar}
+            textMessage={`Acaba de ingresar un usuario con placa: ${userInPlate}`}
+            actionHandler={() => {setUserInSnackbar(false); }}
+            actionText="Entendido"
+            backgroundColor="#ED8E20"
+            accentColor="#FFFFFF"
+            messageColor="#FFFFFF"
+            messageStyle={{ fontSize: 100 }}
             containerStyle={{ height: 90 }}
           />
         </AuthProvider>

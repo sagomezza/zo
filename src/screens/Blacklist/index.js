@@ -91,12 +91,11 @@ const Blacklist = (props) => {
                     setBlacklist(response.data.blackList);
                     setBlacklistExists(true);
                 } else {
-                        setModal3Visible(true);
+                    setModal3Visible(true);
                 };
             };
         } catch (err) {
-            Sentry.captureException(err);
-            setBlacklistExists(false);
+            // Sentry.captureException(err);
             console.log(err);
             console.log(err?.response);
             if (err?.response.data.response === -1) {
@@ -108,19 +107,22 @@ const Blacklist = (props) => {
                         .where('status', '==', 'active')
                         .get()
                         .then(async (snapshot) => {
-                            let bl = []
-                            snapshot.forEach(doc => {
-                                let data = doc.data()
-                                data.date = data.date.nanoseconds ? data.date.toDate() : data.date
-                                data.id = doc.id
-                                bl.push(data)
-                            })
-                            setBlacklist(bl);
-                            setBlacklistExists(true);
+                            if (snapshot.size > 0) {
+                                let bl = []
+                                snapshot.forEach(doc => {
+                                    let data = doc.data()
+                                    data.date = data.date.nanoseconds ? data.date.toDate() : data.date
+                                    data.id = doc.id
+                                    bl.push(data)
+                                })
+                                setBlacklist(bl);
+                                setBlacklistExists(true);
+                            }
                         })
                 } catch (err) {
                     console.log(err);
                     console.log(err?.response);
+                    setBlacklistExists(false);
                     setModal2Visible(true);
                 }
             }

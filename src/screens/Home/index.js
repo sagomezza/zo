@@ -23,6 +23,7 @@ import * as actions from "../../redux/actions";
 import store from '../../config/store';
 import * as Sentry from "@sentry/browser";
 import secondsToString from '../../config/services/secondsToString';
+import getRecipsOfShift from '../../config/services/getRecipsOfShift';
 
 
 const HomeIndex = (props) => {
