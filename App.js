@@ -105,17 +105,16 @@ const App = () => {
         (snapshot) => {
           snapshot.docChanges().forEach((change) => {
             if (change.type === "added") {
-              if (officialData) getRecipsOfShift(officialData);
-
-              console.log("New INFO---------------------------:: ", change.doc.data().reservations.length);
-            }
-            if (change.type === "modified") {
               let reservations = change.doc.data().reservations;
               let lastUserIn = reservations[reservations.length - 1];
               setUserInPlate(lastUserIn.plate);
               setUserInSnackbar(true);
-              getRecipsOfShift(officialData); 
-              console.log("Modified INFO---------------------------: ", reservations[reservations.length - 1] );
+              getRecipsOfShift(officialData);
+              console.log("New INFO---------------------------:: ", reservations[reservations.length - 1]);
+            }
+            if (change.type === "modified") {
+
+              console.log("Modified INFO---------------------------: ", reservations[reservations.length - 1]);
             }
             if (change.type === "removed") {
 
@@ -290,7 +289,7 @@ const App = () => {
           <SnackBar
             visible={userInSnackbar}
             textMessage={`Acaba de ingresar un usuario con placa: ${userInPlate}`}
-            actionHandler={() => {setUserInSnackbar(false); }}
+            actionHandler={() => { setUserInSnackbar(false); }}
             actionText="Entendido"
             backgroundColor="#ED8E20"
             accentColor="#FFFFFF"
