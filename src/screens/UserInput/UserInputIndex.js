@@ -35,6 +35,7 @@ import {
 } from "../../config/api";
 import { TIMEOUT } from '../../config/constants/constants';
 import instance from "../../config/axios";
+import { firestore } from '../../config/firebase/index';
 import store from '../../config/store';
 // redux
 import { connect } from "react-redux";
@@ -178,6 +179,32 @@ const UserInput = (props) => {
       setExistingUser(false);
       setShowDropdown(false);
       setShowPhoneInput(true);
+      if (err?.response.data.response === -1) {
+        try {
+            firestore
+                .collection('blacklist')
+                .where('hqId', '==', officialHq)
+                .where('plate', '==', plateOne + plateTwo)
+                .where('status', '==', 'active')
+                .get()
+                .then(async (snapshot) => {
+                    if (snapshot.size > 0) {
+                        let bl = []
+                        snapshot.forEach(doc => {
+                            let data = doc.data()
+                            data.date = data.date.nanoseconds ? data.date.toDate() : data.date
+                            data.id = doc.id
+                            bl.push(data)
+                        })
+                        setBlacklist(bl);
+                        setModal3Visible(true);
+                    }
+                })
+        } catch (err) {
+            // console.log(err);
+            // console.log(err?.response);
+        }
+    }
     }
   };
 

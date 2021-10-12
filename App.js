@@ -112,14 +112,6 @@ const App = () => {
               getRecipsOfShift(officialData);
               console.log("New INFO---------------------------:: ", reservations[reservations.length - 1]);
             }
-            if (change.type === "modified") {
-
-              console.log("Modified INFO---------------------------: ", reservations[reservations.length - 1]);
-            }
-            if (change.type === "removed") {
-
-              console.log("Removed INFO---------------------------:: ", change.doc.data().reservations.length);
-            }
           });
         },
         (error) => { console.log('ERROR onSnapshot'); }
