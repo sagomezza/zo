@@ -96,8 +96,8 @@ const Blacklist = (props) => {
             };
         } catch (err) {
             // Sentry.captureException(err);
-            console.log(err);
-            console.log(err?.response);
+            // console.log(err);
+            // console.log(err?.response);
             if (err?.response.data.response === -1) {
                 try {
                     firestore
@@ -120,8 +120,8 @@ const Blacklist = (props) => {
                             }
                         })
                 } catch (err) {
-                    console.log(err);
-                    console.log(err?.response);
+                    // console.log(err);
+                    // console.log(err?.response);
                     setBlacklistExists(false);
                     setModal2Visible(true);
                 }
@@ -180,7 +180,6 @@ const Blacklist = (props) => {
             console.log(err?.response)
             setLoading(false);
             setModalVisible(false);
-            console.log('ERROR PAY DEBT', err?.response.data);
             if (err?.response.data.response === -2) {
                 setErrorMessage(false);
                 setModal3Visible(true);
