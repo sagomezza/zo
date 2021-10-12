@@ -269,25 +269,31 @@ const App = () => {
           </NavigationContainer>
           <SnackBar
             visible={logoutSnackbar}
+            position='bottom'
+            bottom={1}
             textMessage="Recuerda realizar el cierre de caja y posterior cierre de sesión antes de terminar tu turno."
             actionHandler={() => { setLogoutSnackbar(false) }}
             actionText="Entendido"
+            actionStyle={{fontSize: 100, fontFamily: 'Montserrat-Bold' }}
             backgroundColor="#FFF200"
             accentColor="#00A9A0"
             messageColor="#00A9A0"
-            messageStyle={{ fontSize: 60 }}
-            containerStyle={{ height: 90 }}
+            messageStyle={{ fontSize: 100, fontFamily: 'Montserrat-Regular' }}
+            containerStyle={{ height: 80, borderRadius: 10, margin: 2 }}
           />
           <SnackBar
             visible={userInSnackbar}
+            position='bottom'
+            bottom={1}
             textMessage={`Acaba de ingresar un usuario con placa: ${userInPlate}`}
             actionHandler={() => { setUserInSnackbar(false); }}
             actionText="Entendido"
+            actionStyle={{fontSize: 100, fontFamily: 'Montserrat-Bold' }}
             backgroundColor="#ED8E20"
             accentColor="#FFFFFF"
             messageColor="#FFFFFF"
-            messageStyle={{ fontSize: 100 }}
-            containerStyle={{ height: 90 }}
+            messageStyle={{ fontSize: 100, fontFamily: 'Montserrat-Bold' }}
+            containerStyle={{ height: 80, borderRadius: 10, margin: 2 }}
           />
         </AuthProvider>
       </Provider>
