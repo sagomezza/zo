@@ -228,20 +228,6 @@ const UserOut = (props) => {
     setLoading(true)
     try {
       let idempotencyKey = createIdempotency(uid.uid)
-      // console.log({
-      //   plate: check.plate,
-      //   hqId: check.hqId,
-      //   phone: check.phone,
-      //   paymentType: "cash",
-      //   total: totalAmount,
-      //   cash: parseInt(totalPay),
-      //   change: totalPay - totalAmount,
-      //   status: paymentStatus,
-      //   isParanoic: isParanoicUser,
-      //   officialEmail: officialProps.email,
-      //   dateFinished: new Date(),
-      //   dateStart: dateStart
-      // });
       const response = await instance.post(
         FINISHPARKING,
         {
@@ -278,7 +264,7 @@ const UserOut = (props) => {
       setRecip(response.data.data);
       setIsDisabled(true);
     } catch (err) {
-      Sentry.captureException(err);
+      // Sentry.captureException(err);
       console.log(err?.response)
       console.log(err)
       setLoading(false);

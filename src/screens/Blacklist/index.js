@@ -22,6 +22,8 @@ import { PAY_DEBTS, FIND_USER_BY_PLATE, LIST_HQ_DEBTS } from "../../config/api";
 import instance from "../../config/axios";
 import { TIMEOUT } from '../../config/constants/constants';
 import getRecipsOfShift from '../../config/services/getRecipsOfShift';
+import { firestore } from '../../config/firebase/index';
+
 // redux
 import { connect } from "react-redux";
 import * as actions from "../../redux/actions";
@@ -93,11 +95,37 @@ const Blacklist = (props) => {
                 };
             };
         } catch (err) {
-            Sentry.captureException(err);
-            setBlacklistExists(false);
+            // Sentry.captureException(err);
             // console.log(err);
             // console.log(err?.response);
-            if (err?.response.data.response === -1) setModal2Visible(true);
+            if (err?.response.data.response === -1) {
+                try {
+                    firestore
+                        .collection('blacklist')
+                        .where('hqId', '==', officialHq)
+                        .where('plate', '==', plateOne + plateTwo)
+                        .where('status', '==', 'active')
+                        .get()
+                        .then(async (snapshot) => {
+                            if (snapshot.size > 0) {
+                                let bl = []
+                                snapshot.forEach(doc => {
+                                    let data = doc.data()
+                                    data.date = data.date.nanoseconds ? data.date.toDate() : data.date
+                                    data.id = doc.id
+                                    bl.push(data)
+                                })
+                                setBlacklist(bl);
+                                setBlacklistExists(true);
+                            }
+                        })
+                } catch (err) {
+                    // console.log(err);
+                    // console.log(err?.response);
+                    setBlacklistExists(false);
+                    setModal2Visible(true);
+                }
+            }
         };
     };
 
@@ -148,11 +176,10 @@ const Blacklist = (props) => {
             }
         } catch (err) {
             // Sentry.captureException(err);
-            // console.log(err)
-            // console.log(err?.response)
+            console.log(err)
+            console.log(err?.response)
             setLoading(false);
             setModalVisible(false);
-            // console.log('ERROR PAY DEBT', err?.response.data);
             if (err?.response.data.response === -2) {
                 setErrorMessage(false);
                 setModal3Visible(true);

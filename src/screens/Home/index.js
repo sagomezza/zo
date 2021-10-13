@@ -23,6 +23,8 @@ import * as actions from "../../redux/actions";
 import store from '../../config/store';
 import * as Sentry from "@sentry/browser";
 import secondsToString from '../../config/services/secondsToString';
+import getRecipsOfShift from '../../config/services/getRecipsOfShift';
+import readHqInfo from '../../config/services/readHqInfo';
 
 
 const HomeIndex = (props) => {
@@ -75,7 +77,10 @@ const HomeIndex = (props) => {
         }
       }
     }
-
+    if (officialProps !== {}) {
+      getRecipsOfShift(officialProps);
+      readHqInfo(officialHq);
+    }
     updateExpoToken();
     offData();
   }, []);
@@ -138,7 +143,8 @@ const HomeIndex = (props) => {
         {item.prepayFullDay === true ? " Pase día" : ""}
         {item.mensuality === true ? " Mensualidad" : ""}
         {item.isParanoic === true ? `${secondsToString((item.hours) * 3600)} ` : ""}
-        {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? `${secondsToString((item.hours) * 3600)} ` : ""}
+        {!item.prepayFullDay && !item.mensuality && !item.isParanoic && item.hours ? `${secondsToString((item.hours) * 3600)} ` : ""}
+        {!item.prepayFullDay && !item.mensuality && !item.isParanoic && !item.hours ? 'Pago deuda' : ""}
       </Text>
       <Text style={styles.textPlaca}>
         {item.cash === 0 && item.change === 0 ? '$0' : ''}
@@ -152,7 +158,7 @@ const HomeIndex = (props) => {
   const renderReservationItem = useCallback(({ item, index }) =>
     <View style={styles.list} key={item.key}>
       <Text style={styles.textPlaca}>{item.plate}</Text>
-      <Text style={styles.dateDaysText}>{item.verificationCode}</Text>
+      <Text style={styles.dateDaysText}>{item.isParanoic === true ? 'N/A' : item.verificationCode}</Text>
       <View style={{ flexDirection: 'column' }}>
         <Text style={styles.dateDaysText}>{moment(item.dateStart).format('L')}</Text>
         <Text style={styles.dateHourText}>{moment(item.dateStart).format('LT')}</Text>
@@ -191,7 +197,7 @@ const HomeIndex = (props) => {
                   data={recips.recips}
                   keyExtractor={recipKeyExtractor}
                   renderItem={renderRecipItem}
-                  initialNumToRender={5} 
+                  initialNumToRender={5}
                   maxToRenderPerBatch={5}
                   removeClippedSubviews={true}
                 />
@@ -227,7 +233,7 @@ const HomeIndex = (props) => {
                   data={reservations.reservations}
                   keyExtractor={reservationKeyExtractor}
                   renderItem={renderReservationItem}
-                  initialNumToRender={5} 
+                  initialNumToRender={5}
                   maxToRenderPerBatch={5}
                   removeClippedSubviews={true}
                 />

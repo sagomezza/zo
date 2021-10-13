@@ -35,6 +35,7 @@ import {
 } from "../../config/api";
 import { TIMEOUT } from '../../config/constants/constants';
 import instance from "../../config/axios";
+import { firestore } from '../../config/firebase/index';
 import store from '../../config/store';
 // redux
 import { connect } from "react-redux";
@@ -178,6 +179,32 @@ const UserInput = (props) => {
       setExistingUser(false);
       setShowDropdown(false);
       setShowPhoneInput(true);
+      if (err?.response.data.response === -1) {
+        try {
+            firestore
+                .collection('blacklist')
+                .where('hqId', '==', officialHq)
+                .where('plate', '==', plateOne + plateTwo)
+                .where('status', '==', 'active')
+                .get()
+                .then(async (snapshot) => {
+                    if (snapshot.size > 0) {
+                        let bl = []
+                        snapshot.forEach(doc => {
+                            let data = doc.data()
+                            data.date = data.date.nanoseconds ? data.date.toDate() : data.date
+                            data.id = doc.id
+                            bl.push(data)
+                        })
+                        setBlacklist(bl);
+                        setModal3Visible(true);
+                    }
+                })
+        } catch (err) {
+            // console.log(err);
+            // console.log(err?.response);
+        }
+    }
     }
   };
 
@@ -232,7 +259,6 @@ const UserInput = (props) => {
         setTableData(response.data.data);
       }
     } catch (err) {
-      Sentry.captureException(err)
       if (err?.response.data.response !== -1) Sentry.captureException(err);
       // console.log(err)
       // console.log(err?.response)
@@ -316,7 +342,6 @@ const UserInput = (props) => {
         readHqInfo(officialHq);
       }
     } catch (err) {
-      Sentry.captureException(err);
       setLoadingStart(false)
       // response -2 -> already parked
       // response -3 -> car parks full
@@ -331,6 +356,7 @@ const UserInput = (props) => {
         setBikeParksFull(true);
         setModal2Visible(true);
       } else {
+        Sentry.captureException(err);
         setErrorModalVisible(true)
       }
       // console.log(err)
@@ -428,7 +454,7 @@ const UserInput = (props) => {
 
   const handleChangeTotalPay = text => setTotalPay(text);
   const handleCheckBox = () => setPrepayDay(!prepayDay);
-  const handleModal3 = () => { setModal3Visible(false); setTotalPay(0); setDebtExists(true);}
+  const handleModal3 = () => { setModal3Visible(false); setTotalPay(0); setDebtExists(true); }
   const handleMaxCapMensuality = () => { setMaxCapMensuality(false); }
 
   let inputChange = (totalPay - prepayDayValue) <= 0 ? '' : '' + (totalPay - prepayDayValue)
@@ -800,7 +826,7 @@ const UserInput = (props) => {
                 <View style={{ margin: '4%', justifyContent: 'center', height: ' 55%' }}>
                   <Text style={styles.modalText}> LA DEUDA FUE RETIRADA. </Text>
                 </View>
-                <View style={{ height: '20%', width: '100%',justifyContent: 'flex-end' }}>
+                <View style={{ height: '20%', width: '100%', justifyContent: 'flex-end' }}>
                   <Button onPress={handleModal3}
                     title="ENTENDIDO"
                     color="#00A9A0"

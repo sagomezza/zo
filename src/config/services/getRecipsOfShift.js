@@ -14,12 +14,14 @@ const getRecipsOfShift = (officialProps) => {
         }
         // console.log(officialProps.schedule.status)
         let date = new Date((officialProps.start._seconds) * 1000)
+        let actualDate = moment(date).subtract(5, 'hours').toDate();
+        // console.log('DATE IN GET SHIFT RECIPS',actualDate);
         // console.log(date);
         firestore
             .collection('recips')
             .where('hqId', '==', officialHq)
             .where('officialEmail', '==', email)
-            .where('dateFinished', '>=', date)
+            .where('dateFinished', '>=', actualDate)
             .orderBy('dateFinished', 'desc')
             .get()
             .then(async (snapshot) => {
@@ -39,7 +41,7 @@ const getRecipsOfShift = (officialProps) => {
                         .where("hqId", "==", officialHq)
                         .where("prepayFullDay", "==", true)
                         .where("officialEmail", "==", email)
-                        .where("dateFactured", ">=", date)
+                        .where("dateFactured", ">=", actualDate)
                         .orderBy("dateFactured", "desc")
                         .get()
                         .then((snapshot) => {
@@ -55,7 +57,7 @@ const getRecipsOfShift = (officialProps) => {
                                 .where("hqId", "==", officialHq)
                                 .where("mensuality", "==", true)
                                 .where("officialEmail", "==", email)
-                                .where("dateStart", ">=", date)
+                                .where("dateStart", ">=", actualDate)
                                 .orderBy("dateStart", "desc")
                                 .get()
                                 .then((snapshot) => {
@@ -71,7 +73,7 @@ const getRecipsOfShift = (officialProps) => {
                                         .where("hqId", "==", officialHq)
                                         .where("blackList", "==", true)
                                         .where("officialEmail", "==", email)
-                                        .where("dateFactured", ">=", date)
+                                        .where("dateFactured", ">=", actualDate)
                                         .orderBy("dateFactured", "desc")
                                         .get()
                                         .then((snapshot) => {
