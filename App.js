@@ -82,7 +82,7 @@ const App = () => {
     };
 
     if (officialScheduleStart !== null) {
-      // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
+      console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
       const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
       const checkOfficialHours = setInterval(() => {
         let hours = moment(new Date()).diff(offStart, 'hours', true);
@@ -138,11 +138,11 @@ const App = () => {
         // console.log(response.data.data)
         store.dispatch(setOfficial(response.data.data));
         setOfficialData(response.data.data)
-        if (response.data.data.hq) {
-          let hqId = response.data.data.hq[0]
-          readHqInfo(hqId);
-          getRecipsOfShift(officialData);
-        }
+        // if (response.data.data.hq) {
+        //   let hqId = response.data.data.hq[0]
+        //   readHqInfo(hqId);
+        //   getRecipsOfShift(officialData);
+        // }
       } catch (err) {
         Sentry.captureException(err)
         try {

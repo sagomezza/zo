@@ -24,6 +24,7 @@ import store from '../../config/store';
 import * as Sentry from "@sentry/browser";
 import secondsToString from '../../config/services/secondsToString';
 import getRecipsOfShift from '../../config/services/getRecipsOfShift';
+import readHqInfo from '../../config/services/readHqInfo';
 
 
 const HomeIndex = (props) => {
@@ -72,7 +73,10 @@ const HomeIndex = (props) => {
         }
       }
     }
-
+    if (officialProps !== {}) {
+      getRecipsOfShift(officialProps);
+      readHqInfo(officialHq);
+    }
     updateExpoToken();
     offData();
   }, []);
@@ -189,7 +193,7 @@ const HomeIndex = (props) => {
                   data={recips.recips}
                   keyExtractor={recipKeyExtractor}
                   renderItem={renderRecipItem}
-                  initialNumToRender={5} 
+                  initialNumToRender={5}
                   maxToRenderPerBatch={5}
                   removeClippedSubviews={true}
                 />
@@ -225,7 +229,7 @@ const HomeIndex = (props) => {
                   data={reservations.reservations}
                   keyExtractor={reservationKeyExtractor}
                   renderItem={renderReservationItem}
-                  initialNumToRender={5} 
+                  initialNumToRender={5}
                   maxToRenderPerBatch={5}
                   removeClippedSubviews={true}
                 />
