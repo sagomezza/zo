@@ -82,7 +82,7 @@ const App = () => {
     };
 
     if (officialScheduleStart !== null) {
-      console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
+      // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
       const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
       const checkOfficialHours = setInterval(() => {
         let hours = moment(new Date()).diff(offStart, 'hours', true);
@@ -107,10 +107,15 @@ const App = () => {
             if (change.type === "added") {
               let reservations = change.doc.data().reservations;
               let lastUserIn = reservations[reservations.length - 1];
-              setUserInPlate(lastUserIn.plate);
-              setUserInSnackbar(true);
-              getRecipsOfShift(officialData);
-              console.log("New INFO---------------------------:: ", reservations[reservations.length - 1]);
+              let dateLastUser = lastUserIn.dateStart;
+              let momDateLastUser = moment(new Date(dateLastUser.seconds * 1000)).subtract(5, 'hours');
+              let minutes = moment(new Date()).diff(momDateLastUser, 'minutes', true);
+              if (minutes && minutes < 5) {
+                setUserInPlate(lastUserIn.plate);
+                setUserInSnackbar(true);
+                getRecipsOfShift(officialData);
+              }
+              console.log("New INFO---------------------------:: ", lastUserIn);
             }
           });
         },
@@ -121,9 +126,6 @@ const App = () => {
       unsubscribe();
       updateApp();
     }
-
-    updateApp();
-
   }, []);
 
   Sentry.init({
@@ -277,7 +279,7 @@ const App = () => {
             textMessage="Recuerda realizar el cierre de caja y posterior cierre de sesión antes de terminar tu turno."
             actionHandler={() => { setLogoutSnackbar(false) }}
             actionText="Entendido"
-            actionStyle={{fontSize: 100, fontFamily: 'Montserrat-Bold' }}
+            actionStyle={{ fontSize: 100, fontFamily: 'Montserrat-Bold' }}
             backgroundColor="#FFF200"
             accentColor="#00A9A0"
             messageColor="#00A9A0"
@@ -291,7 +293,7 @@ const App = () => {
             textMessage={`Acaba de ingresar un usuario con placa: ${userInPlate}`}
             actionHandler={() => { setUserInSnackbar(false); }}
             actionText="Entendido"
-            actionStyle={{fontSize: 100, fontFamily: 'Montserrat-Bold' }}
+            actionStyle={{ fontSize: 100, fontFamily: 'Montserrat-Bold' }}
             backgroundColor="#ED8E20"
             accentColor="#FFFFFF"
             messageColor="#FFFFFF"
