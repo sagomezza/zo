@@ -99,28 +99,28 @@ const App = () => {
       return () => clearInterval(checkOfficialHours);
     }
 
-    // const unsubscribe = firestore
-    //   .collection("headquarters")
-    //   .onSnapshot(
-    //     (snapshot) => {
-    //       snapshot.docChanges().forEach((change) => {
-    //         if (change.type === "added") {
-    //           let reservations = change.doc.data().reservations;
-    //           let lastUserIn = reservations[reservations.length - 1];
-    //           setUserInPlate(lastUserIn.plate);
-    //           setUserInSnackbar(true);
-    //           getRecipsOfShift(officialData);
-    //           console.log("New INFO---------------------------:: ", reservations[reservations.length - 1]);
-    //         }
-    //       });
-    //     },
-    //     (error) => { console.log('ERROR onSnapshot'); }
-    //   );
+    const unsubscribe = firestore
+      .collection("headquarters")
+      .onSnapshot(
+        (snapshot) => {
+          snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+              let reservations = change.doc.data().reservations;
+              let lastUserIn = reservations[reservations.length - 1];
+              setUserInPlate(lastUserIn.plate);
+              setUserInSnackbar(true);
+              getRecipsOfShift(officialData);
+              console.log("New INFO---------------------------:: ", reservations[reservations.length - 1]);
+            }
+          });
+        },
+        (error) => { console.log('ERROR onSnapshot'); }
+      );
 
-    // return () => {
-    //   unsubscribe();
-    //   updateApp();
-    // }
+    return () => {
+      unsubscribe();
+      updateApp();
+    }
 
     updateApp();
 
