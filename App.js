@@ -108,7 +108,7 @@ const App = () => {
               if (change.type === "modified") {
                 let reservations = change.doc.data().reservations;
                 let lastUserIn = reservations[reservations.length - 1];
-                if (!lastUserIn.dateFinished && !lastUserIn.officialEmail) {
+                if (!lastUserIn.officialEmail) {
                   let dateLastUser = lastUserIn.dateStart;
                   let momDateLastUser = moment(new Date(dateLastUser.seconds * 1000)).subtract(5, 'hours');
                   let dateNow = moment(new Date()).subtract(5, 'hours');
@@ -116,7 +116,7 @@ const App = () => {
                   // console.log('NEW DATE--------', dateNow)
                   let minutes = moment(dateNow).diff(momDateLastUser, 'minutes', true);
                   // console.log('MINUTES------', minutes);
-                  if (minutes !== undefined && minutes < 4) {
+                  if (minutes !== undefined && minutes < 1) {
                     setUserInPlate(lastUserIn.plate);
                     setUserInSnackbar(true);
                   }
