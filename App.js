@@ -99,32 +99,39 @@ const App = () => {
       return () => clearInterval(checkOfficialHours);
     }
 
-    const unsubscribe = firestore
-      .collection("headquarters")
-      .onSnapshot(
-        (snapshot) => {
-          snapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
-              let reservations = change.doc.data().reservations;
-              let lastUserIn = reservations[reservations.length - 1];
-              let dateLastUser = lastUserIn.dateStart;
-              let momDateLastUser = moment(new Date(dateLastUser.seconds * 1000)).subtract(5, 'hours');
-              let minutes = moment(new Date()).diff(momDateLastUser, 'minutes', true);
-              if (minutes && minutes < 5) {
-                setUserInPlate(lastUserIn.plate);
-                setUserInSnackbar(true);
-                getRecipsOfShift(officialData);
+    const unsubscribe =
+      firestore
+        .collection("headquarters")
+        .onSnapshot(
+          (snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+              if (change.type === "modified") {
+                let reservations = change.doc.data().reservations;
+                let lastUserIn = reservations[reservations.length - 1];
+                if (!lastUserIn.dateFinished && !lastUserIn.officialEmail) {
+                  let dateLastUser = lastUserIn.dateStart;
+                  let momDateLastUser = moment(new Date(dateLastUser.seconds * 1000)).subtract(5, 'hours');
+                  let dateNow = moment(new Date()).subtract(5, 'hours');
+                  // console.log('momDateLastUser------', momDateLastUser);
+                  // console.log('NEW DATE--------', dateNow)
+                  let minutes = moment(dateNow).diff(momDateLastUser, 'minutes', true);
+                  // console.log('MINUTES------', minutes);
+                  if (minutes !== undefined && minutes < 4) {
+                    setUserInPlate(lastUserIn.plate);
+                    setUserInSnackbar(true);
+                  }
+                  // console.log("New INFO---------------------------:: ", lastUserIn);
+                }
+                // console.log("Modified city: ");
               }
-              console.log("New INFO---------------------------:: ", lastUserIn);
-            }
-          });
-        },
-        (error) => { console.log('ERROR onSnapshot'); }
-      );
+            });
+          },
+          (error) => { console.log('ERROR onSnapshot'); }
+        );
 
     return () => {
-      unsubscribe();
-      updateApp();
+    unsubscribe();
+    updateApp();
     }
   }, []);
 
