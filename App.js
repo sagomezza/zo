@@ -82,7 +82,7 @@ const App = () => {
     };
 
     if (officialScheduleStart !== null) {
-      console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
+      // console.log("start IN if", moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours'))
       const offStart = moment(new Date(officialScheduleStart._seconds * 1000)).subtract(5, 'hours')
       const checkOfficialHours = setInterval(() => {
         let hours = moment(new Date()).diff(offStart, 'hours', true);
@@ -99,31 +99,40 @@ const App = () => {
       return () => clearInterval(checkOfficialHours);
     }
 
-    // const unsubscribe = firestore
-    //   .collection("headquarters")
-    //   .onSnapshot(
-    //     (snapshot) => {
-    //       snapshot.docChanges().forEach((change) => {
-    //         if (change.type === "added") {
-    //           let reservations = change.doc.data().reservations;
-    //           let lastUserIn = reservations[reservations.length - 1];
-    //           setUserInPlate(lastUserIn.plate);
-    //           setUserInSnackbar(true);
-    //           getRecipsOfShift(officialData);
-    //           console.log("New INFO---------------------------:: ", reservations[reservations.length - 1]);
-    //         }
-    //       });
-    //     },
-    //     (error) => { console.log('ERROR onSnapshot'); }
-    //   );
+    const unsubscribe =
+      firestore
+        .collection("headquarters")
+        .onSnapshot(
+          (snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+              if (change.type === "modified") {
+                let reservations = change.doc.data().reservations;
+                let lastUserIn = reservations[reservations.length - 1];
+                if (!lastUserIn.officialEmail) {
+                  let dateLastUser = lastUserIn.dateStart;
+                  let momDateLastUser = moment(new Date(dateLastUser.seconds * 1000)).subtract(5, 'hours');
+                  let dateNow = moment(new Date()).subtract(5, 'hours');
+                  // console.log('momDateLastUser------', momDateLastUser);
+                  // console.log('NEW DATE--------', dateNow)
+                  let minutes = moment(dateNow).diff(momDateLastUser, 'minutes', true);
+                  // console.log('MINUTES------', minutes);
+                  if (minutes !== undefined && minutes < 1) {
+                    setUserInPlate(lastUserIn.plate);
+                    setUserInSnackbar(true);
+                  }
+                  // console.log("New INFO---------------------------:: ", lastUserIn);
+                }
+                // console.log("Modified city: ");
+              }
+            });
+          },
+          (error) => { console.log('ERROR onSnapshot'); }
+        );
 
-    // return () => {
-    //   unsubscribe();
-    //   updateApp();
-    // }
-
+    return () => {
+    unsubscribe();
     updateApp();
-
+    }
   }, []);
 
   Sentry.init({
@@ -277,7 +286,7 @@ const App = () => {
             textMessage="Recuerda realizar el cierre de caja y posterior cierre de sesión antes de terminar tu turno."
             actionHandler={() => { setLogoutSnackbar(false) }}
             actionText="Entendido"
-            actionStyle={{fontSize: 100, fontFamily: 'Montserrat-Bold' }}
+            actionStyle={{ fontSize: 100, fontFamily: 'Montserrat-Bold' }}
             backgroundColor="#FFF200"
             accentColor="#00A9A0"
             messageColor="#00A9A0"
@@ -291,7 +300,7 @@ const App = () => {
             textMessage={`Acaba de ingresar un usuario con placa: ${userInPlate}`}
             actionHandler={() => { setUserInSnackbar(false); }}
             actionText="Entendido"
-            actionStyle={{fontSize: 100, fontFamily: 'Montserrat-Bold' }}
+            actionStyle={{ fontSize: 100, fontFamily: 'Montserrat-Bold' }}
             backgroundColor="#ED8E20"
             accentColor="#FFFFFF"
             messageColor="#FFFFFF"
