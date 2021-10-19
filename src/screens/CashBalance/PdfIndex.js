@@ -203,7 +203,7 @@ const txtGenerator = (props) => {
         { timeout: TIMEOUT }
       );
       setBase(0);
-      settoTalReported(0);
+      setTotalReported(0);
       listBoxClose();
       setLoadingBoxGenerator(false);
       setModalVisible(false);
