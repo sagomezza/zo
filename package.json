@@ -24,6 +24,7 @@
     "expo-av": "~8.6.0",
     "expo-barcode-scanner": "~9.0.0",
     "expo-camera": "^9.0.0",
+    "expo-cli": "^4.12.10",
     "expo-constants": "~9.2.0",
     "expo-device": "~2.3.0",
     "expo-file-system": "^10.0.0",
