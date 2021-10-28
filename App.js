@@ -62,10 +62,12 @@ const App = () => {
   const [userInSnackbar, setUserInSnackbar] = useState(false);
   const [userInPlate, setUserInPlate] = useState('');
   const [officialData, setOfficialData] = useState({});
+  const officialHq = officialData.hq !== undefined ? officialData.hq[0] : "";
   const officialScheduleStart = officialData.start !== undefined ? officialData.start : null;
   const MINUTE_MS = 60000;
 
   useEffect(() => {
+    // console.log('OFFICIAL DATA', officialHq);
     const updateApp = async () => {
       try {
         const update = await Updates.checkForUpdateAsync();

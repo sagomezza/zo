@@ -565,7 +565,7 @@ const MonthlyPayments = (props) => {
   const renderNewMenPlatesItem = ({ item }) => {
     return (
       <View
-       key={item.key}
+        key={item.key}
         style={{
           flexDirection: "row",
           marginBottom: "2%",
@@ -687,22 +687,23 @@ const MonthlyPayments = (props) => {
                   textStyle={styles.buttonTextRenew}
                   disabled={plateOne === "" || plateTwo === ""}
                 />
-                <Button
-                  onPress={editMenButton}
-                  title="EDITAR"
-                  color="transparent"
-                  style={[
-                    plateOne === "" || plateTwo === ""
-                      ? styles.buttonEdDisabled
-                      : styles.buttonEd,
-                  ]}
-                  textStyle={styles.buttonTextRenew}
-                  disabled={plateOne === "" || plateTwo === ""}
-                />
+                {mensualityInfo.type !== 'corporative' &&
+                  <Button
+                    onPress={editMenButton}
+                    title="EDITAR"
+                    color="transparent"
+                    style={[
+                      plateOne === "" || plateTwo === ""
+                        ? styles.buttonEdDisabled
+                        : styles.buttonEd,
+                    ]}
+                    textStyle={styles.buttonTextRenew}
+                    disabled={plateOne === "" || plateTwo === ""}
+                  />}
               </View>
             </View>
           ) : (
-            <View style={{ height: "30%", justifyContent: "space-between", width: "80%"}}>
+            <View style={{ height: "30%", justifyContent: "space-between", width: "80%" }}>
               {mensualityExists === false ? (
                 <Text style={styles.notFoundText}>
                   No se encuentra mensualidad asociada.
