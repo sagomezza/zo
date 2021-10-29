@@ -80,19 +80,19 @@ const DrawerContent = (props) => {
                         label="Mensualidades"
                         onPress={() => { props.navigation.navigate('MonthlyPayments') }}
                     />
-                    {officialHq === 'kPlPR3Rysv3uCsrUdcn2' &&
+                    {/* {officialHq === 'kPlPR3Rysv3uCsrUdcn2' && */}
 
-                        <DrawerItem
-                            icon={({ color, size }) => (
-                                <Image
-                                    style={{ width: normalize(25), height: normalize(25) }}
-                                    resizeMode={"contain"}
-                                    source={require('../../../assets/images/MenuMensualidades.png')} />
-                            )}
-                            label="Tiquete"
-                            onPress={() => { props.navigation.navigate('Ticket') }}
-                        />
-                    }
+                    <DrawerItem
+                        icon={({ color, size }) => (
+                            <Image
+                                style={{ width: normalize(25), height: normalize(25) }}
+                                resizeMode={"contain"}
+                                source={require('../../../assets/images/MenuMensualidades.png')} />
+                        )}
+                        label="Tiquete"
+                        onPress={() => { props.navigation.navigate('Ticket') }}
+                    />
+                    {/* } */}
 
                     <DrawerItem
                         icon={({ color, size }) => (
