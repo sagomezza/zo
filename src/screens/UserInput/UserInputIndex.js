@@ -577,7 +577,7 @@ const UserInput = (props) => {
                   onChangeText={handleOnChangeNewPhone}
                   value={newPhone}
                 />}
-              {officialHq === 'iIJJcbIpMdVeYwEDK6mJ' &&
+              {officialHq === 'GwPIopvdwylEq5JtiY35' &&
                 <View style={styles.checkPrepayContainer}>
                   <CheckBox
                     value={prepayDay}
@@ -588,7 +588,7 @@ const UserInput = (props) => {
                   <Text style={styles.prepayDayText}>PASE DIA</Text>
                 </View>
               }
-              {officialHq === 'kPlPR3Rysv3uCsrUdcn2' &&
+              {officialHq === 'Rb6l7wLi6ouxVtkRSx6V' &&
                 <View style={styles.checkPrepayContainer}>
                   <CheckBox
                     value={halfHour}
