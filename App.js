@@ -9,7 +9,7 @@ import { AuthProvider } from "./src/components/AuthContext";
 import { auth } from "./src/config/firebase";
 import RootStack from "./src/navigators/RootStack"
 import * as Font from 'expo-font';
-import { AppLoading } from "expo";
+import AppLoading from "expo-app-loading";
 import instance from "./src/config/axios";
 import { READ_OFFICIAL, READ_HQ } from "./src/config/api";
 import { READ_ADMIN, READ_CORPO, STORAGE_KEY } from "./src/config/api/index";
@@ -50,7 +50,7 @@ const fetchFont = () => {
 };
 
 const App = () => {
-  const [fontLoaded, setfontLoaded] = useState(false);
+  const [fontLoaded, setFontLoaded] = useState(false);
   const [currentUser, setUser] = useState("");
   const [initialRouteName, setInitialRouteName] = useState("");
   const [loginState, setLoginState] = useState(false);
@@ -62,10 +62,12 @@ const App = () => {
   const [userInSnackbar, setUserInSnackbar] = useState(false);
   const [userInPlate, setUserInPlate] = useState('');
   const [officialData, setOfficialData] = useState({});
+  const officialHq = officialData.hq !== undefined ? officialData.hq[0] : "";
   const officialScheduleStart = officialData.start !== undefined ? officialData.start : null;
   const MINUTE_MS = 60000;
 
   useEffect(() => {
+    // console.log('OFFICIAL DATA', officialHq);
     const updateApp = async () => {
       try {
         const update = await Updates.checkForUpdateAsync();
@@ -260,7 +262,7 @@ const App = () => {
       startAsync={fetchFont}
       onError={() => console.log('ERROR')}
       onFinish={() => {
-        setfontLoaded(true)
+        setFontLoaded(true)
       }}
     />;
   }

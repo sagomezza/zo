@@ -57,6 +57,7 @@ const UserInput = (props) => {
   const refPlateOne = useRef(null);
   const refPlateTwo = useRef(null);
   const [prepayDay, setPrepayDay] = useState(false);
+  const [halfHour, setHalfHour] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [carParksFull, setCarParksFull] = useState(false);
@@ -114,13 +115,13 @@ const UserInput = (props) => {
     setShowDropdown(false);
     setNewPhone("");
     setPrepayDay(false);
+    setHalfHour(false);
     setShowPhoneInput(false);
     setHistoryExists(false);
     setMensualityExists(false);
     setPrepayDayRecip(false);
     setPlateOne("");
     setPlateTwo("");
-    setPrepayDay(false);
     setShowPhoneInput(false);
     setMensuality({});
     setLoadingStart(false);
@@ -133,7 +134,7 @@ const UserInput = (props) => {
     setNewPhone("");
     setPrepayDay(false);
     setShowPhoneInput(false);
-    setPrepayDay(false);
+    setHalfHour(false);
     setShowPhoneInput(false);
     setHistoryExists(false);
     setMensualityExists(false);
@@ -181,30 +182,30 @@ const UserInput = (props) => {
       setShowPhoneInput(true);
       if (err?.response.data.response === -1) {
         try {
-            firestore
-                .collection('blacklist')
-                .where('hqId', '==', officialHq)
-                .where('plate', '==', plateOne + plateTwo)
-                .where('status', '==', 'active')
-                .get()
-                .then(async (snapshot) => {
-                    if (snapshot.size > 0) {
-                        let bl = []
-                        snapshot.forEach(doc => {
-                            let data = doc.data()
-                            data.date = data.date.nanoseconds ? data.date.toDate() : data.date
-                            data.id = doc.id
-                            bl.push(data)
-                        })
-                        setBlacklist(bl);
-                        setModal3Visible(true);
-                    }
+          firestore
+            .collection('blacklist')
+            .where('hqId', '==', officialHq)
+            .where('plate', '==', plateOne + plateTwo)
+            .where('status', '==', 'active')
+            .get()
+            .then(async (snapshot) => {
+              if (snapshot.size > 0) {
+                let bl = []
+                snapshot.forEach(doc => {
+                  let data = doc.data()
+                  data.date = data.date.nanoseconds ? data.date.toDate() : data.date
+                  data.id = doc.id
+                  bl.push(data)
                 })
+                setBlacklist(bl);
+                setModal3Visible(true);
+              }
+            })
         } catch (err) {
-            // console.log(err);
-            // console.log(err?.response);
+          // console.log(err);
+          // console.log(err?.response);
         }
-    }
+      }
     }
   };
 
@@ -320,6 +321,7 @@ const UserInput = (props) => {
             dateStart: new Date(),
             phone: !showPhoneInput ? '+57' + phone : '+57' + newPhone,
             prepayFullDay: prepayDay,
+            halfHour: halfHour,
             officialEmail: officialEmail,
             type,
             cash: Number(totalPay),
@@ -335,6 +337,7 @@ const UserInput = (props) => {
         setPhones([{ label: 'Selecciona un número', value: 1 }]);
         setLoadingStart(false);
         setPrepayDay(false);
+        setHalfHour(false);
         setPrepayDayValue(0);
         setTotalPay(0);
         setModalVisible(true);
@@ -453,7 +456,8 @@ const UserInput = (props) => {
   };
 
   const handleChangeTotalPay = text => setTotalPay(text);
-  const handleCheckBox = () => setPrepayDay(!prepayDay);
+  const handlePrepayCheckBox = () => setPrepayDay(!prepayDay);
+  const handleHalfCheckBox = () => setHalfHour(!prepayDay);
   const handleModal3 = () => { setModal3Visible(false); setTotalPay(0); setDebtExists(true); }
   const handleMaxCapMensuality = () => { setMaxCapMensuality(false); }
 
@@ -573,15 +577,28 @@ const UserInput = (props) => {
                   onChangeText={handleOnChangeNewPhone}
                   value={newPhone}
                 />}
-              <View style={styles.checkPrepayContainer}>
-                <CheckBox
-                  value={prepayDay}
-                  onValueChange={handleCheckBox}
-                  style={{ alignSelf: 'center' }}
-                  tintColors={{ true: '#FFF200', false: '#FFF200' }}
-                />
-                <Text style={styles.prepayDayText}>PASE DIA</Text>
-              </View>
+              {officialHq === 'iIJJcbIpMdVeYwEDK6mJ' &&
+                <View style={styles.checkPrepayContainer}>
+                  <CheckBox
+                    value={prepayDay}
+                    onValueChange={handlePrepayCheckBox}
+                    style={{ alignSelf: 'center' }}
+                    tintColors={{ true: '#FFF200', false: '#FFF200' }}
+                  />
+                  <Text style={styles.prepayDayText}>PASE DIA</Text>
+                </View>
+              }
+              {officialHq === 'kPlPR3Rysv3uCsrUdcn2' &&
+                <View style={styles.checkPrepayContainer}>
+                  <CheckBox
+                    value={halfHour}
+                    onValueChange={handleHalfCheckBox}
+                    style={{ alignSelf: 'center' }}
+                    tintColors={{ true: '#FFF200', false: '#FFF200' }}
+                  />
+                  <Text style={styles.prepayDayText}>MEDIA HORA</Text>
+                </View>
+              }
               <View style={styles.startButtonContainer}>
                 {!loadingStart &&
                   <Button

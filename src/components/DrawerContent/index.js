@@ -7,9 +7,12 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { CommonActions } from '@react-navigation/native';
 import normalize from '../../config/services/normalizeFontSize';
+import { connect } from 'react-redux';
+import * as actions from "../../redux/actions";
 
 const DrawerContent = (props) => {
-
+    const { navigation, officialProps, reservations, recips, hq } = props;
+    const officialHq = officialProps.hq !== undefined ? officialProps.hq[0] : "";
     // const { currentUser } = React.useContext(AuthContext);
 
     const signOut = async () => {
@@ -21,7 +24,7 @@ const DrawerContent = (props) => {
     }
 
     return (
-        <View style={{ flex: 1}}>
+        <View style={{ flex: 1 }}>
             <DrawerContentScrollView {...props}>
                 <View style={styles.drawerContent}>
 
@@ -44,7 +47,7 @@ const DrawerContent = (props) => {
                                 source={require('../../../assets/images/MenuTransacciones.png')} />
                         )}
                         label="Transacciones"
-                    onPress={() => { props.navigation.navigate('Transactions') }}
+                        onPress={() => { props.navigation.navigate('Transactions') }}
                     />
                     <DrawerItem
                         icon={({ color, size }) => (
@@ -77,6 +80,20 @@ const DrawerContent = (props) => {
                         label="Mensualidades"
                         onPress={() => { props.navigation.navigate('MonthlyPayments') }}
                     />
+                    {/* {officialHq === 'kPlPR3Rysv3uCsrUdcn2' && */}
+
+                    {/* <DrawerItem
+                        icon={({ color, size }) => (
+                            <Image
+                                style={{ width: normalize(25), height: normalize(25) }}
+                                resizeMode={"contain"}
+                                source={require('../../../assets/images/MenuMensualidades.png')} />
+                        )}
+                        label="Tiquete"
+                        onPress={() => { props.navigation.navigate('Ticket') }}
+                    /> */}
+                    {/* } */}
+
                     <DrawerItem
                         icon={({ color, size }) => (
                             <Image
@@ -87,6 +104,7 @@ const DrawerContent = (props) => {
                         label="Reporte de novedad"
                         onPress={() => { props.navigation.navigate('NewsReport') }}
                     />
+
                     <DrawerItem
                         // icon={({ color, size }) => (
                         //     <Image
@@ -104,13 +122,8 @@ const DrawerContent = (props) => {
                         label="Cierre de caja"
                         onPress={() => { props.navigation.navigate('CashBalance') }}
                     />
+
                     <DrawerItem
-                        // icon={({ color, size }) => (
-                        //     <Image
-                        //         style={{ width: normalize(25), height: normalize(25) }}
-                        //         resizeMode={"contain"}
-                        //         source={require('../../../assets/images/MenuMensualidades.png')} />
-                        // )}
                         icon={({ color, size }) => (
                             <MaterialIcons
                                 name="contact-support"
@@ -138,7 +151,7 @@ const DrawerContent = (props) => {
                         label="Crear recibo"
                         onPress={() => { props.navigation.navigate('CreateRecip') }}
                     /> */}
-                      <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '4%', marginLeft: '4%', marginRight: '4%', marginTop: '4%' }} ></View>
+                    <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#E9E9E9", marginBottom: '4%', marginLeft: '4%', marginRight: '4%', marginTop: '4%' }} ></View>
 
                     <DrawerItem
 
@@ -210,4 +223,11 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DrawerContent;
+const mapStateToProps = (state) => ({
+    officialProps: state.official,
+    reservations: state.reservations,
+    recips: state.recips,
+    hq: state.hq,
+});
+
+export default connect(mapStateToProps, actions)(DrawerContent);

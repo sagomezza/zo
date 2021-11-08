@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '90%',
   },
-  
+
   modalButtonPrepay: {
     width: '100%',
     height: '75%',
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
     backgroundColor: '#E7E7EA',
     width: '60%',
-    padding:'5%',
+    padding: '5%',
     borderRadius: 10,
     color: '#8F8F8F'
   },
@@ -151,5 +151,71 @@ const styles = StyleSheet.create({
     height: '70%',
     opacity: 0.5
   },
+  modalViewTicket: {
+    height: normalize(650),
+    width: '80%',
+    padding: '4%',
+    borderRadius: 30,
+    borderColor: '#707070',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    shadowColor: '#FFF',
+    shadowOffset: {
+      width: 50,
+      height: 50,
+    },
+    shadowOpacity: 0,
+    shadowRadius: 50,
+    elevation: 5,
+    flexDirection: 'column'
+  },
+  createMensualityRowContainer: {
+    flexDirection: "row",
+    justifyContent: 'space-between',
+    margin: '1%'
+  },
+  createMensualityRowInput: {
+    fontSize: normalize(20),
+    fontFamily: 'Montserrat-Bold',
+    width: '70%',
+    borderRadius: 7,
+    color: '#00A9A0',
+    backgroundColor: '#ECEDEF',
+    padding: '2%'
+  },
+  ticketInfoContainer: {
+    height: "100%",
+    width: "100%",
+    justifyContent: "space-between",
+    padding: "3%",
+  },
+  ticketTitleContainer: {
+    marginBottom: "4%",
+    justifyContent: "center",
+    height: "7%",
+  },
+  ticketTitle: {
+    textAlign: 'left',
+    fontFamily: 'Montserrat-Bold',
+    color: '#8F8F8F',
+    fontSize: width * 0.03,
+    fontSize: normalize(20),
+    color: "#00A9A0",
+  },
+  ticketInputsContainer: {
+    justifyContent: "space-between",
+    height: "70%",
+    width: "100%",
+    flexDirection: "column",
+    paddingBottom: "10%",
+  },
+  ticketSubtitleText: {
+    textAlign: 'left',
+    fontFamily: 'Montserrat-Bold',
+    color: '#8F8F8F',
+    fontSize: width * 0.03,
+    fontSize: normalize(20),
+  }
 })
 export default styles;
