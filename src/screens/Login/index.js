@@ -5,12 +5,12 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  AsyncStorage,
   Platform,
   Image,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // Library dependecies
 import { auth } from "../../config/firebase";
 import * as SecureStore from "expo-secure-store";

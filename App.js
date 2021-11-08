@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { View, ActivityIndicator, StyleSheet, Modal, Text, AsyncStorage } from 'react-native';
+import { View, ActivityIndicator} from 'react-native';
 import SnackBar from 'react-native-snackbar-component'
 import NoConnectionModal from './src/components/NoConnectionModal';
 import { Provider } from "react-redux";
