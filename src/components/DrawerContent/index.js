@@ -82,7 +82,7 @@ const DrawerContent = (props) => {
                     />
                     {/* {officialHq === 'kPlPR3Rysv3uCsrUdcn2' && */}
 
-                    <DrawerItem
+                    {/* <DrawerItem
                         icon={({ color, size }) => (
                             <Image
                                 style={{ width: normalize(25), height: normalize(25) }}
@@ -91,7 +91,7 @@ const DrawerContent = (props) => {
                         )}
                         label="Tiquete"
                         onPress={() => { props.navigation.navigate('Ticket') }}
-                    />
+                    /> */}
                     {/* } */}
 
                     <DrawerItem

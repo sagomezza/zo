@@ -36,6 +36,7 @@ import * as actions from "../../redux/actions";
 import { createIdempotency } from "../../utils/idempotency";
 import * as Sentry from "@sentry/browser";
 import getRecipsOfShift from '../../config/services/getRecipsOfShift';
+import CustomModal from '../../components/CustomModal';
 
 const { width } = Dimensions.get("window");
 
@@ -233,6 +234,10 @@ const Ticket = (props) => {
             <View style={styles.footer}>
                 <FooterIndex navigation={navigation} />
             </View>
+            <CustomModal
+            type='editTicketInfo'
+            visible={true}
+            />
         </View>
 
     )

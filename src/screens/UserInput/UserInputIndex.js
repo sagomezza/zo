@@ -115,13 +115,13 @@ const UserInput = (props) => {
     setShowDropdown(false);
     setNewPhone("");
     setPrepayDay(false);
+    setHalfHour(false);
     setShowPhoneInput(false);
     setHistoryExists(false);
     setMensualityExists(false);
     setPrepayDayRecip(false);
     setPlateOne("");
     setPlateTwo("");
-    setPrepayDay(false);
     setShowPhoneInput(false);
     setMensuality({});
     setLoadingStart(false);
@@ -134,7 +134,7 @@ const UserInput = (props) => {
     setNewPhone("");
     setPrepayDay(false);
     setShowPhoneInput(false);
-    setPrepayDay(false);
+    setHalfHour(false);
     setShowPhoneInput(false);
     setHistoryExists(false);
     setMensualityExists(false);
@@ -321,6 +321,7 @@ const UserInput = (props) => {
             dateStart: new Date(),
             phone: !showPhoneInput ? '+57' + phone : '+57' + newPhone,
             prepayFullDay: prepayDay,
+            halfHour: halfHour,
             officialEmail: officialEmail,
             type,
             cash: Number(totalPay),
@@ -336,6 +337,7 @@ const UserInput = (props) => {
         setPhones([{ label: 'Selecciona un número', value: 1 }]);
         setLoadingStart(false);
         setPrepayDay(false);
+        setHalfHour(false);
         setPrepayDayValue(0);
         setTotalPay(0);
         setModalVisible(true);

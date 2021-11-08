@@ -24,7 +24,6 @@ const officialReducer = (state=initialState, action ) => {
                 phone: action.payload.phone,
                 name: action.payload.name,
                 lastName: action.payload.lastName,
-                id: action.payload.id,
                 hq: action.payload.hq,
                 schedule: action.payload.schedule,
                 start: action.payload.start

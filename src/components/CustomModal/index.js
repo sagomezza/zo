@@ -41,7 +41,7 @@ const CustomModal = (props) => {
     } = props;
 
     switch (type) {
-        case 'fullMensuality':
+        case 'editTicketInfo':
             return (
                 <Modal
                     animationType={animationType !== undefined ? animationType : 'slide'}
@@ -50,8 +50,191 @@ const CustomModal = (props) => {
                     visible={visible}
                 >
                     <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-
+                        <View style={styles.modalViewTicket}>
+                            <View style={styles.ticketInfoContainer}>
+                                <View style={styles.ticketTitleContainer}>
+                                    <Text style={styles.ticketTitle}>
+                                        Placas asociadas a tiquetera
+                                    </Text>
+                                </View>
+                                <View style={styles.ticketInputsContainer}>
+                                    <View style={styles.createMensualityRowContainer}>
+                                        <Text style={styles.ticketSubtitleText}>
+                                            Nombre:
+                                        </Text>
+                                        <TextInput
+                                            style={styles.createMensualityRowInput}
+                                            keyboardType="default"
+                                            placeholder=""
+                                            textAlign="center"
+                                            // value={userName !== undefined + "" ? userName : ""}
+                                            // onChangeText={handleChangeUserName}
+                                            // onFocus={handleFocusUserName}
+                                        />
+                                    </View>
+                                    <View style={styles.createMensualityRowContainer}>
+                                        <Text style={styles.ticketSubtitleText} >
+                                            Correo:
+                                        </Text>
+                                        <TextInput
+                                            style={styles.createMensualityRowInput}
+                                            keyboardType="default"
+                                            placeholder=""
+                                            autoCapitalize={"none"}
+                                            textAlign="center"
+                                            // value={userEmail !== undefined + "" ? userEmail : ""}
+                                            // onChangeText={handleChangeUserEmail}
+                                            // onFocus={handleFocusUserEmail}
+                                        />
+                                    </View>
+                                    <View style={styles.createMensualityRowContainer}>
+                                        <Text
+                                            style={styles.ticketSubtitleText}
+                                        >
+                                            Celular:
+                                        </Text>
+                                        <TextInput
+                                            style={styles.createMensualityRowInput}
+                                            keyboardType="default"
+                                            placeholder=""
+                                            maxLength={10}
+                                            textAlign="center"
+                                            // value={userPhone !== undefined + "" ? userPhone : ""}
+                                            // onChangeText={handleChangeUserPhone}
+                                            // onFocus={handleFocusUserPhone}
+                                        />
+                                    </View>
+                                    <View style={styles.createMensualityRowContainer}>
+                                        <Text
+                                            style={styles.ticketSubtitleText}
+                                        >
+                                            Placa 1:
+                                        </Text>
+                                        <TextInput
+                                            style={styles.createMensualityRowInput}
+                                            keyboardType="default"
+                                            placeholder=""
+                                            maxLength={6}
+                                            textAlign="center"
+                                            // value={firstPlate !== undefined + "" ? firstPlate : ""}
+                                            // onChangeText={handleChangeFirstPlate}
+                                            // onFocus={handleFocusFirstPlate}
+                                        />
+                                    </View>
+                                    <View style={styles.createMensualityRowContainer}>
+                                        <Text
+                                            style={styles.ticketSubtitleText}
+                                        >
+                                            Placa 2:
+                                        </Text>
+                                        <TextInput
+                                            style={styles.createMensualityRowInput}
+                                            keyboardType="default"
+                                            placeholder=""
+                                            maxLength={6}
+                                            textAlign="center"
+                                            // value={secondPlate !== undefined + "" ? secondPlate : ""}
+                                            // onChangeText={handleChangeSecondPlate}
+                                            // onFocus={handleFocusSecondPlate}
+                                        />
+                                    </View>
+                                    <View style={styles.createMensualityRowContainer}>
+                                        <Text style={styles.ticketSubtitleText}>
+                                            Placa 3:
+                                        </Text>
+                                        <TextInput
+                                            style={styles.createMensualityRowInput}
+                                            keyboardType="default"
+                                            placeholder=""
+                                            maxLength={6}
+                                            textAlign="center"
+                                            // value={thirdPlate !== undefined + "" ? thirdPlate : ""}
+                                            // onChangeText={handleChangeThirdPlate}
+                                            // onFocus={handleFocusThirdPlate}
+                                        />
+                                    </View>
+                                    <View style={styles.createMensualityRowContainer}>
+                                        <Text style={styles.ticketSubtitleText}>
+                                            Placa 4:
+                                        </Text>
+                                        <TextInput
+                                            style={styles.createMensualityRowInput}
+                                            keyboardType="default"
+                                            placeholder=""
+                                            maxLength={6}
+                                            textAlign="center"
+                                            // value={fourthPlate !== undefined + "" ? fourthPlate : ""}
+                                            // onChangeText={handleChangeFourthPlate}
+                                            // onFocus={handleFocusFourthPlate}
+                                        />
+                                    </View>
+                                    <View style={styles.createMensualityRowContainer}>
+                                        <Text style={styles.ticketSubtitleText} >
+                                            Placa 5:
+                                        </Text>
+                                        <TextInput
+                                            style={styles.createMensualityRowInput}
+                                            keyboardType="default"
+                                            placeholder=""
+                                            maxLength={6}
+                                            textAlign="center"
+                                            // value={fifthPlate !== undefined + "" ? fifthPlate : ""}
+                                            // onChangeText={handleChangeFifthPlate}
+                                            // onFocus={handleFocusFifthPlate}
+                                        />
+                                    </View>
+                                </View>
+                                <View
+                                    style={{
+                                        height: "20%",
+                                        justifyContent: "space-between",
+                                        flexDirection: "column",
+                                        marginTop: "5%",
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            height: "50%",
+                                            width: "100%",
+                                            justifyContent: "flex-end",
+                                        }}
+                                    >
+                                        <Button
+                                            // onPress={handleEdit}
+                                            title="GUARDAR"
+                                            color="#00A9A0"
+                                            style={styles.modalButton}
+                                            textStyle={{
+                                                color: "#FFFFFF",
+                                                textAlign: "center",
+                                                fontFamily: "Montserrat-Bold",
+                                                letterSpacing: 5
+                                            }}
+                                            // activityIndicatorStatus={loading}
+                                        />
+                                    </View>
+                                    <View
+                                        style={{
+                                            height: "50%",
+                                            width: "100%",
+                                            justifyContent: "flex-end",
+                                        }}
+                                    >
+                                        <Button
+                                            // onPress={handleBackEdit}
+                                            title="VOLVER"
+                                            color="transparent"
+                                            style={styles.modalButton}
+                                            textStyle={{
+                                                color: "#00A9A0",
+                                                textAlign: "center",
+                                                fontFamily: "Montserrat-Bold",
+                                                letterSpacing: 5
+                                            }}
+                                        />
+                                    </View>
+                                </View>
+                            </View>
                         </View>
                     </View>
                 </Modal>
