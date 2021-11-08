@@ -1208,8 +1208,7 @@ const MonthlyPayments = (props) => {
                     value={pendingMensualityPay}
                     onValueChange={handleChangeCheckBox}
                     style={{ alignSelf: "center" }}
-                    // color={pendingMensualityPay ? '#00A9A0' : undefined}
-                    tintColors={{ true: "#00A9A0", false: "gray" }}
+                    color={pendingMensualityPay ? '#00A9A0' : '#00A9A0'}
                   />
                   <Text
                     style={{

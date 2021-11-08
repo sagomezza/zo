@@ -5,7 +5,6 @@ import {
   Modal,
   Image
 } from 'react-native';
-import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Camera } from "expo-camera";
 import FooterIndex from '../../components/Footer';
@@ -44,7 +43,7 @@ const BarcodeScanner = (props) => {
 
   useEffect(() => {
     (async () => {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA);
+      const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
     })();
   }, []);
