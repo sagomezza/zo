@@ -9,7 +9,7 @@ import {
   FlatList,
   TextInput
 } from "react-native";
-import CheckBox from "@react-native-community/checkbox";
+import Checkbox from 'expo-checkbox';
 import CurrencyInput from "react-native-currency-input";
 import styles from "../MonthlyPayments/MonthlyPaymentsStyles";
 import normalize from "../../config/services/normalizeFontSize";
@@ -1204,10 +1204,11 @@ const MonthlyPayments = (props) => {
                     justifyContent: "center",
                   }}
                 >
-                  <CheckBox
+                  <Checkbox
                     value={pendingMensualityPay}
                     onValueChange={handleChangeCheckBox}
                     style={{ alignSelf: "center" }}
+                    // color={pendingMensualityPay ? '#00A9A0' : undefined}
                     tintColors={{ true: "#00A9A0", false: "gray" }}
                   />
                   <Text

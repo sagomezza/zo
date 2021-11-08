@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   checkPrepayContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignContent: 'center',
+    // alignContent: 'center',
     height: '8%',
     width: '60%',
     justifyContent: 'center',

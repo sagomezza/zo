@@ -12,7 +12,7 @@ import {
   FlatList
 } from 'react-native';
 import { ImageBackground } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+import Checkbox from 'expo-checkbox';
 import styles from './UserInputStyles';
 import FooterIndex from '../../components/Footer/index';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -457,7 +457,7 @@ const UserInput = (props) => {
 
   const handleChangeTotalPay = text => setTotalPay(text);
   const handlePrepayCheckBox = () => setPrepayDay(!prepayDay);
-  const handleHalfCheckBox = () => setHalfHour(!prepayDay);
+  const handleHalfCheckBox = () => setHalfHour(!halfHour);
   const handleModal3 = () => { setModal3Visible(false); setTotalPay(0); setDebtExists(true); }
   const handleMaxCapMensuality = () => { setMaxCapMensuality(false); }
 
@@ -579,22 +579,22 @@ const UserInput = (props) => {
                 />}
               {officialHq === 'iIJJcbIpMdVeYwEDK6mJ' &&
                 <View style={styles.checkPrepayContainer}>
-                  <CheckBox
+                  <Checkbox
                     value={prepayDay}
                     onValueChange={handlePrepayCheckBox}
-                    style={{ alignSelf: 'center' }}
-                    tintColors={{ true: '#FFF200', false: '#FFF200' }}
+                    style={{ margin: 8 }}
+                    color={prepayDay === true ? '#FFF200' : '#FFF200'}
                   />
                   <Text style={styles.prepayDayText}>PASE DIA</Text>
                 </View>
               }
               {officialHq === 'kPlPR3Rysv3uCsrUdcn2' &&
                 <View style={styles.checkPrepayContainer}>
-                  <CheckBox
+                  <Checkbox
                     value={halfHour}
                     onValueChange={handleHalfCheckBox}
-                    style={{ alignSelf: 'center' }}
-                    tintColors={{ true: '#FFF200', false: '#FFF200' }}
+                    style={{ margin: 8 }}
+                    color={halfHour === true ? '#FFF200' : '#FFF200'}
                   />
                   <Text style={styles.prepayDayText}>MEDIA HORA</Text>
                 </View>

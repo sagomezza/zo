@@ -9,7 +9,7 @@ import {
     FlatList,
     TextInput
 } from "react-native";
-import CheckBox from "@react-native-community/checkbox";
+import Checkbox from 'expo-checkbox';
 import CurrencyInput from "react-native-currency-input";
 import styles from "../Ticket/styles";
 import normalize from "../../config/services/normalizeFontSize";

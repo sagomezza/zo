@@ -2533,10 +2533,10 @@
   dependencies:
     merge-options "^3.0.4"
 
-"@react-native-community/checkbox@^0.5.7":
-  version "0.5.7"
-  resolved "https://registry.yarnpkg.com/@react-native-community/checkbox/-/checkbox-0.5.7.tgz#ac818de88736acc1a4539188f2d435cf5e845ae1"
-  integrity sha512-CiHBAMWy5fsFIHLd1pf8frlWrLT8DnCXUSxdlGKazHm7srQSReKH4R5absShjmYOHRo9raWEnKZO/cm7MUDHZg==
+"@react-native-community/checkbox@^0.5.9":
+  version "0.5.9"
+  resolved "https://registry.yarnpkg.com/@react-native-community/checkbox/-/checkbox-0.5.9.tgz#73e1fa91b0cbb4d1eaaa75a57844435a51c22290"
+  integrity sha512-2y/MW8zwXgzRN6fApZbYov3xKkR4vyWSOPo69OWSfa5emTbtKpSl7BY9xlKgu2pzGlLg5EyE8yogp0U7vFk+sQ==
 
 "@react-native-community/cli-debugger-ui@^5.0.1":
   version "5.0.1"
@@ -6158,6 +6158,11 @@ expo-camera@~12.0.3:
     "@koale/useworker" "^4.0.2"
     expo-modules-core "~0.4.4"
     invariant "2.2.4"
+
+expo-checkbox@~2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/expo-checkbox/-/expo-checkbox-2.0.0.tgz#417f5e6c4e3b4404e479064adab841bb2bef4d74"
+  integrity sha512-ZvDdpHRyyTd6P4JnqqJKyLzg8iKrvhHSXOKBK2uc/Xq5MWBj1JNtn2FCGs0oNpG9H1rt8/gV86Wzy96onxE7bw==
 
 expo-cli@^4.12.10:
   version "4.12.10"
