@@ -2533,11 +2533,6 @@
   dependencies:
     merge-options "^3.0.4"
 
-"@react-native-community/checkbox@^0.5.9":
-  version "0.5.9"
-  resolved "https://registry.yarnpkg.com/@react-native-community/checkbox/-/checkbox-0.5.9.tgz#73e1fa91b0cbb4d1eaaa75a57844435a51c22290"
-  integrity sha512-2y/MW8zwXgzRN6fApZbYov3xKkR4vyWSOPo69OWSfa5emTbtKpSl7BY9xlKgu2pzGlLg5EyE8yogp0U7vFk+sQ==
-
 "@react-native-community/cli-debugger-ui@^5.0.1":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-5.0.1.tgz#6b1f3367b8e5211e899983065ea2e72c1901d75f"
@@ -11758,13 +11753,6 @@ react-native-signature-canvas@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/react-native-signature-canvas/-/react-native-signature-canvas-3.4.0.tgz#87690a53966bd758cd83c2fdd51263670d341c3b"
   integrity sha512-c8FUCYckXErlGbqxfhMNBcPzBdhCSpBgCtTx9+rpntvveBoajE44854NLydeAvCxHuh1yV5y2EnNFij7AuXtSw==
-
-react-native-sketch@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-sketch/-/react-native-sketch-1.1.0.tgz#2e75a388454a7197ff02c7251c73749e18ad8116"
-  integrity sha512-TbtTvKFBknwHgGJCI0JGzadIGysIv5HkhXH7NcAm7QOYx0O/m+Rg5oDpMl6D+HGa1ZBDXxiMho/Vt2Ux2iwSIA==
-  dependencies:
-    prop-types "^15.5.10"
 
 react-native-snackbar-component@^1.1.11:
   version "1.1.11"
