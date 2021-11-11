@@ -263,7 +263,6 @@ const MonthlyPayments = (props) => {
         if (isCharacterALetter(firstPlateNewMen[5])) type = "bike";
         else type = "car";
         let idempotencyKey = createIdempotency(uid.uid);
-
         const response = await instance.post(
           CREATE_USER,
           {
@@ -338,15 +337,15 @@ const MonthlyPayments = (props) => {
             timeout: TIMEOUT,
           }
         );
-        // console.log("RESPONSE CREATE MENSUALITY", response.data);
+        console.log("RESPONSE CREATE MENSUALITY", response.data);
         setModal4Visible(true);
         setModal3Visible(false);
         setLoading(false);
       }
     } catch (err) {
       Sentry.captureException(err);
-      // console.log(err);
-      // console.log("ERROR ", err?.response);
+      console.log(err);
+      console.log("ERROR ", err?.response);
       setLoading(false);
       setModal5Visible(true);
     }
@@ -1207,7 +1206,7 @@ const MonthlyPayments = (props) => {
                   <Checkbox
                     value={pendingMensualityPay}
                     onValueChange={handleChangeCheckBox}
-                    style={{ margin: 8}}
+                    style={{ margin: 8 }}
                     color={pendingMensualityPay ? '#00A9A0' : '#00A9A0'}
                   />
                   <Text
