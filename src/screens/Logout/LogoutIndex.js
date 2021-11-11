@@ -29,7 +29,7 @@ import '@firebase/auth';
 import '@firebase/database';
 import "@firebase/firestore";
 import { TIMEOUT } from '../../config/constants/constants';
-import * as Network from 'expo-network';
+import * as Application from 'expo-application';
 import store from '../../config/store';
 import { createIdempotency } from '../../utils/idempotency';
 import * as Sentry from "@sentry/browser";
@@ -65,10 +65,7 @@ const LogoutIndex = (props) => {
     });
 
     const macAdd = () => {
-      Network.getMacAddressAsync().then(state => {
-        setMacAddress(state)
-      }
-      )
+        setMacAddress(Application.androidId);
     };
     
     const getShiftRecips = async () => {

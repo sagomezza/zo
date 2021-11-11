@@ -9,7 +9,7 @@ import {
   FlatList,
   TextInput
 } from "react-native";
-import CheckBox from "@react-native-community/checkbox";
+import Checkbox from 'expo-checkbox';
 import CurrencyInput from "react-native-currency-input";
 import styles from "../MonthlyPayments/MonthlyPaymentsStyles";
 import normalize from "../../config/services/normalizeFontSize";
@@ -263,7 +263,6 @@ const MonthlyPayments = (props) => {
         if (isCharacterALetter(firstPlateNewMen[5])) type = "bike";
         else type = "car";
         let idempotencyKey = createIdempotency(uid.uid);
-
         const response = await instance.post(
           CREATE_USER,
           {
@@ -338,15 +337,15 @@ const MonthlyPayments = (props) => {
             timeout: TIMEOUT,
           }
         );
-        // console.log("RESPONSE CREATE MENSUALITY", response.data);
+        console.log("RESPONSE CREATE MENSUALITY", response.data);
         setModal4Visible(true);
         setModal3Visible(false);
         setLoading(false);
       }
     } catch (err) {
       Sentry.captureException(err);
-      // console.log(err);
-      // console.log("ERROR ", err?.response);
+      console.log(err);
+      console.log("ERROR ", err?.response);
       setLoading(false);
       setModal5Visible(true);
     }
@@ -1204,11 +1203,11 @@ const MonthlyPayments = (props) => {
                     justifyContent: "center",
                   }}
                 >
-                  <CheckBox
+                  <Checkbox
                     value={pendingMensualityPay}
                     onValueChange={handleChangeCheckBox}
-                    style={{ alignSelf: "center" }}
-                    tintColors={{ true: "#00A9A0", false: "gray" }}
+                    style={{ margin: 8 }}
+                    color={pendingMensualityPay ? '#00A9A0' : '#00A9A0'}
                   />
                   <Text
                     style={{
