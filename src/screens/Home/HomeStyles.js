@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: '2%',
     paddingBottom: '2%',
-    borderWidth: 1
   },
   plateContainer: {
     flexDirection: "row",

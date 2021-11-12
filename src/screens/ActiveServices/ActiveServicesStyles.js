@@ -59,6 +59,13 @@ const styles = StyleSheet.create({
         color: '#6F6F7B',
         fontFamily: 'Montserrat-Medium'
     },
+    paymentType: {
+        fontSize: width * 0.02,
+        color: '#6F6F7B',
+        fontFamily: 'Montserrat-Medium',
+        width: '16%',
+        textAlign: 'center'
+      },
     dateHourText: {
         fontSize: width * 0.02,
         color: '#19A9A0',
