@@ -159,11 +159,11 @@ const HomeIndex = (props) => {
         <Text style={styles.dateDaysText}>{moment(item.dateStart).format('L')}</Text>
         <Text style={styles.dateHourText}>{moment(item.dateStart).format('LT')}</Text>
       </View>
-      <Text style={styles.dateDaysText}>
-        {item.prepayFullDay === true ? " Pase día" : ""}
-        {item.mensuality === true ? " Mensualidad" : ""}
-        {item.isParanoic === true ? " Por horas" : ""}
-        {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? " Por horas" : ""}
+      <Text style={styles.paymentType}>
+        {item.prepayFullDay === true ? "Pase día" : ""}
+        {item.mensuality === true ? "Mensualidad" : ""}
+        {item.isParanoic === true ? "Por horas" : ""}
+        {!item.prepayFullDay && !item.mensuality && !item.isParanoic ? "Por horas" : ""}
       </Text>
     </View>
     , [reservations.reservations]);

@@ -54,8 +54,10 @@ const styles = StyleSheet.create({
     marginTop: '3%',
     borderRadius: 7,
     justifyContent: 'space-around',
+    alignItems: 'center',
     paddingTop: '2%',
-    paddingBottom: '2%'
+    paddingBottom: '2%',
+    borderWidth: 1
   },
   plateContainer: {
     flexDirection: "row",
@@ -135,7 +137,15 @@ const styles = StyleSheet.create({
   dateDaysText: {
     fontSize: width * 0.02,
     color: '#6F6F7B',
-    fontFamily: 'Montserrat-Medium'
+    fontFamily: 'Montserrat-Medium',
+    textAlign: 'center',
+  },
+  paymentType: {
+    fontSize: width * 0.02,
+    color: '#6F6F7B',
+    fontFamily: 'Montserrat-Medium',
+    width: '16%',
+    textAlign: 'center'
   },
   totalHours: {
     fontSize: width * 0.02,
